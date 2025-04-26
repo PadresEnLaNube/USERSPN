@@ -1,0 +1,1140 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Filkers WooCommerce Marketing\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-10-17 07:19+0000\n"
+"PO-Revision-Date: 2024-12-19 09:44+0000\n"
+"Last-Translator: \n"
+"Language-Team: Hungarian\n"
+"Language: hu_HU\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.6.14; wp-6.7.1\n"
+"X-Domain: filkers"
+
+#: includes/class-userspn-functions-user.php:711
+msgid "Account deletion!"
+msgstr "Fiók törlése!"
+
+#: includes/class-userspn-mailing.php:140
+msgid "Activate now"
+msgstr "Aktiválja most"
+
+#: includes/class-userspn-mailing.php:162
+msgid "Activate your account"
+msgstr "Aktiválja fiókját"
+
+#: includes/class-userspn-ajax-nopriv.php:205
+#: includes/class-userspn-ajax-nopriv.php:208
+msgid "Activate your subscription"
+msgstr "Aktiválja az előfizetést"
+
+#: includes/class-userspn-forms.php:329
+msgid "Add audio"
+msgstr "Hang hozzáadása"
+
+#: includes/class-userspn-forms.php:329
+msgid "Add audios"
+msgstr "Hangok hozzáadása"
+
+#: includes/class-userspn-forms.php:420
+msgid "Add element"
+msgstr "Elem hozzáadása"
+
+#: includes/class-userspn-settings.php:180
+msgid "Add extra profile fields on admin dashboard"
+msgstr "Adjon hozzá további profilmezőket az adminisztrációs irányítópulton"
+
+#: includes/class-userspn-forms.php:350
+msgid "Add file"
+msgstr "Fájl hozzáadása"
+
+#: includes/class-userspn-forms.php:350
+msgid "Add files"
+msgstr "Fájlok hozzáadása"
+
+#: includes/class-userspn-forms.php:287
+msgid "Add image"
+msgstr "Kép hozzáadása"
+
+#: includes/class-userspn-forms.php:287
+msgid "Add images"
+msgstr "Képek hozzáadása"
+
+#: includes/class-userspn-functions-user.php:278
+msgid "Add new field"
+msgstr "Új mező hozzáadása"
+
+#: includes/class-userspn-forms.php:308
+msgid "Add video"
+msgstr "Videó hozzáadása lehetőségre"
+
+#: includes/class-userspn-forms.php:308
+msgid "Add videos"
+msgstr "Videók hozzáadása"
+
+#: includes/class-userspn-functions-user.php:369
+msgid "Advanced"
+msgstr "Fejlett"
+
+#: includes/class-userspn-settings.php:142
+msgid "Advanced options in profile"
+msgstr "Speciális beállítások a profilban"
+
+#: includes/class-userspn-common.php:141
+msgid "An error has occurred. Please try again in a few minutes."
+msgstr "Hiba történt. Kérjük, próbálja újra néhány perc múlva."
+
+#: includes/class-userspn-functions-user.php:156
+msgid ""
+"As you login with a new account, you will lose access to yours, so it´s "
+"better if you open this link in a private window or other browser."
+msgstr ""
+"Ahogy bejelentkezik egy új fiókkal, elveszíti hozzáférését a sajátjához, "
+"ezért jobb, ha ezt a hivatkozást privát ablakban vagy más böngészőben nyitja "
+"meg."
+
+#: includes/class-userspn-forms.php:222
+msgid "Atleast 8 Character"
+msgstr "Legalább 8 karakter"
+
+#: includes/class-userspn-functions-user.php:155
+msgid "Auto-login tool"
+msgstr "Automatikus bejelentkezési eszköz"
+
+#: includes/class-userspn-ajax.php:152 includes/class-userspn-forms.php:551
+msgid "Cancel"
+msgstr "Mégsem"
+
+#: includes/class-userspn-functions-user.php:749
+#: includes/class-userspn-functions-user.php:765
+msgid "Change password"
+msgstr "Jelszó módosítása"
+
+#: includes/class-userspn-settings.php:152
+msgid "Change password access"
+msgstr "Jelszó hozzáférés módosítása"
+
+#: includes/class-userspn-functions-user.php:759
+msgid ""
+"Change your profile access password. The process will send you an email to "
+"your account to secure the process."
+msgstr ""
+"Változtasd meg profilod hozzáférési jelszavát. A folyamat e-mailt küld a "
+"fiókjába a folyamat biztonsága érdekében."
+
+#: includes/class-userspn-forms.php:528
+msgid "Classes separated by spaces"
+msgstr "Az osztályok szóközzel elválasztva"
+
+#: includes/class-userspn-notifications.php:29
+msgid "Congratulations! Your email has been activated successfully."
+msgstr "Gratulálok! E-mail-címe sikeresen aktiválva lett."
+
+#: includes/class-userspn-settings.php:112
+msgid "Contact notifications"
+msgstr "Kapcsolattartási értesítések"
+
+#: includes/class-userspn-settings.php:334
+msgid ""
+"Create a message that will be shown just above of the Newsletter "
+"registration form."
+msgstr ""
+"Hozzon létre egy üzenetet, amely közvetlenül a Hírlevél regisztrációs űrlap "
+"felett fog megjelenni."
+
+#: includes/class-userspn-functions-user.php:833
+msgid "Create user"
+msgstr "Felhasználó létrehozása"
+
+#: includes/class-userspn-settings.php:122
+#: includes/class-userspn-functions-attachment.php:114
+msgid "Current file max size allowed:"
+msgstr "Jelenlegi fájl maximális megengedett mérete:"
+
+#: includes/class-userspn-functions-user.php:275
+msgid "Current form"
+msgstr "Jelenlegi forma"
+
+#: includes/class-userspn-settings.php:84
+msgid "Custom Profile Picture - PFP"
+msgstr "Egyéni profilkép - PFP"
+
+#: includes/class-userspn-settings.php:189
+msgid "Dashboard"
+msgstr "Műszerfal"
+
+#: includes/class-userspn-settings.php:197
+msgid "Dashboard main login page"
+msgstr "Az irányítópult fő bejelentkezési oldala"
+
+#: includes/class-userspn-settings.php:239
+#: includes/class-userspn-settings.php:240
+msgid "Dashboard main login page CSS"
+msgstr "Irányítópult fő bejelentkezési oldal CSS"
+
+#: includes/class-userspn-settings.php:218
+msgid "Dashboard main login page header logo link text"
+msgstr "Irányítópult fő bejelentkezési oldal fejléc logó hivatkozás szövege"
+
+#: includes/class-userspn-settings.php:206
+msgid "Dashboard main login page logo"
+msgstr "Az irányítópult fő bejelentkezési oldalának logója"
+
+#: includes/class-userspn-settings.php:229
+#: includes/class-userspn-settings.php:230
+msgid "Dashboard main login page logo link"
+msgstr "Az irányítópult fő bejelentkezési oldalának logójának linkje"
+
+#: includes/class-userspn-settings.php:217
+msgid "Dashboard main login page logo link text"
+msgstr "Irányítópult fő bejelentkezési oldal logó hivatkozás szövege"
+
+#: includes/class-userspn-settings.php:249
+msgid "Dashboard main logo"
+msgstr "A műszerfal fő logója"
+
+#: includes/class-userspn-settings.php:259
+msgid "Dashboard main logo link"
+msgstr "Az irányítópult fő logójának linkje"
+
+#: includes/class-userspn-forms.php:507
+msgid "Date"
+msgstr "Dátum"
+
+#: includes/class-userspn-settings.php:288
+msgid "Disable admin bar"
+msgstr "Admin bar letiltása"
+
+#: includes/class-userspn-settings.php:268
+msgid "Disable dashboard access"
+msgstr "Az irányítópult hozzáférésének letiltása"
+
+#: includes/class-userspn-settings.php:33
+msgid "Disable Profile popup"
+msgstr "Profil előugró ablak letiltása"
+
+#: includes/class-userspn-functions-user.php:410
+msgid "Disconnect account"
+msgstr "Fiók leválasztása"
+
+#: includes/class-userspn-functions-user.php:420
+msgid "Disconnect your user from the system. You will need to log in again."
+msgstr "Válassza le a felhasználót a rendszerről. Újra be kell jelentkeznie."
+
+#: includes/class-userspn-functions-attachment.php:146
+msgid "Download file"
+msgstr "Fájl letöltése"
+
+#: includes/class-userspn-forms.php:325 includes/class-userspn-common.php:152
+msgid "Edit audio"
+msgstr "Hang szerkesztése"
+
+#: includes/class-userspn-forms.php:325 includes/class-userspn-common.php:153
+msgid "Edit audios"
+msgstr "Hangok szerkesztése"
+
+#: includes/class-userspn-forms.php:346 includes/class-userspn-common.php:156
+msgid "Edit file"
+msgstr "Fájl szerkesztése"
+
+#: includes/class-userspn-forms.php:346 includes/class-userspn-common.php:157
+msgid "Edit files"
+msgstr "Fájlok szerkesztése"
+
+#: includes/class-userspn-forms.php:283 includes/class-userspn-common.php:144
+msgid "Edit image"
+msgstr "Kép szerkesztése"
+
+#: includes/class-userspn-forms.php:283 includes/class-userspn-common.php:145
+msgid "Edit images"
+msgstr "Képek szerkesztése"
+
+#: includes/class-userspn-forms.php:304 includes/class-userspn-common.php:148
+msgid "Edit video"
+msgstr "Videó szerkesztése"
+
+#: includes/class-userspn-forms.php:304 includes/class-userspn-common.php:149
+msgid "Edit videos"
+msgstr "Videók szerkesztése"
+
+#: includes/class-userspn-functions-user.php:806
+#: includes/class-userspn-functions-user.php:807
+#: includes/class-userspn-forms.php:507
+msgid "Email"
+msgstr "Email"
+
+#: includes/class-userspn-settings.php:279
+#: includes/class-userspn-settings.php:299
+msgid "Enabled roles"
+msgstr "Engedélyezett szerepek"
+
+#: includes/class-userspn-cron.php:32
+msgid "Every 30 minutes"
+msgstr "30 percenként"
+
+#: includes/class-userspn-common.php:165
+msgid "Existing user. Please login."
+msgstr "Meglévő felhasználó. Kérjük, jelentkezzen be."
+
+#: includes/class-userspn-settings.php:67
+msgid "Extra fields in the user profile"
+msgstr "További mezők a felhasználói profilban"
+
+#: includes/class-userspn-functions-user.php:365
+msgid "Files"
+msgstr "Fájlok"
+
+#: includes/class-userspn-functions-user.php:787
+msgid "Forgot your password?"
+msgstr "Elfelejtette jelszavát?"
+
+#: includes/class-userspn-settings.php:76
+msgid "Front-end users registration"
+msgstr "Front-end felhasználók regisztrációja"
+
+#: includes/class-userspn-settings.php:172
+msgid "Front-end users removal"
+msgstr "Front-end felhasználók eltávolítása"
+
+#: includes/class-userspn-ajax-nopriv.php:208
+msgid "Hello"
+msgstr "Helló"
+
+#. Author URI of the plugin
+msgid "https://padresenlanube.com/"
+msgstr "https://padresenlanube.com/"
+
+#. URI of the plugin
+msgid "https://padresenlanube.com/plugins/userspn/"
+msgstr "https://padresenlanube.com/plugins/userspn/"
+
+#: includes/class-userspn-mailing.php:105
+msgid "I have read and accept"
+msgstr "Elolvastam és elfogadom"
+
+#: includes/class-userspn-mailing.php:107
+msgid "I have read and accept Terms and conditions."
+msgstr "Elolvastam és elfogadom az Általános Szerződési Feltételeket."
+
+#: includes/class-userspn-settings.php:181
+msgid ""
+"If you check this option, admin dashboard user edition and creation pages "
+"will show the added profile extra fields at the bottom. Administrators and "
+"roles with access to this dashboard pages will be able to edit or add them "
+"on the creation of new contacts."
+msgstr ""
+"Ha bejelöli ezt a lehetőséget, az adminisztrátori irányítópult felhasználói "
+"kiadásának és létrehozásának oldalain alul megjelennek a hozzáadott profil "
+"extra mezői. Az ehhez az irányítópult-oldalhoz hozzáféréssel rendelkező "
+"adminisztrátorok és szerepkörök szerkeszthetik vagy hozzáadhatják őket új "
+"névjegyek létrehozásához."
+
+#: includes/class-userspn-settings.php:43
+msgid ""
+"If you check this option, the system will ask for the name and surname of "
+"the contact based on the WordPress custom database structure."
+msgstr ""
+"Ha bejelöli ezt a lehetőséget, a rendszer a WordPress egyéni adatbázis-"
+"struktúra alapján kéri a kapcsolattartó nevét és vezetéknevét."
+
+#: includes/class-userspn-functions-user.php:355
+msgid "Image"
+msgstr "Kép"
+
+#: includes/class-userspn-functions-user.php:714
+msgid "Include your password to confirm deletion"
+msgstr "A törlés megerősítéséhez adja meg jelszavát"
+
+#: includes/class-userspn-forms.php:496
+msgid "Input"
+msgstr "Bemenet"
+
+#: includes/class-userspn-forms.php:527
+msgid "Input classes"
+msgstr "Bemeneti osztályok"
+
+#: includes/class-userspn-forms.php:488 includes/class-userspn-forms.php:489
+msgid "Input name"
+msgstr "Adja meg a nevet"
+
+#: includes/class-userspn-forms.php:532
+msgid "Input required"
+msgstr "Bemenet szükséges"
+
+#: includes/class-userspn-forms.php:503
+msgid "Input subtype"
+msgstr "Bemeneti altípus"
+
+#: includes/class-userspn-forms.php:493
+msgid "Input type"
+msgstr "Beviteli típus"
+
+#: includes/class-userspn-functions-user.php:527
+#: includes/class-userspn-functions-user.php:833
+#: includes/class-userspn-data.php:59 includes/class-userspn-forms.php:176
+#: includes/class-userspn-functions-attachment.php:122
+#: includes/class-userspn-functions-attachment.php:145
+msgid "Loading..."
+msgstr "Terhelés..."
+
+#: includes/class-userspn-functions-user.php:784
+msgid "Log In"
+msgstr "Bejelentkezés"
+
+#: includes/class-userspn-functions-user.php:426
+msgid "Log out"
+msgstr "Jelentkezzen ki"
+
+#: includes/class-userspn-functions-user.php:459
+msgid "Login"
+msgstr "Bejelentkezés"
+
+#: includes/class-userspn-functions-user.php:158
+msgid "Login as"
+msgstr "Bejelentkezés mint"
+
+#: includes/class-userspn-forms.php:210
+msgid "Lowercase & Uppercase"
+msgstr "Kis- és nagybetűk"
+
+#: includes/class-userspn-settings.php:353
+#: includes/class-userspn-settings.php:354
+msgid "Max number of activation emails"
+msgstr "Az aktiváló e-mailek maximális száma"
+
+#: includes/class-userspn-forms.php:518
+msgid "Multiple selector"
+msgstr "Többszörös választó"
+
+#: includes/class-userspn-functions-user.php:310
+#: includes/class-userspn-functions-user.php:311
+msgid "Name"
+msgstr "Név"
+
+#: includes/class-userspn-settings.php:42
+msgid "Name and surname in profile"
+msgstr "Név és vezetéknév a profilban"
+
+#: includes/class-userspn-settings.php:52
+msgid "Name compulsory"
+msgstr "A név kötelező"
+
+#: includes/class-userspn-forms.php:483 includes/class-userspn-forms.php:489
+msgid "New field"
+msgstr "Új mező"
+
+#: includes/class-userspn-settings.php:317
+#: includes/class-userspn-settings.php:325
+msgid "Newsletter"
+msgstr "Hírlevél"
+
+#: includes/class-userspn-settings.php:343
+msgid "Newsletter activation"
+msgstr "Hírlevél aktiválás"
+
+#: includes/class-userspn-settings.php:333
+msgid "Newsletter message"
+msgstr "Hírlevél üzenet"
+
+#: includes/class-userspn-forms.php:115
+msgid "No file found"
+msgstr "Nem található fájl"
+
+#: includes/class-userspn-forms.php:535
+msgid "Not required"
+msgstr "Nem kötelező"
+
+#: includes/class-userspn-functions-user.php:360
+msgid "Notifications"
+msgstr "Értesítések"
+
+#: includes/class-userspn-functions-user.php:390
+msgid ""
+"Notifications are inactive. Please install and activate WPH Mailing Plugin "
+"to allow integrated notifications in your platform."
+msgstr ""
+"Az értesítések inaktívak. Telepítse és aktiválja a WPH levelező bővítményt, "
+"hogy engedélyezze az integrált értesítéseket a platformon."
+
+#: includes/class-userspn-forms.php:507
+msgid "Number"
+msgstr "Szám"
+
+#: includes/class-userspn-forms.php:214
+msgid "Number (0-9)"
+msgstr "Szám (0-9)"
+
+#: includes/class-userspn-forms.php:523
+msgid "One option per line"
+msgstr "Soronként egy lehetőség"
+
+#: includes/class-userspn-notifications.php:34
+msgid ""
+"Oppps! We are not able to verify your account. Please try to subscribe again "
+"or contact us."
+msgstr ""
+"Oppps! Nem tudjuk ellenőrizni fiókját. Kérjük, próbáljon újra előfizetni, "
+"vagy lépjen kapcsolatba velünk."
+
+#: includes/class-userspn-forms.php:394 includes/class-userspn-forms.php:410
+msgid "Order element"
+msgstr "Rendelési elem"
+
+#: includes/class-userspn-common.php:160
+msgid "Ordered element"
+msgstr "Rendezett elem"
+
+#: includes/class-userspn-functions-user.php:716
+#: includes/class-userspn-functions-user.php:815
+#: includes/class-userspn-functions-user.php:816
+#: includes/class-userspn-forms.php:507
+msgid "Password"
+msgstr "Jelszó"
+
+#: includes/class-userspn-forms.php:206
+msgid "Password strength checker"
+msgstr "Jelszóerősség-ellenőrző"
+
+#: includes/class-userspn-common.php:161
+#| msgid "Please complete all the required fields of your profile."
+msgid "Please complete all the required fields (*) of your profile"
+msgstr "Kérjük, töltse ki profilja összes kötelező mezőjét (*)."
+
+#: includes/class-userspn-ajax-nopriv.php:205
+#: includes/class-userspn-ajax-nopriv.php:208
+msgid "Please confirm your email address clicking in the link."
+msgstr "Kérjük, erősítse meg e-mail címét a linkre kattintva."
+
+#: includes/class-userspn-common.php:142
+msgid "Please create a new user or login to save the information."
+msgstr ""
+"Kérjük, hozzon létre egy új felhasználót, vagy jelentkezzen be az adatok "
+"mentéséhez."
+
+#: includes/class-userspn-common.php:171
+msgid "Please provide at least field name and type."
+msgstr "Kérjük, adja meg legalább a mező nevét és típusát."
+
+#: includes/class-userspn-common.php:163
+#| msgid "Please, include your account password to complete the operation."
+msgid "Please, include your account password to complete the operation"
+msgstr "Kérjük, adja meg fiókjának jelszavát a művelet befejezéséhez"
+
+#: includes/class-userspn-ajax.php:478
+msgid "Please, select a valid file."
+msgstr "Kérjük, válasszon érvényes fájlt."
+
+#: includes/class-userspn-functions-post.php:140
+msgid "Post creation failed, could not find original post:"
+msgstr ""
+"A bejegyzés létrehozása nem sikerült, az eredeti bejegyzés nem található:"
+
+#: includes/class-userspn-settings.php:424
+msgid "Powered by"
+msgstr "Powered by"
+
+#: includes/class-userspn-functions-user.php:352
+msgid "Profile"
+msgstr "Profil"
+
+#: includes/class-userspn-functions-user.php:623
+msgid "Profile picture"
+msgstr "Profilkép"
+
+#: includes/class-userspn-functions-user.php:623
+msgid "Profile picture of"
+msgstr "Profil képe"
+
+#: includes/class-userspn-settings.php:26
+msgid "Profile popup"
+msgstr "Profil előugró ablak"
+
+#: includes/class-userspn-settings.php:93
+msgid "Random images in avatar block"
+msgstr "Véletlenszerű képek az avatar blokkban"
+
+#: includes/class-userspn-notifications.php:54
+msgid "Receive notifications"
+msgstr "Értesítések fogadása"
+
+#: includes/class-userspn-functions-user.php:462
+msgid "Register"
+msgstr "Nyilvántartás"
+
+#: includes/class-userspn-functions-user.php:784
+msgid "Remember Me"
+msgstr "Emlékezz Rám"
+
+#: includes/class-userspn-forms.php:555
+msgid "Remove"
+msgstr "Távolítsa el"
+
+#: includes/class-userspn-forms.php:398 includes/class-userspn-forms.php:414
+msgid "Remove element"
+msgstr "Távolítsa el az elemet"
+
+#: includes/class-userspn-forms.php:545
+msgid "Remove field"
+msgstr "Távolítsa el a mezőt"
+
+#: includes/class-userspn-functions-attachment.php:145
+msgid "Remove file"
+msgstr "Fájl eltávolítása"
+
+#: includes/class-userspn-ajax.php:146 includes/class-userspn-ajax.php:156
+#: includes/class-userspn-functions-user.php:687
+#: includes/class-userspn-functions-user.php:703
+#: includes/class-userspn-functions-user.php:719
+msgid "Remove user"
+msgstr "Felhasználó eltávolítása"
+
+#: includes/class-userspn-functions-user.php:697
+msgid "Remove your user from the system. This action cannot be undone."
+msgstr ""
+"Távolítsa el a felhasználót a rendszerből. Ez a művelet nem vonható vissza."
+
+#: includes/class-userspn-forms.php:536
+msgid "Required"
+msgstr "Kívánt"
+
+#: includes/class-userspn-forms.php:458
+msgid "Required field"
+msgstr "Kötelező mező"
+
+#: includes/class-userspn-ajax.php:84
+msgid "Roles"
+msgstr "Szerepek"
+
+#: includes/class-userspn-settings.php:132
+#: includes/class-userspn-settings.php:133
+msgid "Roles allowed to upload files"
+msgstr "A szerepkörök feltölthetnek fájlokat"
+
+#: includes/class-userspn-forms.php:562
+msgid "Save field"
+msgstr "Mező mentése"
+
+#: includes/class-userspn-settings.php:370
+#: includes/class-userspn-notifications.php:67
+msgid "Save options"
+msgstr "Beállítások mentése"
+
+#: includes/class-userspn-common.php:143
+msgid "Saved successfully"
+msgstr "Sikeresen mentve"
+
+#: includes/class-userspn-forms.php:496
+msgid "Select"
+msgstr "Válassza ki"
+
+#: includes/class-userspn-forms.php:259
+msgid "Select an option"
+msgstr "Válasszon egy lehetőséget"
+
+#: includes/class-userspn-common.php:154
+msgid "Select audio"
+msgstr "Válassza ki a hangot"
+
+#: includes/class-userspn-common.php:155
+msgid "Select audios"
+msgstr "Válasszon hangokat"
+
+#: includes/class-userspn-settings.php:103
+#: includes/class-userspn-settings.php:104
+msgid "Select avatar block images"
+msgstr "Válassza ki az avatarblokk képeket"
+
+#: includes/class-userspn-common.php:158
+msgid "Select file"
+msgstr "Válassza ki a fájlt"
+
+#: includes/class-userspn-common.php:159
+msgid "Select files"
+msgstr "Válassza ki a fájlokat"
+
+#: includes/class-userspn-common.php:146
+msgid "Select image"
+msgstr "Válasszon képet"
+
+#: includes/class-userspn-common.php:147
+msgid "Select images"
+msgstr "Válasszon képeket"
+
+#: includes/class-userspn-forms.php:517
+msgid "Select multiple"
+msgstr "Válasszon többet"
+
+#: includes/class-userspn-forms.php:534
+msgid "Select requirement"
+msgstr "Válassza ki a követelményt"
+
+#: includes/class-userspn-forms.php:506
+msgid "Select subtype"
+msgstr "Válassza ki az altípust"
+
+#: includes/class-userspn-forms.php:495
+msgid "Select type"
+msgstr "Válasszon típust"
+
+#: includes/class-userspn-common.php:150
+msgid "Select video"
+msgstr "Válassza ki a videót"
+
+#: includes/class-userspn-common.php:151
+msgid "Select videos"
+msgstr "Válasszon videókat"
+
+#: includes/class-userspn-forms.php:514
+msgid "Selector subtype"
+msgstr "Kiválasztó altípus"
+
+#: includes/class-userspn-settings.php:280
+msgid ""
+"Set up the roles to get dashboard access. This option takes priority over "
+"the previous one. If a role appears in both fields, this \"Enabled roles\" "
+"field will be the one taken into account and the access will be provided."
+msgstr ""
+"Állítsa be a szerepköröket az irányítópulthoz való hozzáféréshez. Ez az "
+"opció elsőbbséget élvez az előzővel szemben. Ha mindkét mezőben megjelenik "
+"egy szerep, akkor ezt az „Engedélyezett szerepkörök” mezőt veszik figyelembe,"
+" és biztosítják a hozzáférést."
+
+#: includes/class-userspn-settings.php:300
+msgid ""
+"Set up the roles to get the admin bar. This option takes priority over the "
+"previous one. If a role appears in both fields, this \"Enabled roles\" field "
+"will be the one taken into account and the administration bar will be "
+"displayed."
+msgstr ""
+"Állítsa be a szerepköröket az adminisztrációs sáv eléréséhez. Ez az opció "
+"elsőbbséget élvez az előzővel szemben. Ha mindkét mezőben megjelenik egy "
+"szerep, akkor ezt az „Engedélyezett szerepkörök” mezőt veszi figyelembe a "
+"rendszer, és megjelenik az adminisztrációs sáv."
+
+#: includes/class-userspn-forms.php:518
+msgid "Simple selector"
+msgstr "Egyszerű választó"
+
+#: includes/class-userspn-forms.php:218
+msgid "Special Character (!@#$%^&*)"
+msgstr "Speciális karakter (!@#$%^&*)"
+
+#. Description of the plugin
+msgid ""
+"Streamline user management on your WordPress site with this powerful plugin. "
+"Enable custom registration forms, secure logins, and seamless profile "
+"management for your users."
+msgstr ""
+"Egyszerűsítse a felhasználók kezelését WordPress webhelyén ezzel a hatékony "
+"bővítménnyel. Engedélyezze az egyéni regisztrációs űrlapokat, a biztonságos "
+"bejelentkezéseket és a zökkenőmentes profilkezelést a felhasználók számára."
+
+#: includes/class-userspn-mailing.php:97
+msgid "Submit"
+msgstr "Beküld"
+
+#: includes/class-userspn-functions-user.php:319
+#: includes/class-userspn-functions-user.php:320
+msgid "Surname"
+msgstr "Vezetéknév"
+
+#: includes/class-userspn-settings.php:61
+msgid "Surname compulsory"
+msgstr "A vezetéknév kötelező"
+
+#: includes/class-userspn-forms.php:507
+msgid "Text"
+msgstr "Szöveg"
+
+#: includes/class-userspn-forms.php:496
+msgid "Textarea"
+msgstr "Textarea"
+
+#: includes/class-userspn-common.php:169
+msgid "The field has been removed."
+msgstr "A mezőt eltávolították."
+
+#: includes/class-userspn-common.php:170
+msgid "The field has been saved successfully."
+msgstr "A mező mentése sikeresen megtörtént."
+
+#: includes/class-userspn-forms.php:548
+msgid "The field will be removed. This action cannot be undone."
+msgstr "A mező el lesz távolítva. Ez a művelet nem vonható vissza."
+
+#: includes/class-userspn-common.php:168
+msgid "The file has been removed."
+msgstr "A fájl eltávolítva."
+
+#: includes/class-userspn-common.php:167
+#| msgid "Your file has been uploaded successfully. Reloading page"
+msgid "The file has been uploaded successfully. Reloading page..."
+msgstr "A fájl feltöltése sikeres volt. Oldal újratöltése..."
+
+#: includes/class-userspn-common.php:162
+#| msgid "The password is not correct. Please try again."
+msgid "The password is not correct. Please try again"
+msgstr "A jelszó nem megfelelő. Kérjük, próbálja újra"
+
+#: includes/class-userspn-common.php:164
+msgid "The user has been successfully removed from the system. Reloading..."
+msgstr "A felhasználót sikeresen eltávolították a rendszerből. Újratöltés..."
+
+#: includes/class-userspn-functions-user.php:530
+msgid "There are no extra fields in the profile"
+msgstr "A profilban nincsenek extra mezők"
+
+#: includes/class-userspn-settings.php:134
+msgid ""
+"This option allow only specific roles to have the option to upload files to "
+"the system. If this option is empty and \"User files\" field is on, all the "
+"roles will be able to upload files to the system. Administrators will be "
+"allways allowed."
+msgstr ""
+"Ez a beállítás csak bizonyos szerepkörök számára teszi lehetővé a fájlok "
+"rendszerbe való feltöltését. Ha ez az opció üres, és a „Felhasználói fájlok” "
+"mező be van kapcsolva, minden szerepkör képes lesz fájlokat feltölteni a "
+"rendszerre. Az adminisztrátorok mindig engedélyezettek lesznek."
+
+#: includes/class-userspn-settings.php:94
+#: includes/class-userspn-settings.php:105
+msgid ""
+"This option allow you to include custom images to be shown randomly in the "
+"avatar image block."
+msgstr ""
+"Ez az opció lehetővé teszi, hogy egyéni képeket vegyen fel véletlenszerűen "
+"az avatar képblokkba."
+
+#: includes/class-userspn-settings.php:153
+msgid ""
+"This option allows users to access to the password change integrated "
+"function."
+msgstr ""
+"Ezzel az opcióval a felhasználók hozzáférhetnek a jelszómódosítás integrált "
+"funkciójához."
+
+#: includes/class-userspn-settings.php:77
+msgid ""
+"This option allows users to create their account from the front-end profile "
+"popup."
+msgstr ""
+"Ezzel az opcióval a felhasználók létrehozhatják fiókjukat a kezelőfelületi "
+"profil előugró ablakából."
+
+#: includes/class-userspn-settings.php:143
+msgid ""
+"This option allows users to do user from the advanced option in the profile "
+"popup."
+msgstr ""
+"Ez az opció lehetővé teszi a felhasználók számára, hogy a profil felugró "
+"ablak speciális beállításából végezzék el a felhasználót."
+
+#: includes/class-userspn-settings.php:173
+msgid ""
+"This option allows users to remove their account from the advanced option in "
+"the profile popup."
+msgstr ""
+"Ez az opció lehetővé teszi a felhasználók számára, hogy eltávolítsák "
+"fiókjukat a profil felugró ablak speciális beállításából."
+
+#: includes/class-userspn-settings.php:122
+msgid ""
+"This option allows users to upload and manage their files to the system."
+msgstr ""
+"Ezzel az opcióval a felhasználók feltölthetik és kezelhetik fájljaikat a "
+"rendszerbe."
+
+#: includes/class-userspn-settings.php:207
+msgid "This option changes the main login page logo."
+msgstr "Ez az opció megváltoztatja a fő bejelentkezési oldal logóját."
+
+#: includes/class-userspn-settings.php:219
+msgid ""
+"This option changes your main login page header logo link text. By default "
+"\"Powered by WordPress\"."
+msgstr ""
+"Ez a beállítás módosítja a fő bejelentkezési oldal fejlécének logójának "
+"szövegét. Alapértelmezés szerint \"Powered by WordPress\"."
+
+#: includes/class-userspn-settings.php:231
+msgid ""
+"This option changes your main login page logo link. By default https:"
+"//wordpress.org/."
+msgstr ""
+"Ez a lehetőség megváltoztatja a fő bejelentkezési oldal logójának "
+"hivatkozását. Alapértelmezés szerint https://wordpress.org/."
+
+#: includes/class-userspn-settings.php:163
+msgid ""
+"This option force system to use the password recovery WordPress tool by "
+"default. It will generate an unique nonce and will send it to the user to "
+"change password safely."
+msgstr ""
+"Ez a lehetőség arra kényszeríti a rendszert, hogy alapértelmezés szerint "
+"használja a jelszó-helyreállító WordPress eszközt. Egyedi nonce-t generál, "
+"és elküldi a felhasználónak, hogy biztonságosan módosítsa a jelszót."
+
+#: includes/class-userspn-settings.php:355
+msgid ""
+"This option set up the maximum numer of activating emails allowed to be sent "
+"from the platform."
+msgstr ""
+"Ez az opció beállítja a platformról küldhető aktiváló e-mailek maximális "
+"számát."
+
+#: includes/class-userspn-settings.php:113
+msgid ""
+"This option shows a notifications tab in the profile popup that allows users "
+"to manage their notifications."
+msgstr ""
+"Ez az opció egy értesítések lapot jelenít meg a profil előugró ablakában, "
+"amely lehetővé teszi a felhasználók számára az értesítések kezelését."
+
+#: includes/class-userspn-settings.php:309
+msgid ""
+"This option will allow administrators to login as any user on the platform "
+"with no administrator role. Please use this option with caution and "
+"responsibility, always with the consent of the users. It carries privacy and "
+"security risks."
+msgstr ""
+"Ez a beállítás lehetővé teszi a rendszergazdák számára, hogy bármely "
+"felhasználóként bejelentkezzenek a platformra, rendszergazdai szerepkör "
+"nélkül. Kérjük, óvatosan és felelősséggel használja ezt a lehetőséget, "
+"mindig a felhasználók beleegyezésével. Magánéleti és biztonsági kockázatokat "
+"hordoz magában."
+
+#: includes/class-userspn-functions-user.php:156
+msgid ""
+"This option will allow you to login the platform as the current user profile."
+" This won´t work for administrator profiles, but any other contact all "
+"across the website."
+msgstr ""
+"Ez az opció lehetővé teszi, hogy az aktuális felhasználói profilként "
+"jelentkezzen be a platformra. Ez nem működik rendszergazdai profiloknál, de "
+"a webhelyen található bármely más kapcsolattartónál."
+
+#: includes/class-userspn-settings.php:260
+msgid ""
+"This option will modify also the dashboard main top left logo link using the "
+"link and text set above."
+msgstr ""
+"Ez az opció módosítja az irányítópult fő bal felső logójának hivatkozását is "
+"a fenti hivatkozás és szöveg segítségével."
+
+#: includes/class-userspn-settings.php:250
+msgid ""
+"This option will modify also the dashboard main top left logo using the "
+"image set above."
+msgstr ""
+"Ez az opció módosítja az irányítópult fő, bal felső logóját is a fenti kép "
+"segítségével."
+
+#: includes/class-userspn-settings.php:198
+msgid "This option will modify the dashboard main login page aspect."
+msgstr ""
+"Ez az opció módosítja az irányítópult fő bejelentkezési oldalának "
+"szempontját."
+
+#: includes/class-userspn-notifications.php:55
+msgid ""
+"This option will set if you receive notifications from the system. If you "
+"uncheck it you won't receive no notifications from the system."
+msgstr ""
+"Ez az opció akkor kerül beállításra, ha értesítést kap a rendszertől. Ha "
+"törli a jelölést, nem kap értesítést a rendszertől."
+
+#: includes/class-userspn-settings.php:85
+msgid ""
+"This options allow contacts to include a custom Profile Pictures in their "
+"profiles."
+msgstr ""
+"Ez az opció lehetővé teszi a névjegyek számára, hogy egyéni profilképeket "
+"helyezzenek el a profiljukban."
+
+#: includes/class-userspn-forms.php:507
+msgid "Time"
+msgstr "Idő"
+
+#: includes/class-userspn-functions-user.php:527
+msgid "Update profile"
+msgstr "Frissítse a profilt"
+
+#: includes/class-userspn-ajax.php:107
+msgid "Update user"
+msgstr "Felhasználó frissítése"
+
+#: includes/class-userspn-functions-attachment.php:122
+msgid "Upload"
+msgstr "Feltöltés"
+
+#: includes/class-userspn-functions-user.php:554
+msgid "Upload avatar"
+msgstr "Avatar feltöltése"
+
+#: includes/class-userspn-functions-attachment.php:114
+msgid "Upload your private file"
+msgstr "Töltse fel privát fájlját"
+
+#: includes/class-userspn-forms.php:507
+msgid "Url"
+msgstr "URL"
+
+#: includes/class-userspn-settings.php:162
+msgid "Use WordPress password recovery system"
+msgstr "Használja a WordPress jelszó-helyreállító rendszert"
+
+#: includes/class-userspn-functions-user.php:543
+msgid "User avatar (recommended square images)"
+msgstr "Felhasználói avatar (ajánlott négyzet alakú képek)"
+
+#: includes/class-userspn-common.php:166
+msgid "User created. Please login."
+msgstr "Felhasználó létrehozva. Kérjük, jelentkezzen be."
+
+#: includes/class-userspn-ajax.php:78 includes/class-userspn-ajax.php:148
+msgid "User ID#"
+msgstr "User ID#"
+
+#: includes/class-userspn-functions-user.php:135
+msgid "User management - WPH Extra profile fields"
+msgstr "Felhasználókezelés - WPH Extra profilmezők"
+
+#: includes/class-userspn-settings.php:308
+msgid "Users auto-login"
+msgstr "A felhasználók automatikus bejelentkezés"
+
+#: includes/class-userspn-settings.php:121
+msgid "Users files"
+msgstr "Felhasználói fájlok"
+
+#: includes/class-userspn-settings.php:382
+msgid "Users manager"
+msgstr "Felhasználók menedzsere"
+
+#. Name of the plugin
+#: includes/class-userspn-activator.php:25
+#| msgid "Users management - WPH"
+msgid "Users manager - WPH"
+msgstr "Felhasználókezelő - WPH"
+
+#: includes/class-userspn-settings.php:397
+msgid "Users manager - WPH Options"
+msgstr "Felhasználók kezelője – WPH-beállítások"
+
+#: includes/class-userspn-settings.php:344
+msgid ""
+"When this option is active, the system asks contacts to verify their emails "
+"as they login in the platform."
+msgstr ""
+"Ha ez az opció aktív, a rendszer megkéri a kapcsolattartókat, hogy igazolják "
+"e-maileiket, amikor bejelentkeznek a platformra."
+
+#: includes/class-userspn-ajax.php:148
+msgid ""
+"will be removed completely from the system. This action cannot be undone. "
+"Are you sure?"
+msgstr ""
+"teljesen eltávolítjuk a rendszerből. Ez a művelet nem vonható vissza. Biztos "
+"vagy benne?"
+
+#. Author of the plugin
+msgid "Wordpress-Heroes"
+msgstr "Wordpress-Hősök"
+
+#: includes/class-userspn-functions-user.php:391
+msgid "WPH Mailing Plugin"
+msgstr "WPH levelező bővítmény"
+
+#: includes/class-userspn-functions-user.php:837
+msgid ""
+"You are already registered and logged in the system. So you cannot create a "
+"new user. Please close your session to register a new account."
+msgstr ""
+"Ön már regisztrált és bejelentkezett a rendszerbe. Tehát nem hozhat létre új "
+"felhasználót. Új fiók regisztrálásához zárja be a munkamenetet."
+
+#: includes/class-userspn-mailing.php:142
+msgid "You are already subscribed to the newsletter"
+msgstr "Már feliratkozott a hírlevélre"
+
+#: includes/class-userspn-functions-user.php:837
+msgid "You are registered"
+msgstr "Ön regisztrált"
+
+#: includes/class-userspn-settings.php:34
+msgid ""
+"You can disable the popup access temporarily by checking on this checkbox."
+msgstr ""
+"A jelölőnégyzet bejelölésével ideiglenesen letilthatja a felugró ablakok "
+"hozzáférését."
+
+#: includes/class-userspn-settings.php:68
+msgid ""
+"You can include the fields that will be asked in the profile popup. The base "
+"login or registration will include email and password. The fields that you "
+"add here will be included below the two base email and password fields."
+msgstr ""
+"A profil felugró ablakában megadhatja a kérni kívánt mezőket. Az alap "
+"bejelentkezés vagy regisztráció tartalmazza az e-mail címet és a jelszót. Az "
+"itt hozzáadott mezők a két alap e-mail- és jelszómező alatt jelennek meg."
+
+#: includes/class-userspn-settings.php:289
+msgid "You can remove the front-end admin bar by contacts role."
+msgstr ""
+"Eltávolíthatja a kezelőfelület adminisztrációs sávját a kapcsolattartói "
+"szerepkör alapján."
+
+#: includes/class-userspn-settings.php:269
+msgid ""
+"You can revoke the accesss to certain roles to the administrator dashboard "
+"completely."
+msgstr ""
+"Teljesen visszavonhatja bizonyos szerepkörökhöz való hozzáférést a "
+"rendszergazdai irányítópulthoz."
+
+#: includes/class-userspn-functions-attachment.php:114
+msgid "You can upload files to the system and access them from your profile."
+msgstr "Feltölthet fájlokat a rendszerbe, és elérheti őket a profiljából."
+
+#: includes/class-userspn-mailing.php:140
+msgid "You have disabled your email notifications."
+msgstr "Letiltotta az e-mailes értesítéseit."
+
+#: includes/class-userspn-ajax-nopriv.php:205
+#: includes/class-userspn-ajax-nopriv.php:208
+msgid "You have just subscribed to our newsletter."
+msgstr "Ön most iratkozott fel hírlevelünkre."
+
+#: includes/class-userspn-functions-user.php:290
+msgid "You have not registered any field yet"
+msgstr "Még nem regisztrált egyetlen mezőt sem"
+
+#: includes/class-userspn-functions-user.php:712
+msgid "Your account removal will be permanent. This action cannot be undone!"
+msgstr "A fiók eltávolítása végleges lesz. Ez a művelet nem vonható vissza!"
+
+#: includes/class-userspn-mailing.php:127
+msgid "Your email"
+msgstr "Az Ön email címe"
+
+#: includes/class-userspn-ajax.php:476
+msgid "Your file has been uploaded succesfully."
+msgstr "A fájl feltöltése sikeresen megtörtént."
+
+#: includes/class-userspn-functions-user.php:447
+#: includes/class-userspn-functions-user.php:449
+#: includes/class-userspn-functions-user.php:452
+msgid "Your profile"
+msgstr "A profilod"
+
+#: includes/class-userspn-functions-user.php:452
+msgid "Your profile link button"
+msgstr "A profilod link gombja"
+
+#: includes/class-userspn-mailing.php:128
+msgid "your@email.com"
+msgstr "your@email.com"

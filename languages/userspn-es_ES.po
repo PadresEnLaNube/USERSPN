@@ -1,0 +1,1163 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Filkers WooCommerce Marketing\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-04-23 12:29+0000\n"
+"PO-Revision-Date: 2024-12-19 09:48+0000\n"
+"Last-Translator: \n"
+"Language-Team: Español\n"
+"Language: es_ES\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.6.14; wp-6.7.1\n"
+"X-Domain: filkers"
+
+#: includes/class-userspn-functions-user.php:711
+msgid "Account deletion!"
+msgstr "¡Eliminación de cuenta!"
+
+#: includes/class-userspn-mailing.php:140
+msgid "Activate now"
+msgstr "Activar ahora"
+
+#: includes/class-userspn-mailing.php:162
+msgid "Activate your account"
+msgstr "Activa tu cuenta"
+
+#: includes/class-userspn-ajax-nopriv.php:205
+#: includes/class-userspn-ajax-nopriv.php:208
+msgid "Activate your subscription"
+msgstr "Activar tu suscripción"
+
+#: includes/class-userspn-forms.php:329
+msgid "Add audio"
+msgstr "Agregar audio"
+
+#: includes/class-userspn-forms.php:329
+msgid "Add audios"
+msgstr "Agregar audios"
+
+#: includes/class-userspn-forms.php:420
+msgid "Add element"
+msgstr "Agregar elemento"
+
+#: includes/class-userspn-settings.php:180
+msgid "Add extra profile fields on admin dashboard"
+msgstr "Agregue campos de perfil adicionales en el panel de administración"
+
+#: includes/class-userspn-forms.php:350
+msgid "Add file"
+msgstr "Agregar archivo"
+
+#: includes/class-userspn-forms.php:350
+msgid "Add files"
+msgstr "Agregar archivos"
+
+#: includes/class-userspn-forms.php:287
+msgid "Add image"
+msgstr "Añadir imagen"
+
+#: includes/class-userspn-forms.php:287
+msgid "Add images"
+msgstr "Añadir imágenes"
+
+#: includes/class-userspn-functions-user.php:278
+msgid "Add new field"
+msgstr "Agregar nuevo campo"
+
+#: includes/class-userspn-forms.php:308
+msgid "Add video"
+msgstr "Añadir video"
+
+#: includes/class-userspn-forms.php:308
+msgid "Add videos"
+msgstr "Agregar vídeos"
+
+#: includes/class-userspn-functions-user.php:369
+msgid "Advanced"
+msgstr "Avanzado"
+
+#: includes/class-userspn-settings.php:142
+msgid "Advanced options in profile"
+msgstr "Opciones avanzadas en el perfil"
+
+#: includes/class-userspn-common.php:141
+msgid "An error has occurred. Please try again in a few minutes."
+msgstr ""
+"Se ha producido un error. Por favor, inténtalo de nuevo en unos minutos."
+
+#: includes/class-userspn-functions-user.php:156
+msgid ""
+"As you login with a new account, you will lose access to yours, so it´s "
+"better if you open this link in a private window or other browser."
+msgstr ""
+"Al iniciar sesión con una nueva cuenta, perderá el acceso a la suya, por lo "
+"que es mejor que abra este enlace en una ventana privada u otro navegador."
+
+#: includes/class-userspn-forms.php:222
+msgid "Atleast 8 Character"
+msgstr "Al menos 8 caracteres"
+
+#: includes/class-userspn-functions-user.php:155
+msgid "Auto-login tool"
+msgstr "Herramienta de inicio de sesión automático"
+
+#: includes/class-userspn-ajax.php:152 includes/class-userspn-forms.php:551
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: includes/class-userspn-functions-user.php:749
+#: includes/class-userspn-functions-user.php:765
+msgid "Change password"
+msgstr "Cambiar la contraseña"
+
+#: includes/class-userspn-settings.php:152
+msgid "Change password access"
+msgstr "Cambiar contraseña de acceso"
+
+#: includes/class-userspn-functions-user.php:759
+msgid ""
+"Change your profile access password. The process will send you an email to "
+"your account to secure the process."
+msgstr ""
+"Cambia tu contraseña de acceso al perfil. El proceso te enviará un correo "
+"electrónico a tu cuenta para asegurar el proceso."
+
+#: includes/class-userspn-forms.php:528
+msgid "Classes separated by spaces"
+msgstr "Clases separadas por espacios"
+
+#: includes/class-userspn-notifications.php:29
+msgid "Congratulations! Your email has been activated successfully."
+msgstr "¡Enhorabuena! Tu correo electrónico ha sido activado con éxito."
+
+#: includes/class-userspn-settings.php:112
+msgid "Contact notifications"
+msgstr "Notificaciones de contacto"
+
+#: includes/class-userspn-settings.php:334
+msgid ""
+"Create a message that will be shown just above of the Newsletter "
+"registration form."
+msgstr ""
+"Crea un mensaje que se mostrará justo encima del formulario de registro del "
+"Newsletter."
+
+#: includes/class-userspn-functions-user.php:833
+msgid "Create user"
+msgstr "Crear usuario"
+
+#: includes/class-userspn-settings.php:122
+#: includes/class-userspn-functions-attachment.php:114
+msgid "Current file max size allowed:"
+msgstr "Tamaño máximo permitido del archivo actual:"
+
+#: includes/class-userspn-functions-user.php:275
+msgid "Current form"
+msgstr "Formulario actual"
+
+#: includes/class-userspn-settings.php:84
+msgid "Custom Profile Picture - PFP"
+msgstr "Imagen de perfil personaliada - PFP"
+
+#: includes/class-userspn-settings.php:189
+msgid "Dashboard"
+msgstr "Panel"
+
+#: includes/class-userspn-settings.php:197
+msgid "Dashboard main login page"
+msgstr "Página principal de login del dashboard"
+
+#: includes/class-userspn-settings.php:239
+#: includes/class-userspn-settings.php:240
+msgid "Dashboard main login page CSS"
+msgstr "CSS de la página de inicio de sesión principal del panel de control"
+
+#: includes/class-userspn-settings.php:218
+msgid "Dashboard main login page header logo link text"
+msgstr ""
+"Texto del enlace del logo de la página principal de login del dashboard"
+
+#: includes/class-userspn-settings.php:206
+msgid "Dashboard main login page logo"
+msgstr "Logo de la página principal de login del dashboard"
+
+#: includes/class-userspn-settings.php:229
+#: includes/class-userspn-settings.php:230
+msgid "Dashboard main login page logo link"
+msgstr "Enlace del logo de la página principal de login del dashboard"
+
+#: includes/class-userspn-settings.php:217
+msgid "Dashboard main login page logo link text"
+msgstr ""
+"Texto del enlace del logo de la página principal de login del dashboard"
+
+#: includes/class-userspn-settings.php:249
+msgid "Dashboard main logo"
+msgstr "Logotipo principal del panel de control"
+
+#: includes/class-userspn-settings.php:259
+msgid "Dashboard main logo link"
+msgstr "Enlace al logotipo principal del panel de administración"
+
+#: includes/class-userspn-forms.php:507
+msgid "Date"
+msgstr "Fecha"
+
+#: includes/class-userspn-settings.php:288
+msgid "Disable admin bar"
+msgstr "Deshabilitar la barra de administración"
+
+#: includes/class-userspn-settings.php:268
+msgid "Disable dashboard access"
+msgstr "Deshabilitar el acceso al panel de control"
+
+#: includes/class-userspn-settings.php:33
+msgid "Disable Profile popup"
+msgstr "Deshabilitar la ventana emergente del perfil"
+
+#: includes/class-userspn-functions-user.php:410
+msgid "Disconnect account"
+msgstr "Desconectar la cuenta"
+
+#: includes/class-userspn-functions-user.php:420
+#| msgid "Disconnect your user from the system. You will have to log in again."
+msgid "Disconnect your user from the system. You will need to log in again."
+msgstr ""
+"Desconecta tu usuario del sistema. Tendrás que iniciar sesión de nuevo."
+
+#: includes/class-userspn-functions-attachment.php:146
+msgid "Download file"
+msgstr "Descargar archivo"
+
+#: includes/class-userspn-forms.php:325 includes/class-userspn-common.php:152
+msgid "Edit audio"
+msgstr "Editar audio"
+
+#: includes/class-userspn-forms.php:325 includes/class-userspn-common.php:153
+msgid "Edit audios"
+msgstr "editar audios"
+
+#: includes/class-userspn-forms.php:346 includes/class-userspn-common.php:156
+msgid "Edit file"
+msgstr "Editar archivo"
+
+#: includes/class-userspn-forms.php:346 includes/class-userspn-common.php:157
+msgid "Edit files"
+msgstr "Editar archivos"
+
+#: includes/class-userspn-forms.php:283 includes/class-userspn-common.php:144
+msgid "Edit image"
+msgstr "Editar imagen"
+
+#: includes/class-userspn-forms.php:283 includes/class-userspn-common.php:145
+msgid "Edit images"
+msgstr "Editar imágenes"
+
+#: includes/class-userspn-forms.php:304 includes/class-userspn-common.php:148
+msgid "Edit video"
+msgstr "Editar video"
+
+#: includes/class-userspn-forms.php:304 includes/class-userspn-common.php:149
+msgid "Edit videos"
+msgstr "Editar vídeos"
+
+#: includes/class-userspn-functions-user.php:806
+#: includes/class-userspn-functions-user.php:807
+#: includes/class-userspn-forms.php:507
+msgid "Email"
+msgstr "Correo electrónico"
+
+#: includes/class-userspn-settings.php:279
+#: includes/class-userspn-settings.php:299
+msgid "Enabled roles"
+msgstr "Roles habilitados"
+
+#: includes/class-userspn-cron.php:32
+#| msgid "Every 5 minutes"
+msgid "Every 30 minutes"
+msgstr "Cada 30 minutos"
+
+#: includes/class-userspn-common.php:165
+#| msgid "Existing user. Plese login."
+msgid "Existing user. Please login."
+msgstr "Usuario existente. Por favor inicia sesión."
+
+#: includes/class-userspn-settings.php:67
+msgid "Extra fields in the user profile"
+msgstr "Campos extra en el perfil de usuario"
+
+#: includes/class-userspn-functions-user.php:365
+msgid "Files"
+msgstr "Archivos"
+
+#: includes/class-userspn-functions-user.php:787
+msgid "Forgot your password?"
+msgstr "¿Olvidaste la contraseña?"
+
+#: includes/class-userspn-settings.php:76
+msgid "Front-end users registration"
+msgstr "Registro de usuarios desde el font-end"
+
+#: includes/class-userspn-settings.php:172
+msgid "Front-end users removal"
+msgstr "Eliminación de usuarios desde el front-end"
+
+#: includes/class-userspn-ajax-nopriv.php:208
+msgid "Hello"
+msgstr "Hola"
+
+#. Author URI of the plugin
+msgid "https://padresenlanube.com/"
+msgstr "https://padresenlanube.com/"
+
+#. URI of the plugin
+msgid "https://padresenlanube.com/plugins/userspn/"
+msgstr "https://padresenlanube.com/plugins/userspn/"
+
+#: includes/class-userspn-mailing.php:105
+msgid "I have read and accept"
+msgstr "He leído y acepto"
+
+#: includes/class-userspn-mailing.php:107
+msgid "I have read and accept Terms and conditions."
+msgstr "He leído y acepto los términos y condiciones."
+
+#: includes/class-userspn-settings.php:181
+msgid ""
+"If you check this option, admin dashboard user edition and creation pages "
+"will show the added profile extra fields at the bottom. Administrators and "
+"roles with access to this dashboard pages will be able to edit or add them "
+"on the creation of new contacts."
+msgstr ""
+"Si marcas esta opción, las páginas de edición y creación de usuarios del "
+"panel de administración mostrarán los campos adicionales del perfil agregado "
+"en la parte inferior. Los administradores y roles con acceso a las páginas "
+"de este panel podrán editarlas o agregarlas al crear nuevos contactos."
+
+#: includes/class-userspn-settings.php:43
+msgid ""
+"If you check this option, the system will ask for the name and surname of "
+"the contact based on the WordPress custom database structure."
+msgstr ""
+"Si marca esta opción, el sistema le solicitará el nombre y apellido del "
+"contacto basándose en la estructura de base de datos personalizada de "
+"WordPress."
+
+#: includes/class-userspn-functions-user.php:355
+msgid "Image"
+msgstr "Imagen"
+
+#: includes/class-userspn-functions-user.php:714
+msgid "Include your password to confirm deletion"
+msgstr "Incluye tu contraseña para confirmar la eliminación"
+
+#: includes/class-userspn-forms.php:496
+msgid "Input"
+msgstr "Entrada"
+
+#: includes/class-userspn-forms.php:527
+msgid "Input classes"
+msgstr "Clases de la entrada"
+
+#: includes/class-userspn-forms.php:488 includes/class-userspn-forms.php:489
+msgid "Input name"
+msgstr "Nombre de entrada"
+
+#: includes/class-userspn-forms.php:532
+msgid "Input required"
+msgstr "Entrada requerida"
+
+#: includes/class-userspn-forms.php:503
+msgid "Input subtype"
+msgstr "Subtipo de entrada"
+
+#: includes/class-userspn-forms.php:493
+msgid "Input type"
+msgstr "Tipo de entrada"
+
+#: includes/class-userspn-functions-user.php:527
+#: includes/class-userspn-functions-user.php:833
+#: includes/class-userspn-data.php:59 includes/class-userspn-forms.php:176
+#: includes/class-userspn-functions-attachment.php:122
+#: includes/class-userspn-functions-attachment.php:145
+msgid "Loading..."
+msgstr "Cargando..."
+
+#: includes/class-userspn-functions-user.php:784
+msgid "Log In"
+msgstr "Acceso"
+
+#: includes/class-userspn-functions-user.php:426
+msgid "Log out"
+msgstr "Cerrar sesión"
+
+#: includes/class-userspn-functions-user.php:459
+msgid "Login"
+msgstr "Acceso"
+
+#: includes/class-userspn-functions-user.php:158
+msgid "Login as"
+msgstr "Iniciar sesión como"
+
+#: includes/class-userspn-forms.php:210
+msgid "Lowercase & Uppercase"
+msgstr "Mayúsculas y minúsculas"
+
+#: includes/class-userspn-settings.php:353
+#: includes/class-userspn-settings.php:354
+msgid "Max number of activation emails"
+msgstr "Máximo número de correos electrónicos de activación"
+
+#: includes/class-userspn-forms.php:518
+msgid "Multiple selector"
+msgstr "Selector múltiple"
+
+#: includes/class-userspn-functions-user.php:310
+#: includes/class-userspn-functions-user.php:311
+msgid "Name"
+msgstr "Nombre"
+
+#: includes/class-userspn-settings.php:42
+msgid "Name and surname in profile"
+msgstr "Nombre y apellidos en el perfil"
+
+#: includes/class-userspn-settings.php:52
+msgid "Name compulsory"
+msgstr "Nombre obligatorio"
+
+#: includes/class-userspn-forms.php:483 includes/class-userspn-forms.php:489
+msgid "New field"
+msgstr "Nuevo campo"
+
+#: includes/class-userspn-settings.php:317
+#: includes/class-userspn-settings.php:325
+msgid "Newsletter"
+msgstr "Newsltetter"
+
+#: includes/class-userspn-settings.php:343
+msgid "Newsletter activation"
+msgstr "Activación del boletín"
+
+#: includes/class-userspn-settings.php:333
+msgid "Newsletter message"
+msgstr "Mensaje del boletín informativo"
+
+#: includes/class-userspn-forms.php:115
+msgid "No file found"
+msgstr "Archivo no encontrado"
+
+#: includes/class-userspn-forms.php:535
+msgid "Not required"
+msgstr "No requerido"
+
+#: includes/class-userspn-functions-user.php:360
+msgid "Notifications"
+msgstr "Notificaciones"
+
+#: includes/class-userspn-functions-user.php:390
+msgid ""
+"Notifications are inactive. Please install and activate Mailing Manager - PN "
+"to allow integrated notifications in your platform."
+msgstr ""
+"Las notificaciones están inactivas. Instala y activa el complemento de "
+"Mailing Manager - PN para permitir notificaciones integradas en tu plataforma."
+
+#: includes/class-userspn-forms.php:507
+msgid "Number"
+msgstr "Número"
+
+#: includes/class-userspn-forms.php:214
+msgid "Number (0-9)"
+msgstr "Número (0-9)"
+
+#: includes/class-userspn-forms.php:523
+msgid "One option per line"
+msgstr "Una opción por línea"
+
+#: includes/class-userspn-notifications.php:34
+msgid ""
+"Oppps! We are not able to verify your account. Please try to subscribe again "
+"or contact us."
+msgstr ""
+"¡Ups! No podemos verificar tu cuenta. Intenta suscribirte nuevamente o "
+"contáctanos."
+
+#: includes/class-userspn-forms.php:394 includes/class-userspn-forms.php:410
+msgid "Order element"
+msgstr "Elemento de orden"
+
+#: includes/class-userspn-common.php:160
+msgid "Ordered element"
+msgstr "Elemento ordenado"
+
+#: includes/class-userspn-functions-user.php:716
+#: includes/class-userspn-functions-user.php:815
+#: includes/class-userspn-functions-user.php:816
+#: includes/class-userspn-forms.php:507
+msgid "Password"
+msgstr "Contraseña"
+
+#: includes/class-userspn-forms.php:206
+msgid "Password strength checker"
+msgstr "Comprobador de la solidez de la contraseña"
+
+#: includes/class-userspn-common.php:161
+#| msgid "Please complete all the required fields of your profile."
+msgid "Please complete all the required fields (*) of your profile"
+msgstr "Por favor completa todos los campos requeridos (*) de tu perfil."
+
+#: includes/class-userspn-ajax-nopriv.php:205
+#: includes/class-userspn-ajax-nopriv.php:208
+msgid "Please confirm your email address clicking in the link."
+msgstr ""
+"Por favor confirma tu dirección de correo electrónico pinchando en el enlace."
+
+#: includes/class-userspn-common.php:142
+msgid "Please create a new user or login to save the information."
+msgstr ""
+"Por favor crea un nuevo usuario o inicia sesión para guardar la información."
+
+#: includes/class-userspn-common.php:171
+msgid "Please provide at least field name and type."
+msgstr "Proporcione al menos el nombre y el tipo de campo."
+
+#: includes/class-userspn-common.php:163
+#| msgid "Please, include your account password to complete the operation."
+msgid "Please, include your account password to complete the operation"
+msgstr ""
+"Por favor, incluye la contraseña de tu cuenta para completar la operación"
+
+#: includes/class-userspn-ajax.php:478
+msgid "Please, select a valid file."
+msgstr "Por favor, selecciona un archivo válido."
+
+#: includes/class-userspn-functions-post.php:140
+msgid "Post creation failed, could not find original post:"
+msgstr ""
+"Error en la creación de la publicación, no se pudo encontrar la publicación "
+"original:"
+
+#: includes/class-userspn-settings.php:424
+msgid "Powered by"
+msgstr "Desarrollado por"
+
+#: includes/class-userspn-functions-user.php:352
+msgid "Profile"
+msgstr "Perfil"
+
+#: includes/class-userspn-functions-user.php:623
+msgid "Profile picture"
+msgstr "Imagen de perfil"
+
+#: includes/class-userspn-functions-user.php:623
+msgid "Profile picture of"
+msgstr "Foto de perfil de"
+
+#: includes/class-userspn-settings.php:26
+msgid "Profile popup"
+msgstr "Ventana emergente de perfil"
+
+#: includes/class-userspn-settings.php:93
+msgid "Random images in avatar block"
+msgstr "Imágenes aleatorias en el bloque del avatar"
+
+#: includes/class-userspn-notifications.php:54
+msgid "Receive notifications"
+msgstr "Recibir notificaciones"
+
+#: includes/class-userspn-functions-user.php:462
+msgid "Register"
+msgstr "Registro"
+
+#: includes/class-userspn-functions-user.php:784
+msgid "Remember Me"
+msgstr "Recordarme"
+
+#: includes/class-userspn-forms.php:555
+msgid "Remove"
+msgstr "Eliminar"
+
+#: includes/class-userspn-forms.php:398 includes/class-userspn-forms.php:414
+msgid "Remove element"
+msgstr "Eliminar elemento"
+
+#: includes/class-userspn-forms.php:545
+msgid "Remove field"
+msgstr "Eliminar campo"
+
+#: includes/class-userspn-functions-attachment.php:145
+msgid "Remove file"
+msgstr "Eliminar archivo"
+
+#: includes/class-userspn-ajax.php:146 includes/class-userspn-ajax.php:156
+#: includes/class-userspn-functions-user.php:687
+#: includes/class-userspn-functions-user.php:703
+#: includes/class-userspn-functions-user.php:719
+msgid "Remove user"
+msgstr "Eliminar usuario"
+
+#: includes/class-userspn-functions-user.php:697
+msgid "Remove your user from the system. This action cannot be undone."
+msgstr "Eliminar tu usuario del sistema. Esta acción no se puede deshacer."
+
+#: includes/class-userspn-forms.php:536
+msgid "Required"
+msgstr "Requerido"
+
+#: includes/class-userspn-forms.php:458
+msgid "Required field"
+msgstr "Campo requerido"
+
+#: includes/class-userspn-ajax.php:84
+msgid "Roles"
+msgstr "Roles"
+
+#: includes/class-userspn-settings.php:132
+#: includes/class-userspn-settings.php:133
+msgid "Roles allowed to upload files"
+msgstr "Roles con permiso para subir archivos"
+
+#: includes/class-userspn-forms.php:562
+msgid "Save field"
+msgstr "Guardar campo"
+
+#: includes/class-userspn-settings.php:370
+#: includes/class-userspn-notifications.php:67
+msgid "Save options"
+msgstr "Guardar opciones"
+
+#: includes/class-userspn-common.php:143
+msgid "Saved successfully"
+msgstr "Guardado exitosamente"
+
+#: includes/class-userspn-forms.php:496
+msgid "Select"
+msgstr "Selector"
+
+#: includes/class-userspn-forms.php:259
+msgid "Select an option"
+msgstr "Selecciona una opción"
+
+#: includes/class-userspn-common.php:154
+msgid "Select audio"
+msgstr "Seleccionar audio"
+
+#: includes/class-userspn-common.php:155
+msgid "Select audios"
+msgstr "Seleccionar audios"
+
+#: includes/class-userspn-settings.php:103
+#: includes/class-userspn-settings.php:104
+msgid "Select avatar block images"
+msgstr "Selecciona las imágenes del Avatar"
+
+#: includes/class-userspn-common.php:158
+msgid "Select file"
+msgstr "Selecciona Archivo"
+
+#: includes/class-userspn-common.php:159
+msgid "Select files"
+msgstr "Selecciona archivos"
+
+#: includes/class-userspn-common.php:146
+msgid "Select image"
+msgstr "Seleccionar imagen"
+
+#: includes/class-userspn-common.php:147
+msgid "Select images"
+msgstr "Seleccionar imágenes"
+
+#: includes/class-userspn-forms.php:517
+msgid "Select multiple"
+msgstr "Selector múltiple"
+
+#: includes/class-userspn-forms.php:534
+msgid "Select requirement"
+msgstr "Selector requerido"
+
+#: includes/class-userspn-forms.php:506
+msgid "Select subtype"
+msgstr "Seleccionar subtipo"
+
+#: includes/class-userspn-forms.php:495
+msgid "Select type"
+msgstr "Seleccionar tipo"
+
+#: includes/class-userspn-common.php:150
+msgid "Select video"
+msgstr "Seleccionar vídeo"
+
+#: includes/class-userspn-common.php:151
+msgid "Select videos"
+msgstr "Seleccionar vídeos"
+
+#: includes/class-userspn-forms.php:514
+msgid "Selector subtype"
+msgstr "Seleccionar subtipo"
+
+#: includes/class-userspn-settings.php:280
+msgid ""
+"Set up the roles to get dashboard access. This option takes priority over "
+"the previous one. If a role appears in both fields, this \"Enabled roles\" "
+"field will be the one taken into account and the access will be provided."
+msgstr ""
+"Configurar los roles para obtener acceso al panel de control. Esta opción "
+"tiene prioridad sobre la anterior. Si en ambos campos aparece un rol, este "
+"campo \"Roles habilitados\" será el que se tenga en cuenta y se proporcione "
+"el acceso."
+
+#: includes/class-userspn-settings.php:300
+msgid ""
+"Set up the roles to get the admin bar. This option takes priority over the "
+"previous one. If a role appears in both fields, this \"Enabled roles\" field "
+"will be the one taken into account and the administration bar will be "
+"displayed."
+msgstr ""
+"Configura los roles para obtener la barra de administración. Esta opción "
+"tiene prioridad sobre la anterior. Si en ambos campos aparece un rol, se "
+"tendrá en cuenta este campo “Roles habilitados” y se mostrará la barra de "
+"administración."
+
+#: includes/class-userspn-forms.php:518
+msgid "Simple selector"
+msgstr "Selector simple"
+
+#: includes/class-userspn-forms.php:218
+msgid "Special Character (!@#$%^&*)"
+msgstr "Caracter especial (!@#$%^&*)"
+
+#. Description of the plugin
+msgid ""
+"Streamline user management on your WordPress site with this powerful plugin. "
+"Enable custom registration forms, secure logins, and seamless profile "
+"management for your users."
+msgstr ""
+"Agilice la gestión de usuarios en su sitio de WordPress con este potente "
+"complemento. Habilite formularios de registro personalizados, inicios de "
+"sesión seguros y una gestión de perfiles sin inconvenientes para sus "
+"usuarios."
+
+#: includes/class-userspn-mailing.php:97
+msgid "Submit"
+msgstr "Enviar"
+
+#: includes/class-userspn-functions-user.php:319
+#: includes/class-userspn-functions-user.php:320
+msgid "Surname"
+msgstr "Apellidos"
+
+#: includes/class-userspn-settings.php:61
+msgid "Surname compulsory"
+msgstr "Apellido obligatorio"
+
+#: includes/class-userspn-forms.php:507
+msgid "Text"
+msgstr "Texto"
+
+#: includes/class-userspn-forms.php:496
+msgid "Textarea"
+msgstr "Textarea"
+
+#: includes/class-userspn-common.php:169
+msgid "The field has been removed."
+msgstr "El campo ha sido eliminado."
+
+#: includes/class-userspn-common.php:170
+msgid "The field has been saved successfully."
+msgstr "El campo se ha guardado correctamente."
+
+#: includes/class-userspn-forms.php:548
+msgid "The field will be removed. This action cannot be undone."
+msgstr "El campo será eliminado. Esta acción no se puede deshacer."
+
+#: includes/class-userspn-common.php:168
+msgid "The file has been removed."
+msgstr "El archivo ha sido eliminado."
+
+#: includes/class-userspn-common.php:167
+#| msgid "Your file has been uploaded successfully. Reloading page"
+msgid "The file has been uploaded successfully. Reloading page..."
+msgstr "Tu archivo se ha subido con éxito. Recargando página..."
+
+#: includes/class-userspn-common.php:162
+#| msgid "The password is not correct. Please try again."
+msgid "The password is not correct. Please try again"
+msgstr "La contraseña no es correcta. Por favor, inténtalo de nuevo."
+
+#: includes/class-userspn-common.php:164
+msgid "The user has been successfully removed from the system. Reloading..."
+msgstr "El usuario ha sido eliminado con éxito del sistema. Recargando..."
+
+#: includes/class-userspn-functions-user.php:530
+msgid "There are no extra fields in the profile"
+msgstr "No hay campos extra en el perfil"
+
+#: includes/class-userspn-settings.php:134
+#| msgid ""
+#| "This option allow only specific roles to have the option to upload files "
+#| "to the system. If this option is empty and \"User files\" field is on, "
+#| "all the roles will be able to upload files to the system."
+msgid ""
+"This option allow only specific roles to have the option to upload files to "
+"the system. If this option is empty and \"User files\" field is on, all the "
+"roles will be able to upload files to the system. Administrators will be "
+"allways allowed."
+msgstr ""
+"Esta opción permite que solo roles específicos puedan cargar archivos al "
+"sistema. Si esta opción está vacía y el campo \"Archivos de usuario\" está "
+"activado, todos los roles podrán cargar archivos al sistema."
+
+#: includes/class-userspn-settings.php:94
+#: includes/class-userspn-settings.php:105
+msgid ""
+"This option allow you to include custom images to be shown randomly in the "
+"avatar image block."
+msgstr ""
+"Esta opción le permite incluir imágenes personalizadas que se mostrarán "
+"aleatoriamente en el bloque de imágenes del avatar."
+
+#: includes/class-userspn-settings.php:153
+msgid ""
+"This option allows users to access to the password change integrated "
+"function."
+msgstr ""
+"Esta opción permite a los usuarios acceder a la función integrada de cambio "
+"de contraseña."
+
+#: includes/class-userspn-settings.php:77
+msgid ""
+"This option allows users to create their account from the front-end profile "
+"popup."
+msgstr ""
+"Esta opción permite a los usuarios crear su cuenta desde el popup de perfil "
+"del front-end."
+
+#: includes/class-userspn-settings.php:143
+msgid ""
+"This option allows users to do user from the advanced option in the profile "
+"popup."
+msgstr ""
+"Esta opción permite a los usuarios realizar cambios desde la opción avanzada "
+"en la ventana emergente del perfil."
+
+#: includes/class-userspn-settings.php:173
+msgid ""
+"This option allows users to remove their account from the advanced option in "
+"the profile popup."
+msgstr ""
+"Esta opción permite a los usuarios eliminar su cuenta desde la opción "
+"avanzada en la ventana emergente del perfil."
+
+#: includes/class-userspn-settings.php:122
+msgid ""
+"This option allows users to upload and manage their files to the system."
+msgstr ""
+"Esta opción permite a los usuarios cargar y administrar sus archivos en el "
+"sistema."
+
+#: includes/class-userspn-settings.php:207
+msgid "This option changes the main login page logo."
+msgstr ""
+"Esta opción cambia el logotipo de la página principal de inicio de sesión."
+
+#: includes/class-userspn-settings.php:219
+msgid ""
+"This option changes your main login page header logo link text. By default "
+"\"Powered by WordPress\"."
+msgstr ""
+"Esta opción cambia el texto del enlace del logotipo del encabezado de la "
+"página de inicio de sesión principal. Por defecto \"Desarrollado por "
+"WordPress\"."
+
+#: includes/class-userspn-settings.php:231
+msgid ""
+"This option changes your main login page logo link. By default https:"
+"//wordpress.org/."
+msgstr ""
+"Esta opción cambia el enlace del logotipo de tu página principal de inicio "
+"de sesión. Por defecto https://wordpress.org/."
+
+#: includes/class-userspn-settings.php:163
+msgid ""
+"This option force system to use the password recovery WordPress tool by "
+"default. It will generate an unique nonce and will send it to the user to "
+"change password safely."
+msgstr ""
+"Esta opción obliga al sistema a utilizar la herramienta de recuperación de "
+"contraseña de WordPress de forma predeterminada. Generará un nonce único y "
+"lo enviará al usuario para que cambie la contraseña de forma segura."
+
+#: includes/class-userspn-settings.php:355
+msgid ""
+"This option set up the maximum numer of activating emails allowed to be sent "
+"from the platform."
+msgstr ""
+"Esta opción configura la cantidad máxima de correos electrónicos de "
+"activación que se pueden enviar desde la plataforma."
+
+#: includes/class-userspn-settings.php:113
+msgid ""
+"This option shows a notifications tab in the profile popup that allows users "
+"to manage their notifications."
+msgstr ""
+"Esta opción muestra una pestaña de notificaciones en la ventana emergente "
+"del perfil que permite a los usuarios administrar sus notificaciones."
+
+#: includes/class-userspn-settings.php:309
+msgid ""
+"This option will allow administrators to login as any user on the platform "
+"with no administrator role. Please use this option with caution and "
+"responsibility, always with the consent of the users. It carries privacy and "
+"security risks."
+msgstr ""
+"Esta opción permitirá a los administradores iniciar sesión como cualquier "
+"usuario  sin rol de administrador de la plataforma. Utiliza esta opción con "
+"precaución y responsabilidad, siempre con el consentimiento de los usuarios. "
+"Conlleva riesgos de privacidad y seguridad."
+
+#: includes/class-userspn-functions-user.php:156
+msgid ""
+"This option will allow you to login the platform as the current user profile."
+" This won´t work for administrator profiles, but any other contact all "
+"across the website."
+msgstr ""
+"Esta opción te permitirá iniciar sesión en la plataforma con el perfil de "
+"usuario actual. Esto no funcionará para perfiles de administrador, sino para "
+"cualquier otro contacto en todo el sitio web."
+
+#: includes/class-userspn-settings.php:260
+msgid ""
+"This option will modify also the dashboard main top left logo link using the "
+"link and text set above."
+msgstr ""
+"Esta opción modificará también el enlace del logotipo superior izquierdo "
+"principal del panel de administracón usando el enlace y el texto "
+"establecidos arriba."
+
+#: includes/class-userspn-settings.php:250
+msgid ""
+"This option will modify also the dashboard main top left logo using the "
+"image set above."
+msgstr ""
+"Esta opción modificará también el enlace del logotipo superior izquierdo "
+"principal del panel de administración usando el enlace y el texto "
+"establecido arriba."
+
+#: includes/class-userspn-settings.php:198
+msgid "This option will modify the dashboard main login page aspect."
+msgstr ""
+"Esta opción modificará el aspecto de la página principal de inicio de sesión "
+"del panel."
+
+#: includes/class-userspn-notifications.php:55
+msgid ""
+"This option will set if you receive notifications from the system. If you "
+"uncheck it you won't receive no notifications from the system."
+msgstr ""
+"Esta opción configurará si recibes notificaciones del sistema. Si la "
+"desmarcas no recibirás ninguna notificación del sistema."
+
+#: includes/class-userspn-settings.php:85
+msgid ""
+"This options allow contacts to include a custom Profile Pictures in their "
+"profiles."
+msgstr ""
+"Estas opciones permiten a los contactos incluir imágenes de perfil "
+"personalizadas en sus perfiles."
+
+#: includes/class-userspn-forms.php:507
+msgid "Time"
+msgstr "Hora"
+
+#: includes/class-userspn-functions-user.php:527
+msgid "Update profile"
+msgstr "Actualizar perfil"
+
+#: includes/class-userspn-ajax.php:107
+msgid "Update user"
+msgstr "Actualizar usuario"
+
+#: includes/class-userspn-functions-attachment.php:122
+msgid "Upload"
+msgstr "Cargar"
+
+#: includes/class-userspn-functions-user.php:554
+msgid "Upload avatar"
+msgstr "Subir avatar"
+
+#: includes/class-userspn-functions-attachment.php:114
+msgid "Upload your private file"
+msgstr "Sube tu archivo privado"
+
+#: includes/class-userspn-forms.php:507
+msgid "Url"
+msgstr "Url"
+
+#: includes/class-userspn-settings.php:162
+msgid "Use WordPress password recovery system"
+msgstr "Utilice el sistema de recuperación de contraseña de WordPress"
+
+#: includes/class-userspn-functions-user.php:543
+msgid "User avatar (recommended square images)"
+msgstr "Avatar de usuario (recomendado imágenes cuadradas)"
+
+#: includes/class-userspn-common.php:166
+#| msgid "User created. Plese login."
+msgid "User created. Please login."
+msgstr "Usuario creado. Por favor inicia de sesión."
+
+#: includes/class-userspn-ajax.php:78 includes/class-userspn-ajax.php:148
+msgid "User ID#"
+msgstr "ID de usuario #"
+
+#: includes/class-userspn-functions-user.php:135
+msgid "User management - PN Extra profile fields"
+msgstr "Gestión de usuarios - Campos de perfil adicionales de PN"
+
+#: includes/class-userspn-settings.php:308
+msgid "Users auto-login"
+msgstr "Login automático de usuarios"
+
+#: includes/class-userspn-settings.php:121
+msgid "Users files"
+msgstr "Archivos de usuarios"
+
+#: includes/class-userspn-settings.php:382
+msgid "Users manager"
+msgstr "Gestor de usuarios"
+
+#. Name of the plugin
+#: includes/class-userspn-activator.php:25
+#| msgid "Users management - PN"
+msgid "Users manager - PN"
+msgstr "Gestión de usuarios - PN"
+
+#: includes/class-userspn-settings.php:397
+msgid "Users manager - PN Settings"
+msgstr "Gestor de usuarios - Opciones de PN"
+
+#: includes/class-userspn-settings.php:344
+msgid ""
+"When this option is active, the system asks contacts to verify their emails "
+"as they login in the platform."
+msgstr ""
+"Cuando esta opción está activa, el sistema solicita a los contactos que "
+"verifiquen sus correos electrónicos cuando inician sesión en la plataforma."
+
+#: includes/class-userspn-ajax.php:148
+msgid ""
+"will be removed completely from the system. This action cannot be undone. "
+"Are you sure?"
+msgstr ""
+"será eliminado completamente del sistema. Esta acción no se puede deshacer. "
+"¿Estás seguro?"
+
+#. Author of the plugin
+msgid "Wordpress-Heroes"
+msgstr "Wordpress-Heroes"
+
+#: includes/class-userspn-functions-user.php:391
+msgid "Mailing Manager - PN"
+msgstr "Mailing Manager - PN"
+
+#: includes/class-userspn-functions-user.php:837
+msgid ""
+"You are already registered and logged in the system. So you cannot create a "
+"new user. Please close your session to register a new account."
+msgstr ""
+"Ya está registrado y ha iniciado sesión en el sistema, por lo que no puede "
+"crear un nuevo usuario. Cierre su sesión para registrar una nueva cuenta."
+
+#: includes/class-userspn-mailing.php:142
+msgid "You are already subscribed to the newsletter"
+msgstr "Ya estás suscrito al boletín"
+
+#: includes/class-userspn-functions-user.php:837
+msgid "You are registered"
+msgstr "Estás registrado"
+
+#: includes/class-userspn-settings.php:34
+msgid ""
+"You can disable the popup access temporarily by checking on this checkbox."
+msgstr ""
+"Puede deshabilitar el acceso emergente temporalmente marcando esta casilla "
+"de verificación."
+
+#: includes/class-userspn-settings.php:68
+#| msgid ""
+#| "You can include the fields that will be asked in the user registration. "
+#| "The base registration will include email and password. The fields that "
+#| "you add here will be included below the two base email and password "
+#| "fields."
+msgid ""
+"You can include the fields that will be asked in the profile popup. The base "
+"login or registration will include email and password. The fields that you "
+"add here will be included below the two base email and password fields."
+msgstr ""
+"Puedes incluir los campos que se te pedirán en el registro de usuario. El "
+"registro base incluirá correo electrónico y contraseña. Los campos que "
+"agregues aquí se incluirán debajo de los dos campos básicos de correo "
+"electrónico y contraseña."
+
+#: includes/class-userspn-settings.php:289
+msgid "You can remove the front-end admin bar by contacts role."
+msgstr ""
+"Puede eliminar la barra de administración de front-end según la función de "
+"contactos."
+
+#: includes/class-userspn-settings.php:269
+msgid ""
+"You can revoke the accesss to certain roles to the administrator dashboard "
+"completely."
+msgstr ""
+"Puedes revocar completamente los accesos a ciertos roles al panel de "
+"administrador."
+
+#: includes/class-userspn-functions-attachment.php:114
+msgid "You can upload files to the system and access them from your profile."
+msgstr "Puedes subir archivos al sistema y acceder a ellos desde tu perfil."
+
+#: includes/class-userspn-mailing.php:140
+msgid "You have disabled your email notifications."
+msgstr "Has desactivado tus notificaciones por correo electrónico."
+
+#: includes/class-userspn-ajax-nopriv.php:205
+#: includes/class-userspn-ajax-nopriv.php:208
+msgid "You have just subscribed to our newsletter."
+msgstr "Te acabas de suscribir a nuestra lista de correo."
+
+#: includes/class-userspn-functions-user.php:290
+msgid "You have not registered any field yet"
+msgstr "No has registrado ningún campo todavía"
+
+#: includes/class-userspn-functions-user.php:712
+msgid "Your account removal will be permanent. This action cannot be undone!"
+msgstr ""
+"La eliminación de tu cuenta será permanente. ¡Esta acción no se puede "
+"deshacer!"
+
+#: includes/class-userspn-mailing.php:127
+msgid "Your email"
+msgstr "Tu correo electrónico"
+
+#: includes/class-userspn-ajax.php:476
+msgid "Your file has been uploaded succesfully."
+msgstr "Tu archivo se ha subido exitosamente."
+
+#: includes/class-userspn-functions-user.php:447
+#: includes/class-userspn-functions-user.php:449
+#: includes/class-userspn-functions-user.php:452
+msgid "Your profile"
+msgstr "Tu perfil"
+
+#: includes/class-userspn-functions-user.php:452
+msgid "Your profile link button"
+msgstr "Botón de enlace a tu perfil"
+
+#: includes/class-userspn-mailing.php:128
+msgid "your@email.com"
+msgstr "your@email.com"
