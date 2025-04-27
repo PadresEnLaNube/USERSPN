@@ -326,11 +326,6 @@ class USERSPN_Functions_User {
         'label' => __('Surname', 'userspn'),
         'placeholder' => __('Surname', 'userspn'),
       ];
-      $userspn_user_register_base_fields['userspn_nonce'] = [
-        'id' => 'userspn_nonce',
-        'input' => 'input',
-        'type' => 'nonce',
-      ];
     }
 
     $userspn_user_register_fields_filtered = apply_filters('userspn_register_fields', $base_fields);

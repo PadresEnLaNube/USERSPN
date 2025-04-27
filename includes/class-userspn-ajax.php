@@ -363,20 +363,6 @@ class USERSPN_Ajax {
             echo 'userspn_input_editor_builder_remove_error';exit();
           }
           break;
-        case 'userspn_profile_edit':
-          if (!empty($user_id)) {
-            foreach ($key_value as $key => $value) {
-              if (!in_array($key, ['userspn_ajax_type', 'user_id', 'action'])) {
-                update_user_meta($user_id, $key, $value);
-              }
-            }
-
-            do_action('userspn_profile_edit', $user_id, $key_value);
-            echo 'userspn_profile_edit_success';exit();
-          }else{
-            echo 'userspn_profile_edit_error';exit();
-          }
-          break;
         case 'userspn_notifications':
           if (!empty($user_id)) {
             foreach ($key_value as $key => $value) {

@@ -1232,9 +1232,6 @@ textarea{
 }
 /*  END USERSPN TABS */
 
-.userspn-input-wrapper.userspn_nonce{
-  height:0;
-}
 .userspn-body header .wp-block-navigation .wp-block-navigation-item__content.wp-block-navigation-item__content{
   text-transform:uppercase;
   font-weight:400;

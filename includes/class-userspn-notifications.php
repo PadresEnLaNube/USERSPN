@@ -86,11 +86,6 @@ class USERSPN_Notifications {
       ];
     }
 
-    $userspn_notifications['userspn_nonce'] = [
-      'id' => 'userspn_nonce',
-      'input' => 'input',
-      'type' => 'hidden',
-    ];
     $userspn_notifications['userspn_notifications_submit'] = [
       'id' => 'userspn_notifications_submit',
       'input' => 'input',

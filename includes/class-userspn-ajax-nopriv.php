@@ -102,6 +102,10 @@ class USERSPN_Ajax_Nopriv {
                     update_user_meta($user_id, $key, $value);
                   }
 
+                  update_user_meta($user_id, 'userspn_user_updated', strtotime('now'));
+                  update_user_meta($user_id, 'dev_first_key_value', $key_value);
+                  do_action('userspn_form_save', $user_id, $key_value, $userspn_form_type, $userspn_form_subtype);
+                  do_action('userspn_profile_edit', $user_id, $key_value);
                   break;
                 case 'post':
                   if (empty($userspn_form_subtype) || !in_array($userspn_form_subtype, ['post_new', 'post_edit'])) {
@@ -116,6 +120,7 @@ class USERSPN_Ajax_Nopriv {
                     }
                   }
 
+                  do_action('userspn_form_save', $post_id, $key_value, $userspn_form_type, $userspn_form_subtype);
                   break;
                 case 'option':
                   if (USERSPN_Functions_User::is_user_admin(get_current_user_id())) {
@@ -124,23 +129,12 @@ class USERSPN_Ajax_Nopriv {
                     }
                   }
 
+                  do_action('userspn_form_save', 0, $key_value, $userspn_form_type, $userspn_form_subtype);
                   break;
               }
 
               if ($userspn_form_type == 'option') {
                 update_option('userspn_form_changed', true);
-              }
-
-              switch ($userspn_form_type) {
-                case 'user':
-                  do_action('userspn_form_save', $user_id, $key_value, $userspn_form_type, $userspn_form_subtype);
-                  break;
-                case 'post':
-                  do_action('userspn_form_save', $post_id, $key_value, $userspn_form_type, $userspn_form_subtype);
-                  break;
-                case 'option':
-                  do_action('userspn_form_save', 0, $key_value, $userspn_form_type, $userspn_form_subtype);
-                  break;
               }
 
               $popup = in_array($userspn_form_subtype, ['post_new', 'post_edit']) ? 'close' : '';

@@ -57,6 +57,8 @@
       });
 
       $.post(ajax_url, data, function(response) {
+        console.log(data);console.log(response);
+        
         if ($.parseJSON(response)['error_key'] == 'userspn_form_save_error_unlogged') {
           userspn_get_main_message(userspn_i18n.user_unlogged);
 

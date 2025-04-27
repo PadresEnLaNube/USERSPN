@@ -199,12 +199,12 @@ class USERSPN_Forms {
             break;
           case 'hidden':
             ?>
-              <input type="hidden" id="<?php echo esc_attr($userspn_input['id']); ?>" name="<?php echo esc_attr($userspn_input['id']); ?>" value="<?php echo esc_attr($userspn_value); ?>">
+              <input type="hidden" id="<?php echo esc_attr($userspn_input['id']); ?>" name="<?php echo esc_attr($userspn_input['id']); ?>" value="<?php echo esc_attr($userspn_value); ?>" <?php echo (array_key_exists('multiple', $userspn_input) && $userspn_input['multiple'] == 'true' ? 'multiple' : ''); ?>>
             <?php
             break;
           case 'nonce':
             ?>
-              <input type="hidden" id="<?php echo esc_attr($userspn_input['id']); ?>" name="<?php echo esc_attr($userspn_input['id']); ?>" value="<?php echo esc_attr(wp_create_nonce('userspn-nonce')); ?>">
+              <input type="hidden" id="<?php echo esc_attr($userspn_input['id']); ?>" name="<?php echo esc_attr($userspn_input['id']); ?>" value="<?php echo esc_attr(wp_create_nonce('userspn-nonce')); ?>" <?php echo (array_key_exists('multiple', $userspn_input) && $userspn_input['multiple'] == 'true' ? 'multiple' : ''); ?>>
             <?php
             break;
           case 'password':
@@ -223,7 +223,7 @@ class USERSPN_Forms {
                     <div class="userspn-password-strength-bar"></div>
                   </div>
 
-                  <h3 class="userspn-mt-20"><?php esc_html_e('Password strength checker', 'userspn'); ?> <i class="material-icons-outlined userspn-cursor-pointer userspn-close-icon userspn-mt-30">close</i></h3>
+                  <h5 class="userspn-mt-20 userspn-mb-10"><?php esc_html_e('Password strength checker', 'userspn'); ?> <i class="material-icons-outlined userspn-cursor-pointer userspn-close-icon userspn-mt-30">close</i></h5>
                   <ul class="userspn-list-style-none">
                     <li class="low-upper-case">
                       <i class="material-icons-outlined userspn-font-size-20 userspn-vertical-align-middle">radio_button_unchecked</i>

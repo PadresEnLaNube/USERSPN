@@ -358,11 +358,6 @@ class USERSPN_Settings {
       'section' => 'end',
     ];
 
-    $userspn_options['userspn_nonce'] = [
-      'id' => 'userspn_nonce',
-      'input' => 'input',
-      'type' => 'hidden',
-    ];
     $userspn_options['userspn_submit'] = [
       'id' => 'userspn_submit',
       'input' => 'input',
