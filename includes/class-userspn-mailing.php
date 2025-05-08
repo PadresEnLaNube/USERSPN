@@ -107,14 +107,10 @@ class USERSPN_Mailing {
         $userspn_checkbox_policies = __('I have read and accept Terms and conditions.', 'userspn');
       }
     }
-    // TODO
-    // CREAR ROL DE USUARIO SUSCRIPTOR
-    // CREAR USUARIO SUSCRIPTOR AL PONER DATOS EN EL FORM
-    // ESTADÍSTICAS DE CLICKS
-    // INTEGRAR ENLACES CON CÓDIGO ESPECIAL PARA QUE LLEVEN A LA WEB Y ADEMÁS GUARDEN EL CLICK POR USUARIO Y ENLACE Y FECHA DENTRO DE WP-ANALYTICS
+
     ob_start();
     ?>    
-      <div class="userspn-newsletter" id="userspn-newsletter">
+      <div class="userspn-newsletter userspn-p-30" id="userspn-newsletter">
         <?php if (!is_user_logged_in()): ?>
           <?php $userspn_newsletter_message = get_option('userspn_newsletter_message'); ?>
 
@@ -154,13 +150,13 @@ class USERSPN_Mailing {
     ob_start();
 
     $url = add_query_arg([
-        'userspn_action' => 'newsletter-activation',
+        'userspn_action' => 'userspn_newsletter_activation',
         'user' => $user_id,
       ],
       home_url()
     );
     ?>
-      <a href="<?php echo esc_url(wp_nonce_url(html_entity_decode($url), 'newsletter-activation', 'newsletter-activation-nonce')); ?>"><?php esc_html_e('Activate your account', 'userspn'); ?></a>
+      <a href="<?php echo esc_url(wp_nonce_url(html_entity_decode($url), 'userspn_newsletter_activation', 'userspn_newsletter_activation_nonce')); ?>"><?php esc_html_e('Activate your account', 'userspn'); ?></a>
     <?php
     $userspn_return_string = ob_get_contents(); 
     ob_end_clean(); 

@@ -16,13 +16,6 @@ This WordPress plugin simplifies user management by providing customizable regis
 == Credits ==
 This plugin stands on the shoulders of giants
 
-FancyBox v3.5.7
-Licensed GPLv3 for open source use or fancyBox Commercial License for commercial use
-Copyright 2019 fancyApps
-http://fancyapps.com/fancybox/
-https://github.com/fancyapps/fancybox/blob/master/dist/jquery.fancybox.js
-https://github.com/fancyapps/fancybox/blob/master/dist/jquery.fancybox.css
-
 Tooltipster v4.2.8 - A rockin' custom tooltip jQuery plugin
 Developed by Caleb Jacob and Louis Ameline
 MIT license

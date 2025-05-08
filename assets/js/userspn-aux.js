@@ -20,7 +20,5 @@
     $('.userspn-wysiwyg').each(function(index, element) {
       $(this).trumbowyg();
     });
-
-    $.fancybox.defaults.touch = false;
   });
 })(jQuery);

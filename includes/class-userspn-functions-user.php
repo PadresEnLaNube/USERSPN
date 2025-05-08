@@ -241,13 +241,16 @@ class USERSPN_Functions_User {
       update_user_meta($user_id, 'userspn_lang', pll_current_language());
     }
 
-    if (class_exists('MAILPN') && empty(get_user_meta($user_id, 'userspn_newsletter_activation_sent', true)) && empty(get_user_meta($user_id, 'userspn_newsletter_active', true))) {
+    $user_info = get_userdata($user_id);
+    $user_roles = $user_info->roles;
+
+    if (class_exists('MAILPN') && !in_array('userspn_newsletter_subscriber', $user_roles)) {
       $userspn_mailing = new USERSPN_Mailing();
       $userspn_emails_welcome = $userspn_mailing->userspn_get_email_welcome($user_id);
 
       if (!empty($userspn_emails_welcome)) {
         foreach ($userspn_emails_welcome as $mail_id) {
-          do_shortcode('[mailpn-sender mailpn_type="newsletter_welcome" mailpn_user_to="' . $user_id . '" mailpn_subject="' . get_the_title($mail_id) . '" mailpn_id="' . $mail_id . '"]');
+          do_shortcode('[mailpn-sender mailpn_type="email_welcome" mailpn_user_to="' . $user_id . '" mailpn_subject="' . get_the_title($mail_id) . '" mailpn_id="' . $mail_id . '"]');
         }
       }
     }
@@ -279,7 +282,7 @@ class USERSPN_Functions_User {
           <div class="userspn-text-align-right">
             <div class="userspn-display-table userspn-width-100-percent">
               <div class="userspn-display-inline-table userspn-width-50-percent userspn-tablet-display-block userspn-tablet-width-100-percent userspn-text-align-center">
-                <a href="#" data-fancybox data-src="#userspn-user-register-fields-viewer"><?php esc_html_e('Current form', 'userspn'); ?></a>
+                <a href="#" class="userspn-popup" data-userspn-popup-id="userspn-user-register-fields-viewer"><?php esc_html_e('Current form', 'userspn'); ?></a>
               </div>
               <div class="userspn-display-inline-table userspn-width-50-percent userspn-tablet-display-block userspn-tablet-width-100-percent userspn-text-align-center">
                 <a href="#" class="userspn-btn userspn-input-editor-builder-btn-add userspn-pl-50 userspn-pr-50" data-userspn-meta="<?php echo esc_attr($userspn_meta); ?>"><?php esc_html_e('Add new field', 'userspn'); ?></a>
@@ -349,98 +352,100 @@ class USERSPN_Functions_User {
             <a href="#" class="userspn-text-align-right userspn-profile-popup-btn"><?php echo do_shortcode('[userspn-get-avatar user_id="' . $user_id . '" size="50"]'); ?></a>
 
             <div id="userspn-profile-popup" class="userspn-popup userspn-popup-size-medium userspn-display-none-soft">
-              <div class="userspn-profile-wrapper">
-                <div class="userspn-tabs-wrapper">
-                  <div class="userspn-tabs">
-                    <div class="userspn-tab-links active" data-userspn-id="userspn-tab-edit"><?php esc_html_e('Profile', 'userspn'); ?></div>
+              <div class="userspn-popup-content">
+                <div class="userspn-profile-wrapper" data-user-id="<?php echo esc_attr($user_id); ?>">
+                  <div class="userspn-tabs-wrapper">
+                    <div class="userspn-tabs">
+                      <div class="userspn-tab-links active" data-userspn-id="userspn-tab-edit"><?php esc_html_e('Profile', 'userspn'); ?></div>
+
+                      <?php if (get_option('userspn_user_image') == 'on'): ?>
+                        <div class="userspn-tab-links" data-userspn-id="userspn-tab-image"><?php esc_html_e('Image', 'userspn'); ?></div>
+                      <?php endif ?>
+
+                      <?php if (get_option('userspn_user_notifications') == 'on'): ?>
+                        <?php if (current_user_can('administrator') || class_exists('MAILPN')): ?>
+                          <div class="userspn-tab-links" data-userspn-id="userspn-tab-notifications"><?php esc_html_e('Notifications', 'userspn'); ?></div>
+                        <?php endif ?>
+                      <?php endif ?>
+
+                      <?php if ($functions_attachment->userspn_user_files_allowed($user_id)): ?>
+                        <div class="userspn-tab-links" data-userspn-id="userspn-tab-files"><?php esc_html_e('Files', 'userspn'); ?></div>
+                      <?php endif ?>
+
+                      <?php if (get_option('userspn_user_advanced') == 'on'): ?>
+                        <div class="userspn-tab-links" data-userspn-id="userspn-tab-advanced"><?php esc_html_e('Advanced', 'userspn'); ?></div>
+                      <?php endif ?>
+                    </div>
+
+                    <div id="userspn-tab-edit" class="userspn-tab-content">
+                      <?php echo do_shortcode('[userspn-profile-edit]'); ?>
+                    </div>
 
                     <?php if (get_option('userspn_user_image') == 'on'): ?>
-                      <div class="userspn-tab-links" data-userspn-id="userspn-tab-image"><?php esc_html_e('Image', 'userspn'); ?></div>
+                      <div id="userspn-tab-image" class="userspn-tab-content userspn-display-none">
+                        <?php echo do_shortcode('[userspn-profile-image]'); ?>
+                      </div>
                     <?php endif ?>
 
                     <?php if (get_option('userspn_user_notifications') == 'on'): ?>
-                      <?php if (current_user_can('administrator') || class_exists('MAILPN')): ?>
-                        <div class="userspn-tab-links" data-userspn-id="userspn-tab-notifications"><?php esc_html_e('Notifications', 'userspn'); ?></div>
+                      <?php if (class_exists('MAILPN')): ?>
+                        <div id="userspn-tab-notifications" class="userspn-tab-content userspn-display-none">
+                          <?php echo do_shortcode('[userspn-notifications]'); ?>
+                        </div>
+                      <?php elseif (current_user_can('administrator')): ?>
+                        <div id="userspn-tab-notifications" class="userspn-tab-content userspn-display-none">
+                          <div class="userspn-mt-30 userspn-p-10">
+                            <p class="userspn-alert"><?php esc_html_e('Notifications are inactive. Please install and activate Mailing Manager - PN to allow integrated notifications in your platform.', 'userspn'); ?></p>
+                            <a href="#" class="userspn-btn userspn-btn-mini"><?php esc_html_e('Mailing Manager - PN', 'userspn'); ?></a>
+                          </div>
+                        </div>
                       <?php endif ?>
                     <?php endif ?>
 
                     <?php if ($functions_attachment->userspn_user_files_allowed($user_id)): ?>
-                      <div class="userspn-tab-links" data-userspn-id="userspn-tab-files"><?php esc_html_e('Files', 'userspn'); ?></div>
+                      <div id="userspn-tab-files" class="userspn-tab-content userspn-display-none">
+                        <?php echo do_shortcode('[userspn-user-files]'); ?>
+                      </div>
                     <?php endif ?>
 
                     <?php if (get_option('userspn_user_advanced') == 'on'): ?>
-                      <div class="userspn-tab-links" data-userspn-id="userspn-tab-advanced"><?php esc_html_e('Advanced', 'userspn'); ?></div>
-                    <?php endif ?>
-                  </div>
+                      <div id="userspn-tab-advanced" class="userspn-tab-content userspn-display-none">
+                        <div class="userspn-display-table userspn-width-100-percent userspn-mt-30 userspn-mb-30 userspn-p-10">
+                          <div class="userspn-display-inline-table userspn-width-100-percent">
+                            <div class="userspn-toggle-wrapper userspn-position-relative userspn-mb-10">
+                              <a href="#" class="userspn-toggle userspn-width-100-percent userspn-text-decoration-none">
+                                <div class="userspn-display-table userspn-width-100-percent">
+                                  <div class="userspn-display-inline-table userspn-width-80-percent userspn-vertical-align-middle">
+                                    <label class="userspn-display-block"><?php esc_html_e('Disconnect account', 'userspn'); ?></label>
+                                  </div>
 
-                  <div id="userspn-tab-edit" class="userspn-tab-content">
-                    <?php echo do_shortcode('[userspn-profile-edit]'); ?>
-                  </div>
-
-                  <?php if (get_option('userspn_user_image') == 'on'): ?>
-                    <div id="userspn-tab-image" class="userspn-tab-content userspn-display-none">
-                      <?php echo do_shortcode('[userspn-profile-image]'); ?>
-                    </div>
-                  <?php endif ?>
-
-                  <?php if (get_option('userspn_user_notifications') == 'on'): ?>
-                    <?php if (class_exists('MAILPN')): ?>
-                      <div id="userspn-tab-notifications" class="userspn-tab-content userspn-display-none">
-                        <?php echo do_shortcode('[userspn-notifications]'); ?>
-                      </div>
-                    <?php elseif (current_user_can('administrator')): ?>
-                      <div id="userspn-tab-notifications" class="userspn-tab-content userspn-display-none">
-                        <div class="userspn-mt-30 userspn-p-10">
-                          <p class="userspn-alert"><?php esc_html_e('Notifications are inactive. Please install and activate Mailing Manager - PN to allow integrated notifications in your platform.', 'userspn'); ?></p>
-                          <a href="#" class="userspn-btn userspn-btn-mini"><?php esc_html_e('Mailing Manager - PN', 'userspn'); ?></a>
-                        </div>
-                      </div>
-                    <?php endif ?>
-                  <?php endif ?>
-
-                  <?php if ($functions_attachment->userspn_user_files_allowed($user_id)): ?>
-                    <div id="userspn-tab-files" class="userspn-tab-content userspn-display-none">
-                      <?php echo do_shortcode('[userspn-user-files]'); ?>
-                    </div>
-                  <?php endif ?>
-
-                  <?php if (get_option('userspn_user_advanced') == 'on'): ?>
-                    <div id="userspn-tab-advanced" class="userspn-tab-content userspn-display-none">
-                      <div class="userspn-display-table userspn-width-100-percent userspn-mt-30 userspn-mb-30 userspn-p-10">
-                        <div class="userspn-display-inline-table userspn-width-100-percent">
-                          <div class="userspn-toggle-wrapper userspn-position-relative userspn-mb-10">
-                            <a href="#" class="userspn-toggle userspn-width-100-percent userspn-text-decoration-none">
-                              <div class="userspn-display-table userspn-width-100-percent">
-                                <div class="userspn-display-inline-table userspn-width-80-percent userspn-vertical-align-middle">
-                                  <label class="userspn-display-block"><?php esc_html_e('Disconnect account', 'userspn'); ?></label>
+                                  <div class="userspn-display-inline-table userspn-width-10-percent userspn-vertical-align-middle userspn-text-align-right">
+                                    <i class="material-icons-outlined userspn-cursor-pointer userspn-vertical-align-middle userspn-color-main-0">add</i>
+                                  </div>
                                 </div>
+                              </a>
 
-                                <div class="userspn-display-inline-table userspn-width-10-percent userspn-vertical-align-middle userspn-text-align-right">
-                                  <i class="material-icons-outlined userspn-cursor-pointer userspn-vertical-align-middle userspn-color-main-0">add</i>
-                                </div>
+                              <div class="userspn-toggle-content userspn-display-none-soft">
+                                <small><?php esc_html_e('Disconnect your user from the system. You will need to log in again.', 'userspn'); ?></small>
                               </div>
-                            </a>
-
-                            <div class="userspn-toggle-content userspn-display-none-soft">
-                              <small><?php esc_html_e('Disconnect your user from the system. You will need to log in again.', 'userspn'); ?></small>
                             </div>
+                          </div>
+
+                          <div class="userspn-display-inline-table userspn-width-100-percent userspn-text-align-right">
+                            <a href="<?php echo esc_url(wp_logout_url(get_permalink())); ?>" class="userspn-btn userspn-btn-transparent userspn-btn-mini"><?php esc_html_e('Log out', 'userspn'); ?></a>
                           </div>
                         </div>
 
-                        <div class="userspn-display-inline-table userspn-width-100-percent userspn-text-align-right">
-                          <a href="<?php echo esc_url(wp_logout_url(get_permalink())); ?>" class="userspn-btn userspn-btn-transparent userspn-btn-mini"><?php esc_html_e('Log out', 'userspn'); ?></a>
-                        </div>
+                        <?php if (get_option('userspn_user_change_password') == 'on'): ?>
+                          <?php echo do_shortcode('[userspn-user-change-password-btn]'); ?>
+                        <?php endif ?>
+
+                        <?php if (get_option('userspn_user_remove') == 'on'): ?>
+                          <?php echo do_shortcode('[userspn-user-remove-form]'); ?>
+                        <?php endif ?>
                       </div>
-
-                      <?php if (get_option('userspn_user_change_password') == 'on'): ?>
-                        <?php echo do_shortcode('[userspn-user-change-password-btn]'); ?>
-                      <?php endif ?>
-
-                      <?php if (get_option('userspn_user_remove') == 'on'): ?>
-                        <?php echo do_shortcode('[userspn-user-remove-form]'); ?>
-                      <?php endif ?>
-                    </div>
-                  <?php endif ?>
+                    <?php endif ?>
+                  </div>
                 </div>
               </div>
             </div>
@@ -459,25 +464,27 @@ class USERSPN_Functions_User {
             <?php endif ?>
 
             <div id="userspn-profile-popup" class="userspn-popup userspn-display-none-soft">
-              <div class="userspn-profile-wrapper">
-                <div class="userspn-tabs-wrapper">
-                  <div class="userspn-tabs">
-                    <div class="userspn-tab-links active" data-userspn-id="userspn-tab-login"><?php esc_html_e('Login', 'userspn'); ?></div>
+              <div class="userspn-popup-content">
+                <div class="userspn-profile-wrapper">
+                  <div class="userspn-tabs-wrapper">
+                    <div class="userspn-tabs">
+                      <div class="userspn-tab-links active" data-userspn-id="userspn-tab-login"><?php esc_html_e('Login', 'userspn'); ?></div>
+
+                      <?php if (get_option('userspn_user_register') == 'on'): ?>
+                        <div class="userspn-tab-links" data-userspn-id="userspn-tab-register"><?php esc_html_e('Register', 'userspn'); ?></div>
+                      <?php endif ?>
+                    </div>
+
+                    <div id="userspn-tab-login" class="userspn-tab-content">
+                      <?php echo do_shortcode('[userspn-login]'); ?>
+                    </div>
 
                     <?php if (get_option('userspn_user_register') == 'on'): ?>
-                      <div class="userspn-tab-links" data-userspn-id="userspn-tab-register"><?php esc_html_e('Register', 'userspn'); ?></div>
+                      <div id="userspn-tab-register" class="userspn-tab-content userspn-display-none">
+                        <?php echo do_shortcode('[userspn-user-register-form]'); ?>
+                      </div>
                     <?php endif ?>
                   </div>
-
-                  <div id="userspn-tab-login" class="userspn-tab-content">
-                    <?php echo do_shortcode('[userspn-login]'); ?>
-                  </div>
-
-                  <?php if (get_option('userspn_user_register') == 'on'): ?>
-                    <div id="userspn-tab-register" class="userspn-tab-content userspn-display-none">
-                      <?php echo do_shortcode('[userspn-user-register-form]'); ?>
-                    </div>
-                  <?php endif ?>
                 </div>
               </div>
             </div>
@@ -512,9 +519,117 @@ class USERSPN_Functions_User {
     $user_id = get_current_user_id();
     $userspn_fields = self::userspn_user_register_get_fields([]);
     $functions_attachment = new USERSPN_Functions_Attachment();
+    
+    // Calculate profile completion
+    $total_fields = 0;
+    $completed_fields = 0;
+    $incomplete_fields = [];
+    $all_fields = [];
+    
+    // Get profile completion fields configuration
+    $page_ids = get_option('userspn_profile_completion_field_page_id', []);
+    $meta_keys = get_option('userspn_profile_completion_field_meta_key', []);
+    
+    if (!empty($page_ids) && !empty($meta_keys)) {
+      foreach ($page_ids as $index => $page_id) {
+        if (!empty($meta_keys[$index])) {
+          $meta_key = $meta_keys[$index];
+          $total_fields++;
+          
+          $value = get_user_meta($user_id, $meta_key, true);
+          $is_completed = !empty($value);
+          
+          if ($is_completed) {
+            $completed_fields++;
+          } else {
+            $incomplete_fields[] = [
+              'meta_key' => $meta_key,
+              'page_id' => $page_id,
+              'page_link' => !empty($page_id) ? get_permalink($page_id) : ''
+            ];
+          }
+          
+          // Store all fields for detailed view
+          $all_fields[] = [
+            'meta_key' => $meta_key,
+            'page_id' => $page_id,
+            'page_link' => !empty($page_id) ? get_permalink($page_id) : '',
+            'page_title' => !empty($page_id) ? get_the_title($page_id) : '',
+            'is_completed' => $is_completed
+          ];
+        }
+      }
+    }
+    
+    // Calculate completion percentage
+    $completion_percentage = $total_fields > 0 ? round(($completed_fields / $total_fields) * 100) : 0;
 
     ob_start();
     ?>
+      <?php if ($total_fields > 0 && get_option('userspn_profile_completion') == 'on' && $completion_percentage < 100): ?>
+        <div class="userspn-profile-completion userspn-mt-20 userspn-mb-30">
+          <div class="userspn-profile-completion-header userspn-mb-10">
+            <div class="userspn-display-table userspn-width-100-percent">
+              <div class="userspn-display-inline-table userspn-width-80-percent">
+                <h4><?php esc_html_e('Profile Completion', 'userspn'); ?></h4>
+              </div>
+              <div class="userspn-display-inline-table userspn-width-20-percent userspn-text-align-right">
+                <span class="userspn-profile-completion-percentage"><?php echo esc_html($completion_percentage); ?>%</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="userspn-profile-completion-bar">
+            <div class="userspn-profile-completion-progress" style="width: <?php echo esc_attr($completion_percentage); ?>%"></div>
+          </div>
+          
+          <div class="userspn-profile-completion-stats userspn-mt-10">
+            <small><?php echo sprintf(esc_html__('%d of %d fields completed', 'userspn'), $completed_fields, $total_fields); ?></small>
+          </div>
+          
+          <div class="userspn-toggle-wrapper userspn-position-relative userspn-mt-10">
+            <a href="#" class="userspn-toggle userspn-width-100-percent userspn-text-decoration-none">
+              <div class="userspn-display-table userspn-width-100-percent">
+                <div class="userspn-display-inline-table userspn-width-80-percent userspn-vertical-align-middle">
+                  <small class="userspn-display-block"><?php esc_html_e('View details', 'userspn'); ?></small>
+                </div>
+                <div class="userspn-display-inline-table userspn-width-20-percent userspn-vertical-align-middle userspn-text-align-right">
+                  <i class="material-icons-outlined userspn-cursor-pointer userspn-vertical-align-middle">add</i>
+                </div>
+              </div>
+            </a>
+            
+            <div class="userspn-toggle-content userspn-display-none-soft">
+              <div class="userspn-profile-completion-details userspn-mt-10">
+                <ul class="userspn-profile-completion-fields-list">
+                  <?php foreach ($all_fields as $field): ?>
+                    <li class="userspn-profile-completion-field-item userspn-list-style-none <?php echo $field['is_completed'] ? 'completed' : 'incomplete'; ?>">
+                      <div class="userspn-display-table userspn-width-100-percent">
+                        <div class="userspn-display-inline-table userspn-width-90-percent userspn-vertical-align-middle">
+                          <?php if (!empty($field['page_link'])): ?>
+                            <a class="userspn-text-decoration-none" href="<?php echo esc_url($field['page_link']); ?>">
+                              <?php echo esc_html($field['page_title']); ?>
+                            </a>
+                          <?php else: ?>
+                            <?php echo esc_html($field['meta_key']); ?>
+                          <?php endif; ?>
+                        </div>
+
+                        <div class="userspn-display-inline-table userspn-width-10-percent userspn-vertical-align-middle userspn-text-align-right">
+                          <i class="material-icons-outlined userspn-vertical-align-middle">
+                            <?php echo $field['is_completed'] ? 'check' : 'radio_button_unchecked'; ?>
+                          </i>
+                        </div>
+                      </div>
+                      </li>
+                  <?php endforeach; ?>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      <?php endif ?>
+
       <form id="userspn-profile-edit" class="userspn-mt-30 userspn-form">
         <?php if (!empty($userspn_base_fields)): ?>
           <?php foreach ($userspn_base_fields as $userspn_base_field): ?>
@@ -708,23 +823,27 @@ class USERSPN_Functions_User {
         </div>
 
         <div class="userspn-display-inline-table userspn-width-100-percent userspn-text-align-right">
-          <a href="#" data-fancybox data-src="#userspn-user-remove-popup" class="userspn-btn userspn-btn-transparent userspn-btn-mini"><?php esc_html_e('Remove user', 'userspn'); ?></a>
+          <a href="#" class="userspn-popup-open userspn-btn userspn-btn-transparent userspn-btn-mini" data-userspn-popup-id="userspn-user-remove-popup"><?php esc_html_e('Remove user', 'userspn'); ?></a>
         </div>
 
-        <div id="userspn-user-remove-popup" class="userspn-display-none-soft">
-          <div class="userspn-width-100-percent userspn-text-align-center">
-            <i class="material-icons-outlined userspn-color-main-0 userspn-font-size-75">report_problem</i>
-          </div>
+        <div id="userspn-user-remove-popup" class="userspn-popup userspn-display-none-soft">
+          <div class="userspn-popup-content">
+            <div class="userspn-p-30">
+              <div class="userspn-width-100-percent userspn-text-align-center">
+                <i class="material-icons-outlined userspn-color-main-0 userspn-font-size-75">report_problem</i>
+              </div>
 
-          <h2 class="userspn-mt-10 userspn-mb-10 userspn-text-align-center"><?php esc_html_e('Account deletion!', 'userspn'); ?></h2>
-          <p class="userspn-alert userspn-mb-30"><?php esc_html_e('Your account removal will be permanent. This action cannot be undone!', 'userspn'); ?></p>
+              <h2 class="userspn-mt-10 userspn-mb-10 userspn-text-align-center"><?php esc_html_e('Account deletion!', 'userspn'); ?></h2>
+              <p class="userspn-alert userspn-mb-30"><?php esc_html_e('Your account removal will be permanent. This action cannot be undone!', 'userspn'); ?></p>
 
-          <label class="userspn-display-block" for="userspn_password"><?php esc_html_e('Include your password to confirm deletion', 'userspn'); ?></label>
+              <label class="userspn-display-block" for="userspn_password"><?php esc_html_e('Include your password to confirm deletion', 'userspn'); ?></label>
 
-          <input type="password" name="userspn_password" id="userspn_password" class="userspn-input userspn-width-100-percent" placeholder="<?php esc_html_e('Password', 'userspn'); ?>">
+              <input type="password" name="userspn_password" id="userspn_password" class="userspn-input userspn-width-100-percent" placeholder="<?php esc_html_e('Password', 'userspn'); ?>">
 
-          <div class="userspn-width-100-percent userspn-text-align-right">
-            <a href="#" class="userspn-btn userspn-user-remove-btn" data-userspn-user-id="<?php echo esc_attr(get_current_user_id()); ?>"><?php esc_html_e('Remove user', 'userspn'); ?></a><?php echo esc_html(USERSPN_Data::loader()); ?>
+              <div class="userspn-width-100-percent userspn-text-align-right">
+                <a href="#" class="userspn-btn userspn-user-remove-btn" data-userspn-user-id="<?php echo esc_attr(get_current_user_id()); ?>"><?php esc_html_e('Remove user', 'userspn'); ?></a><?php echo esc_html(USERSPN_Data::loader()); ?>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -839,7 +958,7 @@ class USERSPN_Functions_User {
             <?php USERSPN_Forms::input_wrapper_builder($userspn_user_register_field, 'user', 0, 0, 'full'); ?>
           <?php endforeach ?>
 
-          <div class="userspn-text-align-right userspn-mb-30">
+          <div class="userspn-text-align-right userspn-mt-30 userspn-mb-30">
             <input type="submit" value="<?php esc_html_e('Create user', 'userspn'); ?>" name="userspn-user-registration-btn" id="userspn-user-registration-btn" class="userspn-btn userspn-btn"/><?php echo esc_html(USERSPN_Data::loader()); ?>
           </div>
         </form>
@@ -853,8 +972,23 @@ class USERSPN_Functions_User {
   }
 
   public function userspn_profile_save_fields($user_id){
-    if (array_key_exists('ajax_nonce', $_POST) && !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['ajax_nonce'])), 'userspn-nonce')) {
-      echo wp_json_encode(['error_key' => 'userspn_nonce_error', ]);exit();
+    // Always require nonce verification
+    if (!array_key_exists('userspn_ajax_nopriv_nonce', $_POST)) {
+      echo wp_json_encode([
+        'error_key' => 'userspn_profile_ajax_nopriv_nonce_error_required',
+        'error_content' => esc_html(__('Security check failed: Nonce is required.', 'userspn')),
+      ]);
+
+      exit();
+    }
+
+    if (!wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['userspn_ajax_nopriv_nonce'])), 'userspn-nonce')) {
+      echo wp_json_encode([
+        'error_key' => 'userspn_profile_ajax_nopriv_nonce_error_invalid',
+        'error_content' => esc_html(__('Security check failed: Invalid nonce.', 'userspn')),
+      ]);
+
+      exit();
     }
 
     if(!current_user_can('manage_options') || get_option('userspn_user_register_fields_dashboard') != 'on'){

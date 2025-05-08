@@ -18,10 +18,7 @@ class USERSPN_Activator {
 	 *
 	 * @since    1.0.0
 	 */
-	public static function activate() {
-    $post_functions = new USERSPN_Functions_Post();
-    $attachment_functions = new USERSPN_Functions_Attachment();
-
+	public static function userspn_activate() {
     add_role('userspn_role_manager', esc_html(__('Users manager - WPH', 'userspn')));
 
     $role_admin = get_role('administrator');

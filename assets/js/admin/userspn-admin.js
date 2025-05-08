@@ -28,7 +28,7 @@
 
     var data = {
       action: 'userspn_ajax',
-      ajax_nonce: userspn_ajax.ajax_nonce,
+      userspn_ajax_nonce: userspn_ajax.userspn_ajax_nonce,
       userspn_ajax_type: 'userspn_options_save',
       ajax_keys: [],
     };

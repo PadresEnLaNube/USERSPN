@@ -56,7 +56,7 @@
           userspn_toggle_wrapper.find('.userspn-input-editor-builder-btn-remove-popup').attr('data-userspn-input-type', userspn_input_type);
           userspn_toggle_wrapper.find('.userspn-input-editor-builder-btn-remove-popup').attr('data-userspn-meta', userspn_meta);
           userspn_toggle_wrapper.find('.userspn-input-editor-builder-btn-remove-popup').attr('id', 'userspn-input-editor-builder-btn-remove-popup-' + userspn_input_id);
-          userspn_toggle_wrapper.find('a[data-fancybox]').attr('data-src', '#userspn-input-editor-builder-btn-remove-popup-' + userspn_input_id);
+          userspn_toggle_wrapper.find('a.userspn-popup').attr('data-userspn-popup-id', '#userspn-input-editor-builder-btn-remove-popup-' + userspn_input_id);
         }else{
           $('.userspn-user-register-field#' + userspn_input_id).after($.parseJSON(response)['html']);
           $('.userspn-user-register-field.' + userspn_input_id + ':first').remove();
@@ -97,7 +97,7 @@
 
     $.post(ajax_url, data, function(response) {
       if (response.indexOf('userspn_input_editor_builder_remove_success') != -1) {
-        $.fancybox.close();
+        $.USERSPN_Popups.close();
         $('.userspn-user-register-field.' + userspn_input_id).fadeOut('fast').remove();
         $('.userspn-toggle-wrapper.' + userspn_input_id).fadeOut('fast').remove();
         userspn_get_main_message(userspn_i18n.field_removed);

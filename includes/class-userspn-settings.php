@@ -67,6 +67,44 @@ class USERSPN_Settings {
         'label' => __('Extra fields in the user profile', 'userspn'),
         'description' => __('You can include the fields that will be asked in the profile popup. The base login or registration will include email and password. The fields that you add here will be included below the two base email and password fields.', 'userspn'),
       ];
+      $userspn_options['userspn_profile_completion'] = [
+        'id' => 'userspn_profile_completion',
+        'class' => 'userspn-input userspn-width-100-percent',
+        'input' => 'input',
+        'type' => 'checkbox',
+        'parent' => 'this',
+        'label' => __('Show profile completion block', 'userspn'),
+        'description' => __('If enabled, a profile completion block will be shown in the profile popup.', 'userspn'),
+      ];
+      $userspn_options['userspn_profile_completion_fields'] = [
+        'id' => 'userspn_profile_completion_fields',
+        'class' => 'userspn-input userspn-width-100-percent',
+        'input' => 'html_multi',
+        'parent' => 'userspn_profile_completion',
+        'parent_option' => 'on',
+        'label' => __('Profile completion field', 'userspn'),
+        'description' => __('Select the page and meta key to track for profile completion.', 'userspn'),
+        'html_multi_fields' => [
+          $userspn_profile_completion_field_page_id = [
+            'id' => 'userspn_profile_completion_field_page_id',
+            'class' => 'userspn-input userspn-width-100-percent',
+            'input' => 'input',
+            'type' => 'number',
+            'multiple' => true,
+            'label' => __('Page ID', 'userspn'),
+            'placeholder' => __('Enter page ID', 'userspn'),
+          ],
+          $userspn_profile_completion_field_meta_key  = [
+            'id' => 'userspn_profile_completion_field_meta_key',
+            'class' => 'userspn-input userspn-width-100-percent',
+            'input' => 'input',
+            'type' => 'text',
+            'multiple' => true,
+            'label' => __('Meta key', 'userspn'),
+            'placeholder' => __('Enter meta key', 'userspn'),
+          ]
+        ]
+      ];
       $userspn_options['userspn_user_register'] = [
         'id' => 'userspn_user_register',
         'class' => 'userspn-input userspn-width-100-percent',
@@ -333,6 +371,16 @@ class USERSPN_Settings {
           'label' => __('Newsletter message', 'userspn'),
           'description' => __('Create a message that will be shown just above of the Newsletter registration form.', 'userspn'),
         ];
+        $userspn_options['userspn_newsletter_exit_popup'] = [
+          'id' => 'userspn_newsletter_exit_popup',
+          'class' => 'userspn-input userspn-width-100-percent',
+          'input' => 'input',
+          'type' => 'checkbox',
+          'parent' => 'userspn_newsletter',
+          'parent_option' => 'on',
+          'label' => __('Newsletter exit popup', 'userspn'),
+          'description' => __('When this option is active, the system shows a popup when a contact tries to exit page without completing the newsletter registration form.', 'userspn'),
+        ];
         $userspn_options['userspn_newsletter_activation'] = [
           'id' => 'userspn_newsletter_activation',
           'class' => 'userspn-input userspn-width-100-percent',
@@ -340,8 +388,8 @@ class USERSPN_Settings {
           'type' => 'checkbox',
           'parent' => 'this userspn_newsletter',
           'parent_option' => 'on',
-          'label' => __('Newsletter activation', 'userspn'),
-          'description' => __('When this option is active, the system asks contacts to verify their emails as they login in the platform.', 'userspn'),
+          'label' => __('Newsletter activation required', 'userspn'),
+          'description' => __('When this option is active, the system asks contacts to verify their emails via a link sent to their email address as they register in the platform.', 'userspn'),
         ];
           $userspn_options['userspn_newsletter_activation_max'] = [
             'id' => 'userspn_newsletter_activation_max',
@@ -350,8 +398,8 @@ class USERSPN_Settings {
             'type' => 'number',
             'parent' => 'userspn_newsletter_activation',
             'parent_option' => 'on',
-            'label' => __('Max number of activation emails', 'userspn'),
-            'placeholder' => __('Max number of activation emails', 'userspn'),
+            'label' => __('Maximum number of activation emails', 'userspn'),
+            'placeholder' => __('Maximum number of activation emails', 'userspn'),
             'description' => __('This option set up the maximum numer of activating emails allowed to be sent from the platform.', 'userspn'),
           ];
     $userspn_options['userspn_section_newsletter_end'] = [

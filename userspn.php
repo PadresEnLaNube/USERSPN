@@ -37,12 +37,163 @@ if (!defined('WPINC')) {
 define('USERSPN_VERSION', '1.0.1');
 
 /**
+ * Plugin role capabilities
+ */
+define('USERSPN_ROLE_CAPABILITIES', [
+	// Post editing capabilities
+	'edit_post' => 'edit_userspn',
+	'edit_posts' => 'edit_userspn',
+	'edit_private_posts' => 'edit_private_userspn',
+	'edit_published_posts' => 'edit_published_userspn',
+	'edit_others_posts' => 'edit_others_userspn',
+	'publish_posts' => 'publish_userspn',
+	
+	// Post reading capabilities
+	'read_post' => 'read_userspn',
+	'read_private_posts' => 'read_private_userspn',
+	
+	// Post deletion capabilities
+	'delete_post' => 'delete_userspn',
+	'delete_posts' => 'delete_userspn',
+	'delete_private_posts' => 'delete_private_userspn',
+	'delete_published_posts' => 'delete_published_userspn',
+	'delete_others_posts' => 'delete_others_userspn',
+	
+	// Media capabilities
+	'upload_files' => 'upload_files',
+	
+	// Taxonomy capabilities
+	'manage_terms' => 'manage_userspn_category',
+	'edit_terms' => 'edit_userspn_category',
+	'delete_terms' => 'delete_userspn_category',
+	'assign_terms' => 'assign_userspn_category',
+	
+	// Options capabilities
+	'manage_options' => 'manage_userspn_options'
+]);
+
+/**
+ * Plugin KSES allowed HTML elements and attributes
+ */
+define('USERSPN_KSES', [
+	// Basic text elements
+	'p' => ['id' => [], 'class' => []],
+	'span' => ['id' => [], 'class' => []],
+	'small' => ['id' => [], 'class' => []],
+	'em' => [],
+	'strong' => [],
+	'br' => [],
+
+	// Headings
+	'h1' => ['id' => [], 'class' => []],
+	'h2' => ['id' => [], 'class' => []],
+	'h3' => ['id' => [], 'class' => []],
+	'h4' => ['id' => [], 'class' => []],
+	'h5' => ['id' => [], 'class' => []],
+	'h6' => ['id' => [], 'class' => []],
+
+	// Lists
+	'ul' => ['id' => [], 'class' => []],
+	'ol' => ['id' => [], 'class' => []],
+	'li' => ['id' => [], 'class' => []],
+
+	// Links and media
+	'a' => [
+		'id' => [], 
+		'class' => [], 
+		'href' => [], 
+		'title' => [], 
+		'target' => []
+	],
+	'img' => [
+		'id' => [], 
+		'class' => [], 
+		'src' => [], 
+		'alt' => [], 
+		'title' => []
+	],
+	'i' => ['id' => [], 'class' => [], 'title' => []],
+
+	// Forms and inputs
+	'form' => [
+		'id' => [], 
+		'class' => [], 
+		'action' => [], 
+		'method' => []
+	],
+	'input' => [
+		'name' => [], 
+		'id' => [], 
+		'class' => [], 
+		'type' => [], 
+		'checked' => [], 
+		'multiple' => [], 
+		'disabled' => [], 
+		'value' => [], 
+		'placeholder' => [], 
+		'data-userspn-parent' => [], 
+		'data-userspn-parent-option' => [], 
+		'data-userspn-type' => [], 
+		'data-userspn-subtype' => [], 
+		'data-userspn-user-id' => [], 
+		'data-userspn-post-id' => []
+	],
+	'select' => [
+		'name' => [], 
+		'id' => [], 
+		'class' => [], 
+		'type' => [], 
+		'checked' => [], 
+		'multiple' => [], 
+		'disabled' => [], 
+		'value' => [], 
+		'placeholder' => [], 
+		'data-placeholder' => [], 
+		'data-userspn-parent' => [], 
+		'data-userspn-parent-option' => []
+	],
+	'option' => [
+		'name' => [], 
+		'id' => [], 
+		'class' => [], 
+		'disabled' => [], 
+		'selected' => [], 
+		'value' => [], 
+		'placeholder' => []
+	],
+	'textarea' => [
+		'name' => [], 
+		'id' => [], 
+		'class' => [], 
+		'type' => [], 
+		'multiple' => [], 
+		'disabled' => [], 
+		'value' => [], 
+		'placeholder' => [], 
+		'data-userspn-parent' => [], 
+		'data-userspn-parent-option' => []
+	],
+	'label' => [
+		'id' => [], 
+		'class' => [], 
+		'for' => []
+	],
+
+	// Container elements
+	'div' => [
+		'id' => [], 
+		'class' => [], 
+		'data-userspn-section-id' => []
+	]
+]);
+
+/**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-userspn-activator.php
  */
 function userspn_activate() {
 	require_once plugin_dir_path(__FILE__) . 'includes/class-userspn-activator.php';
-	USERSPN_Activator::activate();
+	USERSPN_Activator::userspn_activate();
 }
 register_activation_hook(__FILE__, 'userspn_activate');
 
@@ -52,7 +203,7 @@ register_activation_hook(__FILE__, 'userspn_activate');
  */
 function userspn_deactivate() {
 	require_once plugin_dir_path(__FILE__) . 'includes/class-userspn-deactivator.php';
-	USERSPN_Deactivator::deactivate();
+	USERSPN_Deactivator::userspn_deactivate();
 }
 register_deactivation_hook(__FILE__, 'userspn_deactivate');
 
@@ -70,10 +221,11 @@ require plugin_dir_path(__FILE__) . 'includes/class-userspn.php';
  */
 function userspn_run() {
 	$plugin = new USERSPN();
-	$plugin->run();
+	$plugin->userspn_run();
 
 	require_once plugin_dir_path(__FILE__) . 'includes/class-userspn-activator.php';
-	USERSPN_Activator::activate();
+	USERSPN_Activator::userspn_activate();
 }
 
-userspn_run();
+// Initialize the plugin on plugins_loaded hook
+add_action('plugins_loaded', 'userspn_run');

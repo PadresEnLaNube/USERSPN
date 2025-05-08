@@ -18,18 +18,18 @@ class USERSPN_Ajax_Nopriv {
 	 */
 	public function userspn_ajax_nopriv_server() {
     if (array_key_exists('userspn_ajax_nopriv_type', $_POST)) {
-      if (!array_key_exists('ajax_nonce', $_POST)) {
+      if (!array_key_exists('userspn_ajax_nopriv_nonce', $_POST)) {
         echo wp_json_encode([
-          'error_key' => 'userspn_nonce_error',
+          'error_key' => 'userspn_nonce_ajax_nopriv_error_required',
           'error_content' => esc_html(__('Security check failed: Nonce is required.', 'userspn'))
         ]);
 
         exit();
       }
 
-      if (!wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['ajax_nonce'])), 'userspn-nonce')) {
+      if (!wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['userspn_ajax_nopriv_nonce'])), 'userspn-nonce')) {
         echo wp_json_encode([
-          'error_key' => 'userspn_nonce_error',
+          'error_key' => 'userspn_nonce_ajax_nopriv_error_invalid',
           'error_content' => esc_html(__('Security check failed: Invalid nonce.', 'userspn'))
         ]);
         
@@ -183,9 +183,7 @@ class USERSPN_Ajax_Nopriv {
               $userspn_login = sanitize_title(substr($userspn_email, 0, strpos($userspn_email, '@')) . '-' . bin2hex(openssl_random_pseudo_bytes(4)));
               $userspn_password = bin2hex(openssl_random_pseudo_bytes(12));
 
-              $user_id = $plugin_user->userspn_insert_user($userspn_login, $userspn_password, $userspn_email, '', '', $userspn_login, $userspn_login, $userspn_login, '', ['userspn_newsletter_subscriber'], [
-                ['userspn_secret_token' => bin2hex(openssl_random_pseudo_bytes(16))],
-              ]);
+              $user_id = $plugin_user->userspn_insert_user($userspn_login, $userspn_password, $userspn_email, '', '', $userspn_login, $userspn_login, $userspn_login, '', ['userspn_newsletter_subscriber'], []);
             }
 
             if (get_option('userspn_newsletter_activation') == 'on') {

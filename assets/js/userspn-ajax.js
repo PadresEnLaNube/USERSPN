@@ -10,8 +10,8 @@
       var ajax_url = userspn_ajax.ajax_url;
       var data = {
         action: 'userspn_ajax_nopriv',
-        ajax_nonce: userspn_ajax.ajax_nonce,
         userspn_ajax_nopriv_type: 'userspn_form_save',
+        userspn_ajax_nopriv_nonce: userspn_ajax.userspn_ajax_nonce,
         userspn_form_id: userspn_form.attr('id'),
         userspn_form_type: userspn_btn.attr('data-userspn-type'),
         userspn_form_subtype: userspn_btn.attr('data-userspn-subtype'),
@@ -59,22 +59,25 @@
       $.post(ajax_url, data, function(response) {
         console.log(data);console.log(response);
         
-        if ($.parseJSON(response)['error_key'] == 'userspn_form_save_error_unlogged') {
+        if (response == 'userspn_profile_edit_success') {
+          userspn_get_main_message(userspn_i18n.profile_updated);
+          $(document).trigger('userspn_profile_updated');
+        }else if (response == 'userspn_form_save_error_unlogged') {
           userspn_get_main_message(userspn_i18n.user_unlogged);
 
           if (!$('.userspn-profile-wrapper .user-unlogged').length) {
             $('.userspn-profile-wrapper').prepend('<div class="userspn-alert userspn-alert-warning user-unlogged">' + userspn_i18n.user_unlogged + '</div>');
           }
 
-          $.fancybox.open($('#userspn-profile-popup'), {touch: false});
+          USERSPN_Popups.open($('#userspn-profile-popup'));
           $('#userspn-login input#user_login').focus();
-        }else if ($.parseJSON(response)['error_key'] == 'userspn_form_save_error') {
+        }else if (response == 'userspn_form_save_error') {
           userspn_get_main_message(userspn_i18n.an_error_has_occurred);
         }else {
           userspn_get_main_message(userspn_i18n.saved_successfully);
         }
 
-        userspn_btn.removeClass('userspn-link-disabled').siblings('.userspn-waiting').addClass('userspn-display-none')
+        userspn_btn.removeClass('userspn-link-disabled').siblings('.userspn-waiting').fadeOut('fast');
       });
 
       delete window['userspn_window_vars'];
@@ -116,10 +119,12 @@
       var data = {
         action: 'userspn_ajax_nopriv',
         userspn_ajax_nopriv_type: 'userspn_newsletter',
+        userspn_ajax_nopriv_nonce: userspn_ajax.userspn_ajax_nonce,
         userspn_email: userspn_btn.closest('.userspn-newsletter-form').find('#userspn-newsletter-email').val(),
       };
 
       $.post(ajax_url, data, function(response) {
+        console.log(data);console.log(response);
         if (response == 'userspn_newsletter_success_activation_sent') {
           userspn_get_main_message(userspn_i18n.activation_email);
           $('.userspn-newsletter').html('<div class="userspn-alert-warning"><p>' + userspn_i18n.email_sent + '</p></div>');
@@ -135,7 +140,7 @@
           userspn_get_main_message(userspn_i18n.an_error_has_occurred);
         }
 
-        $.fancybox.close();
+        USERSPN_Popups.close();
         userspn_btn.removeClass('userspn-link-disabled').siblings('.userspn-waiting').fadeOut('slow');
       });
 

@@ -1,0 +1,92 @@
+.userspn-profile-completion {
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+}
+
+.userspn-profile-completion-header {
+    margin-bottom: 15px;
+}
+
+.userspn-profile-completion-header h4 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.userspn-profile-completion-percentage {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--userspn-color-main-0)(--userspn-color-main);
+}
+
+.userspn-profile-completion-bar {
+    height: 8px;
+    background-color: #e6f3eb;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.userspn-profile-completion-progress {
+    position: relative;
+    height: 100%;
+    background-color: var(--userspn-color-main);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.userspn-profile-completion-progress::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        90deg,
+        rgba(255,255,255,0.1) 0%,
+        rgba(255,255,255,0.2) 50%,
+        rgba(255,255,255,0.1) 100%
+    );
+}
+
+.userspn-profile-completion-stats {
+    margin-top: 10px;
+    font-size: 12px;
+    color: #666;
+}
+
+.userspn-profile-completion-fields-list {
+    margin: 10px 0;
+    padding: 0;
+    list-style: none;
+}
+
+.userspn-profile-completion-field-item {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.userspn-profile-completion-field-item:last-child {
+    border-bottom: none;
+}
+
+.userspn-profile-completion-field-item.completed .material-icons-outlined {
+    color: var(--userspn-color-main);
+}
+
+.userspn-profile-completion-field-item.incomplete .material-icons-outlined {
+    color: #999;
+}
+
+.userspn-profile-completion-field-item a {
+    color: #333;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.userspn-profile-completion-field-item a:hover {
+    color: var(--userspn-color-main);
+}

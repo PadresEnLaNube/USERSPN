@@ -11,7 +11,7 @@
       var data = {
         action: 'userspn_ajax_nopriv',
         userspn_ajax_nopriv_type: 'userspn_profile_create',
-        ajax_nonce: userspn_ajax.ajax_nonce,
+        userspn_ajax_nopriv_nonce: userspn_ajax.userspn_ajax_nonce,
         ajax_keys: [],
       };
 

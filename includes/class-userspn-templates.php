@@ -18,5 +18,6 @@ class USERSPN_Templates {
 	 */
 	public function load_plugin_templates() {
 		require_once USERSPN_DIR . 'templates/userspn-footer.php';
+		require_once USERSPN_DIR . 'templates/userspn-popups.php';
 	}
 }

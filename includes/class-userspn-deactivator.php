@@ -29,7 +29,7 @@ class USERSPN_Deactivator {
 	 *
 	 * @since    1.0.0
 	 */
-	public static function deactivate() {
+	public static function userspn_deactivate() {
 		if (get_option('userspn_options_remove') == 'on') {
       remove_role('userspn_role_manager');
 

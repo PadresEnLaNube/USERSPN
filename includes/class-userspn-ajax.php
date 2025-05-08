@@ -19,18 +19,18 @@ class USERSPN_Ajax {
 	public function userspn_ajax_server() {
     if (array_key_exists('userspn_ajax_type', $_POST)) {
       // Always require nonce verification
-      if (!array_key_exists('ajax_nonce', $_POST)) {
+      if (!array_key_exists('userspn_ajax_nonce', $_POST)) {
         echo wp_json_encode([
-          'error_key' => 'userspn_nonce_error',
+          'error_key' => 'userspn_nonce_ajax_error_required',
           'error_content' => esc_html(__('Security check failed: Nonce is required.', 'userspn'))
         ]);
 
         exit();
       }
 
-      if (!wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['ajax_nonce'])), 'userspn-nonce')) {
+      if (!wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['userspn_ajax_nonce'])), 'userspn-nonce')) {
         echo wp_json_encode([
-          'error_key' => 'userspn_nonce_error',
+          'error_key' => 'userspn_nonce_ajax_error_invalid',
           'error_content' => esc_html(__('Security check failed: Invalid nonce.', 'userspn'))
         ]);
         
@@ -185,6 +185,73 @@ class USERSPN_Ajax {
           }else{
             echo 'userspn_manager_remove_error';exit();
           }
+          break;
+        case 'userspn_profile_progress':
+          if (!empty($user_id)) {
+            $user = get_user_by('id', $user_id);
+            if (!$user) {
+              wp_send_json_error();
+              exit();
+            }
+
+            // Get all required fields
+            $required_fields = [];
+            
+            // Add base fields
+            if (get_option('userspn_user_name') == 'on') {
+              $required_fields[] = [
+                'id' => 'first_name',
+                'name' => __('First Name', 'userspn'),
+                'required' => get_option('userspn_user_name_compulsory') == 'on'
+              ];
+              $required_fields[] = [
+                'id' => 'last_name',
+                'name' => __('Last Name', 'userspn'),
+                'required' => get_option('userspn_user_surname_compulsory') == 'on'
+              ];
+            }
+
+            // Add custom fields
+            $custom_fields = apply_filters('userspn_register_fields', []);
+            foreach ($custom_fields as $field) {
+              if (!empty($field['required'])) {
+                $required_fields[] = [
+                  'id' => $field['id'],
+                  'name' => $field['label'],
+                  'required' => true
+                ];
+              }
+            }
+
+            // Calculate progress
+            $completed_fields = 0;
+            $fields_status = [];
+
+            foreach ($required_fields as $field) {
+              $value = get_user_meta($user_id, $field['id'], true);
+              $is_completed = !empty($value);
+              
+              if ($is_completed) {
+                $completed_fields++;
+              }
+
+              $fields_status[] = [
+                'name' => $field['name'],
+                'completed' => $is_completed
+              ];
+            }
+
+            $total_fields = count($required_fields);
+            $percentage = $total_fields > 0 ? round(($completed_fields / $total_fields) * 100) : 100;
+
+            wp_send_json_success([
+              'percentage' => $percentage,
+              'fields' => $fields_status
+            ]);
+            exit();
+          }
+          wp_send_json_error();
+          exit();
           break;
         case 'userspn_input_editor_builder_add':
           $userspn_meta = !empty($_POST['userspn_meta']) ? USERSPN_Forms::sanitizer(wp_unslash($_POST['userspn_meta'])) : [];

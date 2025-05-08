@@ -401,7 +401,7 @@ class USERSPN_Forms {
         }
 
         ?>
-          <div class="userspn-html-multi-wrapper userspn-mb-50" <?php echo wp_kses_post($userspn_parent_block); ?>>
+          <div class="userspn-field userspn-html-multi-wrapper userspn-mb-50" <?php echo wp_kses_post($userspn_parent_block); ?>>
             <?php if ($html_multi_fields_length): ?>
               <?php foreach (range(0, ($html_multi_fields_length - 1)) as $length_index): ?>
                 <div class="userspn-html-multi-group userspn-display-table userspn-width-100-percent userspn-mb-30">
@@ -563,7 +563,7 @@ class USERSPN_Forms {
             <div class="userspn-display-table userspn-width-100-percent">
               <?php if (!in_array($input_array['id'], ['first_name', 'last_name'])): ?>
                 <div class="userspn-display-inline-table userspn-width-30-percent userspn-tablet-display-block userspn-tablet-width-100-percent">
-                  <a href="#" data-fancybox data-src="#userspn-input-editor-builder-btn-remove-popup-<?php echo esc_attr($input_array['id']); ?>"><?php esc_html_e('Remove field', 'userspn'); ?></a>
+                  <a href="#" class="userspn-popup" data-userspn-popup-id="userspn-input-editor-builder-btn-remove-popup-<?php echo esc_attr($input_array['id']); ?>"><?php esc_html_e('Remove field', 'userspn'); ?></a>
 
                   <div id="userspn-input-editor-builder-btn-remove-popup-<?php echo esc_attr($input_array['id']); ?>" data-userspn-input-id="<?php echo esc_attr($input_array['id']); ?>" data-userspn-input-type="<?php echo array_key_exists('form_type', $input_array) ? esc_attr($input_array['form_type']) : ''; ?>" data-userspn-meta="<?php echo array_key_exists('meta', $input_array) ? esc_attr($input_array['meta']) : ''; ?>" class="userspn-popup userspn-input-editor-builder-btn-remove-popup userspn-display-none-soft">
                     <p><?php esc_html_e('The field will be removed. This action cannot be undone.', 'userspn'); ?></p>

@@ -200,7 +200,26 @@
     });
   }
 
+  window.userspn_handle_exit_popup = function() {
+    if (typeof userspn_newsletter !== 'undefined' && userspn_newsletter.exit_popup && !userspn_newsletter.is_user_logged_in) {
+      var newsletterContent = $('#userspn-newsletter').html();
+
+      if (newsletterContent) {
+        setTimeout(function() {
+          $(document).one('mouseleave', function(e) {
+            if (e.pageY - $(window).scrollTop() <= 1) {
+              USERSPN_Popups.open($('#userspn-newsletter-exit-popup'));
+            }
+          });
+        }, 3000);
+      }
+    }
+  }
+
   $(document).ready(function() {
+    // Call the exit popup handler
+    userspn_handle_exit_popup();
+
     if ($('.userspn-countdown').length) {
       $('.userspn-countdown').each(function() {
         var userspn_countdown = $(this);
@@ -303,14 +322,14 @@
     if($('.userspn-popup-close').length){
       $(document).on('click', '.userspn-popup-close', function(e){
         e.preventDefault();
-        $.fancybox.close();
+        $.USERSPN_Popups.close();
       });
     }
 
     if($('.userspn-popup-open').length){
       $(document).on('click', '.userspn-popup-open', function(e){
         e.preventDefault();
-        $.fancybox.open($('#' + $(this).attr('data-userspn-popup-id')), {touch: false});
+        USERSPN_Popups.open($('#' + $(this).attr('data-userspn-popup-id')));
       });
     }
 
@@ -319,7 +338,7 @@
     $(document).on('click', '.userspn-profile-popup-btn', function(e){
       e.preventDefault();
       var userspn_btn = $(this).attr('data-userspn-action');
-      $.fancybox.open($('#userspn-profile-popup'), {touch: false});
+      USERSPN_Popups.open($('#userspn-profile-popup'));
 
       if (typeof userspn_btn !== 'undefined') {
         $('.userspn-tab-links[data-userspn-id="userspn-tab-' + userspn_btn + '"]').click();
@@ -393,5 +412,7 @@
         });
       });
     }
+
+    
   });
 })(jQuery);

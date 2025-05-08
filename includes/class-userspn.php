@@ -81,10 +81,6 @@ class USERSPN {
 	private function define_constants() {
 		define('USERSPN_DIR', plugin_dir_path(dirname(__FILE__)));
 		define('USERSPN_URL', plugin_dir_url(dirname(__FILE__)));
-		
-		define('USERSPN_ROLE_CAPABILITIES', ['edit_post' => 'edit_userspn_host', 'edit_posts' => 'edit_userspn', 'edit_private_posts' => 'edit_private_userspn', 'edit_published_posts' => 'edit_published_userspn', 'edit_others_posts' => 'edit_other_userspn', 'publish_posts' => 'publish_userspn', 'read_post' => 'read_userspn_host', 'read_private_posts' => 'read_private_userspn', 'delete_post' => 'delete_userspn_host', 'delete_posts' => 'delete_userspn', 'delete_private_posts' => 'delete_private_userspn', 'delete_published_posts' => 'delete_published_userspn', 'delete_others_posts' => 'delete_others_userspn', 'upload_files' => 'upload_files', 'manage_terms' => 'manage_userspn_category', 'edit_terms' => 'edit_userspn_category', 'delete_terms' => 'delete_userspn_category', 'assign_terms' => 'assign_userspn_category', 'manage_options' => 'manage_userspn_options', ]);
-
-		define('USERSPN_KSES', ['div' => ['id' => [], 'class' => [], 'data-userspn-section-id' => [], 'data-userspn-form-type' => [], 'data-userspn-meta' => [], 'data-userspn-input-id' => [], 'data-userspn-input-type' => [], 'data-userspn-meta' => [], ], 'span' => ['id' => [], 'class' => [], ], 'p' => ['id' => [], 'class' => [], ], 'ul' => ['id' => [], 'class' => [], ], 'ol' => ['id' => [], 'class' => [], ], 'li' => ['id' => [], 'class' => [], 'data-userspn-user-id' => [], 'data-userspn-file-id' => [], ], 'small' => ['id' => [], 'class' => [], ], 'a' => ['id' => [], 'class' => [], 'href' => [], 'title' => [], 'target' => [], 'data-fancybox' => [], 'data-src' => [], 'data-userspn-meta' => [], ], 'form' => ['id' => [], 'class' => [], 'action' => [], 'method' => [], ], 'input' => ['name' => [], 'id' => [], 'class' => [], 'type' => [], 'checked' => [], 'multiple' => [], 'disabled' => [], 'value' => [], 'placeholder' => [], 'data-userspn-parent' => [], 'data-userspn-parent-option' => [], 'data-userspn-parent-option' => [], 'data-userspn-type' => [], 'data-userspn-subtype' => [], 'data-userspn-user-id' => [], 'data-userspn-post-id' => [],], 'select' => ['name' => [], 'id' => [], 'class' => [], 'type' => [], 'checked' => [], 'multiple' => [], 'disabled' => [], 'value' => [], 'placeholder' => [], 'data-placeholder' => [], 'data-userspn-parent' => [], 'data-userspn-parent-option' => [], ], 'option' => ['name' => [], 'id' => [], 'class' => [], 'disabled' => [], 'selected' => [], 'value' => [], 'placeholder' => [], ], 'textarea' => ['name' => [], 'id' => [], 'class' => [], 'type' => [], 'multiple' => [], 'disabled' => [], 'value' => [], 'placeholder' => [], 'data-userspn-parent' => [], 'data-userspn-parent-option' => [], ], 'label' => ['id' => [], 'class' => [], 'for' => [], ], 'i' => ['id' => [], 'class' => [], 'title' => [], ], 'br' => [], 'em' => [], 'strong' => [], 'h1' => ['id' => [], 'class' => [], ], 'h2' => ['id' => [], 'class' => [], ], 'h3' => ['id' => [], 'class' => [], ], 'h4' => ['id' => [], 'class' => [], ], 'h5' => ['id' => [], 'class' => [], ], 'h6' => ['id' => [], 'class' => [], ], 'img' => ['id' => [], 'class' => [], 'src' => [], 'alt' => [], 'title' => [], ], ]);
 	}
 			
 	/**
@@ -212,6 +208,11 @@ class USERSPN {
 		 */
 		require_once USERSPN_DIR . 'includes/class-userspn-shortcodes.php';
 
+		/**
+		 * The class responsible for popups functionality.
+		 */
+		require_once USERSPN_DIR . 'includes/class-userspn-popups.php';
+
 		$this->loader = new USERSPN_Loader();
 	}
 
@@ -226,9 +227,11 @@ class USERSPN {
 	private function set_i18n() {
 		$plugin_i18n = new USERSPN_i18n();
 
+		$this->loader->userspn_add_action('after_setup_theme', $plugin_i18n, 'userspn_load_plugin_textdomain');
+
 		if (class_exists('Polylang')) {
-			$this->loader->add_filter('pll_get_post_types', $plugin_i18n, 'userspn_pll_get_post_types', 10, 2);
-    }
+			$this->loader->userspn_add_filter('pll_get_post_types', $plugin_i18n, 'userspn_pll_get_post_types', 10, 2);
+    	}
 	}
 
 	/**
@@ -239,17 +242,17 @@ class USERSPN {
 	 */
 	private function define_common_hooks() {
 		$plugin_common = new USERSPN_Common($this->get_plugin_name(), $this->get_version());
-		$this->loader->add_action('wp_enqueue_scripts', $plugin_common, 'enqueue_styles');
-		$this->loader->add_action('wp_enqueue_scripts', $plugin_common, 'enqueue_scripts');
-		$this->loader->add_action('admin_enqueue_scripts', $plugin_common, 'enqueue_styles');
-		$this->loader->add_action('admin_enqueue_scripts', $plugin_common, 'enqueue_scripts');
-		$this->loader->add_filter('body_class', $plugin_common, 'userspn_body_classes');
+		$this->loader->userspn_add_action('wp_enqueue_scripts', $plugin_common, 'enqueue_styles');
+		$this->loader->userspn_add_action('wp_enqueue_scripts', $plugin_common, 'enqueue_scripts');
+		$this->loader->userspn_add_action('admin_enqueue_scripts', $plugin_common, 'enqueue_styles');
+		$this->loader->userspn_add_action('admin_enqueue_scripts', $plugin_common, 'enqueue_scripts');
+		$this->loader->userspn_add_filter('body_class', $plugin_common, 'userspn_body_classes');
 		
 		$plugin_settings = new USERSPN_Settings();
-		$this->loader->add_action('after_setup_theme', $plugin_settings, 'userspn_remove_admin_bar');
+		$this->loader->userspn_add_action('after_setup_theme', $plugin_settings, 'userspn_remove_admin_bar');
 
 		$plugin_mailing = new USERSPN_Mailing();
-		$this->loader->add_filter('wp_mail_content_type', $plugin_mailing, 'userspn_wp_mail_content_type');
+		$this->loader->userspn_add_filter('wp_mail_content_type', $plugin_mailing, 'userspn_wp_mail_content_type');
 	}
 
 	/**
@@ -260,16 +263,16 @@ class USERSPN {
 	 */
 	private function define_admin_hooks() {
 		$plugin_admin = new USERSPN_Admin($this->get_plugin_name(), $this->get_version());
-		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
-		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
+		$this->loader->userspn_add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
+		$this->loader->userspn_add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
 		
 		$plugin_user = new USERSPN_Functions_User();
-		$this->loader->add_action('show_user_profile', $plugin_user, 'userspn_profile_fields');
-		$this->loader->add_action('edit_user_profile', $plugin_user, 'userspn_profile_fields');
-		$this->loader->add_action('user_new_form', $plugin_user, 'userspn_profile_fields');
-		$this->loader->add_action('user_register', $plugin_user, 'userspn_profile_save_fields');
-		$this->loader->add_action('profile_update', $plugin_user, 'userspn_profile_save_fields');
-		$this->loader->add_action('init', $plugin_user, 'userspn_auto_login');
+		$this->loader->userspn_add_action('show_user_profile', $plugin_user, 'userspn_profile_fields');
+		$this->loader->userspn_add_action('edit_user_profile', $plugin_user, 'userspn_profile_fields');
+		$this->loader->userspn_add_action('user_new_form', $plugin_user, 'userspn_profile_fields');
+		$this->loader->userspn_add_action('user_register', $plugin_user, 'userspn_profile_save_fields');
+		$this->loader->userspn_add_action('profile_update', $plugin_user, 'userspn_profile_save_fields');
+		$this->loader->userspn_add_action('init', $plugin_user, 'userspn_auto_login');
 	}
 
 	/**
@@ -280,24 +283,25 @@ class USERSPN {
 	 */
 	private function define_public_hooks() {
 		$plugin_public = new USERSPN_Public($this->get_plugin_name(), $this->get_version());
-		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
-		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
+		$this->loader->userspn_add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
+		$this->loader->userspn_add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
 
 		$plugin_user = new USERSPN_Functions_User();
-		$this->loader->add_action('wp_login', $plugin_user, 'userspn_wp_login');
-		$this->loader->add_action('user_register', $plugin_user, 'userspn_user_register');
+		$this->loader->userspn_add_action('wp_login', $plugin_user, 'userspn_wp_login');
+		$this->loader->userspn_add_action('user_register', $plugin_user, 'userspn_user_register');
 		
-		$this->loader->add_filter('get_avatar', $plugin_user, 'userspn_get_avatar_hook', 10, 5);
+		$this->loader->userspn_add_filter('get_avatar', $plugin_user, 'userspn_get_avatar_hook', 10, 5);
 		
-		$this->loader->add_shortcode('userspn-get-avatar', $plugin_user, 'userspn_get_avatar');
-		$this->loader->add_shortcode('userspn-profile-edit', $plugin_user, 'userspn_profile_edit');		
-		$this->loader->add_shortcode('userspn-profile-image', $plugin_user, 'userspn_profile_image');	
-		$this->loader->add_shortcode('userspn-user-change-password-btn', $plugin_user, 'userspn_user_change_password_btn');		
-		$this->loader->add_shortcode('userspn-user-remove-form', $plugin_user, 'userspn_user_remove_form');		
+		$this->loader->userspn_add_shortcode('userspn-get-avatar', $plugin_user, 'userspn_get_avatar');
+		$this->loader->userspn_add_shortcode('userspn-profile-edit', $plugin_user, 'userspn_profile_edit');		
+		$this->loader->userspn_add_shortcode('userspn-profile-image', $plugin_user, 'userspn_profile_image');	
+		$this->loader->userspn_add_shortcode('userspn-user-change-password-btn', $plugin_user, 'userspn_user_change_password_btn');		
+		$this->loader->userspn_add_shortcode('userspn-user-remove-form', $plugin_user, 'userspn_user_remove_form');		
 
 
 		$plugin_notifications = new USERSPN_Notifications();
-		$this->loader->add_shortcode('userspn-notifications', $plugin_notifications, 'userspn_notifications');		
+		$this->loader->userspn_add_shortcode('userspn-notifications', $plugin_notifications, 'userspn_notifications');		
+		$this->loader->userspn_add_action('init', $plugin_notifications, 'userspn_notifications_init');
 	}
 
 
@@ -311,13 +315,13 @@ class USERSPN {
 		$plugin_data = new USERSPN_Data();
 
 		if (is_admin()) {
-			$this->loader->add_action('init', $plugin_data, 'load_plugin_data');
+			$this->loader->userspn_add_action('init', $plugin_data, 'load_plugin_data');
 		}else{
-			$this->loader->add_action('wp_footer', $plugin_data, 'load_plugin_data');
+			$this->loader->userspn_add_action('wp_footer', $plugin_data, 'load_plugin_data');
 		}
 
-		$this->loader->add_action('wp_footer', $plugin_data, 'flush_rewrite_rules');
-		$this->loader->add_action('admin_footer', $plugin_data, 'flush_rewrite_rules');
+		$this->loader->userspn_add_action('wp_footer', $plugin_data, 'flush_rewrite_rules');
+		$this->loader->userspn_add_action('admin_footer', $plugin_data, 'flush_rewrite_rules');
 	}
 
 	/**
@@ -329,8 +333,8 @@ class USERSPN {
 	private function load_templates() {
 		if (!defined('DOING_AJAX')) {
 			$plugin_templates = new USERSPN_Templates();
-			$this->loader->add_action('wp_footer', $plugin_templates, 'load_plugin_templates');
-			$this->loader->add_action('admin_footer', $plugin_templates, 'load_plugin_templates');
+			$this->loader->userspn_add_action('wp_footer', $plugin_templates, 'load_plugin_templates');
+			$this->loader->userspn_add_action('admin_footer', $plugin_templates, 'load_plugin_templates');
 		}
 	}
 
@@ -342,21 +346,21 @@ class USERSPN {
 	 */
 	private function load_settings() {
 		$plugin_settings = new USERSPN_Settings();
-		$this->loader->add_action('admin_menu', $plugin_settings, 'userspn_admin_menu');
-		$this->loader->add_action('login_enqueue_scripts', $plugin_settings, 'userspn_login_logo');
+		$this->loader->userspn_add_action('admin_menu', $plugin_settings, 'userspn_admin_menu');
+		$this->loader->userspn_add_action('login_enqueue_scripts', $plugin_settings, 'userspn_login_logo');
 
     if (get_option('userspn_dashboard_logo') == 'on') {
-			$this->loader->add_action('wp_before_admin_bar_render', $plugin_settings, 'userspn_wp_before_admin_bar_render');
-			$this->loader->add_action('wp_footer', $plugin_settings, 'userspn_wp_before_admin_bar_render');
+			$this->loader->userspn_add_action('wp_before_admin_bar_render', $plugin_settings, 'userspn_wp_before_admin_bar_render');
+			$this->loader->userspn_add_action('wp_footer', $plugin_settings, 'userspn_wp_before_admin_bar_render');
     }
 
-		$this->loader->add_action('admin_bar_menu', $plugin_settings, 'userspn_admin_bar_wp_menu', 99);
-		$this->loader->add_filter('login_headerurl', $plugin_settings, 'userspn_login_headerurl');
-		$this->loader->add_filter('login_headertext', $plugin_settings, 'userspn_login_headertext');
-		$this->loader->add_action('activated_plugin', $plugin_settings, 'activated_plugin');
+		$this->loader->userspn_add_action('admin_bar_menu', $plugin_settings, 'userspn_admin_bar_wp_menu', 99);
+		$this->loader->userspn_add_filter('login_headerurl', $plugin_settings, 'userspn_login_headerurl');
+		$this->loader->userspn_add_filter('login_headertext', $plugin_settings, 'userspn_login_headertext');
+		$this->loader->userspn_add_action('activated_plugin', $plugin_settings, 'activated_plugin');
 
 		if (get_option('userspn_user_change_password_wp_defaults') == 'on') {
-			$this->loader->add_filter('lostpassword_url', $plugin_settings, 'userspn_lostpassword_url', 99, 2);
+			$this->loader->userspn_add_filter('lostpassword_url', $plugin_settings, 'userspn_lostpassword_url', 99, 2);
     }
 	}
 
@@ -368,7 +372,7 @@ class USERSPN {
 	 */
 	private function load_ajax() {
 		$plugin_ajax = new USERSPN_Ajax();
-		$this->loader->add_action('wp_ajax_userspn_ajax', $plugin_ajax, 'userspn_ajax_server');
+		$this->loader->userspn_add_action('wp_ajax_userspn_ajax', $plugin_ajax, 'userspn_ajax_server');
 	}
 
 	/**
@@ -379,8 +383,8 @@ class USERSPN {
 	 */
 	private function load_ajax_nopriv() {
 		$plugin_ajax_nopriv = new USERSPN_Ajax_Nopriv();
-		$this->loader->add_action('wp_ajax_userspn_ajax_nopriv', $plugin_ajax_nopriv, 'userspn_ajax_nopriv_server');
-		$this->loader->add_action('wp_ajax_nopriv_userspn_ajax_nopriv', $plugin_ajax_nopriv, 'userspn_ajax_nopriv_server');
+		$this->loader->userspn_add_action('wp_ajax_userspn_ajax_nopriv', $plugin_ajax_nopriv, 'userspn_ajax_nopriv_server');
+		$this->loader->userspn_add_action('wp_ajax_nopriv_userspn_ajax_nopriv', $plugin_ajax_nopriv, 'userspn_ajax_nopriv_server');
 	}
 
 	/**
@@ -391,23 +395,23 @@ class USERSPN {
 	 */
 	private function load_shortcodes() {
 		$plugin_shortcodes = new USERSPN_Shortcodes();
-		$this->loader->add_shortcode('userspn-host', $plugin_shortcodes, 'userspn_host');
-		$this->loader->add_shortcode('userspn-test', $plugin_shortcodes, 'userspn_test');
-		$this->loader->add_shortcode('userspn-call-to-action', $plugin_shortcodes, 'userspn_call_to_action');
+		$this->loader->userspn_add_shortcode('userspn-host', $plugin_shortcodes, 'userspn_host');
+		$this->loader->userspn_add_shortcode('userspn-test', $plugin_shortcodes, 'userspn_test');
+		$this->loader->userspn_add_shortcode('userspn-call-to-action', $plugin_shortcodes, 'userspn_call_to_action');
 
 		$plugin_user = new USERSPN_Functions_User();
-		$this->loader->add_shortcode('userspn-profile', $plugin_user, 'userspn_profile');
-		$this->loader->add_shortcode('userspn-user-register-fields', $plugin_user, 'userspn_user_register_fields');
-		$this->loader->add_shortcode('userspn-user-register-form', $plugin_user, 'userspn_user_register_form');
-		$this->loader->add_shortcode('userspn-login', $plugin_user, 'userspn_login');
-		$this->loader->add_shortcode('userspn-csv-template', $plugin_user, 'userspn_csv_template');
-		$this->loader->add_shortcode('userspn-csv-template-upload', $plugin_user, 'userspn_csv_template_upload');
+		$this->loader->userspn_add_shortcode('userspn-profile', $plugin_user, 'userspn_profile');
+		$this->loader->userspn_add_shortcode('userspn-user-register-fields', $plugin_user, 'userspn_user_register_fields');
+		$this->loader->userspn_add_shortcode('userspn-user-register-form', $plugin_user, 'userspn_user_register_form');
+		$this->loader->userspn_add_shortcode('userspn-login', $plugin_user, 'userspn_login');
+		$this->loader->userspn_add_shortcode('userspn-csv-template', $plugin_user, 'userspn_csv_template');
+		$this->loader->userspn_add_shortcode('userspn-csv-template-upload', $plugin_user, 'userspn_csv_template_upload');
 		
 		$plugin_attachment = new USERSPN_Functions_Attachment();
-		$this->loader->add_shortcode('userspn-user-files', $plugin_attachment, 'userspn_user_files');
+		$this->loader->userspn_add_shortcode('userspn-user-files', $plugin_attachment, 'userspn_user_files');
 
 		$plugin_mailing = new USERSPN_Mailing();
-		$this->loader->add_shortcode('userspn-newsletter', $plugin_mailing, 'userspn_newsletter');
+		$this->loader->userspn_add_shortcode('userspn-newsletter', $plugin_mailing, 'userspn_newsletter');
 	}
 
 	/**
@@ -419,10 +423,10 @@ class USERSPN {
 	private function load_cron() {
 		$plugin_cron = new USERSPN_Cron();
 
-		$this->loader->add_action('wp', $plugin_cron, 'cron_schedule');
-		$this->loader->add_filter('cron_schedules', $plugin_cron, 'userspn_cron_thirty_minutes_schedule');
-		$this->loader->add_action('userspn_cron_daily', $plugin_cron, 'cron_daily');
-		$this->loader->add_action('userspn_cron_thirty_minutes', $plugin_cron, 'userspn_cron_thirty_minutes_function');
+		$this->loader->userspn_add_action('wp', $plugin_cron, 'cron_schedule');
+		$this->loader->userspn_add_filter('cron_schedules', $plugin_cron, 'userspn_cron_thirty_minutes_schedule');
+		$this->loader->userspn_add_action('userspn_cron_daily', $plugin_cron, 'cron_daily');
+		$this->loader->userspn_add_action('userspn_cron_thirty_minutes', $plugin_cron, 'userspn_cron_thirty_minutes_function');
 	}
 
 	/**
@@ -433,7 +437,7 @@ class USERSPN {
 	 */
 	private function load_notifications() {
 		$plugin_notifications = new USERSPN_Notifications();
-		$this->loader->add_action('wp_body_open', $plugin_notifications, 'userspn_wp_body_open');
+		$this->loader->userspn_add_action('wp_body_open', $plugin_notifications, 'userspn_wp_body_open');
 	}
 
 	/**
@@ -441,8 +445,8 @@ class USERSPN {
 	 *
 	 * @since    1.0.0
 	 */
-	public function run() {
-		$this->loader->run();
+	public function userspn_run() {
+		$this->loader->userspn_run();
 	}
 
 	/**
