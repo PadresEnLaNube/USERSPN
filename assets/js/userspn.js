@@ -349,24 +349,25 @@
       }
     });
 
-    if ($('.userspn-tab-links').length) {
-      $(document).on('click', '.userspn-tab-links', function(e){
-        e.preventDefault();
-        var tab_link = $(this);
-        var tab_wrapper = $(this).closest('.userspn-tabs-wrapper');
-        
-        tab_wrapper.find('.userspn-tab-links').each(function(index, element) {
-          $(this).removeClass('active');
-          $($(this).attr('data-userspn-id')).addClass('userspn-display-none');
-        });
+    $(document).on('click', '.userspn-tab-links', function(e){
+      console.log('click tab');
 
-        tab_wrapper.find('.userspn-tab-content').each(function(index, element) {
-          $(this).addClass('userspn-display-none');
-        });
-        
-        tab_link.addClass('active');
-        tab_wrapper.find('#' + tab_link.attr('data-userspn-id')).removeClass('userspn-display-none');
+      var tab_link = $(this);
+      var tab_wrapper = $(this).closest('.userspn-tabs-wrapper');
+      
+      tab_wrapper.find('.userspn-tab-links').each(function(index, element) {
+        $(this).removeClass('active');
+        $($(this).attr('data-userspn-id')).addClass('userspn-display-none');
       });
+
+      tab_wrapper.find('.userspn-tab-content').each(function(index, element) {
+        $(this).addClass('userspn-display-none');
+      });
+      
+      tab_link.addClass('active');
+      tab_wrapper.find('#' + tab_link.attr('data-userspn-id')).removeClass('userspn-display-none');
+    });
+    if ($('.userspn-tab-links').length) {
     }
 
     if ($('.userspn-data-table').length) {

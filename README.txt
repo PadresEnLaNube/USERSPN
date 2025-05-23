@@ -3,7 +3,7 @@ Contributors: felixmartinez, hamlet237
 Donate link: https://padresenlanube.com/
 Tags: user management, users, register, login, contacts
 Tested up to: 6.7
-Stable tag: 1.0.1
+Stable tag: 1.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Streamline user management on your WordPress site with this powerful plugin. Enable custom forms, secure login, and seamless profile management.
@@ -28,12 +28,6 @@ Licensed under: SEE LICENSE IN https://github.com/OwlCarousel2/OwlCarousel2/blob
 Copyright 2013-2018 David Deutsch
 https://owlcarousel2.github.io/OwlCarousel2/
 https://github.com/OwlCarousel2/OwlCarousel2/blob/develop/dist/owl.carousel.js
-
-Select2 4.0.13
-License MIT - https://github.com/select2/select2/blob/master/LICENSE.md
-https://github.com/select2/select2/tree/master
-https://github.com/select2/select2/blob/master/dist/js/select2.js
-https://github.com/select2/select2/blob/master/dist/css/select2.css
 
 Trumbowyg v2.27.3 - A lightweight WYSIWYG editor
 alex-d.github.io/Trumbowyg/
@@ -114,7 +108,7 @@ To uninstall the plugin, go to the 'Plugins' screen in WordPress, find the Users
 
 == Changelog ==
 
-= 1.0.1 =
+= 1.0.4 =
 
 WP references swapped to PN
 wordpress-heroes.com to padresenlanube.com
@@ -127,9 +121,9 @@ Forms style classes fixes
 Notifications finally managed by Mail Manager - PN
 CSS and JS loaded correctly with localize and enqueue functions
 Dashboard logo options fixed
-New version 1.0.1 updated in main
+New version 1.0.4 updated in main
 Ready for last version release XD
-README.txt and main php file changed in Tag 1.0.1
+README.txt and main php file changed in Tag 1.0.4
 
 = 1.0.0 =
 

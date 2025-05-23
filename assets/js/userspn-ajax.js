@@ -102,10 +102,16 @@
         userspn_btn.removeClass('userspn-link-disabled');
 
         $('.userspn-select').each(function(index) {
-          if ($(this).hasClass('search-disabled')) {
-            $(this).select2({minimumResultsForSearch: -1});
+          if ($(this).attr('multiple') == 'true') {
+            // For a multiple select
+            $(this).USERSPN_Selector({
+              multiple: true,
+              searchable: true,
+              placeholder: userspn_i18n.select_options,
+            });
           }else{
-            $(this).select2();
+            // For a single select
+            $(this).USERSPN_Selector();
           }
         });
       });

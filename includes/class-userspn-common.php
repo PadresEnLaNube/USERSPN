@@ -52,13 +52,13 @@ class USERSPN_Common {
 			wp_enqueue_style($this->plugin_name . '-material-icons-outlined', USERSPN_URL . 'assets/css/material-icons-outlined.min.css', [], $this->version, 'all');
 		}
 
-		if (!wp_style_is($this->plugin_name . '-select2', 'enqueued')) {
-			wp_enqueue_style($this->plugin_name . '-select2', USERSPN_URL . 'assets/css/select2.min.css', [], $this->version, 'all');
-		}
-
 		if (!wp_style_is($this->plugin_name . '-trumbowyg', 'enqueued')) {
 			wp_enqueue_style($this->plugin_name . '-trumbowyg', USERSPN_URL . 'assets/css/trumbowyg.min.css', [], $this->version, 'all');
 		}
+
+		if (!wp_style_is($this->plugin_name . '-selector', 'enqueued')) {
+			wp_enqueue_style($this->plugin_name . '-selector', USERSPN_URL . 'assets/css/userspn-selector.css', [], $this->version, 'all');
+    	}
 
 		if (!wp_style_is($this->plugin_name . '-popups', 'enqueued')) {
 			wp_enqueue_style($this->plugin_name . '-popups', USERSPN_URL . 'assets/css/userspn-popups.css', [], $this->version, 'all');
@@ -90,12 +90,12 @@ class USERSPN_Common {
 				wp_enqueue_script('jquery-ui-sortable');
 		}
 
-		if(!wp_script_is($this->plugin_name . '-select2', 'enqueued')) {
-				wp_enqueue_script($this->plugin_name . '-select2', USERSPN_URL . 'assets/js/select2.min.js', ['jquery'], $this->version, false, ['in_footer' => true, 'strategy' => 'defer']);
+		if(!wp_script_is($this->plugin_name . '-selector', 'enqueued')) {
+			wp_enqueue_script($this->plugin_name . '-selector', USERSPN_URL . 'assets/js/userspn-selector.js', ['jquery'], $this->version, false, ['in_footer' => true, 'strategy' => 'defer']);
 		}
 
 		if(!wp_script_is($this->plugin_name . '-trumbowyg', 'enqueued')) {
-				wp_enqueue_script($this->plugin_name . '-trumbowyg', USERSPN_URL . 'assets/js/trumbowyg.min.js', ['jquery'], $this->version, false, ['in_footer' => true, 'strategy' => 'defer']);
+			wp_enqueue_script($this->plugin_name . '-trumbowyg', USERSPN_URL . 'assets/js/trumbowyg.min.js', ['jquery'], $this->version, false, ['in_footer' => true, 'strategy' => 'defer']);
 		}
 
 		if(!wp_script_is($this->plugin_name . '-popups', 'enqueued')) {
@@ -103,15 +103,15 @@ class USERSPN_Common {
 		}
 
 		if(!wp_script_is($this->plugin_name . '-tooltipster', 'enqueued')) {
-				wp_enqueue_script($this->plugin_name . '-tooltipster', USERSPN_URL . 'assets/js/tooltipster.min.js', ['jquery'], $this->version, false, ['in_footer' => true, 'strategy' => 'defer']);
+			wp_enqueue_script($this->plugin_name . '-tooltipster', USERSPN_URL . 'assets/js/tooltipster.min.js', ['jquery'], $this->version, false, ['in_footer' => true, 'strategy' => 'defer']);
 		}
 
 		if(!wp_script_is($this->plugin_name . '-owl', 'enqueued')) {
-				wp_enqueue_script($this->plugin_name . '-owl', USERSPN_URL . 'assets/js/owl.min.js', ['jquery'], $this->version, false, ['in_footer' => true, 'strategy' => 'defer']);
+			wp_enqueue_script($this->plugin_name . '-owl', USERSPN_URL . 'assets/js/owl.min.js', ['jquery'], $this->version, false, ['in_footer' => true, 'strategy' => 'defer']);
 		}
 
 		if(!wp_script_is($this->plugin_name . '-datatables', 'enqueued')) {
-				wp_enqueue_script($this->plugin_name . '-datatables', USERSPN_URL . 'assets/js/datatables.min.js', ['jquery'], $this->version, false, ['in_footer' => true, 'strategy' => 'defer']);
+			wp_enqueue_script($this->plugin_name . '-datatables', USERSPN_URL . 'assets/js/datatables.min.js', ['jquery'], $this->version, false, ['in_footer' => true, 'strategy' => 'defer']);
 		}
 
 		wp_enqueue_script($this->plugin_name, USERSPN_URL . 'assets/js/userspn.js', ['jquery'], $this->version, false);
@@ -199,6 +199,12 @@ class USERSPN_Common {
 			'userspn_login' => $userspn_login,
 			'userspn_notice' => $userspn_notice,
 		]);
+
+		// Initialize popups
+		USERSPN_Popups::instance();
+
+		// Initialize selectors
+		USERSPN_Selector::instance();
 	}
 
   	public function userspn_body_classes($classes) {

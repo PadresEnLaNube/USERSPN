@@ -52,7 +52,7 @@ class USERSPN {
 		if (defined('USERSPN_VERSION')) {
 			$this->version = USERSPN_VERSION;
 		} else {
-			$this->version = '1.0.1';
+			$this->version = '1.0.4';
 		}
 
 		$this->plugin_name = 'userspn';
@@ -212,6 +212,11 @@ class USERSPN {
 		 * The class responsible for popups functionality.
 		 */
 		require_once USERSPN_DIR . 'includes/class-userspn-popups.php';
+
+		/**
+		 * The class responsible for selector functionality.
+		 */
+		require_once USERSPN_DIR . 'includes/class-userspn-selector.php';
 
 		$this->loader = new USERSPN_Loader();
 	}

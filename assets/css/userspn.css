@@ -829,7 +829,9 @@ input:checked + .userspn-slider:before{
   background:transparent;
 }
 .userspn-btn-transparent:hover{
-  border-color:var(--userspn-color-main-alt);
+  color:#ffffff;
+  background-color:var(--userspn-color-main);
+  border-color:var(--userspn-color-main);
 }
 .userspn-cursor-pointer{
   cursor:pointer;
@@ -1152,41 +1154,6 @@ textarea{
 .userspn-white-space-pre-wrap{
   white-space:pre-wrap;
 }
-.userspn-width-100-percent~.select2-container{
-  width:100%!important;
-}
-.userspn-body .select2-search__field{
-  padding:10px!important;
-  font-size:var(--wp--preset--font-size--normal);
-}
-.userspn-select,.userspn-select~.select2-container .select2-selection__rendered{
-  font-family:var(--wp--preset--font-family--manrope);
-  font-weight:var(--wp--preset--font-weight--normal);
-  font-size:var(--wp--preset--font-size--normal);
-}
-.userspn-select.userspn-display-none + .userspn-select~.select2-container{
-  display:none
-}
-.userspn-body.userspn-body-logged-in.userspn-body-administrator .select2-dropdown{
-  top:30px;
-}
-.userspn-select~.select2-container .select2-selection--single,.userspn-select~.select2-container .select2-selection:not(.select2-selection--multiple) .select2-selection__rendered,.userspn-select~.select2-container .select2-selection__arrow{
-  min-height:50px;
-}
-.userspn-select~.select2-container .select2-selection__placeholder,.userspn-select~.select2-container .select2-selection:not(.select2-selection--multiple) .select2-selection__rendered{
-  line-height:50px;
-  padding:0 10px;
-}
-.userspn-select~.select2-container .select2-selection--single .select2-selection__clear{
-  font-size:20px;
-  padding-right:10px;
-}
-.userspn-select~.select2-container .select2-selection--multiple{
-  height:auto;
-}
-.userspn-select~.select2-container .select2-selection--multiple .select2-search--inline{
-  display:contents;
-}
 
 /* USERSPN TABS */
 .userspn-tabs{
@@ -1261,9 +1228,6 @@ textarea{
   border-radius:5px;
   padding:5px;
   margin-bottom:10px;
-}
-.userspn-field + .select2-container,.userspn-field{
-  max-width:470px!important;
 }
 .userspn-password-checker{
   max-width:470px;

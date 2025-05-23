@@ -128,6 +128,14 @@ class USERSPN_Functions_User {
 
   public function userspn_profile_fields($user){
     $user_id = $user->ID;
+
+    $userspn_profile_fields_nonce = [];
+    $userspn_profile_fields_nonce['userspn_ajax_nopriv_nonce'] = [
+      'id' => 'userspn_ajax_nopriv_nonce',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'input',
+      'type' => 'nonce',
+    ];
     
     if(get_option('userspn_user_register_fields_dashboard') == 'on'){
       $userspn_user_register_fields = self::userspn_user_register_get_fields([]);
@@ -148,6 +156,10 @@ class USERSPN_Functions_User {
                 </td>
               </tr>
             </table>
+          <?php endforeach ?>
+
+          <?php foreach ($userspn_profile_fields_nonce as $nonce_field): ?>
+            <?php USERSPN_Forms::input_builder($nonce_field, 'user', $user_id); ?>
           <?php endforeach ?>
         <?php endif ?>
       <?php

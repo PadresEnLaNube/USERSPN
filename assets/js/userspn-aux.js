@@ -8,10 +8,16 @@
 
     if ($('.userspn-select').length) {
       $('.userspn-select').each(function(index) {
-        if ($(this).children('option').length < 7) {
-          $(this).select2({minimumResultsForSearch: -1, allowClear: true});
+        if ($(this).attr('multiple') == 'true') {
+          // For a multiple select
+          $(this).USERSPN_Selector({
+            multiple: true,
+            searchable: true,
+            placeholder: userspn_i18n.select_options,
+          });
         }else{
-          $(this).select2({allowClear: true});
+          // For a single select
+          $(this).USERSPN_Selector();
         }
       });
     }

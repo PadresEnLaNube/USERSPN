@@ -15,7 +15,6 @@
 .userspn-popup-content {
     position: relative;
     width: 100%;
-    max-height: calc(90vh - 60px); /* Altura máxima menos el padding */
     margin: 0 auto;
     background-color: #ffffff;
     border-radius: 8px;
@@ -25,16 +24,16 @@
     -webkit-overflow-scrolling: touch; /* Mejor scroll en iOS */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
-.userspn-popup.userspn-popup-size-small .userspn-popup-content{
+.userspn-popup.userspn-popup-size-small,.userspn-popup.userspn-popup-size-small .userspn-popup-content{
     max-width: 300px;
 }
-.userspn-popup.userspn-popup-size-medium .userspn-popup-content{
+.userspn-popup.userspn-popup-size-medium,.userspn-popup.userspn-popup-size-medium .userspn-popup-content{
     max-width: 750px;
 }
-.userspn-popup.userspn-popup-size-large .userspn-popup-content{
+.userspn-popup.userspn-popup-size-large,.userspn-popup.userspn-popup-size-large .userspn-popup-content{
     max-width: 1000px;
 }
-.userspn-popup.userspn-popup-size-full-size .userspn-popup-content{
+.userspn-popup.userspn-popup-size-full-size,.userspn-popup.userspn-popup-size-full-size .userspn-popup-content{
     max-width: 100%; /* Ancho máximo para pantallas grandes */
 }
 .userspn-popup-overlay {
