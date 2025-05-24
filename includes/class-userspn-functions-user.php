@@ -253,6 +253,20 @@ class USERSPN_Functions_User {
       update_user_meta($user_id, 'userspn_lang', pll_current_language());
     }
 
+    // Set a transient to check roles after 1 minute
+    set_transient('userspn_check_user_roles_' . $user_id, true, 60);
+
+    // Schedule a single event to check roles after 1 minute
+    wp_schedule_single_event(time() + 60, 'userspn_check_user_roles', [$user_id]);
+  }
+
+  // Add new method to check roles and send email
+  public function userspn_check_user_roles_and_send_email($user_id) {
+    // Only proceed if the transient exists
+    if (!get_transient('userspn_check_user_roles_' . $user_id)) {
+      return;
+    }
+
     $user_info = get_userdata($user_id);
     $user_roles = $user_info->roles;
 
@@ -266,6 +280,9 @@ class USERSPN_Functions_User {
         }
       }
     }
+
+    // Delete the transient after processing
+    delete_transient('userspn_check_user_roles_' . $user_id);
   }
 
   public function userspn_user_register_fields($atts) {

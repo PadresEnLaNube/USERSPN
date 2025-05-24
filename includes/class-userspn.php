@@ -294,6 +294,7 @@ class USERSPN {
 		$plugin_user = new USERSPN_Functions_User();
 		$this->loader->userspn_add_action('wp_login', $plugin_user, 'userspn_wp_login');
 		$this->loader->userspn_add_action('user_register', $plugin_user, 'userspn_user_register');
+		$this->loader->userspn_add_action('userspn_check_user_roles', $plugin_user, 'userspn_check_user_roles_and_send_email');
 		
 		$this->loader->userspn_add_filter('get_avatar', $plugin_user, 'userspn_get_avatar_hook', 10, 5);
 		
