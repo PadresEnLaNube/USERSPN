@@ -145,6 +145,7 @@ class USERSPN_Common {
 		wp_localize_script($this->plugin_name, 'userspn_newsletter', [
 			'exit_popup' => (get_option('userspn_newsletter_exit_popup') == 'on') ? true : false,
 			'is_user_logged_in' => is_user_logged_in(),
+			'exit_popup_empty' => (get_option('userspn_newsletter_exit_popup_empty') == 'on') ? true : false,
 		]);
 
 		wp_localize_script($this->plugin_name, 'userspn_trumbowyg', [

@@ -253,36 +253,50 @@ class USERSPN_Functions_User {
       update_user_meta($user_id, 'userspn_lang', pll_current_language());
     }
 
-    // Set a transient to check roles after 1 minute
-    set_transient('userspn_check_user_roles_' . $user_id, true, 60);
-
-    // Schedule a single event to check roles after 1 minute
-    wp_schedule_single_event(time() + 60, 'userspn_check_user_roles', [$user_id]);
+    // Save new registration email
+    $pending = get_option('userspn_emails_registration_pending', []);
+    $pending[$user_id] = [
+      'user_id' => $user_id,
+      'timestamp' => time(),
+    ];
+    update_option('userspn_emails_registration_pending', $pending, false);
   }
 
-  // Add new method to check roles and send email
-  public function userspn_check_user_roles_and_send_email($user_id) {
-    // Only proceed if the transient exists
-    if (!get_transient('userspn_check_user_roles_' . $user_id)) {
-      return;
+  // NUEVO: Procesar correos pendientes
+  public function userspn_process_pending_registration_emails() {
+    $pending = get_option('userspn_emails_registration_pending', []);
+    $changed = false;
+    
+    foreach ($pending as $user_id => $data) {
+      $sent = $this->userspn_send_registration_email($user_id);
+      
+      if ($sent) {
+        unset($pending[$user_id]);
+        $changed = true;
+      }
     }
 
-    $user_info = get_userdata($user_id);
-    $user_roles = $user_info->roles;
+    if ($changed) {
+      update_option('userspn_emails_registration_pending', $pending, false);
+    }
+  }
 
+  // NUEVO: Lógica de envío de correo de registro
+  public function userspn_send_registration_email($user_id) {
+    $user_info = get_userdata($user_id);
+    if (!$user_info) return false;
+    $user_roles = $user_info->roles;
     if (class_exists('MAILPN') && !in_array('userspn_newsletter_subscriber', $user_roles)) {
       $userspn_mailing = new USERSPN_Mailing();
       $userspn_emails_welcome = $userspn_mailing->userspn_get_email_welcome($user_id);
-
       if (!empty($userspn_emails_welcome)) {
         foreach ($userspn_emails_welcome as $mail_id) {
           do_shortcode('[mailpn-sender mailpn_type="email_welcome" mailpn_user_to="' . $user_id . '" mailpn_subject="' . get_the_title($mail_id) . '" mailpn_id="' . $mail_id . '"]');
         }
+        return true;
       }
     }
-
-    // Delete the transient after processing
-    delete_transient('userspn_check_user_roles_' . $user_id);
+    return false;
   }
 
   public function userspn_user_register_fields($atts) {

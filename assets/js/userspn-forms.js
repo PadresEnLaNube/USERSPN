@@ -55,19 +55,20 @@
         }
       }
 
-      $(document).on('click', ('.userspn-show-pass'), function(e){
+      $(document).on('click', '.userspn-show-pass', function(e){
         e.preventDefault();
-        var userspn_btn = $('.userspn-show-pass');
+        var userspn_btn = $(this);
+        var password_input = userspn_btn.siblings('.userspn-password-strength');
 
         if (pass_view_state) {
-          userspn_btn.siblings('#userspn_password').attr('type', 'password');
-          userspn_btn.find('i').text('visibility_off');
-          var pass_view_state = false;
-        }else{
-          userspn_btn.siblings('#userspn_password').attr('type', 'text');
+          password_input.attr('type', 'password');
           userspn_btn.find('i').text('visibility');
-          var pass_view_state = true;
-        } 
+          pass_view_state = false;
+        } else {
+          password_input.attr('type', 'text');
+          userspn_btn.find('i').text('visibility_off');
+          pass_view_state = true;
+        }
       });
 
       $(document).on('keyup', ('.userspn-password-strength'), function(e){

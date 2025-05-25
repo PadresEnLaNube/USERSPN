@@ -64,14 +64,18 @@ class USERSPN_Notifications {
               case 'userspn_newsletter_activation_success':
                 ?>
                   <div class="userspn-popup-content userspn-text-align-center">
-                    <p class="userspn-alert userspn-alert-success"><?php esc_html_e('Congratulations! Your email has been activated successfully.', 'userspn'); ?></p>
+                    <div class="userspn-p-30">
+                      <p class="userspn-alert userspn-alert-success"><?php esc_html_e('Congratulations! Your email has been activated successfully.', 'userspn'); ?></p>
+                    </div>
                   </div>
                 <?php
                 break;
               case 'userspn_newsletter_activation_error':
                 ?>
                   <div class="userspn-popup-content userspn-text-align-center">
-                    <p class="userspn-alert userspn-alert-error"><?php esc_html_e('Oppps! We are not able to verify your account. Please try to subscribe again or contact us.', 'userspn'); ?></p>
+                    <div class="userspn-p-30">
+                      <p class="userspn-alert userspn-alert-error"><?php esc_html_e('Oppps! We are not able to verify your account. Please try to subscribe again or contact us.', 'userspn'); ?></p>
+                    </div>
                   </div>
                 <?php
                 break;

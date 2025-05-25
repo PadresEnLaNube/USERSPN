@@ -207,6 +207,10 @@
       if (newsletterContent) {
         setTimeout(function() {
           $(document).one('mouseleave', function(e) {
+            if (userspn_newsletter.exit_popup_empty) {
+              $('.userspn-newsletter-exit-popup .userspn-popup-content .userspn-p-30').append(newsletterContent);
+            }
+
             if (e.pageY - $(window).scrollTop() <= 1) {
               USERSPN_Popups.open($('#userspn-newsletter-exit-popup'));
             }
@@ -350,8 +354,6 @@
     });
 
     $(document).on('click', '.userspn-tab-links', function(e){
-      console.log('click tab');
-
       var tab_link = $(this);
       var tab_wrapper = $(this).closest('.userspn-tabs-wrapper');
       

@@ -376,11 +376,21 @@ class USERSPN_Settings {
           'class' => 'userspn-input userspn-width-100-percent',
           'input' => 'input',
           'type' => 'checkbox',
-          'parent' => 'userspn_newsletter',
+          'parent' => 'this userspn_newsletter',
           'parent_option' => 'on',
           'label' => __('Newsletter exit popup', 'userspn'),
           'description' => __('When this option is active, the system shows a popup when a contact tries to exit page without completing the newsletter registration form.', 'userspn'),
         ];
+          $userspn_options['userspn_newsletter_exit_popup_empty'] = [
+            'id' => 'userspn_newsletter_exit_popup_empty',
+            'class' => 'userspn-input userspn-width-100-percent',
+            'input' => 'input',
+            'type' => 'checkbox',
+            'parent' => 'userspn_newsletter_exit_popup',
+            'parent_option' => 'on',
+            'label' => __('Newsletter is already loaded', 'userspn'),
+            'description' => __('Check this option if you already have a newsletter form loaded in the page. For example, if you are using the shortcode [userspn-newsletter] in the page footer, you should check this option.', 'userspn'),
+          ];
         $userspn_options['userspn_newsletter_activation'] = [
           'id' => 'userspn_newsletter_activation',
           'class' => 'userspn-input userspn-width-100-percent',

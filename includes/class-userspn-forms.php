@@ -214,7 +214,7 @@ class USERSPN_Forms {
                   <input id="<?php echo esc_attr($userspn_input['id']) . ((array_key_exists('multiple', $userspn_input) && $userspn_input['multiple'] == 'true') ? '[]' : ''); ?>" name="<?php echo esc_attr($userspn_input['id']) . ((array_key_exists('multiple', $userspn_input) && $userspn_input['multiple'] == 'true') ? '[]' : ''); ?>" <?php echo (array_key_exists('multiple', $userspn_input) && $userspn_input['multiple'] == 'true' ? 'multiple' : ''); ?> class="userspn-field userspn-password-strength <?php echo array_key_exists('class', $userspn_input) ? esc_attr($userspn_input['class']) : ''; ?>" type="<?php echo esc_attr($userspn_input['type']); ?>" <?php echo ((array_key_exists('required', $userspn_input) && $userspn_input['required'] == 'true') ? 'required' : ''); ?> <?php echo ((array_key_exists('disabled', $userspn_input) && $userspn_input['disabled'] == 'true') ? 'disabled' : ''); ?> value="<?php echo (!empty($userspn_input['button_text']) ? $userspn_input['button_text'] : esc_attr($userspn_value)); ?>" placeholder="<?php echo (array_key_exists('placeholder', $userspn_input) ? esc_attr($userspn_input['placeholder']) : ''); ?>" <?php echo wp_kses_post($userspn_parent_block); ?>/>
 
                   <a href="#" class="userspn-show-pass userspn-cursor-pointer userspn-display-none-soft">
-                    <i class="material-icons-outlined userspn-font-size-20 userspn-vertical-align-middle">visibility</i>
+                    <i class="material-icons-outlined userspn-font-size-20">visibility</i>
                   </a>
                 </div>
 
