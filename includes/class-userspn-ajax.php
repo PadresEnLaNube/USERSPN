@@ -119,7 +119,7 @@ class USERSPN_Ajax {
                 <?php endif ?>
 
                 <div class="userspn-text-align-right">
-                  <input type="submit" data-users-user-id="<?php echo esc_attr($user_id); ?>" value="<?php esc_html_e('Update user', 'userspn'); ?>" class="userspn-btn userspn-manage-btn"/><?php echo esc_html(USERSPN_Data::loader()); ?>
+                  <input type="submit" data-users-user-id="<?php echo esc_attr($user_id); ?>" value="<?php esc_html_e('Update user', 'userspn'); ?>" class="userspn-btn userspn-manage-btn"/><?php echo esc_html(USERSPN_Data::userspn_loader()); ?>
                 </div>
               </form>
             <?php

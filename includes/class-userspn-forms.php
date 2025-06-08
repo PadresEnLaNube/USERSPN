@@ -193,7 +193,7 @@ class USERSPN_Forms {
           case 'submit':
             ?>
               <div class="userspn-text-align-right">
-                <input type="submit" value="<?php echo esc_attr($userspn_input['value']); ?>" name="<?php echo esc_attr($userspn_input['id']); ?>" id="<?php echo esc_attr($userspn_input['id']); ?>" name="<?php echo esc_attr($userspn_input['id']); ?>" class="userspn-btn" data-userspn-type="<?php echo esc_attr($userspn_type); ?>" data-userspn-subtype="<?php echo ((array_key_exists('subtype', $userspn_input)) ? esc_attr($userspn_input['subtype']) : ''); ?>" data-userspn-user-id="<?php echo esc_attr($userspn_id); ?>" data-userspn-post-id="<?php echo esc_attr(get_the_ID()); ?>"/><?php echo esc_html(userspn_Data::loader()); ?>
+                <input type="submit" value="<?php echo esc_attr($userspn_input['value']); ?>" name="<?php echo esc_attr($userspn_input['id']); ?>" id="<?php echo esc_attr($userspn_input['id']); ?>" name="<?php echo esc_attr($userspn_input['id']); ?>" class="userspn-btn" data-userspn-type="<?php echo esc_attr($userspn_type); ?>" data-userspn-subtype="<?php echo ((array_key_exists('subtype', $userspn_input)) ? esc_attr($userspn_input['subtype']) : ''); ?>" data-userspn-user-id="<?php echo esc_attr($userspn_id); ?>" data-userspn-post-id="<?php echo esc_attr(get_the_ID()); ?>"/><?php echo esc_html(USERSPN_Data::userspn_loader()); ?>
               </div>
             <?php
             break;
@@ -244,6 +244,11 @@ class USERSPN_Forms {
                   </ul>
                 </div>
               </div>
+            <?php
+            break;
+          case 'color':
+            ?>
+              <input id="<?php echo esc_attr($userspn_input['id']) . ((array_key_exists('multiple', $userspn_input) && $userspn_input['multiple']) ? '[]' : ''); ?>" name="<?php echo esc_attr($userspn_input['id']) . ((array_key_exists('multiple', $userspn_input) && $userspn_input['multiple']) ? '[]' : ''); ?>" <?php echo (array_key_exists('multiple', $userspn_input) && $userspn_input['multiple'] ? 'multiple' : ''); ?> class="userspn-field <?php echo array_key_exists('class', $userspn_input) ? esc_attr($userspn_input['class']) : ''; ?>" type="<?php echo esc_attr($userspn_input['type']); ?>" <?php echo ((array_key_exists('required', $userspn_input) && $userspn_input['required'] == true) ? 'required' : ''); ?> <?php echo (((array_key_exists('disabled', $userspn_input) && $userspn_input['disabled'] == 'true') || $disabled) ? 'disabled' : ''); ?> value="<?php echo (!empty($userspn_value) ? esc_attr($userspn_value) : '#000000'); ?>" placeholder="<?php echo (array_key_exists('placeholder', $userspn_input) ? esc_attr($userspn_input['placeholder']) : ''); ?>" <?php echo wp_kses_post($userspn_parent_block); ?>/>
             <?php
             break;
           default:

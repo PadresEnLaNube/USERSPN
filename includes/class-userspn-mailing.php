@@ -129,7 +129,7 @@ class USERSPN_Mailing {
             </div>
           
             <div class="userspn-text-align-right">
-              <input type="submit" class="userspn-btn userspn-newsletter-btn" value="<?php echo esc_attr($text_btn); ?>"/><?php echo esc_html(USERSPN_Data::loader()); ?>
+              <input type="submit" class="userspn-btn userspn-newsletter-btn" value="<?php echo esc_attr($text_btn); ?>"/><?php echo esc_html(USERSPN_Data::userspn_loader()); ?>
             </div>
           </form>
         <?php else: ?>

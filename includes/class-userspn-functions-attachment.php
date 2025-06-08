@@ -102,7 +102,7 @@ class USERSPN_Functions_Attachment {
             </div>
 
             <div>
-              <input type="submit" value="<?php esc_html_e('Upload', 'userspn'); ?>" class="userspn-btn userspn-btn-mini userspn-upload-private-files-btn" data-userspn-user-id="<?php echo esc_attr($user_id); ?>" data-userspn-post-id="<?php echo esc_attr($post_id); ?>"/><?php echo esc_html(USERSPN_Data::loader()); ?>
+              <input type="submit" value="<?php esc_html_e('Upload', 'userspn'); ?>" class="userspn-btn userspn-btn-mini userspn-upload-private-files-btn" data-userspn-user-id="<?php echo esc_attr($user_id); ?>" data-userspn-post-id="<?php echo esc_attr($post_id); ?>"/><?php echo esc_html(USERSPN_Data::userspn_loader()); ?>
             </div>
           </form>
         </div>
@@ -144,7 +144,7 @@ class USERSPN_Functions_Attachment {
           </div>
 
           <div class="userspn-display-inline-table userspn-width-30-percent userspn-text-align-right">
-            <a href="#" class="userspn-file-private-remove-btn userspn-tooltip" title="<?php esc_html_e('Remove file', 'userspn'); ?>"><i class="material-icons-outlined userspn-font-size-30 userspn-vertical-align-middle userspn-color-main-0">delete_outline</i></a><?php echo esc_html(USERSPN_Data::loader()); ?>
+            <a href="#" class="userspn-file-private-remove-btn userspn-tooltip" title="<?php esc_html_e('Remove file', 'userspn'); ?>"><i class="material-icons-outlined userspn-font-size-30 userspn-vertical-align-middle userspn-color-main-0">delete_outline</i></a><?php echo esc_html(USERSPN_Data::userspn_loader()); ?>
             <a href="<?php echo esc_url(wp_get_attachment_url($file_id)); ?>" download class="file-uploaded-download-btn userspn-ml-20 userspn-tooltip" title="<?php esc_html_e('Download file', 'userspn'); ?>"><i class="material-icons-outlined userspn-font-size-30 userspn-vertical-align-middle userspn-color-main-0">cloud_download</i></a>
           </div>
         </div>

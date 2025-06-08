@@ -255,10 +255,12 @@ class USERSPN_Functions_User {
 
     // Save new registration email
     $pending = get_option('userspn_emails_registration_pending', []);
+    
     $pending[$user_id] = [
       'user_id' => $user_id,
       'timestamp' => time(),
     ];
+    
     update_option('userspn_emails_registration_pending', $pending, false);
   }
 
@@ -281,11 +283,11 @@ class USERSPN_Functions_User {
     }
   }
 
-  // NUEVO: Lógica de envío de correo de registro
   public function userspn_send_registration_email($user_id) {
     $user_info = get_userdata($user_id);
     if (!$user_info) return false;
     $user_roles = $user_info->roles;
+
     if (class_exists('MAILPN') && !in_array('userspn_newsletter_subscriber', $user_roles)) {
       $userspn_mailing = new USERSPN_Mailing();
       $userspn_emails_welcome = $userspn_mailing->userspn_get_email_welcome($user_id);
@@ -293,9 +295,31 @@ class USERSPN_Functions_User {
         foreach ($userspn_emails_welcome as $mail_id) {
           do_shortcode('[mailpn-sender mailpn_type="email_welcome" mailpn_user_to="' . $user_id . '" mailpn_subject="' . get_the_title($mail_id) . '" mailpn_id="' . $mail_id . '"]');
         }
+
         return true;
       }
     }
+    
+    return false;
+  }
+
+  public function userspn_send_newsletter_email($user_id) {
+    $user_info = get_userdata($user_id);
+    if (!$user_info) return false;
+    $user_roles = $user_info->roles;
+
+    if (class_exists('MAILPN') && !in_array('userspn_newsletter_subscriber', $user_roles)) {
+      $userspn_mailing = new USERSPN_Mailing();
+      $userspn_emails_newsletter = $userspn_mailing->userspn_get_email_newsletter_welcome($user_id);
+      if (!empty($userspn_emails_newsletter)) {
+        foreach ($userspn_emails_newsletter as $mail_id) {
+          do_shortcode('[mailpn-sender mailpn_type="email_newsletter" mailpn_user_to="' . $user_id . '" mailpn_subject="' . get_the_title($mail_id) . '" mailpn_id="' . $mail_id . '"]');
+        }
+
+        return true;
+      }
+    }
+    
     return false;
   }
 
@@ -688,7 +712,7 @@ class USERSPN_Functions_User {
 
         <?php if (!empty($userspn_base_fields) || !empty($userspn_fields)): ?>
           <div class="userspn-text-align-right userspn-mt-30 userspn-mb-50">
-            <input type="submit" value="<?php esc_html_e('Update profile', 'userspn'); ?>" name="userspn-profile-edit-btn" id="userspn-profile-edit-btn" class="userspn-btn" data-userspn-type="user" data-userspn-user-id="<?php echo esc_attr($user_id); ?>" data-userspn-post-id="<?php echo esc_attr($post_id); ?>"/><?php echo esc_html(USERSPN_Data::loader()); ?>
+            <input type="submit" value="<?php esc_html_e('Update profile', 'userspn'); ?>" name="userspn-profile-edit-btn" id="userspn-profile-edit-btn" class="userspn-btn" data-userspn-type="user" data-userspn-user-id="<?php echo esc_attr($user_id); ?>" data-userspn-post-id="<?php echo esc_attr($post_id); ?>"/><?php echo esc_html(USERSPN_Data::userspn_loader()); ?>
           </div>
         <?php else: ?>
           <p class="userspn-alert"><?php esc_html_e('There are no extra fields in the profile', 'userspn'); ?></p>
@@ -717,7 +741,7 @@ class USERSPN_Functions_User {
             <?php wp_enqueue_script('userspn-user-profile-image', USERSPN_URL . 'assets/js/userspn-user-profile-image.js', ['jquery'], USERSPN_VERSION, false, ['in_footer' => true, 'strategy' => 'defer']); ?>
           <?php endif ?>
 
-          <input type="submit" name="userspn-upload-files-btn" value="<?php esc_html_e('Upload avatar', 'userspn'); ?>" class="userspn-upload-files-btn userspn-btn" data-userspn-user-id="<?php echo esc_attr(get_current_user_id()); ?>"><?php echo esc_html(USERSPN_Data::loader()); ?>
+          <input type="submit" name="userspn-upload-files-btn" value="<?php esc_html_e('Upload avatar', 'userspn'); ?>" class="userspn-upload-files-btn userspn-btn" data-userspn-user-id="<?php echo esc_attr(get_current_user_id()); ?>"><?php echo esc_html(USERSPN_Data::userspn_loader()); ?>
         </div>
       </div>
     </form>
@@ -884,7 +908,7 @@ class USERSPN_Functions_User {
               <input type="password" name="userspn_password" id="userspn_password" class="userspn-input userspn-width-100-percent" placeholder="<?php esc_html_e('Password', 'userspn'); ?>">
 
               <div class="userspn-width-100-percent userspn-text-align-right">
-                <a href="#" class="userspn-btn userspn-user-remove-btn" data-userspn-user-id="<?php echo esc_attr(get_current_user_id()); ?>"><?php esc_html_e('Remove user', 'userspn'); ?></a><?php echo esc_html(USERSPN_Data::loader()); ?>
+                <a href="#" class="userspn-btn userspn-user-remove-btn" data-userspn-user-id="<?php echo esc_attr(get_current_user_id()); ?>"><?php esc_html_e('Remove user', 'userspn'); ?></a><?php echo esc_html(USERSPN_Data::userspn_loader()); ?>
               </div>
             </div>
           </div>
@@ -1002,7 +1026,7 @@ class USERSPN_Functions_User {
           <?php endforeach ?>
 
           <div class="userspn-text-align-right userspn-mt-30 userspn-mb-30">
-            <input type="submit" value="<?php esc_html_e('Create user', 'userspn'); ?>" name="userspn-user-registration-btn" id="userspn-user-registration-btn" class="userspn-btn userspn-btn"/><?php echo esc_html(USERSPN_Data::loader()); ?>
+            <input type="submit" value="<?php esc_html_e('Create user', 'userspn'); ?>" name="userspn-user-registration-btn" id="userspn-user-registration-btn" class="userspn-btn userspn-btn"/><?php echo esc_html(USERSPN_Data::userspn_loader()); ?>
           </div>
         </form>
       <?php else: ?>
@@ -1015,6 +1039,11 @@ class USERSPN_Functions_User {
   }
 
   public function userspn_profile_save_fields($user_id){
+    // Skip validation if this is a password reset request (check both POST and GET parameters)
+    if (isset($_GET['action']) && ($_GET['action'] === 'resetpassword' ||  $_GET['action'] === 'lostpassword')) {
+      return true;
+    }
+    
     // Always require nonce verification
     if (!array_key_exists('userspn_ajax_nopriv_nonce', $_POST)) {
       echo wp_json_encode([

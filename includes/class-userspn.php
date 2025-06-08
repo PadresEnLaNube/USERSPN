@@ -304,7 +304,6 @@ class USERSPN {
 		$this->loader->userspn_add_shortcode('userspn-user-change-password-btn', $plugin_user, 'userspn_user_change_password_btn');		
 		$this->loader->userspn_add_shortcode('userspn-user-remove-form', $plugin_user, 'userspn_user_remove_form');		
 
-
 		$plugin_notifications = new USERSPN_Notifications();
 		$this->loader->userspn_add_shortcode('userspn-notifications', $plugin_notifications, 'userspn_notifications');		
 		$this->loader->userspn_add_action('init', $plugin_notifications, 'userspn_notifications_init');
@@ -321,13 +320,13 @@ class USERSPN {
 		$plugin_data = new USERSPN_Data();
 
 		if (is_admin()) {
-			$this->loader->userspn_add_action('init', $plugin_data, 'load_plugin_data');
+			$this->loader->userspn_add_action('init', $plugin_data, 'userspn_load_plugin_data');
 		}else{
-			$this->loader->userspn_add_action('wp_footer', $plugin_data, 'load_plugin_data');
+			$this->loader->userspn_add_action('wp_footer', $plugin_data, 'userspn_load_plugin_data');
 		}
 
-		$this->loader->userspn_add_action('wp_footer', $plugin_data, 'flush_rewrite_rules');
-		$this->loader->userspn_add_action('admin_footer', $plugin_data, 'flush_rewrite_rules');
+		$this->loader->userspn_add_action('wp_footer', $plugin_data, 'userspn_flush_rewrite_rules');
+		$this->loader->userspn_add_action('admin_footer', $plugin_data, 'userspn_flush_rewrite_rules');
 	}
 
 	/**
@@ -362,12 +361,13 @@ class USERSPN {
 
 		$this->loader->userspn_add_action('admin_bar_menu', $plugin_settings, 'userspn_admin_bar_wp_menu', 99);
 		$this->loader->userspn_add_filter('login_headerurl', $plugin_settings, 'userspn_login_headerurl');
-		$this->loader->userspn_add_filter('login_headertext', $plugin_settings, 'userspn_login_headertext');
-		$this->loader->userspn_add_action('activated_plugin', $plugin_settings, 'activated_plugin');
+		$this->loader->	userspn_add_filter('login_headertext', $plugin_settings, 'userspn_login_headertext');
+		$this->loader->userspn_add_action('activated_plugin', $plugin_settings, 'userspn_activated_plugin');
 
 		if (get_option('userspn_user_change_password_wp_defaults') == 'on') {
 			$this->loader->userspn_add_filter('lostpassword_url', $plugin_settings, 'userspn_lostpassword_url', 99, 2);
-    }
+			$this->loader->userspn_add_action('login_form_lostpassword', $plugin_settings, 'userspn_add_nonce_to_lostpassword_form');
+		}
 	}
 
 	/**

@@ -21,7 +21,7 @@ class USERSPN_Shortcodes {
     ?>
       <div class="userspn-shortcode-example">
         Shortcode example
-<?php echo esc_html(USERSPN_Data::loader()); ?>
+<?php echo esc_html(USERSPN_Data::userspn_loader()); ?>
       </div>
     <?php
     $userspn_return_string = ob_get_contents(); 

@@ -20,27 +20,14 @@ class USERSPN_Notifications {
             update_user_meta($user_id, 'userspn_newsletter_active', current_time('timestamp'));
             update_user_meta($user_id, 'userspn_notifications', 'on');
 
-            if (class_exists('MAILPN_Mailing')) {
-              $mailpn_plugin = new MAILPN_Mailing();
-              $userspn_mailing_plugin = new USERSPN_Mailing();
-              $registration_emails = $userspn_mailing_plugin->userspn_get_email_newsletter_welcome($user_id);
-
-              if (!empty($registration_emails)) {
-                foreach ($registration_emails as $mail_id) {
-                  $users_to = $mailpn_plugin->mailpn_get_users_to($mail_id);
-
-                  if (in_array($user_id, $users_to)) {
-                    do_shortcode('[mailpn-sender mailpn_type="newsletter_welcome" mailpn_user_to="' . $user_id . '" mailpn_subject="' . get_the_title($mail_id) . '" mailpn_id="' . $mail_id . '"]');
-                  }
-                }
-              }
-            }
+            // Send welcome email after activation
+            $plugin_user = new USERSPN_Functions_User();
+            $plugin_user->userspn_send_newsletter_email($user_id);
 
             wp_safe_redirect(home_url('?userspn_notice=userspn_newsletter_activation_success'));exit();
           }else{
             wp_safe_redirect(home_url('?userspn_notice=userspn_newsletter_activation_error'));exit();
           }
-
           break;
       }
     }

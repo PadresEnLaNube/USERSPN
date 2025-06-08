@@ -25,7 +25,7 @@ class USERSPN_Data {
 	 *
 	 * @since    1.0.0
 	 */
-	public function load_plugin_data() {
+	public function userspn_load_plugin_data() {
 		$this->data['user_id'] = get_current_user_id();
 
 		if (is_admin()) {
@@ -42,7 +42,7 @@ class USERSPN_Data {
 	 *
 	 * @since    1.0.0
 	 */
-	public function flush_rewrite_rules() {
+	public function userspn_flush_rewrite_rules() {
     if (get_option('userspn_options_changed')) {
       flush_rewrite_rules();
       update_option('userspn_options_changed', false);
@@ -54,11 +54,24 @@ class USERSPN_Data {
 	 *
 	 * @since    1.0.0
 	 */
-	public static function loader() {
+	public static function userspn_loader() {
 		?>
 			<div class="userspn-waiting userspn-display-inline userspn-display-none">
 				<div class="userspn-loader-circle-waiting"><div></div><div></div><div></div><div></div></div>
 			</div>
 		<?php
-  }
+  	}
+
+	/**
+	 * Load popup loader.
+	 *
+	 * @since    1.0.0
+	 */
+	public static function userspn_popup_loader() {
+		?>
+			<div class="userspn-popup-content">
+				<div class="userspn-loader-circle-wrapper"><div class="userspn-text-align-center"><div class="userspn-loader-circle"><div></div><div></div><div></div><div></div></div></div></div>
+			</div>
+		<?php
+	}
 }

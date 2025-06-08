@@ -84,7 +84,7 @@
         {'base':'S', 'letters':'\u0053\u24C8\uFF33\u1E9E\u015A\u1E64\u015C\u1E60\u0160\u1E66\u1E62\u1E68\u0218\u015E\u2C7E\uA7A8\uA784'},
         {'base':'T', 'letters':'\u0054\u24C9\uFF34\u1E6A\u0164\u1E6C\u021A\u0162\u1E70\u1E6E\u0166\u01AC\u01AE\u023E\uA786'},
         {'base':'TZ','letters':'\uA728'},
-        {'base':'U', 'letters':'\u0055\u24CA\uFF35\u00D9\u00DA\u00DB\u0168\u1E78\u016A\u1E7A\u016C\u00DC\u01DB\u01D7\u01D5\u01D9\u1EE6\u016E\u0170\u01D3\u0214\u0216\u01AF\u1EEA\u1EE8\u1EEE\u1EEC\u1EF0\u1EE4\u1E72\u0172\u1E76\u1E74\u0244'},
+        {'base':'U', 'letters':'\u0055\u24CA\uFF35\u00D9\u00DA\u00DB\u0168\u1E78\u016A\u1E7A\u016C\u00DC\u01DB\u01D7\u01D5\u01D9\u1EE6\u016E\u0170\u01D3\u0214\u0216\u01AF\u1EEA\u1EE8\u1EEE\u1EEC\u1EF0\u1EE4\u1E72\u0172\u1E76\u1E75\u0244'},
         {'base':'V', 'letters':'\u0056\u24CB\uFF36\u1E7C\u1E7E\u01B2\uA75E\u0245'},
         {'base':'VY','letters':'\uA760'},
         {'base':'W', 'letters':'\u0057\u24CC\uFF37\u1E80\u1E82\u0174\u1E86\u1E84\u1E88\u2C72'},
@@ -202,21 +202,30 @@
 
   window.userspn_handle_exit_popup = function() {
     if (typeof userspn_newsletter !== 'undefined' && userspn_newsletter.exit_popup && !userspn_newsletter.is_user_logged_in) {
-      var newsletterContent = $('#userspn-newsletter').html();
+        var newsletterContent = $('#userspn-newsletter').html();
+        var popupElement = $('#userspn-newsletter-exit-popup');
 
-      if (newsletterContent) {
-        setTimeout(function() {
-          $(document).one('mouseleave', function(e) {
+        if (newsletterContent && popupElement.length) {
+            // Pre-cargar el contenido del newsletter en el popup
             if (userspn_newsletter.exit_popup_empty) {
-              $('.userspn-newsletter-exit-popup .userspn-popup-content .userspn-p-30').append(newsletterContent);
+                popupElement.find('.userspn-popup-content .userspn-p-30').html(newsletterContent);
             }
 
-            if (e.pageY - $(window).scrollTop() <= 1) {
-              USERSPN_Popups.open($('#userspn-newsletter-exit-popup'));
-            }
-          });
-        }, 3000);
-      }
+            // Asegurarse de que el popup esté inicialmente oculto
+            popupElement.hide().removeClass('userspn-display-none-soft');
+
+            setTimeout(function() {
+                $(document).one('mouseleave', function(e) {
+                    if (e.pageY - $(window).scrollTop() <= 1) {
+                        // Asegurarse de que el contenido esté listo antes de mostrar el popup
+                        if (userspn_newsletter.exit_popup_empty && !popupElement.find('.userspn-newsletter').length) {
+                            popupElement.find('.userspn-popup-content .userspn-p-30').html(newsletterContent);
+                        }
+                        USERSPN_Popups.open(popupElement);
+                    }
+                });
+            }, 3000);
+        }
     }
   }
 

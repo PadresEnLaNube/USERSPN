@@ -479,10 +479,6 @@ class USERSPN_Settings {
   }
 
   public function userspn_login_logo() {
-    if (!wp_style_is('userspn-login', 'enqueued')) {
-      wp_enqueue_style('userspn-login', USERSPN_URL . 'assets/css/userspn-login.css', [], USERSPN_VERSION, 'all');
-    }
-
     $userspn_admin_page_logo = get_option('userspn_admin_page_logo');
     if (!empty($userspn_admin_page_logo)) {
       $userspn_admin_page_logo_base_css = '#login h1 a{background-image:url(' . esc_url(wp_get_attachment_image_src($userspn_admin_page_logo, 'large')[0]) . ');width:' . esc_url(wp_get_attachment_image_src($userspn_admin_page_logo, 'large')[1]) . 'px;height:' . esc_url(wp_get_attachment_image_src($userspn_admin_page_logo, 'large')[2]) . 'px;background-repeat:no-repeat;max-width:300px;max-height:300px;background-size:contain;background-position:center center;}';
@@ -530,7 +526,13 @@ class USERSPN_Settings {
   }
 
   public function userspn_lostpassword_url($lostpassword_url, $redirect) {
-    return esc_url(home_url('wp-login.php?action=lostpassword'));
+    $nonce = wp_create_nonce('userspn-nonce');
+    return esc_url(add_query_arg('userspn_ajax_nopriv_nonce', $nonce, home_url('wp-login.php?action=lostpassword')));
+  }
+
+  public function userspn_add_nonce_to_lostpassword_form() {
+    // Skip adding nonce to lost password form
+    return;
   }
 
   public function userspn_remove_admin_bar() {
@@ -545,7 +547,7 @@ class USERSPN_Settings {
     }
   }
 
-  public function activated_plugin($plugin) {
+  public function userspn_activated_plugin($plugin) {
     if($plugin == 'userspn/userspn.php') {
       wp_redirect(esc_url(admin_url('admin.php?page=userspn_options')));exit();
     }
