@@ -47,7 +47,7 @@ class USERSPN_Common {
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_styles() {
+	public function userspn_enqueue_styles() {
 		if (!wp_style_is($this->plugin_name . '-material-icons-outlined', 'enqueued')) {
 			wp_enqueue_style($this->plugin_name . '-material-icons-outlined', USERSPN_URL . 'assets/css/material-icons-outlined.min.css', [], $this->version, 'all');
 		}
@@ -85,7 +85,7 @@ class USERSPN_Common {
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_scripts() {
+	public function userspn_enqueue_scripts() {
 		if(!wp_script_is('jquery-ui-sortable', 'enqueued')) {
 				wp_enqueue_script('jquery-ui-sortable');
 		}
@@ -114,16 +114,20 @@ class USERSPN_Common {
 			wp_enqueue_script($this->plugin_name . '-datatables', USERSPN_URL . 'assets/js/datatables.min.js', ['jquery'], $this->version, false, ['in_footer' => true, 'strategy' => 'defer']);
 		}
 
-		wp_enqueue_script($this->plugin_name, USERSPN_URL . 'assets/js/userspn.js', ['jquery'], $this->version, false);
+		// Add cache-busting for private windows and ensure proper loading
+		$script_version = $this->version;
+		
+		wp_enqueue_script($this->plugin_name, USERSPN_URL . 'assets/js/userspn.js', ['jquery'], $script_version, false);
 		wp_enqueue_script($this->plugin_name . '-ajax', USERSPN_URL . 'assets/js/userspn-ajax.js', ['jquery'], $this->version, false, ['in_footer' => true, 'strategy' => 'defer']);
 		wp_enqueue_script($this->plugin_name . '-aux', USERSPN_URL . 'assets/js/userspn-aux.js', ['jquery'], $this->version, false, ['in_footer' => true, 'strategy' => 'defer']);
 		wp_enqueue_script($this->plugin_name . '-forms', USERSPN_URL . 'assets/js/userspn-forms.js', ['jquery'], $this->version, false, ['in_footer' => true, 'strategy' => 'defer']);
 		wp_enqueue_script($this->plugin_name . '-input-editor-builder', USERSPN_URL . 'assets/js/userspn-input-editor-builder.js', ['jquery'], $this->version, false, ['in_footer' => true, 'strategy' => 'defer']);
 		wp_enqueue_script($this->plugin_name . '-profile-progress', USERSPN_URL . 'assets/js/userspn-profile-progress.js', ['jquery'], $this->version, false, ['in_footer' => true, 'strategy' => 'defer']);
 
+		$nonce = wp_create_nonce('userspn-nonce');
 		wp_localize_script($this->plugin_name, 'userspn_ajax', [
 			'ajax_url' => admin_url('admin-ajax.php'),
-			'userspn_ajax_nonce' => wp_create_nonce('userspn-nonce'),
+			'userspn_ajax_nonce' => $nonce,
 		]);
 
 		if (class_exists('MAILPN')) {
@@ -193,8 +197,8 @@ class USERSPN_Common {
 			'email_sent' => esc_html(__('We have sent you an email. Please check your inbox or spam folder.', 'userspn')),
 		]);
 			
-		$userspn_login = !empty($_GET['userspn_login']) ? USERSPN_Forms::sanitizer(wp_unslash($_GET['userspn_login'])) : '';
-		$userspn_notice = !empty($_GET['userspn_notice']) ? USERSPN_Forms::sanitizer(wp_unslash($_GET['userspn_notice'])) : '';
+		$userspn_login = !empty($_GET['userspn_login']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_GET['userspn_login'])) : '';
+		$userspn_notice = !empty($_GET['userspn_notice']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_GET['userspn_notice'])) : '';
 
 		wp_localize_script($this->plugin_name, 'userspn_get', [
 			'userspn_login' => $userspn_login,

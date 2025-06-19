@@ -36,7 +36,7 @@ class USERSPN_Ajax_Nopriv {
 				exit();
 			}
 
-			$userspn_ajax_nopriv_type = USERSPN_Forms::sanitizer(wp_unslash($_POST['userspn_ajax_nopriv_type']));
+			$userspn_ajax_nopriv_type = USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_ajax_nopriv_type']));
 
 			$ajax_keys = !empty($_POST['ajax_keys']) ? wp_unslash($_POST['ajax_keys']) : [];
 			$key_value = [];
@@ -49,7 +49,7 @@ class USERSPN_Ajax_Nopriv {
 
 						if (!empty($_POST[$clear_key])) {
 							foreach (wp_unslash($_POST[$clear_key]) as $multi_key => $multi_value) {
-								$final_value = !empty($_POST[$clear_key][$multi_key]) ? USERSPN_Forms::sanitizer(wp_unslash($_POST[$clear_key][$multi_key]), $key['node'], $key['type']) : '';
+								$final_value = !empty($_POST[$clear_key][$multi_key]) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST[$clear_key][$multi_key]), $key['node'], $key['type']) : '';
 								${$clear_key}[$multi_key] = $key_value[$clear_key][$multi_key] = $final_value;
 							}
 						}else{
@@ -57,7 +57,7 @@ class USERSPN_Ajax_Nopriv {
 							$key_value[$clear_key][$multi_key] = '';
 						}
 					}else{
-						$key_id = !empty($_POST[$key['id']]) ? USERSPN_Forms::sanitizer(wp_unslash($_POST[$key['id']]), $key['node'], $key['type']) : '';
+						$key_id = !empty($_POST[$key['id']]) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST[$key['id']]), $key['node'], $key['type']) : '';
 						${$key['id']} = $key_value[$key['id']] = $key_id;
 					}
 				}
@@ -76,13 +76,13 @@ class USERSPN_Ajax_Nopriv {
 					));
 					break;
 				case 'userspn_form_save':
-					$userspn_form_type = !empty($_POST['userspn_form_type']) ? USERSPN_Forms::sanitizer(wp_unslash($_POST['userspn_form_type'])) : '';
+					$userspn_form_type = !empty($_POST['userspn_form_type']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_form_type'])) : '';
 
 					if (!empty($key_value) && !empty($userspn_form_type)) {
-						$userspn_form_id = !empty($_POST['userspn_form_id']) ? USERSPN_Forms::sanitizer(wp_unslash($_POST['userspn_form_id'])) : '';
-						$userspn_form_subtype = !empty($_POST['userspn_form_subtype']) ? USERSPN_Forms::sanitizer(wp_unslash($_POST['userspn_form_subtype'])) : '';
-						$user_id = !empty($_POST['userspn_form_user_id']) ? USERSPN_Forms::sanitizer(wp_unslash($_POST['userspn_form_user_id'])) : '';
-						$post_id = !empty($_POST['userspn_form_post_id']) ? USERSPN_Forms::sanitizer(wp_unslash($_POST['userspn_form_post_id'])) : '';
+						$userspn_form_id = !empty($_POST['userspn_form_id']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_form_id'])) : '';
+						$userspn_form_subtype = !empty($_POST['userspn_form_subtype']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_form_subtype'])) : '';
+						$user_id = !empty($_POST['userspn_form_user_id']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_form_user_id'])) : '';
+						$post_id = !empty($_POST['userspn_form_post_id']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_form_post_id'])) : '';
 
 						if (($userspn_form_type == 'user' && empty($user_id)) || ($userspn_form_type == 'post' && (empty($post_id) && !(!empty($userspn_form_subtype) && in_array($userspn_form_subtype, ['post_new', 'post_edit'])))) || ($userspn_form_type == 'option' && !is_user_logged_in())) {
 							session_start();
@@ -101,10 +101,10 @@ class USERSPN_Ajax_Nopriv {
 							switch ($userspn_form_type) {
 								case 'user':
 									if (empty($user_id)) {
-										if (USERSPN_Functions_User::is_user_admin(get_current_user_id())) {
-											$user_login = !empty($_POST['user_login']) ? USERSPN_Forms::sanitizer(wp_unslash($_POST['user_login'])) : '';
-											$user_password = !empty($_POST['user_password']) ? USERSPN_Forms::sanitizer(wp_unslash($_POST['user_password'])) : '';
-											$user_email = !empty($_POST['user_email']) ? USERSPN_Forms::sanitizer(wp_unslash($_POST['user_email'])) : '';
+										if (USERSPN_Functions_User::userspn_user_is_admin(get_current_user_id())) {
+											$user_login = !empty($_POST['user_login']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['user_login'])) : '';
+											$user_password = !empty($_POST['user_password']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['user_password'])) : '';
+											$user_email = !empty($_POST['user_email']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['user_email'])) : '';
 
 											$user_id = USERSPN_Functions_Post::insert_user($user_login, $user_password, $user_email);
 										}
@@ -122,7 +122,7 @@ class USERSPN_Ajax_Nopriv {
 								case 'post':
 									if (empty($userspn_form_subtype) || !in_array($userspn_form_subtype, ['post_new', 'post_edit'])) {
 										if (empty($post_id)) {
-											if (USERSPN_Functions_User::is_user_admin(get_current_user_id())) {
+											if (USERSPN_Functions_User::userspn_user_is_admin(get_current_user_id())) {
 												$post_id = USERSPN_Functions_Post::insert_post($title, '', '', sanitize_title($title), $post_type, 'publish', get_current_user_id());
 											}
 										}
@@ -135,7 +135,7 @@ class USERSPN_Ajax_Nopriv {
 									do_action('userspn_form_save', $post_id, $key_value, $userspn_form_type, $userspn_form_subtype);
 									break;
 								case 'option':
-									if (USERSPN_Functions_User::is_user_admin(get_current_user_id())) {
+									if (USERSPN_Functions_User::userspn_user_is_admin(get_current_user_id())) {
 										foreach ($key_value as $key => $value) {
 											update_option($key, $value);
 										}
@@ -159,8 +159,8 @@ class USERSPN_Ajax_Nopriv {
 					}
 					break;
 				case 'userspn_profile_create':
-					$userspn_email = !empty($_POST['userspn_email']) ? USERSPN_Forms::sanitizer(wp_unslash($_POST['userspn_email'])) : '';
-					$userspn_password = !empty($_POST['userspn_password']) ? USERSPN_Forms::sanitizer(wp_unslash($_POST['userspn_password'])) : '';
+					$userspn_email = !empty($_POST['userspn_email']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_email'])) : '';
+					$userspn_password = !empty($_POST['userspn_password']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_password'])) : '';
 					$plugin_user = new USERSPN_Functions_User();
 
 					if (!empty($userspn_email) && !empty($userspn_password)) {
@@ -186,7 +186,7 @@ class USERSPN_Ajax_Nopriv {
 					}
 				case 'userspn_newsletter':
 					$plugin_user = new USERSPN_Functions_User();
-					$userspn_email = !empty($_POST['userspn_email']) ? USERSPN_Forms::sanitizer(wp_unslash($_POST['userspn_email'])) : '';
+					$userspn_email = !empty($_POST['userspn_email']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_email'])) : '';
 
 					if (!empty($userspn_email)) {
 						if (email_exists($userspn_email)) {

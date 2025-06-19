@@ -69,8 +69,6 @@
 
             // Close menu when clicking outside
             $(document).on('click', (e) => {
-                console.log('click');
-                console.log(this.wrapper.has(e.target));
                 if (!this.wrapper.has(e.target).length) {
                     this.closeMenu();
                 }

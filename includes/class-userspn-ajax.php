@@ -37,13 +37,13 @@ class USERSPN_Ajax {
         exit();
       }
 
-  		$userspn_ajax_type = USERSPN_Forms::sanitizer(wp_unslash($_POST['userspn_ajax_type']));
-      $ajax_keys = !empty($_POST['ajax_keys']) ? wp_unslash($_POST['ajax_keys']) : [];
+  		$userspn_ajax_type = USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_ajax_type']));
+      $ajax_keys = !empty($_POST['ajax_keys']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['ajax_keys'])) : [];
       $key_value = [];
-      $user_id = !empty($_POST['user_id']) ? wp_unslash($_POST['user_id']) : 0;
-      $current_user_id = !empty($_POST['current_user_id']) ? USERSPN_Forms::sanitizer(wp_unslash($_POST['current_user_id'])) : 0;
-      $post_id = !empty($_POST['post_id']) ? USERSPN_Forms::sanitizer(wp_unslash($_POST['post_id'])) : 0;
-      $file_id = !empty($_POST['file_id']) ? USERSPN_Forms::sanitizer(wp_unslash($_POST['file_id'])) : 0;
+      $user_id = !empty($_POST['user_id']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['user_id'])) : 0;
+      $current_user_id = !empty($_POST['current_user_id']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['current_user_id'])) : 0;
+      $post_id = !empty($_POST['post_id']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['post_id'])) : 0;
+      $file_id = !empty($_POST['file_id']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['file_id'])) : 0;
 
       if (!empty($ajax_keys)) {
         foreach ($ajax_keys as $key) {
@@ -52,8 +52,9 @@ class USERSPN_Ajax {
             ${$clear_key} = $key_value[$clear_key] = [];
 
             if (!empty($_POST[$clear_key])) {
-              foreach (wp_unslash($_POST[$clear_key]) as $multi_key => $multi_value) {
-                $final_value = !empty($_POST[$clear_key][$multi_key]) ? USERSPN_Forms::sanitizer(wp_unslash($_POST[$clear_key][$multi_key]), $key['node'], $key['type']) : '';
+              $sanitized_post_data = wp_unslash($_POST[$clear_key]);
+              foreach ($sanitized_post_data as $multi_key => $multi_value) {
+                $final_value = !empty($sanitized_post_data[$multi_key]) ? USERSPN_Forms::userspn_sanitizer($sanitized_post_data[$multi_key], $key['node'], $key['type']) : '';
                 ${$clear_key}[$multi_key] = $key_value[$clear_key][$multi_key] = $final_value;
               }
             }else{
@@ -61,7 +62,7 @@ class USERSPN_Ajax {
               $key_value[$clear_key][$multi_key] = '';
             }
           }else{
-            $key_id = !empty($_POST[$key['id']]) ? USERSPN_Forms::sanitizer(wp_unslash($_POST[$key['id']]), $key['node'], $key['type']) : '';
+            $key_id = !empty($_POST[$key['id']]) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST[$key['id']]), $key['node'], $key['type']) : '';
             ${$key['id']} = $key_value[$key['id']] = $key_id;
           }
         }
@@ -114,7 +115,7 @@ class USERSPN_Ajax {
                     
                 <?php if (!empty($profile_array)): ?>
                   <?php foreach ($profile_array as $profile_field): ?>
-                    <?php USERSPN_Forms::input_wrapper_builder($profile_field, 'user', esc_html($user_id), 0, 'full'); ?>
+                    <?php USERSPN_Forms::userspn_input_wrapper_builder($profile_field, 'user', esc_html($user_id), 0, 'full'); ?>
                   <?php endforeach ?>
                 <?php endif ?>
 
@@ -254,7 +255,7 @@ class USERSPN_Ajax {
           exit();
           break;
         case 'userspn_input_editor_builder_add':
-          $userspn_meta = !empty($_POST['userspn_meta']) ? USERSPN_Forms::sanitizer(wp_unslash($_POST['userspn_meta'])) : [];
+          $userspn_meta = !empty($_POST['userspn_meta']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_meta'])) : [];
 
           $userspn_array = [
             'id' => '',
@@ -266,26 +267,26 @@ class USERSPN_Ajax {
             'userspn_meta' => $userspn_meta,
           ];
 
-          USERSPN_Forms::input_editor_builder($userspn_array);exit();
+          USERSPN_Forms::userspn_input_editor_builder($userspn_array);exit();
           break;
         case 'userspn_input_editor_builder_save':
-          $userspn_input_name = !empty($_POST['userspn_input_name']) ? USERSPN_Forms::sanitizer(wp_unslash($_POST['userspn_input_name'])) : '';
-          $userspn_input_current_id = !empty($_POST['userspn_input_current_id']) ? USERSPN_Forms::sanitizer(wp_unslash($_POST['userspn_input_current_id'])) : 0;
-          $userspn_input_type = !empty($_POST['userspn_input_type']) ? USERSPN_Forms::sanitizer(wp_unslash($_POST['userspn_input_type'])) : '';
-          $userspn_form_type = !empty($_POST['userspn_form_type']) ? USERSPN_Forms::sanitizer(wp_unslash($_POST['userspn_form_type'])) : '';
-          $userspn_input_id = !empty($_POST['userspn_input_id']) ? USERSPN_Forms::sanitizer(wp_unslash($_POST['userspn_input_id'])) : 0;
-          $userspn_input_class = !empty($_POST['userspn_input_class']) ? USERSPN_Forms::sanitizer(wp_unslash($_POST['userspn_input_class'])) : '';
-          $userspn_input_subtype = !empty($_POST['userspn_input_subtype']) ? USERSPN_Forms::sanitizer(wp_unslash($_POST['userspn_input_subtype'])) : '';
-          $userspn_input_subtype = !empty($_POST['userspn_input_subtype']) ? USERSPN_Forms::sanitizer(wp_unslash($_POST['userspn_input_subtype'])) : '';
-          $userspn_input_required = !empty($_POST['userspn_input_required']) ? USERSPN_Forms::sanitizer(wp_unslash($_POST['userspn_input_required'])) : '';
-          $userspn_input_min = !empty($_POST['userspn_input_min']) ? USERSPN_Forms::sanitizer(wp_unslash($_POST['userspn_input_min'])) : 0;
-          $userspn_input_max = !empty($_POST['userspn_input_max']) ? USERSPN_Forms::sanitizer(wp_unslash($_POST['userspn_input_max'])) : 0;
-          $userspn_input_label_min = !empty($_POST['userspn_input_label_min']) ? USERSPN_Forms::sanitizer(wp_unslash($_POST['userspn_input_label_min'])) : '';
-          $userspn_input_label_max = !empty($_POST['userspn_input_label_max']) ? USERSPN_Forms::sanitizer(wp_unslash($_POST['userspn_input_label_max'])) : '';
-          $userspn_select_options = !empty($_POST['userspn_select_options']) ? $_POST['userspn_select_options'] : '';
-          $userspn_select_subtype = !empty($_POST['userspn_select_subtype']) ? USERSPN_Forms::sanitizer(wp_unslash($_POST['userspn_select_subtype'])) : '';
-          $userspn_textarea_subtype = !empty($_POST['userspn_textarea_subtype']) ? USERSPN_Forms::sanitizer(wp_unslash($_POST['userspn_textarea_subtype'])) : '';
-          $userspn_meta = !empty($_POST['userspn_meta']) ? USERSPN_Forms::sanitizer(wp_unslash($_POST['userspn_meta'])) : '';
+          $userspn_input_name = !empty($_POST['userspn_input_name']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_input_name'])) : '';
+          $userspn_input_current_id = !empty($_POST['userspn_input_current_id']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_input_current_id'])) : 0;
+          $userspn_input_type = !empty($_POST['userspn_input_type']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_input_type'])) : '';
+          $userspn_form_type = !empty($_POST['userspn_form_type']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_form_type'])) : '';
+          $userspn_input_id = !empty($_POST['userspn_input_id']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_input_id'])) : 0;
+          $userspn_input_class = !empty($_POST['userspn_input_class']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_input_class'])) : '';
+          $userspn_input_subtype = !empty($_POST['userspn_input_subtype']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_input_subtype'])) : '';
+          $userspn_input_subtype = !empty($_POST['userspn_input_subtype']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_input_subtype'])) : '';
+          $userspn_input_required = !empty($_POST['userspn_input_required']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_input_required'])) : '';
+          $userspn_input_min = !empty($_POST['userspn_input_min']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_input_min'])) : 0;
+          $userspn_input_max = !empty($_POST['userspn_input_max']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_input_max'])) : 0;
+          $userspn_input_label_min = !empty($_POST['userspn_input_label_min']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_input_label_min'])) : '';
+          $userspn_input_label_max = !empty($_POST['userspn_input_label_max']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_input_label_max'])) : '';
+          $userspn_select_options = !empty($_POST['userspn_select_options']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_select_options'])) : '';
+          $userspn_select_subtype = !empty($_POST['userspn_select_subtype']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_select_subtype'])) : '';
+          $userspn_textarea_subtype = !empty($_POST['userspn_textarea_subtype']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_textarea_subtype'])) : '';
+          $userspn_meta = !empty($_POST['userspn_meta']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_meta'])) : '';
 
           $userspn_input_required = ($userspn_input_required == 'true') ? true : false;
           $userspn_input_multiple = ($userspn_form_type == 'table') ? true : false;
@@ -404,9 +405,9 @@ class USERSPN_Ajax {
           }
           break;
         case 'userspn_input_editor_builder_remove':
-          $userspn_meta = !empty($_POST['userspn_meta']) ? USERSPN_Forms::sanitizer(wp_unslash($_POST['userspn_meta'])) : '';
-          $userspn_input_id = !empty($_POST['userspn_input_id']) ? USERSPN_Forms::sanitizer(wp_unslash($_POST['userspn_input_id'])) : 0;
-          $userspn_form_type = !empty($_POST['userspn_form_type']) ? USERSPN_Forms::sanitizer(wp_unslash($_POST['userspn_form_type'])) : '';
+          $userspn_meta = !empty($_POST['userspn_meta']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_meta'])) : '';
+          $userspn_input_id = !empty($_POST['userspn_input_id']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_input_id'])) : 0;
+          $userspn_form_type = !empty($_POST['userspn_form_type']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_form_type'])) : '';
 
           if (!empty($userspn_input_id) && !empty($userspn_form_type)) {
             if ($userspn_form_type == 'option') {
@@ -466,7 +467,7 @@ class USERSPN_Ajax {
           }
           break;
         case 'userspn_user_remove':
-          $password = !empty($_POST['password']) ? wp_unslash($_POST['password']) : '';
+          $password = !empty($_POST['password']) ? sanitize_text_field(wp_unslash($_POST['password'])) : '';
 
           if (!empty($user_id) && !empty($password)) {
             $plugin_user = new USERSPN_Functions_User();
@@ -554,7 +555,7 @@ class USERSPN_Ajax {
             if (is_wp_error($userspn_file_id)) {
               echo 'userspn_profile_image_error';exit();
             }else{
-              $userspn_related_user_id = !empty($_POST['userspn_related_user_id']) ? USERSPN_Forms::sanitizer(wp_unslash($_POST['userspn_related_user_id'])) : '';
+              $userspn_related_user_id = !empty($_POST['userspn_related_user_id']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_related_user_id'])) : '';
 
               update_post_meta($userspn_file_id, 'userspn_related_user_id', $userspn_related_user_id);
               update_user_meta($userspn_related_user_id, 'userspn_user_image', $userspn_file_id);
@@ -574,7 +575,7 @@ class USERSPN_Ajax {
           break;
         case 'userspn_csv_template_upload':
           if ($_FILES) {
-            $userspn_csv_template_upload = !empty($_POST['userspn_csv_template_upload']) ? USERSPN_Forms::sanitizer(wp_unslash($_POST['userspn_csv_template_upload'])) : 0;
+            $userspn_csv_template_upload = !empty($_POST['userspn_csv_template_upload']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_csv_template_upload'])) : 0;
             require_once(ABSPATH . 'wp-admin/includes/image.php');
             require_once(ABSPATH . 'wp-admin/includes/file.php');
             require_once(ABSPATH . 'wp-admin/includes/media.php');
@@ -589,7 +590,7 @@ class USERSPN_Ajax {
               echo 'userspn_csv_template_upload_error';exit();
             }else{
               $plugin_user = new USERSPN_Functions_User();
-              echo $plugin_user->userspn_csv_template_reader(wp_get_attachment_url($userspn_file_id));exit();
+              echo wp_kses($plugin_user->userspn_csv_template_reader(wp_get_attachment_url($userspn_file_id)), USERSPN_KSES);exit();
             }
           }else{
             echo 'userspn_csv_template_upload_error';exit();

@@ -13,7 +13,7 @@
  * Plugin Name:       Users manager - PN
  * Plugin URI:        https://padresenlanube.com/plugins/userspn/
  * Description:       Streamline user management on your WordPress site with this powerful plugin. Enable custom registration forms, secure logins, and seamless profile management for your users.
- * Version:           1.0.4
+ * Version:           1.0.0
  * Requires at least: 3.0.1
  * Requires PHP:      7.2
  * Author:            Padres en la Nube
@@ -34,43 +34,9 @@ if (!defined('WPINC')) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define('USERSPN_VERSION', '1.0.4');
-
-/**
- * Plugin role capabilities
- */
-define('USERSPN_ROLE_CAPABILITIES', [
-	// Post editing capabilities
-	'edit_post' => 'edit_userspn',
-	'edit_posts' => 'edit_userspn',
-	'edit_private_posts' => 'edit_private_userspn',
-	'edit_published_posts' => 'edit_published_userspn',
-	'edit_others_posts' => 'edit_others_userspn',
-	'publish_posts' => 'publish_userspn',
-	
-	// Post reading capabilities
-	'read_post' => 'read_userspn',
-	'read_private_posts' => 'read_private_userspn',
-	
-	// Post deletion capabilities
-	'delete_post' => 'delete_userspn',
-	'delete_posts' => 'delete_userspn',
-	'delete_private_posts' => 'delete_private_userspn',
-	'delete_published_posts' => 'delete_published_userspn',
-	'delete_others_posts' => 'delete_others_userspn',
-	
-	// Media capabilities
-	'upload_files' => 'upload_files',
-	
-	// Taxonomy capabilities
-	'manage_terms' => 'manage_userspn_category',
-	'edit_terms' => 'edit_userspn_category',
-	'delete_terms' => 'delete_userspn_category',
-	'assign_terms' => 'assign_userspn_category',
-	
-	// Options capabilities
-	'manage_options' => 'manage_userspn_options'
-]);
+define('USERSPN_VERSION', '1.0.0');
+define('USERSPN_DIR', plugin_dir_path(__FILE__));
+define('USERSPN_URL', plugin_dir_url(__FILE__));
 
 /**
  * Plugin KSES allowed HTML elements and attributes
@@ -222,10 +188,7 @@ require plugin_dir_path(__FILE__) . 'includes/class-userspn.php';
 function userspn_run() {
 	$plugin = new USERSPN();
 	$plugin->userspn_run();
-
-	require_once plugin_dir_path(__FILE__) . 'includes/class-userspn-activator.php';
-	USERSPN_Activator::userspn_activate();
 }
 
-// Initialize the plugin on plugins_loaded hook
-add_action('plugins_loaded', 'userspn_run');
+// Initialize the plugin on init hook instead of plugins_loaded to ensure WooCommerce functions are available
+add_action('init', 'userspn_run');

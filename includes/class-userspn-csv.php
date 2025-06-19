@@ -51,7 +51,7 @@ class USERSPN_CSV {
 
               foreach ($userspn_user_register_fields as $field) {
                 if (!empty($field)) {
-                  update_user_meta($user_id, $field['id'], USERSPN_Forms::sanitizer(wp_strip_all_tags($row[$field_counter]), $field['input'], $field['type']));
+                  update_user_meta($user_id, $field['id'], USERSPN_Forms::userspn_sanitizer(wp_strip_all_tags($row[$field_counter]), $field['input'], $field['type']));
                 }
 
                 $field_counter++;

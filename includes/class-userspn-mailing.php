@@ -110,7 +110,7 @@ class USERSPN_Mailing {
 
     ob_start();
     ?>    
-      <div class="userspn-newsletter userspn-p-30" id="userspn-newsletter">
+      <div class="userspn-newsletter userspn-p-30 userspn-pt-0" id="userspn-newsletter">
         <?php if (!is_user_logged_in()): ?>
           <?php $userspn_newsletter_message = get_option('userspn_newsletter_message'); ?>
 

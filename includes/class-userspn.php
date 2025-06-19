@@ -52,37 +52,25 @@ class USERSPN {
 		if (defined('USERSPN_VERSION')) {
 			$this->version = USERSPN_VERSION;
 		} else {
-			$this->version = '1.0.4';
+			$this->version = '1.0.0';
 		}
 
 		$this->plugin_name = 'userspn';
 
-		$this->define_constants();
-		$this->load_dependencies();
-		$this->set_i18n();
-		$this->define_common_hooks();
-		$this->define_admin_hooks();
-		$this->define_public_hooks();
-		$this->load_ajax();
-		$this->load_ajax_nopriv();
-		$this->load_data();
-		$this->load_templates();
-		$this->load_settings();
-		$this->load_shortcodes();
-		$this->load_notifications();
+		$this->userspn_load_dependencies();
+		$this->userspn_set_i18n();
+		$this->userspn_define_common_hooks();
+		$this->userspn_define_admin_hooks();
+		$this->userspn_define_public_hooks();
+		$this->userspn_load_ajax();
+		$this->userspn_load_ajax_nopriv();
+		$this->userspn_load_data();
+		$this->userspn_load_templates();
+		$this->userspn_load_settings();
+		$this->userspn_load_shortcodes();
+		$this->userspn_load_notifications();
 	}
 
-	/**
-	 * Define the plugin main constants.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 */
-	private function define_constants() {
-		define('USERSPN_DIR', plugin_dir_path(dirname(__FILE__)));
-		define('USERSPN_URL', plugin_dir_url(dirname(__FILE__)));
-	}
-			
 	/**
 	 * Load the required dependencies for this plugin.
 	 *
@@ -106,13 +94,14 @@ class USERSPN {
 	 * - USERSPN_Functions_Ajax. Ajax functions.
 	 * - USERSPN_Functions_Ajax_Nopriv. Ajax No Private functions.
 	 * - USERSPN_Functions_Shortcodes. Define all shortcodes for the platform.
+	 * - USERSPN_Validation. Validation functions.
 	 *
 	 * Create an instance of the loader which will be used to register the hooks with WordPress.
 	 *
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function load_dependencies() {
+	private function userspn_load_dependencies() {
 		/**
 		 * The class responsible for orchestrating the actions and filters of the core plugin.
 		 */
@@ -218,6 +207,11 @@ class USERSPN {
 		 */
 		require_once USERSPN_DIR . 'includes/class-userspn-selector.php';
 
+		/**
+		 * The class responsible for validation functions.
+		 */
+		require_once USERSPN_DIR . 'includes/class-userspn-validation.php';
+
 		$this->loader = new USERSPN_Loader();
 	}
 
@@ -229,7 +223,7 @@ class USERSPN {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function set_i18n() {
+	private function userspn_set_i18n() {
 		$plugin_i18n = new USERSPN_i18n();
 
 		$this->loader->userspn_add_action('after_setup_theme', $plugin_i18n, 'userspn_load_plugin_textdomain');
@@ -245,12 +239,12 @@ class USERSPN {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function define_common_hooks() {
-		$plugin_common = new USERSPN_Common($this->get_plugin_name(), $this->get_version());
-		$this->loader->userspn_add_action('wp_enqueue_scripts', $plugin_common, 'enqueue_styles');
-		$this->loader->userspn_add_action('wp_enqueue_scripts', $plugin_common, 'enqueue_scripts');
-		$this->loader->userspn_add_action('admin_enqueue_scripts', $plugin_common, 'enqueue_styles');
-		$this->loader->userspn_add_action('admin_enqueue_scripts', $plugin_common, 'enqueue_scripts');
+	private function userspn_define_common_hooks() {
+		$plugin_common = new USERSPN_Common($this->userspn_get_plugin_name(), $this->userspn_get_version());
+		$this->loader->userspn_add_action('wp_enqueue_scripts', $plugin_common, 'userspn_enqueue_styles');
+		$this->loader->userspn_add_action('wp_enqueue_scripts', $plugin_common, 'userspn_enqueue_scripts');
+		$this->loader->userspn_add_action('admin_enqueue_scripts', $plugin_common, 'userspn_enqueue_styles');
+		$this->loader->userspn_add_action('admin_enqueue_scripts', $plugin_common, 'userspn_enqueue_scripts');
 		$this->loader->userspn_add_filter('body_class', $plugin_common, 'userspn_body_classes');
 		
 		$plugin_settings = new USERSPN_Settings();
@@ -258,6 +252,9 @@ class USERSPN {
 
 		$plugin_mailing = new USERSPN_Mailing();
 		$this->loader->userspn_add_filter('wp_mail_content_type', $plugin_mailing, 'userspn_wp_mail_content_type');
+		
+		// Add redirect hook for plugin activation
+		$this->loader->userspn_add_action('admin_init', $this, 'userspn_redirect_to_options');
 	}
 
 	/**
@@ -266,10 +263,10 @@ class USERSPN {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function define_admin_hooks() {
-		$plugin_admin = new USERSPN_Admin($this->get_plugin_name(), $this->get_version());
-		$this->loader->userspn_add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
-		$this->loader->userspn_add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
+	private function userspn_define_admin_hooks() {
+		$plugin_admin = new USERSPN_Admin($this->userspn_get_plugin_name(), $this->userspn_get_version());
+		$this->loader->userspn_add_action('admin_enqueue_scripts', $plugin_admin, 'userspn_enqueue_styles');
+		$this->loader->userspn_add_action('admin_enqueue_scripts', $plugin_admin, 'userspn_enqueue_scripts');
 		
 		$plugin_user = new USERSPN_Functions_User();
 		$this->loader->userspn_add_action('show_user_profile', $plugin_user, 'userspn_profile_fields');
@@ -286,13 +283,13 @@ class USERSPN {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function define_public_hooks() {
-		$plugin_public = new USERSPN_Public($this->get_plugin_name(), $this->get_version());
-		$this->loader->userspn_add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
-		$this->loader->userspn_add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
+	private function userspn_define_public_hooks() {
+		$plugin_public = new USERSPN_Public($this->userspn_get_plugin_name(), $this->userspn_get_version());
+		$this->loader->userspn_add_action('wp_enqueue_scripts', $plugin_public, 'userspn_enqueue_styles');
+		$this->loader->userspn_add_action('wp_enqueue_scripts', $plugin_public, 'userspn_enqueue_scripts');
 
 		$plugin_user = new USERSPN_Functions_User();
-		$this->loader->userspn_add_action('wp_login', $plugin_user, 'userspn_wp_login');
+		$this->loader->userspn_add_action('wp_login', $plugin_user, 'userspn_user_wp_login');
 		$this->loader->userspn_add_action('user_register', $plugin_user, 'userspn_user_register');
 		$this->loader->userspn_add_action('init', $plugin_user, 'userspn_process_pending_registration_emails');
 		
@@ -316,7 +313,7 @@ class USERSPN {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function load_data() {
+	private function userspn_load_data() {
 		$plugin_data = new USERSPN_Data();
 
 		if (is_admin()) {
@@ -335,7 +332,7 @@ class USERSPN {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function load_templates() {
+	private function userspn_load_templates() {
 		if (!defined('DOING_AJAX')) {
 			$plugin_templates = new USERSPN_Templates();
 			$this->loader->userspn_add_action('wp_footer', $plugin_templates, 'load_plugin_templates');
@@ -349,7 +346,7 @@ class USERSPN {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function load_settings() {
+	private function userspn_load_settings() {
 		$plugin_settings = new USERSPN_Settings();
 		$this->loader->userspn_add_action('admin_menu', $plugin_settings, 'userspn_admin_menu');
 		$this->loader->userspn_add_action('login_enqueue_scripts', $plugin_settings, 'userspn_login_logo');
@@ -376,7 +373,7 @@ class USERSPN {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function load_ajax() {
+	private function userspn_load_ajax() {
 		$plugin_ajax = new USERSPN_Ajax();
 		$this->loader->userspn_add_action('wp_ajax_userspn_ajax', $plugin_ajax, 'userspn_ajax_server');
 	}
@@ -387,7 +384,7 @@ class USERSPN {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function load_ajax_nopriv() {
+	private function userspn_load_ajax_nopriv() {
 		$plugin_ajax_nopriv = new USERSPN_Ajax_Nopriv();
 		$this->loader->userspn_add_action('wp_ajax_userspn_ajax_nopriv', $plugin_ajax_nopriv, 'userspn_ajax_nopriv_server');
 		$this->loader->userspn_add_action('wp_ajax_nopriv_userspn_ajax_nopriv', $plugin_ajax_nopriv, 'userspn_ajax_nopriv_server');
@@ -399,7 +396,7 @@ class USERSPN {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function load_shortcodes() {
+	private function userspn_load_shortcodes() {
 		$plugin_shortcodes = new USERSPN_Shortcodes();
 		$this->loader->userspn_add_shortcode('userspn-host', $plugin_shortcodes, 'userspn_host');
 		$this->loader->userspn_add_shortcode('userspn-test', $plugin_shortcodes, 'userspn_test');
@@ -426,7 +423,7 @@ class USERSPN {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function load_cron() {
+	private function userspn_load_cron() {
 		$plugin_cron = new USERSPN_Cron();
 
 		$this->loader->userspn_add_action('wp', $plugin_cron, 'cron_schedule');
@@ -441,7 +438,7 @@ class USERSPN {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function load_notifications() {
+	private function userspn_load_notifications() {
 		$plugin_notifications = new USERSPN_Notifications();
 		$this->loader->userspn_add_action('wp_body_open', $plugin_notifications, 'userspn_wp_body_open');
 	}
@@ -461,7 +458,7 @@ class USERSPN {
 	 * @since     1.0.0
 	 * @return    string    The name of the plugin.
 	 */
-	public function get_plugin_name() {
+	public function userspn_get_plugin_name() {
 		return $this->plugin_name;
 	}
 
@@ -471,7 +468,7 @@ class USERSPN {
 	 * @since     1.0.0
 	 * @return    USERSPN_Loader    Orchestrates the hooks of the plugin.
 	 */
-	public function get_loader() {
+	public function userspn_get_loader() {
 		return $this->loader;
 	}
 
@@ -481,7 +478,31 @@ class USERSPN {
 	 * @since     1.0.0
 	 * @return    string    The version number of the plugin.
 	 */
-	public function get_version() {
+	public function userspn_get_version() {
 		return $this->version;
+	}
+
+	/**
+	 * Redirect to options page after plugin activation
+	 *
+	 * @since    1.0.0
+	 */
+	public function userspn_redirect_to_options() {
+		// Check if we should redirect (only for administrators)
+		if (!current_user_can('administrator')) {
+			return;
+		}
+		
+		// Check if the redirect flag is set
+		if (get_option('userspn_redirect_to_options', false)) {
+			// Remove the flag to prevent infinite redirects
+			delete_option('userspn_redirect_to_options');
+			
+			// Only redirect if we're not already on the options page
+			if (!isset($_GET['page']) || $_GET['page'] !== 'userspn_options') {
+				wp_safe_redirect(admin_url('admin.php?page=userspn_options'));
+				exit;
+			}
+		}
 	}
 }

@@ -447,11 +447,13 @@ class USERSPN_Settings {
 	public function userspn_options() {
 	  ?>
 	    <div class="userspn-options userspn-max-width-1000 userspn-margin-auto userspn-mt-50 userspn-mb-50">
+        <img src="<?php echo esc_url(USERSPN_URL . 'assets/media/banner-1544x500.png'); ?>" alt="<?php esc_html_e('Plugin main Banner', 'userspn'); ?>" title="<?php esc_html_e('Plugin main Banner', 'userspn'); ?>" class="userspn-width-100-percent userspn-border-radius-20 userspn-mb-30">
+        
         <h1 class="userspn-mb-30"><?php esc_html_e('Users manager - PN Settings', 'userspn'); ?></h1>
         <div class="userspn-options-fields userspn-mb-30">
           <form action="" method="post" id="userspn_form" class="userspn-form">
             <?php foreach ($this->get_options() as $userspn_option): ?>
-              <?php USERSPN_Forms::input_wrapper_builder($userspn_option, 'option'); ?>
+              <?php USERSPN_Forms::userspn_input_wrapper_builder($userspn_option, 'option'); ?>
             <?php endforeach ?>
           </form> 
         </div>
@@ -483,14 +485,14 @@ class USERSPN_Settings {
     if (!empty($userspn_admin_page_logo)) {
       $userspn_admin_page_logo_base_css = '#login h1 a{background-image:url(' . esc_url(wp_get_attachment_image_src($userspn_admin_page_logo, 'large')[0]) . ');width:' . esc_url(wp_get_attachment_image_src($userspn_admin_page_logo, 'large')[1]) . 'px;height:' . esc_url(wp_get_attachment_image_src($userspn_admin_page_logo, 'large')[2]) . 'px;background-repeat:no-repeat;max-width:300px;max-height:300px;background-size:contain;background-position:center center;}';
 
-      wp_register_style('userspn-admin-page-logo-base-css', false);
+      wp_register_style('userspn-admin-page-logo-base-css', false, [], USERSPN_VERSION);
       wp_enqueue_style('userspn-admin-page-logo-base-css');
       wp_add_inline_style('userspn-admin-page-logo-base-css', $userspn_admin_page_logo_base_css);
     }
 
     $userspn_admin_page_logo_css = get_option('userspn_admin_page_logo_css');
     if (!empty($userspn_admin_page_logo_css)) {
-      wp_register_style('userspn-admin-page-logo-css', false);
+      wp_register_style('userspn-admin-page-logo-css', false, [], USERSPN_VERSION);
       wp_enqueue_style('userspn-admin-page-logo-css');
       wp_add_inline_style('userspn-admin-page-logo-css', $userspn_admin_page_logo_css);
     }
@@ -500,7 +502,7 @@ class USERSPN_Settings {
     if (get_option('userspn_dashboard_logo') == 'on') {
       $userspn_admin_bar_render_css = '#wpadminbar #wp-admin-bar-wp-logo{background-color:#ffffff;}#wpadminbar #wp-admin-bar-wp-logo > .ab-item {padding:0 7px;background-image:url(' . esc_url(wp_get_attachment_image_src(get_option('userspn_admin_page_logo'), 'large')[0]) . ')!important;background-size:70%;background-color:#ffffff;background-position:center;background-repeat:no-repeat;opacity:0.8;} #wpadminbar #wp-admin-bar-wp-logo > .ab-item .ab-icon:before {content:" ";top:2px;}#wpadminbar #wp-admin-bar-wp-logo{background-color:#ffffff;}';
 
-      wp_register_style('userspn-admin-bar-render-css', false);
+      wp_register_style('userspn-admin-bar-render-css', false, [], USERSPN_VERSION);
       wp_enqueue_style('userspn-admin-bar-render-css');
       wp_add_inline_style('userspn-admin-bar-render-css', $userspn_admin_bar_render_css);
     }

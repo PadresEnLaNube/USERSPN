@@ -47,7 +47,7 @@ class USERSPN_Admin {
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_styles() {
+	public function userspn_enqueue_styles() {
 		wp_enqueue_style($this->plugin_name . '-admin', USERSPN_URL . 'assets/css/admin/userspn-admin.css', [], $this->version, 'all');
 	}
 
@@ -56,7 +56,7 @@ class USERSPN_Admin {
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_scripts() {
+	public function userspn_enqueue_scripts() {
 		wp_enqueue_media();
 		wp_enqueue_script($this->plugin_name . '-admin', USERSPN_URL . 'assets/js/admin/userspn-admin.js', ['jquery'], $this->version, false);
 	}

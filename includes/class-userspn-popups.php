@@ -41,7 +41,7 @@ class USERSPN_Popups {
                 <?php if ($options['closeButton']) : ?>
                     <button type="button" class="userspn-popup-close"><i class="material-icons-outlined">close</i></button>
                 <?php endif; ?>
-                <?php echo $content; ?>
+                <?php echo wp_kses_post($content); ?>
             </div>
         </div>
         <?php

@@ -15,27 +15,47 @@ class USERSPN_Notifications {
     if (isset($_GET['userspn_action'])) {
       switch ($_GET['userspn_action']) {
         case 'userspn_newsletter_activation':
-          if (wp_verify_nonce($_GET['userspn_newsletter_activation_nonce'], 'userspn_newsletter_activation')) {
-            $user_id = $_GET['user'];
-            update_user_meta($user_id, 'userspn_newsletter_active', current_time('timestamp'));
-            update_user_meta($user_id, 'userspn_notifications', 'on');
+          // Validate and sanitize nonce
+          if (isset($_GET['userspn_newsletter_activation_nonce']) && 
+              wp_verify_nonce(sanitize_text_field(wp_unslash($_GET['userspn_newsletter_activation_nonce'])), 'userspn_newsletter_activation')) {
+            
+            // Validate and sanitize user ID
+            if (isset($_GET['user']) && is_numeric($_GET['user'])) {
+              $user_id = intval($_GET['user']);
+              
+              // Verify user exists
+              if (get_user_by('ID', $user_id)) {
+                update_user_meta($user_id, 'userspn_newsletter_active', current_time('timestamp'));
+                update_user_meta($user_id, 'userspn_notifications', 'on');
 
-            // Send welcome email after activation
-            $plugin_user = new USERSPN_Functions_User();
-            $plugin_user->userspn_send_newsletter_email($user_id);
+                // Send welcome email after activation
+                $plugin_user = new USERSPN_Functions_User();
+                $plugin_user->userspn_send_newsletter_email($user_id);
 
-            wp_safe_redirect(home_url('?userspn_notice=userspn_newsletter_activation_success'));exit();
-          }else{
-            wp_safe_redirect(home_url('?userspn_notice=userspn_newsletter_activation_error'));exit();
+                wp_safe_redirect(home_url('?userspn_notice=userspn_newsletter_activation_success'));exit();
+              }
+            }
           }
+          
+          // If any validation fails, redirect to error
+          wp_safe_redirect(home_url('?userspn_notice=userspn_newsletter_activation_error'));exit();
           break;
       }
     }
   }
   
   public function userspn_wp_body_open() {
-    $userspn_login = !empty($_GET['userspn_login']) ? USERSPN_Forms::sanitizer(wp_unslash($_GET['userspn_login'])) : '';
-    $userspn_notice = !empty($_GET['userspn_notice']) ? USERSPN_Forms::sanitizer(wp_unslash($_GET['userspn_notice'])) : '';
+    // Validate and sanitize login parameter
+    $userspn_login = '';
+    if (isset($_GET['userspn_login']) && !empty($_GET['userspn_login'])) {
+      $userspn_login = USERSPN_Forms::userspn_sanitizer(wp_unslash($_GET['userspn_login']));
+    }
+    
+    // Validate and sanitize notice parameter
+    $userspn_notice = '';
+    if (isset($_GET['userspn_notice']) && !empty($_GET['userspn_notice'])) {
+      $userspn_notice = USERSPN_Forms::userspn_sanitizer(wp_unslash($_GET['userspn_notice']));
+    }
 
     ?>
       <?php if ((!empty($userspn_login) && !is_user_logged_in()) || !empty($userspn_notice)): ?>
@@ -120,7 +140,7 @@ class USERSPN_Notifications {
     ?>
       <form id="userspn-form" class="userspn-mt-30 userspn-form">
         <?php foreach ($userspn_notifications as $notifications_field): ?>
-          <?php USERSPN_Forms::input_wrapper_builder($notifications_field, 'user', esc_html($user_id), 0, 'full'); ?>
+          <?php USERSPN_Forms::userspn_input_wrapper_builder($notifications_field, 'user', esc_html($user_id), 0, 'full'); ?>
         <?php endforeach ?>
       </form>
     <?php

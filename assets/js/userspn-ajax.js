@@ -94,6 +94,7 @@
       var data = {
         action: 'userspn_ajax',
         userspn_ajax_type: 'userspn_input_editor_builder_add',
+        userspn_ajax_nonce: userspn_ajax.userspn_ajax_nonce,
         userspn_meta: userspn_btn.attr('data-userspn-meta'),
       };
 

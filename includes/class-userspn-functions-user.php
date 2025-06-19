@@ -11,11 +11,13 @@
  * @author     Padres en la Nube <info@padresenlanube.com>
  */
 class USERSPN_Functions_User {
-  public static function is_user_admin($user_id) {
+  public static function userspn_user_is_admin($user_id) {
+    // USERSPN_Functions_User::userspn_user_is_admin($user_id)
     return user_can($user_id, 'administrator');
   }
-  
-  public static function get_user_name($user_id) {
+
+  public static function userspn_user_get_name($user_id) {
+    // USERSPN_Functions_User::userspn_user_get_name($user_id)
     if (!empty($user_id)) {
       $user_info = get_userdata($user_id);
 
@@ -29,13 +31,14 @@ class USERSPN_Functions_User {
         return $user_info->user_nicename;
       }else if (!empty($user_info->user_login)){
         return $user_info->user_login;
-      }else{
+      } else {
         return $user_info->user_email;
       }
     }
   }
 
-  public static function get_user_age($user_id) {
+  public static function userspn_user_get_age($user_id) {
+    // USERSPN_Functions_User::userspn_user_get_age($user_id)
     $timestamp = get_user_meta($user_id, 'userspn_child_birthdate', true);
 
     if (!empty($timestamp) && is_string($timestamp)) {
@@ -54,8 +57,8 @@ class USERSPN_Functions_User {
     return false;
   }
 
-  public function userspn_insert_user($userspn_user_login, $userspn_user_password, $userspn_user_email = '', $userspn_first_name = '', $userspn_last_name = '', $userspn_display_name = '', $userspn_user_nicename = '', $userspn_user_nickname = '', $userspn_user_description = '', $userspn_user_role = [], $userspn_array_usermeta = [/*['userspn_key' => 'userspn_value'], */]) {
-    /* self::userspn_insert_user($userspn_user_login, $userspn_user_password, $userspn_user_email = '', $userspn_first_name = '', $userspn_last_name = '', $userspn_display_name = '', $userspn_user_nicename = '', $userspn_user_nickname = '', $userspn_user_description = '', $userspn_user_role = [], $userspn_array_usermeta = [['userspn_key' => 'userspn_value'], ],); */
+  public static function userspn_user_insert($userspn_user_login, $userspn_user_password, $userspn_user_email = '', $userspn_first_name = '', $userspn_last_name = '', $userspn_display_name = '', $userspn_user_nicename = '', $userspn_user_nickname = '', $userspn_user_description = '', $userspn_user_role = [], $userspn_array_usermeta = [/*['userspn_key' => 'userspn_value'], */]) {
+    /* $this->insert_user($userspn_user_login, $userspn_user_password, $userspn_user_email = '', $userspn_first_name = '', $userspn_last_name = '', $userspn_display_name = '', $userspn_user_nicename = '', $userspn_user_nickname = '', $userspn_user_description = '', $userspn_user_role = [], $userspn_array_usermeta = [['userspn_key' => 'userspn_value'], ],); */
 
     $userspn_user_array = [
       'first_name' => $userspn_first_name,
@@ -70,23 +73,23 @@ class USERSPN_Functions_User {
       if (!email_exists($userspn_user_email)) {
         if (username_exists($userspn_user_login)) {
           $user_id = wp_create_user($userspn_user_email, $userspn_user_password, $userspn_user_email);
-        }else{
+        } else {
           $user_id = wp_create_user($userspn_user_login, $userspn_user_password, $userspn_user_email);
         }
-      }else{
+      } else {
         $user_id = get_user_by('email', $userspn_user_email)->ID;
       }
-    }else{
+    } else {
       if (!username_exists($userspn_user_login)) {
         $user_id = wp_create_user($userspn_user_login, $userspn_user_password);
-      }else{
+      } else {
         $user_id = get_user_by('login', $userspn_user_login)->ID;
       }
     }
 
     if ($user_id && !is_wp_error($user_id)) {
       wp_update_user(array_merge(['ID' => $user_id], $userspn_user_array));
-    }else{
+    } else {
       return false;
     }
 
@@ -110,20 +113,18 @@ class USERSPN_Functions_User {
     return $user_id;
   }
 
-  public function userspn_wp_login($login) {
+  public function userspn_user_wp_login($login) {
     $user = get_user_by('login', $login);
     $user_id = $user->ID;
-    $current_login_time = get_user_meta($user_id, 'userspn_current_login', true);
+    $current_login_time = get_user_meta($user_id, 'userspn_user_current_login', true);
 
     if(!empty($current_login_time)){
-      update_user_meta($user_id, 'userspn_last_login', $current_login_time);
-      update_user_meta($user_id, 'userspn_current_login', current_time('timestamp'));
+      update_user_meta($user_id, 'userspn_user_last_login', $current_login_time);
+      update_user_meta($user_id, 'userspn_user_current_login', current_time('timestamp'));
     }else {
-      update_user_meta($user_id, 'userspn_current_login', current_time('timestamp'));
-      update_user_meta($user_id, 'userspn_last_login', current_time('timestamp'));
+      update_user_meta($user_id, 'userspn_user_current_login', current_time('timestamp'));
+      update_user_meta($user_id, 'userspn_user_last_login', current_time('timestamp'));
     }
-
-    update_user_meta($user_id, 'users_userspn_newsletter_active', true);
   }
 
   public function userspn_profile_fields($user){
@@ -170,7 +171,7 @@ class USERSPN_Functions_User {
         <h3><?php esc_html_e('Auto-login tool', 'userspn'); ?></h3>
         <p><?php esc_html_e('This option will allow you to login the platform as the current user profile. This won´t work for administrator profiles, but any other contact all across the website.', 'userspn'); ?> <?php esc_html_e('As you login with a new account, you will lose access to yours, so it´s better if you open this link in a private window or other browser.', 'userspn'); ?></p>
         <div class="userspn-text-align-center">
-          <a class="userspn-btn userspn-btn-mini" target="_blank" href="<?php echo esc_url(self::userspn_link_magic($user_id, home_url())); ?>"><?php esc_html_e('Login as', 'userspn'); ?> <?php echo esc_html(self::get_user_name($user_id)); ?></a>
+          <a class="userspn-btn userspn-btn-mini" target="_blank" href="<?php echo esc_url(self::userspn_link_magic($user_id, home_url())); ?>"><?php esc_html_e('Login as', 'userspn'); ?> <?php echo esc_html(self::userspn_user_get_name($user_id)); ?></a>
         </div>
       <?php
     }
@@ -199,22 +200,22 @@ class USERSPN_Functions_User {
   }
 
   public function userspn_auto_login() {
-    $userspn_nonce = !empty($_GET['userspn_nonce']) ? USERSPN_Forms::sanitizer(wp_unslash($_GET['userspn_nonce'])) : '';
-    if (isset($_GET['userspn_nonce']) && !wp_verify_nonce(sanitize_text_field(wp_unslash($userspn_nonce)), 'userspn_nonce_action')) {
+    $userspn_nonce = !empty($_GET['userspn_nonce']) ? sanitize_text_field(wp_unslash($_GET['userspn_nonce'])) : '';
+    if (isset($_GET['userspn_nonce']) && !wp_verify_nonce($userspn_nonce, 'userspn_nonce_action')) {
       echo wp_json_encode(['error_key' => 'userspn_nonce_error', ]);exit();
     }
 
     if (isset($_GET['userspn_auto_login']) && get_option('userspn_auto_login') == 'on') {
-      $login_username = !empty($_GET['userspn_login_username']) ? USERSPN_Forms::sanitizer(wp_unslash($_GET['userspn_login_username'])) : '';
-      $user_id = !empty($_GET['userspn_user_id']) ? USERSPN_Forms::sanitizer(wp_unslash($_GET['userspn_user_id'])) : '';
+      $login_username = !empty($_GET['userspn_login_username']) ? sanitize_text_field(wp_unslash($_GET['userspn_login_username'])) : '';
+      $user_id = !empty($_GET['userspn_user_id']) ? intval($_GET['userspn_user_id']) : '';
       $secret_token = get_user_meta($user_id, 'userspn_secret_token', true);
-      $userspn_secret_token = !empty($_GET['userspn_secret_token']) ? USERSPN_Forms::sanitizer(wp_unslash($_GET['userspn_secret_token'])) : '';
+      $userspn_secret_token = !empty($_GET['userspn_secret_token']) ? sanitize_text_field(wp_unslash($_GET['userspn_secret_token'])) : '';
       
       if (!empty($secret_token) && $secret_token == $userspn_secret_token && !user_can($user_id, 'administrator')) {
         wp_set_current_user($user_id, $login_username);
         wp_set_auth_cookie($user_id);
         
-        $request_uri = !empty($_SERVER['REQUEST_URI']) ? USERSPN_Forms::sanitizer(wp_unslash($_SERVER['REQUEST_URI'])) : esc_url(home_url());
+        $request_uri = !empty($_SERVER['REQUEST_URI']) ? sanitize_text_field(wp_unslash($_SERVER['REQUEST_URI'])) : esc_url(home_url());
 
         wp_redirect(strtok($request_uri, '?'));
         // wp_redirect($this->userspn_remove_get_parameter($_SERVER['REQUEST_URI'], ['userspn_secret_token', 'userspn_auto_login']));
@@ -341,7 +342,7 @@ class USERSPN_Functions_User {
           <div class="userspn-user-register-fields-edition userspn-mb-50">
             <?php if (!empty($userspn_user_register_fields)): ?>
               <?php foreach ($userspn_user_register_fields as $userspn_user_register_field): ?>
-                <?php USERSPN_Forms::input_editor_builder($userspn_user_register_field); ?>
+                <?php USERSPN_Forms::userspn_input_builder($userspn_user_register_field); ?>
               <?php endforeach ?>
             <?php endif ?>
           </div>
@@ -361,7 +362,7 @@ class USERSPN_Functions_User {
         <div id="userspn-user-register-fields-viewer" class="userspn-user-register-fields userspn-display-none-soft">
           <?php if (!empty($userspn_user_register_fields)): ?>
             <?php foreach ($userspn_user_register_fields as $userspn_user_register_field): ?>
-              <?php USERSPN_Forms::input_wrapper_builder($userspn_user_register_field, 'user', 0, 0, 'full'); ?>
+              <?php USERSPN_Forms::userspn_input_wrapper_builder($userspn_user_register_field, 'user', 0, 0, 'full'); ?>
             <?php endforeach ?>
           <?php else: ?>
           <p class="userspn-user-register-fields-empty"><?php esc_html_e('You have not registered any field yet', 'userspn'); ?></p>
@@ -651,7 +652,10 @@ class USERSPN_Functions_User {
           </div>
           
           <div class="userspn-profile-completion-stats userspn-mt-10">
-            <small><?php echo sprintf(esc_html__('%d of %d fields completed', 'userspn'), $completed_fields, $total_fields); ?></small>
+            <?php
+            /* translators: 1: Number of completed fields, 2: Total number of fields */
+            ?>
+            <small><?php echo sprintf(esc_html__('%1$d of %2$d fields completed', 'userspn'), esc_html($completed_fields), esc_html($total_fields)); ?></small>
           </div>
           
           <div class="userspn-toggle-wrapper userspn-position-relative userspn-mt-10">
@@ -700,13 +704,13 @@ class USERSPN_Functions_User {
       <form id="userspn-profile-edit" class="userspn-mt-30 userspn-form">
         <?php if (!empty($userspn_base_fields)): ?>
           <?php foreach ($userspn_base_fields as $userspn_base_field): ?>
-            <?php USERSPN_Forms::input_wrapper_builder($userspn_base_field, 'user', $user_id, 0, 'full'); ?>
+            <?php USERSPN_Forms::userspn_input_wrapper_builder($userspn_base_field, 'user', $user_id, 0, 'full'); ?>
           <?php endforeach ?>
         <?php endif ?>
 
         <?php if (!empty($userspn_fields)): ?>
           <?php foreach ($userspn_fields as $userspn_user_register_field): ?>
-            <?php USERSPN_Forms::input_wrapper_builder($userspn_user_register_field, 'user', esc_html($user_id), 0, 'full'); ?>
+            <?php USERSPN_Forms::userspn_input_wrapper_builder($userspn_user_register_field, 'user', esc_html($user_id), 0, 'full'); ?>
           <?php endforeach ?>
         <?php endif ?>
 
@@ -795,8 +799,8 @@ class USERSPN_Functions_User {
     ob_start();
 
     $avatar_params = apply_filters('userspn_get_avatar', [
-      'user_identity' => self::get_user_name($user_id),
-      'tooltip' => self::get_user_name($user_id),
+      'user_identity' => self::userspn_user_get_name($user_id),
+      'tooltip' => self::userspn_user_get_name($user_id),
       'html_extra' => '',
     ], $user_id);
 
@@ -810,7 +814,7 @@ class USERSPN_Functions_User {
       <?php endif ?>
 
       <?php if ((!empty($user_image) && !empty(wp_get_attachment_image_src($user_image, 'thumbnail'[0])))): ?>
-        <img alt="<?php esc_html_e('Profile picture', 'userspn'); ?>" description="<?php esc_html_e('Profile picture of', 'userspn'); ?> <?php echo esc_attr(self::get_user_name($user_id)); ?>" src="<?php echo esc_url(wp_get_attachment_image_src($user_image, 'thumbnail')[0]); ?>" class="avatar avatar-<?php echo esc_attr($size); ?> photo userspn-border-radius-50-percent userspn-m-10" height="<?php echo esc_attr($size); ?>" width="<?php echo esc_attr($size); ?>">
+        <img alt="<?php esc_html_e('Profile picture', 'userspn'); ?>" description="<?php esc_html_e('Profile picture of', 'userspn'); ?> <?php echo esc_attr(self::userspn_user_get_name($user_id)); ?>" src="<?php echo esc_url(wp_get_attachment_image_src($user_image, 'thumbnail')[0]); ?>" class="avatar avatar-<?php echo esc_attr($size); ?> photo userspn-border-radius-50-percent userspn-m-10" height="<?php echo esc_attr($size); ?>" width="<?php echo esc_attr($size); ?>">
       <?php elseif (self::userspn_validate_gravatar($user_id)): ?>
         <?php if (!empty(get_avatar($user_id))): ?>
           <?php echo get_avatar($user_id, $size, '', '', ['class' => 'userspn-border-radius-50-percent userspn-m-10']); ?>
@@ -1022,7 +1026,7 @@ class USERSPN_Functions_User {
 
         <form id="userspn-user-register-fields" class="userspn-mt-30">
           <?php foreach ($userspn_user_register_fields as $userspn_user_register_field): ?>
-            <?php USERSPN_Forms::input_wrapper_builder($userspn_user_register_field, 'user', 0, 0, 'full'); ?>
+            <?php USERSPN_Forms::userspn_input_wrapper_builder($userspn_user_register_field, 'user', 0, 0, 'full'); ?>
           <?php endforeach ?>
 
           <div class="userspn-text-align-right userspn-mt-30 userspn-mb-30">
@@ -1071,7 +1075,8 @@ class USERSPN_Functions_User {
 
     foreach ($userspn_user_register_fields as $userspn_user_register_field) {
       if (array_key_exists($userspn_user_register_field['id'], $_POST)) {
-        update_user_meta($user_id, USERSPN_Forms::sanitizer(wp_unslash($userspn_user_register_field['id'])), USERSPN_Forms::sanitizer(wp_unslash($_POST[$userspn_user_register_field['id']])));
+        $field_value = sanitize_text_field(wp_unslash($_POST[$userspn_user_register_field['id']]));
+        update_user_meta($user_id, USERSPN_Forms::userspn_sanitizer(wp_unslash($userspn_user_register_field['id'])), $field_value);
       }
     }
   }
@@ -1114,7 +1119,7 @@ class USERSPN_Functions_User {
                 $body_rows[0][] = esc_html(__('Number for', 'userspn')) . ' ' . $profile_field['label']; 
                 break;
               case 'date':
-                $body_rows[0][] = date('Y-m-d'); 
+                $body_rows[0][] = gmdate('Y-m-d'); 
                 break;
               case 'checkbox':
                 $body_rows[0][] = '[on|emtpy]'; 
@@ -1136,22 +1141,56 @@ class USERSPN_Functions_User {
     }
 
     $path = wp_upload_dir();
-    $stream = fopen($path['path'] . '/' . $file_name . '.csv', 'w'); 
-
-    fputcsv($stream, $header);
-
-    foreach($body_rows as $body_row) {
-      fputcsv($stream, $body_row);
+    $file_path = $path['path'] . '/' . $file_name . '.csv';
+    
+    // Use WP_Filesystem instead of direct PHP filesystem calls
+    global $wp_filesystem;
+    if (empty($wp_filesystem)) {
+      require_once(ABSPATH . '/wp-admin/includes/file.php');
+      WP_Filesystem();
     }
-
-    fclose($stream);
+    
+    $csv_content = '';
+    $csv_content .= $this->array_to_csv_line($header);
+    
+    foreach($body_rows as $body_row) {
+      $csv_content .= $this->array_to_csv_line($body_row);
+    }
+    
+    $wp_filesystem->put_contents($file_path, $csv_content);
+    
     ob_start();
     ?>    
-      <a href="<?php echo $path['url'] . '/' . $file_name . '.csv'; ?>" class="userspn-csv-template-btn userspn-btn userspn-btn-transparent userspn-btn-mini"><?php esc_html_e('Download CSV template', 'userspn'); ?></a>
+      <a href="<?php echo esc_url($path['url'] . '/' . $file_name . '.csv'); ?>" class="userspn-csv-template-btn userspn-btn userspn-btn-transparent userspn-btn-mini"><?php esc_html_e('Download CSV template', 'userspn'); ?></a>
     <?php
     $userspn_return_string = ob_get_contents();
     ob_end_clean();
     return $userspn_return_string;
+  }
+
+  /**
+   * Helper function to convert array to CSV line
+   */
+  private function array_to_csv_line($array) {
+    // Use pure PHP implementation without direct filesystem calls
+    $output = '';
+    
+    foreach ($array as $index => $field) {
+      // Escape double quotes and wrap in quotes if needed
+      $field = str_replace('"', '""', $field);
+      if (strpos($field, ',') !== false || strpos($field, '"') !== false || strpos($field, "\n") !== false) {
+        $field = '"' . $field . '"';
+      }
+      
+      $output .= $field;
+      
+      // Add comma separator except for the last element
+      if ($index < count($array) - 1) {
+        $output .= ',';
+      }
+    }
+    
+    return $output . "\n";
   }
 
   public function userspn_csv_template_upload() {
@@ -1181,17 +1220,32 @@ class USERSPN_Functions_User {
     $row = 0;
     $array = [];
 
-    if (($handle = fopen($userspn_file, 'r')) !== FALSE) {
-      while (($data = fgetcsv($handle, 0, ',')) !== FALSE) {
+    // Use WP_Filesystem instead of direct PHP filesystem calls
+    global $wp_filesystem;
+    if (empty($wp_filesystem)) {
+      require_once(ABSPATH . '/wp-admin/includes/file.php');
+      WP_Filesystem();
+    }
+    
+    $file_content = $wp_filesystem->get_contents($userspn_file);
+    
+    if ($file_content !== false) {
+      $lines = explode("\n", $file_content);
+      
+      foreach ($lines as $line) {
+        if (empty(trim($line))) {
+          continue;
+        }
+        
+        $data = str_getcsv($line, ',');
         $num = count($data);
+        
         for ($c = 0; $c < $num; $c++) {
           $array[$row][] = $data[$c] . "<br/>\n";
         }
-
+        
         $row++;
       }
-
-      fclose($handle);
     }
 
     if (!empty($array)) {
@@ -1207,7 +1261,7 @@ class USERSPN_Functions_User {
             </div>
 
             <div class="userspn-display-inline-table userspn-width-50-percent userspn-tablet-display-block userspn-tablet-width-100-percent userspn-text-align-center">
-              <a href="#" class="userspn-btn userspn-csv-add-contacts"><?php esc_html_e('Add contacts', 'userspn'); ?></a><img class="userspn-waiting userspn-display-none-soft" src="<?php echo plugin_dir_url(__FILE__) . 'assets/ajax-loader.gif'; ?>" alt="<?php esc_html_e('Loading...', 'userspn'); ?>"/>
+              <a href="#" class="userspn-btn userspn-csv-add-contacts"><?php esc_html_e('Add contacts', 'userspn'); ?></a><img class="userspn-waiting userspn-display-none-soft" src="<?php echo esc_url(plugin_dir_url(__FILE__) . 'assets/ajax-loader.gif'); ?>" alt="<?php esc_html_e('Loading...', 'userspn'); ?>"/>
             </div>
           </div>
         </div>
@@ -1217,7 +1271,7 @@ class USERSPN_Functions_User {
             <thead>
               <tr>
                 <?php foreach ($array[0] as $header_cell): ?>
-                  <th><?php echo $header_cell; ?></th>
+                  <th><?php echo esc_html($header_cell); ?></th>
                 <?php endforeach ?>
               </tr>
             </thead>
@@ -1226,7 +1280,7 @@ class USERSPN_Functions_User {
                 <?php if ($index > 0): ?>
                   <tr>
                     <?php foreach ($body_row as $body_cell): ?>
-                      <td><?php echo $body_cell; ?></td>
+                      <td><?php echo esc_html($body_cell); ?></td>
                     <?php endforeach ?>
                   </tr>
                 <?php endif ?>

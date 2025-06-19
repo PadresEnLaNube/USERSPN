@@ -13,6 +13,14 @@
 
   if (!defined('ABSPATH')) exit; // Exit if accessed directly
 
+  // Initialize userspn_data with default values if not already set
+  if (!isset($GLOBALS['userspn_data'])) {
+    $GLOBALS['userspn_data'] = [
+      'user_id' => get_current_user_id(),
+      'post_id' => is_admin() ? (!empty($GLOBALS['_REQUEST']['post']) ? $GLOBALS['_REQUEST']['post'] : 0) : get_the_ID()
+    ];
+  }
+  
   $userspn_data = $GLOBALS['userspn_data'];
 
   if (get_option('userspn_disabled') != 'on') {
