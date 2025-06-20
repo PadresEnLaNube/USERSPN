@@ -58,7 +58,7 @@ class USERSPN_Functions_User {
   }
 
   public static function userspn_user_insert($userspn_user_login, $userspn_user_password, $userspn_user_email = '', $userspn_first_name = '', $userspn_last_name = '', $userspn_display_name = '', $userspn_user_nicename = '', $userspn_user_nickname = '', $userspn_user_description = '', $userspn_user_role = [], $userspn_array_usermeta = [/*['userspn_key' => 'userspn_value'], */]) {
-    /* $this->insert_user($userspn_user_login, $userspn_user_password, $userspn_user_email = '', $userspn_first_name = '', $userspn_last_name = '', $userspn_display_name = '', $userspn_user_nicename = '', $userspn_user_nickname = '', $userspn_user_description = '', $userspn_user_role = [], $userspn_array_usermeta = [['userspn_key' => 'userspn_value'], ],); */
+    /* $this->userspn_user_insert($userspn_user_login, $userspn_user_password, $userspn_user_email = '', $userspn_first_name = '', $userspn_last_name = '', $userspn_display_name = '', $userspn_user_nicename = '', $userspn_user_nickname = '', $userspn_user_description = '', $userspn_user_role = [], $userspn_array_usermeta = [['userspn_key' => 'userspn_value'], ],); */
 
     $userspn_user_array = [
       'first_name' => $userspn_first_name,
@@ -253,60 +253,74 @@ class USERSPN_Functions_User {
     if (class_exists('Polylang')) {
       update_user_meta($user_id, 'userspn_lang', pll_current_language());
     }
+  }
 
-    // Save new registration email
-    $pending = get_option('userspn_emails_registration_pending', []);
+  /**
+   * Log email events to database
+   * 
+   * @param string $event_type Type of event (email_sent_success, email_send_failed, etc.)
+   * @param int $user_id User ID (0 for system events)
+   * @param string $message Log message
+   * @param array $additional_data Additional data to store
+   */
+  private function userspn_log_email_event($event_type, $user_id, $message, $additional_data = []) {
+    $logs = get_option('userspn_email_logs', []);
     
-    $pending[$user_id] = [
+    $log_entry = [
+      'timestamp' => current_time('timestamp'),
+      'event_type' => $event_type,
       'user_id' => $user_id,
-      'timestamp' => time(),
+      'message' => $message,
+      'additional_data' => $additional_data
     ];
     
-    update_option('userspn_emails_registration_pending', $pending, false);
-  }
-
-  // NUEVO: Procesar correos pendientes
-  public function userspn_process_pending_registration_emails() {
-    $pending = get_option('userspn_emails_registration_pending', []);
-    $changed = false;
-    
-    foreach ($pending as $user_id => $data) {
-      $sent = $this->userspn_send_registration_email($user_id);
-      
-      if ($sent) {
-        unset($pending[$user_id]);
-        $changed = true;
-      }
-    }
-
-    if ($changed) {
-      update_option('userspn_emails_registration_pending', $pending, false);
-    }
-  }
-
-  public function userspn_send_registration_email($user_id) {
-    $user_info = get_userdata($user_id);
-    if (!$user_info) return false;
-    $user_roles = $user_info->roles;
-
-    if (class_exists('MAILPN') && !in_array('userspn_newsletter_subscriber', $user_roles)) {
-      $userspn_mailing = new USERSPN_Mailing();
-      $userspn_emails_welcome = $userspn_mailing->userspn_get_email_welcome($user_id);
-      if (!empty($userspn_emails_welcome)) {
-        foreach ($userspn_emails_welcome as $mail_id) {
-          do_shortcode('[mailpn-sender mailpn_type="email_welcome" mailpn_user_to="' . $user_id . '" mailpn_subject="' . get_the_title($mail_id) . '" mailpn_id="' . $mail_id . '"]');
-        }
-
-        return true;
-      }
+    // Add to logs array (keep only last 1000 entries)
+    $logs[] = $log_entry;
+    if (count($logs) > 1000) {
+      $logs = array_slice($logs, -1000);
     }
     
-    return false;
+    update_option('userspn_email_logs', $logs, false);
+  }
+
+  /**
+   * Get email logs with optional filtering
+   * 
+   * @param string $event_type Optional event type filter
+   * @param int $limit Number of entries to return (default 50)
+   * @return array Log entries
+   */
+  public function userspn_get_email_logs($event_type = '', $limit = 50) {
+    $logs = get_option('userspn_email_logs', []);
+    
+    if (!empty($event_type)) {
+      $logs = array_filter($logs, function($log) use ($event_type) {
+        return $log['event_type'] === $event_type;
+      });
+    }
+    
+    // Sort by timestamp (newest first) and limit
+    usort($logs, function($a, $b) {
+      return $b['timestamp'] - $a['timestamp'];
+    });
+    
+    return array_slice($logs, 0, $limit);
+  }
+
+  /**
+   * Clear email logs
+   */
+  public function userspn_clear_email_logs() {
+    delete_option('userspn_email_logs');
   }
 
   public function userspn_send_newsletter_email($user_id) {
     $user_info = get_userdata($user_id);
-    if (!$user_info) return false;
+    
+    if (!$user_info) {
+      return false;
+    }
+    
     $user_roles = $user_info->roles;
 
     if (class_exists('MAILPN') && !in_array('userspn_newsletter_subscriber', $user_roles)) {
@@ -687,9 +701,11 @@ class USERSPN_Functions_User {
                         </div>
 
                         <div class="userspn-display-inline-table userspn-width-10-percent userspn-vertical-align-middle userspn-text-align-right">
-                          <i class="material-icons-outlined userspn-vertical-align-middle">
-                            <?php echo $field['is_completed'] ? 'check' : 'radio_button_unchecked'; ?>
-                          </i>
+                          <a class="userspn-text-decoration-none" href="<?php echo esc_url($field['page_link']); ?>">
+                            <i class="material-icons-outlined userspn-vertical-align-middle">
+                              <?php echo $field['is_completed'] ? 'check' : 'radio_button_unchecked'; ?>
+                            </i>
+                          </a>
                         </div>
                       </div>
                       </li>

@@ -19,6 +19,8 @@ class USERSPN_Activator {
 	 * @since    1.0.0
 	 */
 	public static function userspn_activate() {
+    add_role('userspn_newsletter_subscriber', 'Newsletter Subscriber', ['read' => true]);
+    
     update_option('userspn_options_changed', true);
     
     // Set a flag to redirect to options page after activation

@@ -106,7 +106,7 @@ class USERSPN_Ajax_Nopriv {
 											$user_password = !empty($_POST['user_password']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['user_password'])) : '';
 											$user_email = !empty($_POST['user_email']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['user_email'])) : '';
 
-											$user_id = USERSPN_Functions_Post::insert_user($user_login, $user_password, $user_email);
+											$user_id = USERSPN_Functions_User::userspn_user_insert($user_login, $user_password, $user_email);
 										}
 									}
 
@@ -123,7 +123,7 @@ class USERSPN_Ajax_Nopriv {
 									if (empty($userspn_form_subtype) || !in_array($userspn_form_subtype, ['post_new', 'post_edit'])) {
 										if (empty($post_id)) {
 											if (USERSPN_Functions_User::userspn_user_is_admin(get_current_user_id())) {
-												$post_id = USERSPN_Functions_Post::insert_post($title, '', '', sanitize_title($title), $post_type, 'publish', get_current_user_id());
+												$post_id = USERSPN_Functions_Post::userspn_insert_post($title, '', '', sanitize_title($title), $post_type, 'publish', get_current_user_id());
 											}
 										}
 
@@ -164,11 +164,11 @@ class USERSPN_Ajax_Nopriv {
 					$plugin_user = new USERSPN_Functions_User();
 
 					if (!empty($userspn_email) && !empty($userspn_password)) {
-						if (email_exists($userspn_user_email)) {
+						if (email_exists($userspn_email)) {
 							echo 'userspn_profile_create_existing';exit();
 						}else{
 							$userspn_login = sanitize_title(substr($userspn_email, 0, strpos($userspn_email, '@')) . '-' . bin2hex(openssl_random_pseudo_bytes(4)));
-							$user_id = $plugin_user->userspn_insert_user($userspn_login, $userspn_password, $userspn_email, '', '', $userspn_login, $userspn_login, $userspn_login, '', ['subscriber'], [
+							$user_id = USERSPN_Functions_User::userspn_user_insert($userspn_login, $userspn_password, $userspn_email, '', '', $userspn_login, $userspn_login, $userspn_login, '', ['subscriber'], [
 								['userspn_secret_token' => bin2hex(openssl_random_pseudo_bytes(16))],
 							]);
 
@@ -195,7 +195,7 @@ class USERSPN_Ajax_Nopriv {
 							$userspn_login = sanitize_title(substr($userspn_email, 0, strpos($userspn_email, '@')) . '-' . bin2hex(openssl_random_pseudo_bytes(4)));
 							$userspn_password = bin2hex(openssl_random_pseudo_bytes(12));
 
-							$user_id = $plugin_user->userspn_insert_user($userspn_login, $userspn_password, $userspn_email, '', '', $userspn_login, $userspn_login, $userspn_login, '', ['userspn_newsletter_subscriber'], []);
+							$user_id = USERSPN_Functions_User::userspn_user_insert($userspn_login, $userspn_password, $userspn_email, '', '', $userspn_login, $userspn_login, $userspn_login, '', ['userspn_newsletter_subscriber'], []);
 						}
 
 						if (get_option('userspn_newsletter_activation') == 'on') {

@@ -12,36 +12,65 @@
  */
 class USERSPN_Notifications {
   public function userspn_notifications_init() {
-    if (isset($_GET['userspn_action'])) {
-      switch ($_GET['userspn_action']) {
-        case 'userspn_newsletter_activation':
-          // Validate and sanitize nonce
-          if (isset($_GET['userspn_newsletter_activation_nonce']) && 
-              wp_verify_nonce(sanitize_text_field(wp_unslash($_GET['userspn_newsletter_activation_nonce'])), 'userspn_newsletter_activation')) {
-            
-            // Validate and sanitize user ID
-            if (isset($_GET['user']) && is_numeric($_GET['user'])) {
-              $user_id = intval($_GET['user']);
-              
-              // Verify user exists
-              if (get_user_by('ID', $user_id)) {
-                update_user_meta($user_id, 'userspn_newsletter_active', current_time('timestamp'));
-                update_user_meta($user_id, 'userspn_notifications', 'on');
-
-                // Send welcome email after activation
-                $plugin_user = new USERSPN_Functions_User();
-                $plugin_user->userspn_send_newsletter_email($user_id);
-
-                wp_safe_redirect(home_url('?userspn_notice=userspn_newsletter_activation_success'));exit();
-              }
-            }
+    // Process newsletter activation if requested
+    if (isset($_GET['userspn_action']) && $_GET['userspn_action'] === 'userspn_newsletter_activation') {
+      $this->process_newsletter_activation();
+    }
+  }
+  
+  /**
+   * Process newsletter activation
+   */
+  private function process_newsletter_activation() {
+    // Check if newsletter activation is enabled
+    if (get_option('userspn_newsletter_activation') !== 'on') {
+      wp_safe_redirect(home_url('?userspn_notice=userspn_newsletter_activation_disabled'));exit();
+    }
+    
+    // Validate and sanitize nonce
+    if (isset($_GET['userspn_newsletter_activation_nonce']) && 
+        wp_verify_nonce(sanitize_text_field(wp_unslash($_GET['userspn_newsletter_activation_nonce'])), 'userspn_newsletter_activation')) {
+      
+      // Validate and sanitize user ID
+      if (isset($_GET['user']) && is_numeric($_GET['user'])) {
+        $user_id = intval($_GET['user']);
+        
+        // Verify user exists
+        $user = get_user_by('ID', $user_id);
+        if ($user) {
+          // Check if user is already activated
+          $already_active = get_user_meta($user_id, 'userspn_newsletter_active', true);
+          if ($already_active) {
+            wp_safe_redirect(home_url('?userspn_notice=userspn_newsletter_activation_already'));exit();
           }
           
-          // If any validation fails, redirect to error
-          wp_safe_redirect(home_url('?userspn_notice=userspn_newsletter_activation_error'));exit();
-          break;
+          update_user_meta($user_id, 'userspn_newsletter_active', current_time('timestamp'));
+          update_user_meta($user_id, 'userspn_notifications', 'on');
+
+          // Send welcome email after activation
+          try {
+            $plugin_user = new USERSPN_Functions_User();
+            $plugin_user->userspn_send_newsletter_email($user_id);
+          } catch (Exception $e) {
+            // Silent fail for email sending
+          }
+
+          wp_safe_redirect(home_url('?userspn_notice=userspn_newsletter_activation_success'));exit();
+        }
+      }
+    } else {
+      // Check if nonce is expired
+      if (isset($_GET['userspn_newsletter_activation_nonce'])) {
+        $nonce_value = sanitize_text_field(wp_unslash($_GET['userspn_newsletter_activation_nonce']));
+        $nonce_tick = wp_verify_nonce($nonce_value, 'userspn_newsletter_activation');
+        if ($nonce_tick === false) {
+          wp_safe_redirect(home_url('?userspn_notice=userspn_newsletter_activation_expired'));exit();
+        }
       }
     }
+    
+    // If any validation fails, redirect to error
+    wp_safe_redirect(home_url('?userspn_notice=userspn_newsletter_activation_error'));exit();
   }
   
   public function userspn_wp_body_open() {
@@ -77,6 +106,33 @@ class USERSPN_Notifications {
                   </div>
                 <?php
                 break;
+              case 'userspn_newsletter_activation_already':
+                ?>
+                  <div class="userspn-popup-content userspn-text-align-center">
+                    <div class="userspn-p-30">
+                      <p class="userspn-alert userspn-alert-warning"><?php esc_html_e('Your email is already activated. No further action is needed.', 'userspn'); ?></p>
+                    </div>
+                  </div>
+                <?php
+                break;
+              case 'userspn_newsletter_activation_expired':
+                ?>
+                  <div class="userspn-popup-content userspn-text-align-center">
+                    <div class="userspn-p-30">
+                      <p class="userspn-alert userspn-alert-error"><?php esc_html_e('The activation link has expired. Please request a new activation email.', 'userspn'); ?></p>
+                    </div>
+                  </div>
+                <?php
+                break;
+              case 'userspn_newsletter_activation_disabled':
+                ?>
+                  <div class="userspn-popup-content userspn-text-align-center">
+                    <div class="userspn-p-30">
+                      <p class="userspn-alert userspn-alert-error"><?php esc_html_e('Newsletter activation is currently disabled. Please contact the administrator.', 'userspn'); ?></p>
+                    </div>
+                  </div>
+                <?php
+                break;
               case 'userspn_newsletter_activation_error':
                 ?>
                   <div class="userspn-popup-content userspn-text-align-center">
@@ -92,6 +148,14 @@ class USERSPN_Notifications {
       <?php endif ?>
     <?php
   }
+  
+  /**
+   * Debug method to show notification init status in footer
+   */
+  public function userspn_debug_footer() {
+    // Method kept for potential future use
+  }
+
   public function userspn_notifications() {
     $user_id = get_current_user_id();
 

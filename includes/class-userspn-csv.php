@@ -43,8 +43,9 @@ class USERSPN_CSV {
             $userspn_login = sanitize_title(substr($userspn_email, 0, strpos($userspn_email, '@')) . '-' . bin2hex(openssl_random_pseudo_bytes(4)));
             $userspn_password = bin2hex(openssl_random_pseudo_bytes(12));
 
-            $user_id = $this->userspn_insert_user($userspn_login, $userspn_password, $userspn_email, '', '', $userspn_login, $userspn_login, $userspn_login, '', [$userspn_role]);
-            $userspn_user_register_fields = $this->userspn_user_register_get_fields([]);
+            $user_id = USERSPN_Functions_User::userspn_user_insert($userspn_login, $userspn_password, $userspn_email, '', '', $userspn_login, $userspn_login, $userspn_login, '', [$userspn_role]);
+            $plugin_user = new USERSPN_Functions_User();
+            $userspn_user_register_fields = $plugin_user->userspn_user_register_get_fields([]);
 
             if (!empty($userspn_user_register_fields)) {
               $field_counter = 2;

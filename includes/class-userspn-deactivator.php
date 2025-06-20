@@ -31,17 +31,9 @@ class USERSPN_Deactivator {
 	 */
 	public static function userspn_deactivate() {
 		if (get_option('userspn_options_remove') == 'on') {
-      remove_role('userspn_role_manager');
+			remove_role('userspn_newsletter_subscriber');
+		}
 
-      $userspn_recipe = get_posts(['fields' => 'ids', 'numberposts' => -1, 'post_type' => 'userspn_recipe', 'post_status' => 'any', ]);
-
-      if (!empty($userspn_recipe)) {
-        foreach ($userspn_recipe as $post_id) {
-          wp_delete_post($post_id, true);
-        }
-      }
-    }
-
-    update_option('userspn_options_changed', true);
+    	update_option('userspn_options_changed', true);
 	}
 }

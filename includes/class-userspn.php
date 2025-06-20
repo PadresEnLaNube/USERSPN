@@ -291,7 +291,6 @@ class USERSPN {
 		$plugin_user = new USERSPN_Functions_User();
 		$this->loader->userspn_add_action('wp_login', $plugin_user, 'userspn_user_wp_login');
 		$this->loader->userspn_add_action('user_register', $plugin_user, 'userspn_user_register');
-		$this->loader->userspn_add_action('init', $plugin_user, 'userspn_process_pending_registration_emails');
 		
 		$this->loader->userspn_add_filter('get_avatar', $plugin_user, 'userspn_get_avatar_hook', 10, 5);
 		
@@ -303,7 +302,7 @@ class USERSPN {
 
 		$plugin_notifications = new USERSPN_Notifications();
 		$this->loader->userspn_add_shortcode('userspn-notifications', $plugin_notifications, 'userspn_notifications');		
-		$this->loader->userspn_add_action('init', $plugin_notifications, 'userspn_notifications_init');
+		$this->loader->userspn_add_action('wp_loaded', $plugin_notifications, 'userspn_notifications_init');
 	}
 
 

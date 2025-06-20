@@ -29,7 +29,7 @@ class USERSPN_Functions_Post {
 	 * 
 	 * @since    1.0.0
 	 */
-	public function insert_post($title, $content, $excerpt, $name, $type, $status, $author = 1, $parent = 0, $cats = [], $tags = [], $postmeta = [], $overwrite_id = true) {
+	public static function userspn_insert_post($title, $content, $excerpt, $name, $type, $status, $author = 1, $parent = 0, $cats = [], $tags = [], $postmeta = [], $overwrite_id = true) {
     $post_values = [
       'post_title' => trim($title),
       'post_content' => $content,
