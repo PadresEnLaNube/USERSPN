@@ -394,7 +394,7 @@ class USERSPN_Ajax {
             ?>
               <div class="userspn-user-register-field userspn-width-100-percent userspn-mb-30 <?php echo esc_attr($userspn_input_id); ?>" id="<?php echo esc_attr($userspn_input_id); ?>">
                 <label class="userspn-display-block" for="<?php echo esc_attr($userspn_input_id); ?>"><?php echo esc_html($userspn_input_name); ?></label>
-                <?php USERSPN_Forms::input_builder($userspn_meta_value, 'user'); ?>
+                <?php USERSPN_Forms::userspn_input_builder($userspn_meta_value, 'user'); ?>
               </div>
             <?php
             $userspn_return_string = ob_get_contents(); 

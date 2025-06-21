@@ -153,14 +153,14 @@ class USERSPN_Functions_User {
                   <?php endif ?>
                 </th>
                 <td>
-                  <?php USERSPN_Forms::input_builder($profile_field, 'user', $user_id); ?>
+                  <?php USERSPN_Forms::userspn_input_builder($profile_field, 'user', $user_id); ?>
                 </td>
               </tr>
             </table>
           <?php endforeach ?>
 
           <?php foreach ($userspn_profile_fields_nonce as $nonce_field): ?>
-            <?php USERSPN_Forms::input_builder($nonce_field, 'user', $user_id); ?>
+            <?php USERSPN_Forms::userspn_input_builder($nonce_field, 'user', $user_id); ?>
           <?php endforeach ?>
         <?php endif ?>
       <?php
