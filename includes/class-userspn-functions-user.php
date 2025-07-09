@@ -194,34 +194,35 @@ class USERSPN_Functions_User {
       $base_url,
     );
 
-    $action_user_url = wp_nonce_url($url, 'userspn_nonce_action', 'userspn-nonce');
+    $action_user_url = wp_nonce_url($url, 'userspn_nonce_action', 'userspn_nonce');
 
     return $action_user_url;
   }
 
   public function userspn_auto_login() {
-    $userspn_nonce = !empty($_GET['userspn_nonce']) ? sanitize_text_field(wp_unslash($_GET['userspn_nonce'])) : '';
-    if (isset($_GET['userspn_nonce']) && !wp_verify_nonce($userspn_nonce, 'userspn_nonce_action')) {
-      echo wp_json_encode(['error_key' => 'userspn_nonce_error', ]);exit();
+    // Solo procesar si tenemos los parámetros necesarios
+    if (!isset($_GET['userspn_auto_login']) || get_option('userspn_auto_login') !== 'on') {
+      return;
     }
 
-    if (isset($_GET['userspn_auto_login']) && get_option('userspn_auto_login') == 'on') {
-      $login_username = !empty($_GET['userspn_login_username']) ? sanitize_text_field(wp_unslash($_GET['userspn_login_username'])) : '';
-      $user_id = !empty($_GET['userspn_user_id']) ? intval($_GET['userspn_user_id']) : '';
-      $secret_token = get_user_meta($user_id, 'userspn_secret_token', true);
-      $userspn_secret_token = !empty($_GET['userspn_secret_token']) ? sanitize_text_field(wp_unslash($_GET['userspn_secret_token'])) : '';
-      
-      if (!empty($secret_token) && $secret_token == $userspn_secret_token && !user_can($user_id, 'administrator')) {
-        wp_set_current_user($user_id, $login_username);
-        wp_set_auth_cookie($user_id);
-        
-        $request_uri = !empty($_SERVER['REQUEST_URI']) ? sanitize_text_field(wp_unslash($_SERVER['REQUEST_URI'])) : esc_url(home_url());
-
-        wp_redirect(strtok($request_uri, '?'));
-        // wp_redirect($this->userspn_remove_get_parameter($_SERVER['REQUEST_URI'], ['userspn_secret_token', 'userspn_auto_login']));
-        exit;
-      }
+    $login_username = !empty($_GET['userspn_login_username']) ? sanitize_text_field(wp_unslash($_GET['userspn_login_username'])) : '';
+    $user_id = !empty($_GET['userspn_user_id']) ? intval($_GET['userspn_user_id']) : 0;
+    $secret_token = get_user_meta($user_id, 'userspn_secret_token', true);
+    $userspn_secret_token = !empty($_GET['userspn_secret_token']) ? sanitize_text_field(wp_unslash($_GET['userspn_secret_token'])) : '';
+    
+    // Validación de seguridad usando el token secreto
+    if (empty($secret_token) || $secret_token !== $userspn_secret_token || user_can($user_id, 'administrator')) {
+      return;
     }
+
+    // Realizar el autologin
+    wp_set_current_user($user_id, $login_username);
+    wp_set_auth_cookie($user_id);
+    
+    // Redireccionar sin parámetros
+    $request_uri = !empty($_SERVER['REQUEST_URI']) ? sanitize_text_field(wp_unslash($_SERVER['REQUEST_URI'])) : esc_url(home_url());
+    wp_redirect(strtok($request_uri, '?'));
+    exit;
   }
 
   public function userspn_profile_fields_validation() {
@@ -356,7 +357,7 @@ class USERSPN_Functions_User {
           <div class="userspn-user-register-fields-edition userspn-mb-50">
             <?php if (!empty($userspn_user_register_fields)): ?>
               <?php foreach ($userspn_user_register_fields as $userspn_user_register_field): ?>
-                <?php USERSPN_Forms::userspn_input_builder($userspn_user_register_field); ?>
+                <?php USERSPN_Forms::userspn_input_builder($userspn_user_register_field, 'user'); ?>
               <?php endforeach ?>
             <?php endif ?>
           </div>
@@ -1311,3 +1312,4 @@ class USERSPN_Functions_User {
     }
   }
 }
+

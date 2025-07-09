@@ -52,7 +52,7 @@ class USERSPN {
 		if (defined('USERSPN_VERSION')) {
 			$this->version = USERSPN_VERSION;
 		} else {
-			$this->version = '1.0.0';
+			$this->version = '1.0.1';
 		}
 
 		$this->plugin_name = 'userspn';
@@ -274,7 +274,7 @@ class USERSPN {
 		$this->loader->userspn_add_action('user_new_form', $plugin_user, 'userspn_profile_fields');
 		$this->loader->userspn_add_action('user_register', $plugin_user, 'userspn_profile_save_fields');
 		$this->loader->userspn_add_action('profile_update', $plugin_user, 'userspn_profile_save_fields');
-		$this->loader->userspn_add_action('init', $plugin_user, 'userspn_auto_login');
+		$this->loader->userspn_add_action('admin_init', $plugin_user, 'userspn_auto_login');
 	}
 
 	/**
@@ -289,6 +289,7 @@ class USERSPN {
 		$this->loader->userspn_add_action('wp_enqueue_scripts', $plugin_public, 'userspn_enqueue_scripts');
 
 		$plugin_user = new USERSPN_Functions_User();
+		$this->loader->userspn_add_action('wp', $plugin_user, 'userspn_auto_login');
 		$this->loader->userspn_add_action('wp_login', $plugin_user, 'userspn_user_wp_login');
 		$this->loader->userspn_add_action('user_register', $plugin_user, 'userspn_user_register');
 		
