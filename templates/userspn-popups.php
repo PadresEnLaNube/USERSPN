@@ -18,6 +18,10 @@
 
 <?php if (get_option('userspn_newsletter_exit_popup') == 'on' && !has_shortcode($post->post_content, 'userspn-newsletter')) : ?>
   <div id="userspn-newsletter-exit-popup" class="userspn-popup userspn-newsletter-exit-popup userspn-popup-size-medium userspn-display-none-soft">
+    <button class="userspn-popup-close-wrapper">
+      <i class="material-icons-outlined">close</i>
+    </button>
+
     <div class="userspn-popup-content">
       <div class="userspn-p-30">
         <?php echo esc_html(USERSPN_Data::userspn_popup_loader()); ?>

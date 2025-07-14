@@ -324,12 +324,12 @@ class USERSPN_Functions_User {
     
     $user_roles = $user_info->roles;
 
-    if (class_exists('MAILPN') && !in_array('userspn_newsletter_subscriber', $user_roles)) {
+    if (class_exists('MAILPN') && in_array('userspn_newsletter_subscriber', $user_roles)) {
       $userspn_mailing = new USERSPN_Mailing();
       $userspn_emails_newsletter = $userspn_mailing->userspn_get_email_newsletter_welcome($user_id);
       if (!empty($userspn_emails_newsletter)) {
         foreach ($userspn_emails_newsletter as $mail_id) {
-          do_shortcode('[mailpn-sender mailpn_type="email_newsletter" mailpn_user_to="' . $user_id . '" mailpn_subject="' . get_the_title($mail_id) . '" mailpn_id="' . $mail_id . '"]');
+          do_shortcode('[mailpn-sender mailpn_type="newsletter_welcome" mailpn_user_to="' . $user_id . '" mailpn_subject="' . get_the_title($mail_id) . '" mailpn_id="' . $mail_id . '"]');
         }
 
         return true;
@@ -479,7 +479,7 @@ class USERSPN_Functions_User {
                         <div id="userspn-tab-notifications" class="userspn-tab-content userspn-display-none">
                           <div class="userspn-mt-30 userspn-p-10">
                             <p class="userspn-alert"><?php esc_html_e('Notifications are inactive. Please install and activate Mailing Manager - PN to allow integrated notifications in your platform.', 'userspn'); ?></p>
-                            <a href="#" class="userspn-btn userspn-btn-mini"><?php esc_html_e('Mailing Manager - PN', 'userspn'); ?></a>
+                            <a href="/wp-admin/plugin-install.php?s=mailpn&tab=search&type=term" class="userspn-btn userspn-btn-mini"><?php esc_html_e('Mailing Manager - PN', 'userspn'); ?></a>
                           </div>
                         </div>
                       <?php endif ?>

@@ -83,7 +83,7 @@
     });
 
     // Close popup when clicking close button
-    $(document).on('click', '.userspn-popup-close', function(e) {
+    $(document).on('click', '.userspn-popup-close, .userspn-popup-close-wrapper', function(e) {
       e.preventDefault();
       USERSPN_Popups.close();
     });
