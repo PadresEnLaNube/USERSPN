@@ -1060,6 +1060,11 @@ class USERSPN_Functions_User {
   }
 
   public function userspn_profile_save_fields($user_id){
+    // No ejecutar durante el checkout de WooCommerce
+    if (function_exists('is_checkout') && is_checkout()) {
+      return;
+    }
+    
     // Skip validation if this is a password reset request (check both POST and GET parameters)
     if (isset($_GET['action']) && ($_GET['action'] === 'resetpassword' ||  $_GET['action'] === 'lostpassword')) {
       return true;

@@ -191,4 +191,4 @@ function userspn_run() {
 }
 
 // Initialize the plugin on init hook instead of plugins_loaded to ensure WooCommerce functions are available
-add_action('init', 'userspn_run');
+add_action('init', 'userspn_run', 0);
