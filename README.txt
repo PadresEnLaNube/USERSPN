@@ -108,7 +108,7 @@ To uninstall the plugin, go to the 'Plugins' screen in WordPress, find the Users
 
 == Changelog ==
 
-= 1.0.0 =
+= 1.0.1 =
 
 WP references swapped to PN
 wordpress-heroes.com to padresenlanube.com
