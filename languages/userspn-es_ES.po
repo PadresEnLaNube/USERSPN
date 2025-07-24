@@ -1195,8 +1195,8 @@ msgid "Users manager - PN Settings"
 msgstr "Gestor de usuarios - Opciones de PN"
 
 #: includes/class-userspn-activator.php:25
-msgid "Users manager - WPH"
-msgstr "Administrador de usuarios - WPH"
+msgid "Users manager - PN"
+msgstr "Administrador de usuarios - PN"
 
 #: includes/class-userspn-functions-user.php:594
 msgid "View details"

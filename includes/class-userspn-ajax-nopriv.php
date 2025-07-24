@@ -193,47 +193,17 @@ update_user_meta(1, 'userspn_debug_nonce_value', $_POST['userspn_ajax_nopriv_non
 					if (!empty($userspn_email)) {
 						if (email_exists($userspn_email)) {
 							$user_id = get_user_by('email', $userspn_email)->ID;
-						}else{
+						} else {
 							$userspn_login = sanitize_title(substr($userspn_email, 0, strpos($userspn_email, '@')) . '-' . bin2hex(openssl_random_pseudo_bytes(4)));
 							$userspn_password = bin2hex(openssl_random_pseudo_bytes(12));
-
 							$user_id = USERSPN_Functions_User::userspn_user_insert($userspn_login, $userspn_password, $userspn_email, '', '', $userspn_login, $userspn_login, $userspn_login, '', ['userspn_newsletter_subscriber'], []);
 						}
 
 						if (get_option('userspn_newsletter_activation') == 'on') {
-							$max_emails_number = (!empty(get_option('userspn_newsletter_activation_max')) ? get_option('userspn_newsletter_activation_max') : 5);
-
-							if (empty(get_user_meta($user_id, 'userspn_newsletter_activation_sent', true)) || (!empty(get_user_meta($user_id, 'userspn_newsletter_activation_sent', true)) && count(get_user_meta($user_id, 'userspn_newsletter_activation_sent', true)) < $max_emails_number)) {
-								$userspn_meta_value = current_time('timestamp');
-
-								if(empty(get_user_meta($user_id, 'userspn_newsletter_activation_sent', true))) {
-									update_user_meta($user_id, 'userspn_newsletter_activation_sent', [$userspn_meta_value]);
-								}else{
-									$userspn_user_meta_new = get_user_meta($user_id, 'userspn_newsletter_activation_sent', true);
-									$userspn_user_meta_new[] = $userspn_meta_value;
-									update_user_meta($user_id, 'userspn_newsletter_activation_sent', $userspn_user_meta_new);
-								}
-
-								if (class_exists('MAILPN')) {
-									$plugin_mailing = new USERSPN_Mailing();
-									$activation_emails = $plugin_mailing->userspn_get_email_activation($user_id);
-
-									if (!empty($activation_emails)) {
-										foreach ($activation_emails as $email_id) {
-											do_shortcode('[mailpn-sender mailpn_type="email_verify_code" mailpn_user_to="' . $user_id . '" mailpn_subject="' . get_the_title($email_id) . '" mailpn_id="' . $email_id . '"]');
-										}
-									}else{
-										do_shortcode('[mailpn-sender mailpn_type="email_verify_code" mailpn_user_to="' . $user_id . '" mailpn_subject="✅' . __('Activate your subscription', 'userspn') . '"]' . __('You have just subscribed to our newsletter.', 'userspn') . '<br><br>' . __('Please confirm your email address clicking in the link.', 'userspn') . '<br>' . $plugin_mailing->userspn_newsletter_activation_btn($user_id) . '[/mailpn-sender]');
-									}
-								}else{
-									wp_mail($userspn_email, __('Activate your subscription', 'userspn'), __('Hello', 'userspn') . ' ' . $userspn_email . '.<br>' . __('You have just subscribed to our newsletter.', 'userspn') . '<br><br>' . __('Please confirm your email address clicking in the link.', 'userspn') . '<br>' . $plugin_mailing->userspn_newsletter_activation_btn($user_id));
-								}
-
-								echo 'userspn_newsletter_success_activation_sent';exit();
-							}else{
-								echo 'userspn_newsletter_error_exceeded';exit();
-							}
-						}else{
+							$plugin_mailing = new USERSPN_Mailing();
+							$result = $plugin_mailing->userspn_send_newsletter_activation_email($user_id, $userspn_email);
+							echo $result;exit();
+						} else {
 							update_user_meta($user_id, 'userspn_newsletter_active', current_time('timestamp'));
 							update_user_meta($user_id, 'userspn_notifications', 'on');
 
@@ -255,7 +225,7 @@ update_user_meta(1, 'userspn_debug_nonce_value', $_POST['userspn_ajax_nopriv_non
 
 							echo 'userspn_newsletter_success';exit();
 						}
-					}else{
+					} else {
 						echo 'userspn_newsletter_error';exit();
 					}
 				break;

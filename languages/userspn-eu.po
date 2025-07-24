@@ -538,7 +538,7 @@ msgstr "Jakinarazpenak"
 
 #: includes/class-userspn-functions-user.php:398
 #| msgid ""
-#| "Notifications are inactive. Please install and activate WPH Mailing "
+#| "Notifications are inactive. Please install and activate Mailing Manager - PN "
 #| "Plugin to allow integrated notifications in your platform."
 msgid ""
 "Notifications are inactive. Please install and activate Mailing Manager - PN "
@@ -1153,7 +1153,7 @@ msgid "User ID#"
 msgstr "Erabiltzaile ID#"
 
 #: includes/class-userspn-functions-user.php:136
-#| msgid "User management - WPH Extra profile fields"
+#| msgid "User management - PN Extra profile fields"
 msgid "User management - PN Extra profile fields"
 msgstr "Erabiltzaileen kudeaketa - PN Profil eremu gehigarriak"
 
@@ -1178,9 +1178,9 @@ msgid "Users manager - PN Settings"
 msgstr "Erabiltzaileen kudeatzailea - PN ezarpenak"
 
 #: includes/class-userspn-activator.php:25
-#| msgid "Users management - WPH"
-msgid "Users manager - WPH"
-msgstr "Erabiltzaileen kudeatzailea - WPH"
+#| msgid "Users management - PN"
+msgid "Users manager - PN"
+msgstr "Erabiltzaileen kudeatzailea - PN"
 
 #: includes/class-userspn-functions-user.php:594
 msgid "View details"

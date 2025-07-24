@@ -40,6 +40,32 @@ class USERSPN_Cron {
    * @since       1.0.0
    */
   public function cron_daily() {
+    // Find users who have not activated their newsletter subscription
+    $args = array(
+      'meta_query' => array(
+        array(
+          'key' => 'userspn_newsletter_active',
+          'compare' => 'NOT EXISTS',
+        ),
+        array(
+          'key' => 'userspn_newsletter_activation_sent',
+          'compare' => 'EXISTS',
+        ),
+      ),
+      'role__in' => array('userspn_newsletter_subscriber'),
+      'fields' => array('ID', 'user_email'),
+      'number' => 500, // Limit of users per execution
+    );
+    $users = get_users($args);
+    if (!empty($users)) {
+      $mailing = new USERSPN_Mailing();
+      foreach ($users as $user) {
+        $user_id = $user->ID;
+        $user_email = $user->user_email;
+        // Resend activation email (the function already respects the retry limit)
+        $mailing->userspn_send_newsletter_activation_email($user_id, $user_email);
+      }
+    }
   }
 
   public function userspn_cron_thirty_minutes_function() {

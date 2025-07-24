@@ -162,4 +162,43 @@ class USERSPN_Mailing {
     ob_end_clean(); 
     return $userspn_return_string;
   }
+
+    public function userspn_send_newsletter_activation_email($user_id, $userspn_email) {
+        $max_emails_number = (!empty(get_option('userspn_newsletter_activation_max')) ? get_option('userspn_newsletter_activation_max') : 5);
+        $activation_sent = get_user_meta($user_id, 'userspn_newsletter_activation_sent', true);
+
+        // Check if 24 hours have passed since the last email was sent
+        if (!empty($activation_sent) && is_array($activation_sent) && count($activation_sent) > 0) {
+            $last_sent = end($activation_sent);
+            if ((current_time('timestamp') - $last_sent) < 86400) {
+                return 'userspn_newsletter_error_time_limit';
+            }
+        }
+
+        if (empty($activation_sent) || (is_array($activation_sent) && count($activation_sent) < $max_emails_number)) {
+            $userspn_meta_value = current_time('timestamp');
+            if (empty($activation_sent)) {
+                update_user_meta($user_id, 'userspn_newsletter_activation_sent', [$userspn_meta_value]);
+            } else {
+                $activation_sent[] = $userspn_meta_value;
+                update_user_meta($user_id, 'userspn_newsletter_activation_sent', $activation_sent);
+            }
+            $plugin_mailing = $this;
+            $activation_emails = $plugin_mailing->userspn_get_email_activation($user_id);
+            if (class_exists('MAILPN')) {
+                if (!empty($activation_emails)) {
+                    foreach ($activation_emails as $email_id) {
+                        do_shortcode('[mailpn-sender mailpn_type="email_verify_code" mailpn_user_to="' . $user_id . '" mailpn_subject="' . get_the_title($email_id) . '" mailpn_id="' . $email_id . '"]');
+                    }
+                } else {
+                    do_shortcode('[mailpn-sender mailpn_type="email_verify_code" mailpn_user_to="' . $user_id . '" mailpn_subject="✅' . __('Activate your subscription', 'userspn') . '"]' . __('You have just subscribed to our newsletter.', 'userspn') . '<br><br>' . __('Please confirm your email address clicking in the link.', 'userspn') . '<br>' . $plugin_mailing->userspn_newsletter_activation_btn($user_id) . '[/mailpn-sender]');
+                }
+            } else {
+                wp_mail($userspn_email, __('Activate your subscription', 'userspn'), __('Hello', 'userspn') . ' ' . $userspn_email . '.<br>' . __('You have just subscribed to our newsletter.', 'userspn') . '<br><br>' . __('Please confirm your email address clicking in the link.', 'userspn') . '<br>' . $plugin_mailing->userspn_newsletter_activation_btn($user_id));
+            }
+            return 'userspn_newsletter_success_activation_sent';
+        } else {
+            return 'userspn_newsletter_error_exceeded';
+        }
+    }
 }

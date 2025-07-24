@@ -1090,7 +1090,7 @@ msgid "Users manager - PN Settings"
 msgstr ""
 
 #: includes/class-userspn-activator.php:25
-msgid "Users manager - WPH"
+msgid "Users manager - PN"
 msgstr ""
 
 #: includes/class-userspn-functions-user.php:594

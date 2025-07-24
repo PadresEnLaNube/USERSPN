@@ -262,7 +262,7 @@
 .userspn-display-inline-block{
   display:inline-block
 }
-.userspn-display-none,.pn_wph_nonce{
+.userspn-display-none{
   display:none!important
 }
 .userspn-display-none-soft{
