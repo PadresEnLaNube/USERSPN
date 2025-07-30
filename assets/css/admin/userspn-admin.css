@@ -1,3 +1,79 @@
 #adminmenu #toplevel_page_userspn_options .wp-menu-image img{
     padding:5px 0 0;
 }
+
+/* Dashboard Analytics Widgets */
+.userspn-dashboard-widget {
+    transition: all 0.3s ease;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    text-align: center;
+}
+
+.userspn-dashboard-widget:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.16);
+}
+
+.userspn-bg-primary {
+    background: linear-gradient(135deg, #3f51b5 0%, #5c6bc0 100%);
+    color: #fff;
+}
+
+.userspn-bg-secondary {
+    background: linear-gradient(135deg, #009688 0%, #26a69a 100%);
+    color: #fff;
+}
+
+.userspn-bg-accent {
+    background: linear-gradient(135deg, #ff9800 0%, #ffb74d 100%);
+    color: #fff;
+}
+
+.userspn-dashboard-widget-title {
+    font-size: 1.1em;
+    margin-bottom: 15px;
+    opacity: 0.9;
+}
+
+.userspn-dashboard-widget-value {
+    font-size: 2.5em;
+    font-weight: bold;
+    line-height: 1;
+}
+
+/* Dashboard popup specific styles */
+.userspn-dashboard .userspn-popup {
+    z-index: 10000 !important;
+}
+
+.userspn-dashboard .userspn-popup-content {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.userspn-dashboard .userspn-popup h2 {
+    margin-bottom: 20px;
+    color: #333;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+    font-size: 1.5em;
+}
+
+.userspn-dashboard .userspn-popup ul {
+    margin: 0;
+    padding: 0;
+}
+
+.userspn-dashboard .userspn-popup ul li {
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.userspn-dashboard .userspn-popup ul li:last-child {
+    border-bottom: none;
+}

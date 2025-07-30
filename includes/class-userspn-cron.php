@@ -39,7 +39,7 @@ class USERSPN_Cron {
    *
    * @since       1.0.0
    */
-  public function cron_daily() {
+  public function userspn_cron_daily() {
     // Find users who have not activated their newsletter subscription
     $args = array(
       'meta_query' => array(

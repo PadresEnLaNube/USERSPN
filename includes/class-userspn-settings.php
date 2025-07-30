@@ -434,6 +434,16 @@ class USERSPN_Settings {
 	public function userspn_admin_menu() {
     add_menu_page(__('Users manager', 'userspn'), __('Users manager', 'userspn'), 'administrator', 'userspn_options', [$this, 'userspn_options'], esc_url(USERSPN_URL . 'assets/media/userspn-menu-icon.svg'));
 
+    // Add Dashboard menu as submenu of Users manager
+    add_submenu_page(
+      'userspn_options',
+      __('Dashboard', 'userspn'),
+      __('Dashboard', 'userspn'),
+      'administrator',
+      'userspn_dashboard',
+      [$this, 'userspn_dashboard_page']
+    );
+
     if(is_admin() && !defined('DOING_AJAX') && !current_user_can('administrator') && get_option('userspn_admin_access_removal') == 'on'){
       $user = new WP_User(get_current_user_id());
       $userspn_admin_access_roles = get_option('userspn_admin_access_roles') ?? [];
@@ -459,6 +469,152 @@ class USERSPN_Settings {
         </div>
       </div>
 	  <?php
+	}
+
+	public function userspn_dashboard_page() {
+	  // Load scripts and styles
+	  wp_enqueue_style('userspn-admin', USERSPN_URL . 'assets/css/admin/userspn-admin.css', [], USERSPN_VERSION);
+	  wp_enqueue_script('userspn-popups', USERSPN_URL . 'assets/js/userspn-popups.js', ['jquery'], USERSPN_VERSION, true);
+
+	  // Get analytics data
+	  $users_last_week = $this->get_userspn_users_last_week();
+	  $newsletter_last_week = $this->get_userspn_newsletter_last_week();
+	  $last_logins = $this->get_userspn_last_logins();
+
+	  ?>
+	  <div class="userspn-dashboard userspn-max-width-1000 userspn-margin-auto userspn-mt-50 userspn-mb-50">
+	    <h1 class="userspn-mb-30"><?php esc_html_e('Dashboard de Analíticas', 'userspn'); ?></h1>
+	    <div class="userspn-dashboard-widgets" style="display:flex;gap:30px;margin-bottom:30px;">
+	      <div class="userspn-dashboard-widget userspn-bg-primary" data-popup="userspn-users-week" style="flex:1;cursor:pointer;">
+	        <div class="userspn-dashboard-widget-title"><?php esc_html_e('Usuarios nuevos (7 días)', 'userspn'); ?></div>
+	        <div class="userspn-dashboard-widget-value" style="font-size:2em;font-weight:bold;"><?php echo esc_html($users_last_week['count']); ?></div>
+	      </div>
+	      <div class="userspn-dashboard-widget userspn-bg-secondary" data-popup="userspn-newsletter-week" style="flex:1;cursor:pointer;">
+	        <div class="userspn-dashboard-widget-title"><?php esc_html_e('Newsletter (7 días)', 'userspn'); ?></div>
+	        <div class="userspn-dashboard-widget-value" style="font-size:2em;font-weight:bold;"><?php echo esc_html($newsletter_last_week['count']); ?></div>
+	      </div>
+	      <div class="userspn-dashboard-widget userspn-bg-accent" data-popup="userspn-last-logins" style="flex:1;cursor:pointer;">
+	        <div class="userspn-dashboard-widget-title"><?php esc_html_e('Últimos accesos', 'userspn'); ?></div>
+	        <div class="userspn-dashboard-widget-value" style="font-size:2em;font-weight:bold;"><?php echo esc_html($last_logins['count']); ?></div>
+	      </div>
+	    </div>
+	    <!-- Hidden popups -->
+	    <div id="userspn-popup-userspn-users-week" class="userspn-popup userspn-popup-size-medium userspn-display-none-soft">
+	      <div class="userspn-popup-content">
+          <div class="userspn-p-30">
+            <h2><?php esc_html_e('Usuarios nuevos en la última semana', 'userspn'); ?></h2>
+            <?php echo $users_last_week['html']; ?>
+          </div>
+	      </div>
+	    </div>
+	    <div id="userspn-popup-userspn-newsletter-week" class="userspn-popup userspn-popup-size-medium userspn-display-none-soft">
+	      <div class="userspn-popup-content">
+          <div class="userspn-p-30">
+            <h2><?php esc_html_e('Altas en newsletter en la última semana', 'userspn'); ?></h2>
+            <?php echo $newsletter_last_week['html']; ?>
+          </div>
+	      </div>
+	    </div>
+	    <div id="userspn-popup-userspn-last-logins" class="userspn-popup userspn-popup-size-medium userspn-display-none-soft">
+	      <div class="userspn-popup-content">
+          <div class="userspn-p-30">
+            <h2><?php esc_html_e('Últimos accesos', 'userspn'); ?></h2>
+            <?php echo $last_logins['html']; ?>
+          </div>
+	      </div>
+	    </div>
+	  </div>
+	  <script>
+	    jQuery(function($){
+	      $('.userspn-dashboard-widget').on('click', function(){
+	        var popup = $(this).data('popup');
+	        USERSPN_Popups.open('userspn-popup-' + popup);
+	      });
+	    });
+	  </script>
+	  <?php
+	}
+
+	public function get_userspn_users_last_week() {
+	  $args = [
+	    'date_query' => [
+	      [
+	        'after' => '1 week ago',
+	      ],
+	    ],
+	    'fields' => ['ID', 'user_login', 'user_email', 'user_registered'],
+	  ];
+	  $users = get_users($args);
+	  $html = '<ul style="list-style:none;padding:0;">';
+	  if (!empty($users)) {
+	    foreach ($users as $user) {
+	      $html .= '<li style="padding:10px;border-bottom:1px solid #eee;">' . esc_html($user->user_login) . ' (' . esc_html($user->user_email) . ') - ' . esc_html(date('Y-m-d H:i', strtotime($user->user_registered))) . '</li>';
+	    }
+	  } else {
+	    $html .= '<li style="padding:10px;color:#666;">' . esc_html__('No hay usuarios nuevos en la última semana', 'userspn') . '</li>';
+	  }
+	  $html .= '</ul>';
+	  return [
+	    'count' => count($users),
+	    'html' => $html,
+	  ];
+	}
+
+	public function get_userspn_newsletter_last_week() {
+	  $args = [
+	    'meta_key' => 'userspn_newsletter_active',
+	    'meta_value' => '',
+	    'meta_compare' => '!=',
+	    'date_query' => [
+	      [
+	        'after' => '1 week ago',
+	        'column' => 'user_registered',
+	      ],
+	    ],
+	    'fields' => ['ID', 'user_login', 'user_email', 'user_registered'],
+	    'role__in' => ['userspn_newsletter_subscriber'],
+	  ];
+	  $users = get_users($args);
+	  $html = '<ul style="list-style:none;padding:0;">';
+	  if (!empty($users)) {
+	    foreach ($users as $user) {
+	      $html .= '<li style="padding:10px;border-bottom:1px solid #eee;">' . esc_html($user->user_login) . ' (' . esc_html($user->user_email) . ') - ' . esc_html(date('Y-m-d H:i', strtotime($user->user_registered))) . '</li>';
+	    }
+	  } else {
+	    $html .= '<li style="padding:10px;color:#666;">' . esc_html__('No hay altas en newsletter en la última semana', 'userspn') . '</li>';
+	  }
+	  $html .= '</ul>';
+	  return [
+	    'count' => count($users),
+	    'html' => $html,
+	  ];
+	}
+
+	public function get_userspn_last_logins() {
+	  $args = [
+	    'meta_key' => 'userspn_user_last_login',
+	    'orderby' => 'meta_value_num',
+	    'order' => 'DESC',
+	    'number' => 10,
+	    'fields' => ['ID', 'user_login', 'user_email'],
+	  ];
+	  $users = get_users($args);
+	  $html = '<ul style="list-style:none;padding:0;">';
+	  if (!empty($users)) {
+	    foreach ($users as $user) {
+	      $last_login = get_user_meta($user->ID, 'userspn_user_last_login', true);
+	      if (!empty($last_login)) {
+	        $html .= '<li style="padding:10px;border-bottom:1px solid #eee;">' . esc_html($user->user_login) . ' (' . esc_html($user->user_email) . ') - ' . date('Y-m-d H:i', intval($last_login)) . '</li>';
+	      }
+	    }
+	  } else {
+	    $html .= '<li style="padding:10px;color:#666;">' . esc_html__('No hay registros de últimos accesos', 'userspn') . '</li>';
+	  }
+	  $html .= '</ul>';
+	  return [
+	    'count' => count($users),
+	    'html' => $html,
+	  ];
 	}
 
   public function userspn_bytes_format($size, $precision = 2) { 
@@ -499,6 +655,11 @@ class USERSPN_Settings {
   }
 
   public function userspn_wp_before_admin_bar_render() {
+    // Don't run if admin bar is disabled for current user
+    if (!$this->userspn_should_show_admin_bar()) {
+      return;
+    }
+
     if (get_option('userspn_dashboard_logo') == 'on') {
       $userspn_admin_bar_render_css = '#wpadminbar #wp-admin-bar-wp-logo{background-color:#ffffff;}#wpadminbar #wp-admin-bar-wp-logo > .ab-item {padding:0 7px;background-image:url(' . esc_url(wp_get_attachment_image_src(get_option('userspn_admin_page_logo'), 'large')[0]) . ')!important;background-size:70%;background-color:#ffffff;background-position:center;background-repeat:no-repeat;opacity:0.8;} #wpadminbar #wp-admin-bar-wp-logo > .ab-item .ab-icon:before {content:" ";top:2px;}#wpadminbar #wp-admin-bar-wp-logo{background-color:#ffffff;}';
 
@@ -537,16 +698,59 @@ class USERSPN_Settings {
     return;
   }
 
-  public function userspn_remove_admin_bar() {
-    if(!is_admin() && !current_user_can('administrator') && get_option('userspn_admin_bar_removal') == 'on'){
-      $user = new WP_User(get_current_user_id());
-      $userspn_admin_bar_access_roles = get_option('userspn_admin_bar_access_roles') ?? [];
-
-      if (!array_intersect($user->roles, $userspn_admin_bar_access_roles)) {
-        show_admin_bar(false);
-        return false;
-      }
+  /**
+   * Check if admin bar should be shown for current user
+   */
+  private function userspn_should_show_admin_bar() {
+    // Only run on front-end
+    if (is_admin()) {
+      return true;
     }
+
+    // Check if admin bar removal is enabled
+    if (get_option('userspn_admin_bar_removal') != 'on') {
+      return true;
+    }
+
+    // Always allow administrators
+    if (current_user_can('administrator')) {
+      return true;
+    }
+
+    // Get current user and their roles
+    $user = wp_get_current_user();
+    if (!$user || !$user->exists()) {
+      return false;
+    }
+
+    // Get allowed roles for admin bar
+    $userspn_admin_bar_access_roles = get_option('userspn_admin_bar_access_roles') ?? [];
+
+    // If no specific roles are set, hide admin bar for all non-administrators
+    if (empty($userspn_admin_bar_access_roles)) {
+      return false;
+    }
+
+    // Check if user has any of the allowed roles
+    $user_roles = $user->roles;
+    if (!is_array($user_roles)) {
+      $user_roles = [];
+    }
+
+    return !empty(array_intersect($user_roles, $userspn_admin_bar_access_roles));
+  }
+
+  public function userspn_remove_admin_bar() {
+    if (!$this->userspn_should_show_admin_bar()) {
+      show_admin_bar(false);
+    }
+  }
+
+  /**
+   * Filter to control admin bar visibility
+   */
+  public function userspn_show_admin_bar_filter($show) {
+    return $this->userspn_should_show_admin_bar() ? $show : false;
   }
 
   public function userspn_activated_plugin($plugin) {

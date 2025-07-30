@@ -351,15 +351,22 @@
     $(document).on('click', '.userspn-profile-popup-btn', function(e){
       e.preventDefault();
       var userspn_btn = $(this).attr('data-userspn-action');
-      USERSPN_Popups.open($('#userspn-profile-popup'));
+      
+      // Close any active popups before opening the new one
+      USERSPN_Popups.close();
+      
+      // Small delay to ensure popups are closed before opening the new one
+      setTimeout(function() {
+        USERSPN_Popups.open($('#userspn-profile-popup'));
 
-      if (typeof userspn_btn !== 'undefined') {
-        $('.userspn-tab-links[data-userspn-id="userspn-tab-' + userspn_btn + '"]').click();
-        $('#userspn-' + userspn_btn + ' input#userspn_email').focus();
-      }else{
-        $('.userspn-tab-links[data-userspn-id="userspn-tab-login"]').click();
-        $('#userspn-login input#user_login').focus();
-      }
+        if (typeof userspn_btn !== 'undefined') {
+          $('.userspn-tab-links[data-userspn-id="userspn-tab-' + userspn_btn + '"]').click();
+          $('#userspn-' + userspn_btn + ' input#userspn_email').focus();
+        }else{
+          $('.userspn-tab-links[data-userspn-id="userspn-tab-login"]').click();
+          $('#userspn-login input#user_login').focus();
+        }
+      }, 100);
     });
 
     $(document).on('click', '.userspn-tab-links', function(e){

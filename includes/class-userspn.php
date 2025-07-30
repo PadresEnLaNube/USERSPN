@@ -248,7 +248,9 @@ class USERSPN {
 		$this->loader->userspn_add_filter('body_class', $plugin_common, 'userspn_body_classes');
 		
 		$plugin_settings = new USERSPN_Settings();
-		$this->loader->userspn_add_action('after_setup_theme', $plugin_settings, 'userspn_remove_admin_bar');
+		$this->loader->userspn_add_action('init', $plugin_settings, 'userspn_remove_admin_bar');
+		$this->loader->userspn_add_filter('show_admin_bar', $plugin_settings, 'userspn_show_admin_bar_filter');
+		$this->loader->userspn_add_action('wp', $plugin_settings, 'userspn_remove_admin_bar');
 
 		$plugin_mailing = new USERSPN_Mailing();
 		$this->loader->userspn_add_filter('wp_mail_content_type', $plugin_mailing, 'userspn_wp_mail_content_type');
@@ -428,7 +430,7 @@ class USERSPN {
 
 		$this->loader->userspn_add_action('wp', $plugin_cron, 'cron_schedule');
 		$this->loader->userspn_add_filter('cron_schedules', $plugin_cron, 'userspn_cron_thirty_minutes_schedule');
-		$this->loader->userspn_add_action('userspn_cron_daily', $plugin_cron, 'cron_daily');
+		$this->loader->userspn_add_action('userspn_cron_daily', $plugin_cron, 'userspn_cron_daily');
 		$this->loader->userspn_add_action('userspn_cron_thirty_minutes', $plugin_cron, 'userspn_cron_thirty_minutes_function');
 	}
 
