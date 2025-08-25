@@ -191,7 +191,7 @@ class USERSPN_Forms {
             ?>
               <div class="userspn-password-checker">
                 <div class="userspn-password-input userspn-position-relative">
-                  <input id="<?php echo esc_attr($userspn_input['id']) . ((array_key_exists('multiple', $userspn_input) && $userspn_input['multiple'] == 'true') ? '[]' : ''); ?>" name="<?php echo esc_attr($userspn_input['id']) . ((array_key_exists('multiple', $userspn_input) && $userspn_input['multiple'] == 'true') ? '[]' : ''); ?>" <?php echo (array_key_exists('multiple', $userspn_input) && $userspn_input['multiple'] == 'true' ? 'multiple' : ''); ?> class="userspn-field userspn-password-strength <?php echo array_key_exists('class', $userspn_input) ? esc_attr($userspn_input['class']) : ''; ?>" type="<?php echo esc_attr($userspn_input['type']); ?>" <?php echo ((array_key_exists('required', $userspn_input) && $userspn_input['required'] == 'true') ? 'required' : ''); ?> <?php echo ((array_key_exists('disabled', $userspn_input) && $userspn_input['disabled'] == 'true') ? 'disabled' : ''); ?> value="<?php echo (!empty($userspn_input['button_text']) ? esc_html($userspn_input['button_text']) : esc_attr($userspn_value)); ?>" placeholder="<?php echo (array_key_exists('placeholder', $userspn_input) ? esc_attr($userspn_input['placeholder']) : ''); ?>" <?php echo wp_kses_post($userspn_parent_block); ?>/>
+                  <input id="<?php echo esc_attr($userspn_input['id']) . ((array_key_exists('multiple', $userspn_input) && $userspn_input['multiple'] == 'true') ? '[]' : ''); ?>" name="<?php echo esc_attr($userspn_input['id']) . ((array_key_exists('multiple', $userspn_input) && $userspn_input['multiple'] == 'true') ? '[]' : ''); ?>" <?php echo (array_key_exists('multiple', $userspn_input) && $userspn_input['multiple'] == 'true' ? 'multiple' : ''); ?> class="userspn-field userspn-password-strength <?php echo array_key_exists('class', $userspn_input) ? esc_attr($userspn_input['class']) : ''; ?>" type="<?php echo esc_attr($userspn_input['type']); ?>" <?php echo ((array_key_exists('required', $userspn_input) && $userspn_input['required'] == 'true') ? 'required' : ''); ?> <?php echo ((array_key_exists('disabled', $userspn_input) && $userspn_input['disabled'] == 'true') ? 'disabled' : ''); ?> value="<?php echo (!empty($userspn_input['button_text']) ? esc_html($userspn_input['button_text']) : esc_attr($userspn_value)); ?>" placeholder="<?php echo (array_key_exists('placeholder', $userspn_input) ? esc_attr($userspn_input['placeholder']) : ''); ?>" pattern="[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{}|;:,.<>?]+" title="<?php esc_attr_e('Only letters, numbers, and these symbols are permitted: !@#$%^&*()_+-=[]{}|;:,.<>?', 'userspn'); ?>" <?php echo wp_kses_post($userspn_parent_block); ?>/>
 
                   <a href="#" class="userspn-show-pass userspn-cursor-pointer userspn-display-none-soft">
                     <i class="material-icons-outlined userspn-font-size-20">visibility</i>
@@ -203,7 +203,7 @@ class USERSPN_Forms {
                     <div class="userspn-password-strength-bar"></div>
                   </div>
 
-                  <h3 class="userspn-mt-20"><?php esc_html_e('Password strength checker', 'userspn'); ?> <i class="material-icons-outlined userspn-cursor-pointer userspn-close-icon userspn-mt-30">close</i></h3>
+                  <h3 class="userspn-mt-20 userspn-position-relative"><?php esc_html_e('Password strength checker', 'userspn'); ?> <i class="material-icons-outlined userspn-cursor-pointer userspn-close-icon userspn-mt-30">close</i></h3>
                   <ul class="userspn-list-style-none">
                     <li class="low-upper-case">
                       <i class="material-icons-outlined userspn-font-size-20 userspn-vertical-align-middle">radio_button_unchecked</i>
@@ -215,7 +215,7 @@ class USERSPN_Forms {
                     </li>
                     <li class="one-special-char">
                       <i class="material-icons-outlined userspn-font-size-20 userspn-vertical-align-middle">radio_button_unchecked</i>
-                      <span><?php esc_html_e('Special Character (!@#$%^&*)', 'userspn'); ?></span>
+                      <span><?php esc_html_e('Special Character (!@#$%^&*()_+-=[]{}|;:,.<>?)', 'userspn'); ?></span>
                     </li>
                     <li class="eight-character">
                       <i class="material-icons-outlined userspn-font-size-20 userspn-vertical-align-middle">radio_button_unchecked</i>

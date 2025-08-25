@@ -1319,3 +1319,15 @@ msgstr "Zure profilaren esteka botoia"
 #: includes/class-userspn-mailing.php:125
 msgid "your@email.com"
 msgstr "zure@email.com"
+
+#: includes/class-userspn-validation.php:67
+msgid "Password contains characters that are not allowed. Only letters, numbers, and these symbols are permitted: !@#$%^&*()_+-=[]{}|;:,.<>?"
+msgstr "Pasahitzak ez diren karaktereak ditu. Hitzak, zenbakiak eta ikur hauek soilik dira onartzen: !@#$%^&*()_+-=[]{}|;:,.<>?"
+
+#: includes/class-userspn-forms.php:217
+msgid "Special Character (!@#$%^&*()_+-=[]{}|;:,.<>?)"
+msgstr "Pertsonaia berezia (!@#$%^&*()_+-=[]{}|;:,.<>?)"
+
+#: includes/class-userspn-forms.php:194
+msgid "Only letters, numbers, and these symbols are permitted: !@#$%^&*()_+-=[]{}|;:,.<>?"
+msgstr "Hitzak, zenbakiak eta ikur hauek soilik dira onartzen: !@#$%^&*()_+-=[]{}|;:,.<>?"

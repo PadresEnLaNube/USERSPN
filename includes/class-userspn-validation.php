@@ -57,6 +57,16 @@ class USERSPN_Validation {
         
         // Type-specific validation
         switch ($type) {
+            case 'password':
+                // Validar que la contraseña solo contenga caracteres seguros para WordPress
+                if (!self::userspn_is_password_safe($value)) {
+                    return new WP_Error(
+                        'invalid_password_chars',
+                        __('Password contains characters that are not allowed. Only letters, numbers, and these symbols are permitted: !@#$%^&*()_+-=[]{}|;:,.<>?', 'userspn')
+                    );
+                }
+                break;
+                
             case 'email':
                 if (!is_email($value)) {
                     return new WP_Error(
@@ -238,5 +248,19 @@ class USERSPN_Validation {
             return '';
         }
         return $error->get_error_message();
+    }
+
+    /**
+     * Check if password contains only WordPress-safe characters
+     *
+     * @param string $password The password to validate
+     * @return bool True if password is safe, false otherwise
+     */
+    private static function userspn_is_password_safe($password) {
+        // Caracteres seguros para WordPress (resistentes al sanitizer)
+        $safe_chars = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+        $safe_chars_regex = '/^[a-zA-Z0-9' . preg_quote($safe_chars, '/') . ']+$/';
+        
+        return preg_match($safe_chars_regex, $password);
     }
 } 

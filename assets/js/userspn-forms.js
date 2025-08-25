@@ -5,6 +5,10 @@
     if ($('.userspn-password-checker').length) {
       var pass_view_state = false;
 
+      // Definir caracteres seguros para WordPress (resistentes al sanitizer)
+      var wp_safe_special_chars = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+      var wp_safe_chars_regex = new RegExp('^[a-zA-Z0-9' + wp_safe_special_chars.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ']+$');
+
       function userspn_pass_check_strength(pass) {
         var strength = 0;
         var password = $('.userspn-password-strength');
@@ -12,6 +16,32 @@
         var number = password.closest('.userspn-password-checker').find('.one-number i');
         var special_char = password.closest('.userspn-password-checker').find('.one-special-char i');
         var eight_chars = password.closest('.userspn-password-checker').find('.eight-character i');
+
+        // Verificar si la contraseña contiene caracteres no seguros para WordPress
+        if (pass.length > 0 && !wp_safe_chars_regex.test(pass)) {
+          // Encontrar caracteres no seguros
+          var unsafe_chars = [];
+          for (var i = 0; i < pass.length; i++) {
+            var char = pass[i];
+            if (!wp_safe_chars_regex.test(char)) {
+              unsafe_chars.push(char);
+            }
+          }
+          
+          // Mostrar mensaje de error
+          var error_message = 'La contraseña contiene caracteres no permitidos: ' + unsafe_chars.join(', ') + '. Solo se permiten letras, números y estos símbolos: ' + wp_safe_special_chars;
+          if (typeof userspn_get_main_message === 'function') {
+            userspn_get_main_message(error_message);
+          }
+          
+          // Resetear indicadores de fortaleza
+          low_upper_case.text('radio_button_unchecked');
+          number.text('radio_button_unchecked');
+          special_char.text('radio_button_unchecked');
+          eight_chars.text('radio_button_unchecked');
+          $('.userspn-password-strength-bar').removeClass('userspn-progress-bar-warning userspn-progress-bar-success userspn-progress-bar-danger').css('width', '0%');
+          return;
+        }
 
         //If pass contains both lower and uppercase characters
         if (pass.match(/([a-z].*[A-Z])|([A-Z].*[a-z])/)) {
@@ -29,8 +59,8 @@
           number.text('radio_button_unchecked');
         }
 
-        //If it has one special character
-        if (pass.match(/([!,%,&,@,#,$,^,*,?,_,~,|,¬,+,ç,-,€])/)) {
+        //If it has one special character (solo caracteres seguros)
+        if (pass.match(new RegExp('[' + wp_safe_special_chars.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ']'))) {
           strength += 1;
           special_char.text('task_alt');
         } else {
@@ -72,7 +102,28 @@
       });
 
       $(document).on('keyup', ('.userspn-password-strength'), function(e){
-        userspn_pass_check_strength($('.userspn-password-strength').val());
+        var password_value = $(this).val();
+        
+        // Limpiar mensajes de error anteriores
+        if (typeof userspn_get_main_message === 'function') {
+          // Solo mostrar mensaje si hay caracteres no válidos
+          if (password_value.length > 0 && !wp_safe_chars_regex.test(password_value)) {
+            var unsafe_chars = [];
+            for (var i = 0; i < password_value.length; i++) {
+              var char = password_value[i];
+              if (!wp_safe_chars_regex.test(char)) {
+                unsafe_chars.push(char);
+              }
+            }
+            
+            if (unsafe_chars.length > 0) {
+              var error_message = 'Caracteres no permitidos: ' + unsafe_chars.join(', ') + '. Solo se permiten letras, números y estos símbolos: ' + wp_safe_special_chars;
+              userspn_get_main_message(error_message);
+            }
+          }
+        }
+        
+        userspn_pass_check_strength(password_value);
 
         if (!$('#userspn-popover-pass').is(':visible')) {
           $('#userspn-popover-pass').fadeIn('slow');

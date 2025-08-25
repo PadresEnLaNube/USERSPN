@@ -16,7 +16,7 @@
 ?>
 <div class="userspn-popup-overlay userspn-display-none-soft"></div>
 
-<?php if (get_option('userspn_newsletter_exit_popup') == 'on' && !has_shortcode($post->post_content, 'userspn-newsletter')) : ?>
+<?php if (get_option('userspn_newsletter_exit_popup') == 'on' && $post && !has_shortcode($post->post_content, 'userspn-newsletter')) : ?>
   <div id="userspn-newsletter-exit-popup" class="userspn-popup userspn-newsletter-exit-popup userspn-popup-size-medium userspn-display-none-soft">
     <button class="userspn-popup-close-wrapper">
       <i class="material-icons-outlined">close</i>

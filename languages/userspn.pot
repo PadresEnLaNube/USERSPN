@@ -1206,3 +1206,15 @@ msgstr ""
 #: includes/class-userspn-mailing.php:125
 msgid "your@email.com"
 msgstr ""
+
+#: includes/class-userspn-validation.php:67
+msgid "Password contains characters that are not allowed. Only letters, numbers, and these symbols are permitted: !@#$%^&*()_+-=[]{}|;:,.<>?"
+msgstr ""
+
+#: includes/class-userspn-forms.php:217
+msgid "Special Character (!@#$%^&*()_+-=[]{}|;:,.<>?)"
+msgstr ""
+
+#: includes/class-userspn-forms.php:194
+msgid "Only letters, numbers, and these symbols are permitted: !@#$%^&*()_+-=[]{}|;:,.<>?"
+msgstr ""

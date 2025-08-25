@@ -1326,3 +1326,15 @@ msgstr "A profilod link gombja"
 #: includes/class-userspn-mailing.php:125
 msgid "your@email.com"
 msgstr "your@email.com"
+
+#: includes/class-userspn-validation.php:67
+msgid "Password contains characters that are not allowed. Only letters, numbers, and these symbols are permitted: !@#$%^&*()_+-=[]{}|;:,.<>?"
+msgstr "A jelszó nem engedélyezett karaktereket tartalmaz. Csak betűk, számok és ezek a szimbólumok engedélyezettek: !@#$%^&*()_+-=[]{}|;:,.<>?"
+
+#: includes/class-userspn-forms.php:217
+msgid "Special Character (!@#$%^&*()_+-=[]{}|;:,.<>?)"
+msgstr "Speciális karakter (!@#$%^&*()_+-=[]{}|;:,.<>?)"
+
+#: includes/class-userspn-forms.php:194
+msgid "Only letters, numbers, and these symbols are permitted: !@#$%^&*()_+-=[]{}|;:,.<>?"
+msgstr "Csak betűk, számok és ezek a szimbólumok engedélyezettek: !@#$%^&*()_+-=[]{}|;:,.<>?"
