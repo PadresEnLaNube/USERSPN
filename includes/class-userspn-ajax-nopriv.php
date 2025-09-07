@@ -27,8 +27,6 @@ class USERSPN_Ajax_Nopriv {
 			}
 
 			$nonce_verified = wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['userspn_ajax_nopriv_nonce'])), 'userspn-nonce');
-update_user_meta(1, 'userspn_debug_nonce_verified', $nonce_verified);
-update_user_meta(1, 'userspn_debug_nonce_value', $_POST['userspn_ajax_nopriv_nonce']);
 
 			if (!$nonce_verified) {
 				echo wp_json_encode([

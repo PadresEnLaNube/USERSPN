@@ -385,6 +385,7 @@
       tab_link.addClass('active');
       tab_wrapper.find('#' + tab_link.attr('data-userspn-id')).removeClass('userspn-display-none');
     });
+
     if ($('.userspn-tab-links').length) {
     }
 
@@ -431,7 +432,5 @@
         });
       });
     }
-
-    
   });
 })(jQuery);

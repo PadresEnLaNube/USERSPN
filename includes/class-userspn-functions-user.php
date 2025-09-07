@@ -1041,7 +1041,7 @@ class USERSPN_Functions_User {
           <?php wp_enqueue_script('userspn-user-register-form', USERSPN_URL . 'assets/js/userspn-user-register-form.js', ['jquery'], USERSPN_VERSION, false, ['in_footer' => true, 'strategy' => 'defer']); ?>
         <?php endif ?>
 
-        <form id="userspn-user-register-fields" class="userspn-mt-30">
+        <form id="userspn-user-register-fields" class="userspn-mt-30 userspn-max-width-500 userspn-margin-auto">
           <?php foreach ($userspn_user_register_fields as $userspn_user_register_field): ?>
             <?php USERSPN_Forms::userspn_input_wrapper_builder($userspn_user_register_field, 'user', 0, 0, 'full'); ?>
           <?php endforeach ?>
