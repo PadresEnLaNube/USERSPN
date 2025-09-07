@@ -13,7 +13,7 @@
  * Plugin Name:       Users manager - PN
  * Plugin URI:        https://padresenlanube.com/plugins/userspn/
  * Description:       Streamline user management on your WordPress site with this powerful plugin. Enable custom registration forms, secure logins, and seamless profile management for your users.
- * Version:           
+ * Version:           1.0.3
  * Requires at least: 3.0.1
  * Requires PHP:      7.2
  * Author:            Padres en la Nube
