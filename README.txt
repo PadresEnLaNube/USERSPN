@@ -3,7 +3,7 @@ Contributors: felixmartinez, hamlet237
 Donate link: https://padresenlanube.com/
 Tags: user management, users, register, login, contacts
 Tested up to: 6.8
-Stable tag: 1.0.3
+Stable tag: 1.0.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Streamline user management on your WordPress site with this powerful plugin. Enable custom forms, secure login, and seamless profile management.
@@ -108,7 +108,7 @@ To uninstall the plugin, go to the 'Plugins' screen in WordPress, find the Users
 
 == Changelog ==
 
-= 1.0.3 =
+= 1.0.5 =
 
 WP references swapped to PN
 wordpress-heroes.com to padresenlanube.com

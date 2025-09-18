@@ -58,104 +58,51 @@ class USERSPN_Public {
 	 */
 	public function userspn_enqueue_scripts() {
 		wp_enqueue_script($this->plugin_name . '-public', USERSPN_URL . 'assets/js/public/userspn-public.js', ['jquery'], $this->version, false);
+		
+		// Enqueue profile menu script if feature is enabled
+		if (get_option('userspn_menu_profile_icon') === 'on') {
+			wp_enqueue_script('userspn-profile-menu', USERSPN_URL . 'assets/js/userspn-profile-menu.js', ['jquery'], $this->version, true);
+			
+			// Pass data to JavaScript
+			wp_localize_script('userspn-profile-menu', 'userspnProfileMenu', [
+				'enabled' => true,
+				'selectedMenu' => get_option('userspn_menu_profile_icon_location')
+			]);
+			
+		}
 	}
 
 	/**
-	 * Add profile icon to navigation menu
+	 * Add profile icon container to navigation menu
+	 * This method is kept for compatibility but JavaScript handles the actual work
 	 *
 	 * @since    1.0.0
 	 */
 	public function userspn_add_profile_icon_to_menu($items, $args) {
-		// Check if the feature is enabled
-		if (get_option('userspn_menu_profile_icon') !== 'on') {
-			return $items;
-		}
-
-		// Get the selected menu location
-		$selected_location = get_option('userspn_menu_profile_icon_location');
-		if (empty($selected_location)) {
-			return $items;
-		}
-
-		// Check if current theme is a block theme
-		$is_block_theme = wp_is_block_theme();
-		
-		if ($is_block_theme) {
-			// For block themes, check if this is the selected menu by term_id
-			if (isset($args->menu) && $args->menu->term_id != $selected_location) {
-				return $items;
-			}
-		} else {
-			// For classic themes, check if this is the selected menu location
-			if ($args->theme_location !== $selected_location) {
-				return $items;
-			}
-		}
-
-		// Add profile icon HTML to the end of the menu
-		$profile_icon_html = $this->get_profile_icon_html();
-		$items .= $profile_icon_html;
-
+		// JavaScript handles everything now, so we just return the items unchanged
 		return $items;
 	}
 
 	/**
-	 * Add profile icon to navigation block (for block themes)
+	 * Add profile icon container to navigation block (for block themes)
+	 * This method is kept for compatibility but JavaScript handles the actual work
 	 *
 	 * @since    1.0.0
 	 */
 	public function userspn_add_profile_icon_to_navigation_block($block_content, $block) {
-		// Check if the feature is enabled
-		if (get_option('userspn_menu_profile_icon') !== 'on') {
-			return $block_content;
-		}
-
-		// Only process navigation blocks
-		if ($block['blockName'] !== 'core/navigation') {
-			return $block_content;
-		}
-
-		// Get the selected menu
-		$selected_menu = get_option('userspn_menu_profile_icon_location');
-		if (empty($selected_menu)) {
-			return $block_content;
-		}
-
-		// Check if this is the selected menu
-		$menu_ref = isset($block['attrs']['ref']) ? $block['attrs']['ref'] : null;
-		$menu_id = isset($block['attrs']['menuId']) ? $block['attrs']['menuId'] : null;
-		
-		// Check both ref and menuId attributes
-		if ($menu_ref != $selected_menu && $menu_id != $selected_menu) {
-			return $block_content;
-		}
-
-		// Add profile icon HTML to the end of the navigation block
-		$profile_icon_html = $this->get_profile_icon_html();
-		
-		// Insert the profile icon before the closing </ul> tag
-		// Handle both </ul> and </nav> closing tags
-		if (strpos($block_content, '</ul>') !== false) {
-			$block_content = str_replace('</ul>', $profile_icon_html . '</ul>', $block_content);
-		} elseif (strpos($block_content, '</nav>') !== false) {
-			$block_content = str_replace('</nav>', $profile_icon_html . '</nav>', $block_content);
-		}
-
+		// JavaScript handles everything now, so we just return the content unchanged
 		return $block_content;
 	}
 
 	/**
-	 * Get profile icon HTML
+	 * Get profile container HTML (where existing profile element will be moved)
 	 *
 	 * @return string
 	 */
-	private function get_profile_icon_html() {
-		$profile_icon_html = '<li class="menu-item userspn-profile-icon">';
-		$profile_icon_html .= '<a href="#" class="userspn-profile" data-popup="userspn-user-profile">';
-		$profile_icon_html .= '<span class="userspn-profile-icon-text">' . __('Profile', 'userspn') . '</span>';
-		$profile_icon_html .= '</a>';
-		$profile_icon_html .= '</li>';
+	private function get_profile_container_html() {
+		$profile_container_html = '<li class="menu-item userspn-profile-container" id="userspn-profile-menu-container">';
+		$profile_container_html .= '</li>';
 
-		return $profile_icon_html;
+		return $profile_container_html;
 	}
 }

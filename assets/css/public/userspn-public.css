@@ -13,37 +13,129 @@
     padding:50px 0;
 }
 
-/* Profile icon in navigation menu */
-.userspn-profile-icon {
+/* Profile element moved to navigation menu */
+.userspn-profile-container {
     display: inline-block;
+    vertical-align: middle;
 }
 
-.userspn-profile-icon .userspn-profile {
-    display: flex;
-    align-items: center;
-    padding: 0.5em 1em;
-    text-decoration: none;
-    color: inherit;
-    transition: all 0.3s ease;
+/* Hide original profile element when menu feature is enabled */
+body.userspn-profile-menu-enabled .userspn-profile {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    left: -9999px !important;
+    top: -9999px !important;
 }
 
-.userspn-profile-icon .userspn-profile:hover {
-    opacity: 0.8;
-    transform: scale(1.05);
+/* Show profile element in menu container */
+.userspn-profile-container .userspn-profile,
+.userspn-profile-container .userspn-profile-in-menu {
+    display: inline-block !important;
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    left: auto !important;
+    z-index: auto !important;
+    border-radius: 0 !important;
+    vertical-align: middle !important;
+    visibility: visible !important;
+    opacity: 1 !important;
 }
 
-.userspn-profile-icon-text {
-    margin-left: 0.5em;
-    font-size: 0.9em;
+.userspn-profile-in-menu {
+    /* Override fixed positioning when moved to menu */
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    left: auto !important;
+    z-index: auto !important;
+    border-radius: 0 !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Additional styles for menu integration */
+.menu .userspn-profile-container,
+.nav-menu .userspn-profile-container,
+.wp-block-navigation .userspn-profile-container {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* Ensure proper styling in WordPress navigation */
+.wp-block-navigation .userspn-profile-in-menu,
+.menu .userspn-profile-in-menu,
+.nav-menu .userspn-profile-in-menu,
+.wp-block-navigation .userspn-profile-container .userspn-profile,
+.menu .userspn-profile-container .userspn-profile,
+.nav-menu .userspn-profile-container .userspn-profile {
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    left: auto !important;
+    z-index: auto !important;
+    border-radius: 0 !important;
+    width: auto !important;
+    height: auto !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Avatar sizing when in menu */
+.wp-block-navigation .userspn-profile-in-menu .userspn-avatar-blank,
+.menu .userspn-profile-in-menu .userspn-avatar-blank,
+.nav-menu .userspn-profile-in-menu .userspn-avatar-blank,
+.wp-block-navigation .userspn-profile-container .userspn-avatar-blank,
+.menu .userspn-profile-container .userspn-avatar-blank,
+.nav-menu .userspn-profile-container .userspn-avatar-blank {
+    width: 30px !important;
+    height: 30px !important;
+}
+
+/* First character styling when in menu */
+.wp-block-navigation .userspn-profile-in-menu .userspn-avatar-first-char,
+.menu .userspn-profile-in-menu .userspn-avatar-first-char,
+.nav-menu .userspn-profile-in-menu .userspn-avatar-first-char,
+.wp-block-navigation .userspn-profile-container .userspn-avatar-first-char,
+.menu .userspn-profile-container .userspn-avatar-first-char,
+.nav-menu .userspn-profile-container .userspn-avatar-first-char {
+    line-height: 30px !important;
+    font-size: 15px !important;
+}
+
+/* Profile popup button image sizing when in menu */
+.wp-block-navigation .userspn-profile-in-menu .userspn-profile-popup-btn img,
+.menu .userspn-profile-in-menu .userspn-profile-popup-btn img,
+.nav-menu .userspn-profile-in-menu .userspn-profile-popup-btn img,
+.wp-block-navigation .userspn-profile-container .userspn-profile-popup-btn img,
+.menu .userspn-profile-container .userspn-profile-popup-btn img,
+.nav-menu .userspn-profile-container .userspn-profile-popup-btn img {
+    width: 30px !important;
+    height: 30px !important;
+}
+
+/* Extra specific override for the original profile element */
+body.userspn-profile-menu-enabled .userspn-profile:not(.userspn-profile-in-menu) {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    left: -9999px !important;
+    top: -9999px !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-    .userspn-profile-icon .userspn-profile {
+    .userspn-profile-container {
         padding: 0.3em 0.5em;
-    }
-    
-    .userspn-profile-icon-text {
-        font-size: 0.8em;
     }
 }
