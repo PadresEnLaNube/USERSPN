@@ -33,6 +33,25 @@ class USERSPN_Settings {
         'label' => __('Disable Profile popup', 'userspn'),
         'description' => __('You can disable the popup access temporarily by checking on this checkbox.', 'userspn'),
       ];
+      $userspn_options['userspn_menu_profile_icon'] = [
+        'id' => 'userspn_menu_profile_icon',
+        'class' => 'userspn-input userspn-width-100-percent',
+        'input' => 'input',
+        'type' => 'checkbox',
+        'parent' => 'this',
+        'label' => __('Add profile icon to menu', 'userspn'),
+        'description' => __('This option allows you to add the profile icon to a selected navigation menu.', 'userspn'),
+      ];
+        $userspn_options['userspn_menu_profile_icon_location'] = [
+          'id' => 'userspn_menu_profile_icon_location',
+          'class' => 'userspn-select userspn-width-100-percent',
+          'input' => 'select',
+          'options' => $this->get_available_menus(),
+          'parent' => 'userspn_menu_profile_icon',
+          'parent_option' => 'on',
+          'label' => __('Select menu location', 'userspn'),
+          'description' => __('Choose the navigation menu where you want to add the profile icon.', 'userspn'),
+        ];
       $userspn_options['userspn_user_name'] = [
         'id' => 'userspn_user_name',
         'class' => 'userspn-input userspn-width-100-percent',
@@ -766,5 +785,62 @@ class USERSPN_Settings {
     $settings_link = '<a href="' . admin_url('admin.php?page=userspn_options') . '">' . __('Settings', 'userspn') . '</a>';
     array_unshift($links, $settings_link);
     return $links;
+  }
+
+  /**
+   * Get available navigation menus
+   *
+   * @return array
+   */
+  private function get_available_menus() {
+    $menus = [];
+    
+    // Check if current theme is a block theme
+    $is_block_theme = wp_is_block_theme();
+    
+    if ($is_block_theme) {
+      // For block themes, get all navigation menus
+      $nav_menus = wp_get_nav_menus();
+      if (!empty($nav_menus)) {
+        foreach ($nav_menus as $menu) {
+          $menus[$menu->term_id] = $menu->name;
+        }
+      }
+    } else {
+      // For classic themes, use registered nav menus
+      $registered_menus = get_registered_nav_menus();
+      
+      if (!empty($registered_menus)) {
+        foreach ($registered_menus as $location => $description) {
+          $menus[$location] = $description;
+        }
+      }
+      
+      // Add theme locations if no registered menus
+      if (empty($menus)) {
+        $theme_locations = get_nav_menu_locations();
+        if (!empty($theme_locations)) {
+          foreach ($theme_locations as $location => $menu_id) {
+            $menu = wp_get_nav_menu_object($menu_id);
+            if ($menu) {
+              $menus[$location] = $menu->name;
+            }
+          }
+        }
+      }
+    }
+    
+    // If still empty, add default options
+    if (empty($menus)) {
+      if ($is_block_theme) {
+        $menus['default'] = __('Default Menu', 'userspn');
+      } else {
+        $menus['primary'] = __('Primary Menu', 'userspn');
+        $menus['secondary'] = __('Secondary Menu', 'userspn');
+        $menus['footer'] = __('Footer Menu', 'userspn');
+      }
+    }
+    
+    return $menus;
   }
 }

@@ -12,3 +12,38 @@
     font-size:225px!important;
     padding:50px 0;
 }
+
+/* Profile icon in navigation menu */
+.userspn-profile-icon {
+    display: inline-block;
+}
+
+.userspn-profile-icon .userspn-profile {
+    display: flex;
+    align-items: center;
+    padding: 0.5em 1em;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
+}
+
+.userspn-profile-icon .userspn-profile:hover {
+    opacity: 0.8;
+    transform: scale(1.05);
+}
+
+.userspn-profile-icon-text {
+    margin-left: 0.5em;
+    font-size: 0.9em;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .userspn-profile-icon .userspn-profile {
+        padding: 0.3em 0.5em;
+    }
+    
+    .userspn-profile-icon-text {
+        font-size: 0.8em;
+    }
+}
