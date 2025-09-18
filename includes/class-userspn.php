@@ -362,6 +362,7 @@ class USERSPN {
 		$this->loader->userspn_add_filter('login_headerurl', $plugin_settings, 'userspn_login_headerurl');
 		$this->loader->	userspn_add_filter('login_headertext', $plugin_settings, 'userspn_login_headertext');
 		$this->loader->userspn_add_action('activated_plugin', $plugin_settings, 'userspn_activated_plugin');
+		$this->loader->userspn_add_filter('plugin_action_links_' . plugin_basename(USERSPN_DIR . 'userspn.php'), $plugin_settings, 'userspn_add_settings_link');
 
 		if (get_option('userspn_user_change_password_wp_defaults') == 'on') {
 			$this->loader->userspn_add_filter('lostpassword_url', $plugin_settings, 'userspn_lostpassword_url', 99, 2);

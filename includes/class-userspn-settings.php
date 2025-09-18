@@ -758,4 +758,13 @@ class USERSPN_Settings {
       wp_redirect(esc_url(admin_url('admin.php?page=userspn_options')));exit();
     }
   }
+
+  /**
+   * Add Settings link to plugin actions
+   */
+  public function userspn_add_settings_link($links) {
+    $settings_link = '<a href="' . admin_url('admin.php?page=userspn_options') . '">' . __('Settings', 'userspn') . '</a>';
+    array_unshift($links, $settings_link);
+    return $links;
+  }
 }
