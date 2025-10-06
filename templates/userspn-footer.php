@@ -23,9 +23,11 @@
   
   $userspn_data = $GLOBALS['userspn_data'];
 
-  if (get_option('userspn_disabled') != 'on') {
-    echo do_shortcode('[userspn-profile]');
+  // Always render the profile popup markup so buttons can open it, even if disabled
+  echo do_shortcode('[userspn-profile]');
 
+  // Only run validation workflows when not disabled
+  if (get_option('userspn_disabled') != 'on') {
     if (is_user_logged_in()) {
       $plugin_user = new USERSPN_Functions_User();
       $plugin_user->userspn_profile_fields_validation();

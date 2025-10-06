@@ -1185,15 +1185,6 @@ textarea{
 }
 /*  END USERSPN TABS */
 
-.userspn-body header .wp-block-navigation .wp-block-navigation-item__content.wp-block-navigation-item__content{
-  text-transform:uppercase;
-  font-weight:400;
-  font-size:13px;
-  font-size:var(--wp--preset--font-size--small);
-}
-.userspn-body .darkmode--enabled img,.userspn-body .darkmode--enabled figure,.userspn-body .darkmode--enabled .userspn-btn,.userspn-body .darkmode--enabled .vle-btn,.userspn-body .darkmode--enabled .material-icons-outlined.userspn-color-main-0,.userspn-body .darkmode--enabled .wp-element-button,.userspn-body .darkmode--enabled footer{
-  mix-blend-mode:difference;
-}
 .userspn-bordered{
   border:1px solid #c3c3c3;
 }

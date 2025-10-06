@@ -136,7 +136,7 @@ class USERSPN_Mailing {
           <?php if (get_user_meta($user_id, 'userspn_notifications', true) != 'on'): ?>
             <p class="userspn-alert-warning"><?php esc_html_e('You have disabled your email notifications.', 'userspn'); ?> <a href="#" class="userspn-profile-popup-btn" data-userspn-action="notifications"><?php esc_html_e('Activate now', 'userspn'); ?></a></p>
           <?php else: ?>
-            <p class="userspn-alert-success"><?php esc_html_e('You are already subscribed to the newsletter', 'userspn'); ?></p>
+            <p class="userspn-alert-success"><?php esc_html_e('You are already subscribed to the newsletter', 'userspn'); ?> <a href="#" class="userspn-profile-popup-btn" data-userspn-action="notifications"><?php esc_html_e('Manage your subscription', 'userspn'); ?></a></p>
           <?php endif ?>
         <?php endif ?>
       </div>

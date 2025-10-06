@@ -432,7 +432,7 @@ class USERSPN_Functions_User {
       <?php if (!is_admin()): ?>
         <div class="userspn-profile">
           <?php if (is_user_logged_in()): ?>
-            <a href="#" class="userspn-text-align-right userspn-profile-popup-btn"><?php echo do_shortcode('[userspn-get-avatar user_id="' . $user_id . '" size="50"]'); ?></a>
+            <a href="#" class="userspn-text-align-right userspn-profile-popup-btn<?php echo (get_option('userspn_disabled') == 'on') ? ' userspn-display-none-soft' : ''; ?>"><?php echo do_shortcode('[userspn-get-avatar user_id="' . $user_id . '" size="50"]'); ?></a>
 
             <div id="userspn-profile-popup" class="userspn-popup userspn-popup-size-medium userspn-display-none-soft">
               <div class="userspn-popup-content">
@@ -538,12 +538,12 @@ class USERSPN_Functions_User {
 
               <?php if (!empty($custom_ids)): ?>
                 <?php $custom_ids = explode(',', $custom_ids); ?>
-                <a href="#" class="userspn-profile-popup-btn userspn-tooltip-left" title="<?php esc_html_e('Your profile', 'userspn'); ?>"><?php echo wp_get_attachment_image($custom_ids[array_rand($custom_ids)], [50, 50], false, ['class' => 'userspn-border-radius-50-percent userspn-m-10 userspn-display-block']); ?></a>
+                <a href="#" class="userspn-profile-popup-btn userspn-tooltip-left<?php echo (get_option('userspn_disabled') == 'on') ? ' userspn-display-none-soft' : ''; ?>" title="<?php esc_html_e('Your profile', 'userspn'); ?>"><?php echo wp_get_attachment_image($custom_ids[array_rand($custom_ids)], [50, 50], false, ['class' => 'userspn-border-radius-50-percent userspn-m-10 userspn-display-block']); ?></a>
               <?php else: ?>
-                <a href="#" class="userspn-profile-popup-btn userspn-tooltip-left" title="<?php esc_html_e('Your profile', 'userspn'); ?>"><i class="material-icons-outlined userspn-profile-icon userspn-color-main-0 userspn-vertical-align-middle userspn-font-size-50">account_circle</i></a>
+                <a href="#" class="userspn-profile-popup-btn userspn-tooltip-left<?php echo (get_option('userspn_disabled') == 'on') ? ' userspn-display-none-soft' : ''; ?>" title="<?php esc_html_e('Your profile', 'userspn'); ?>"><i class="material-icons-outlined userspn-profile-icon userspn-color-main-0 userspn-vertical-align-middle userspn-font-size-50">account_circle</i></a>
               <?php endif ?>
             <?php else: ?>
-              <a href="#" class="userspn-profile-popup-btn userspn-tooltip-left" aria-label="<?php esc_html_e('Your profile link button', 'userspn'); ?>" title="<?php esc_html_e('Your profile', 'userspn'); ?>"><i class="material-icons-outlined userspn-profile-icon userspn-color-main-0 userspn-vertical-align-middle userspn-font-size-50">account_circle</i></a>
+              <a href="#" class="userspn-profile-popup-btn userspn-tooltip-left<?php echo (get_option('userspn_disabled') == 'on') ? ' userspn-display-none-soft' : ''; ?>" aria-label="<?php esc_html_e('Your profile link button', 'userspn'); ?>" title="<?php esc_html_e('Your profile', 'userspn'); ?>"><i class="material-icons-outlined userspn-profile-icon userspn-color-main-0 userspn-vertical-align-middle userspn-font-size-50">account_circle</i></a>
             <?php endif ?>
 
             <div id="userspn-profile-popup" class="userspn-popup userspn-display-none-soft">
