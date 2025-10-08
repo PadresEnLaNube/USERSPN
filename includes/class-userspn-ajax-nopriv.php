@@ -184,6 +184,7 @@ class USERSPN_Ajax_Nopriv {
 					}else{
 						echo 'userspn_profile_create_error';exit();
 					}
+					break;
 				case 'userspn_newsletter':
 					$plugin_user = new USERSPN_Functions_User();
 					$userspn_email = !empty($_POST['userspn_email']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_email'])) : '';
@@ -195,6 +196,14 @@ class USERSPN_Ajax_Nopriv {
 							$userspn_login = sanitize_title(substr($userspn_email, 0, strpos($userspn_email, '@')) . '-' . bin2hex(openssl_random_pseudo_bytes(4)));
 							$userspn_password = bin2hex(openssl_random_pseudo_bytes(12));
 							$user_id = USERSPN_Functions_User::userspn_user_insert($userspn_login, $userspn_password, $userspn_email, '', '', $userspn_login, $userspn_login, $userspn_login, '', ['userspn_newsletter_subscriber'], []);
+						}
+
+						// Ensure the subscriber role is present for existing users
+						if ($user_id) {
+							$user_object = new WP_User($user_id);
+							if (!in_array('userspn_newsletter_subscriber', (array) $user_object->roles, true)) {
+								$user_object->add_role('userspn_newsletter_subscriber');
+							}
 						}
 
 						if (get_option('userspn_newsletter_activation') == 'on') {
@@ -219,6 +228,11 @@ class USERSPN_Ajax_Nopriv {
 										}
 									}
 								}
+							} else {
+								// Fallback: send a simple welcome email when MAILPN is not available
+								$subject = __('Welcome to our newsletter', 'userspn');
+								$body = __('Hello', 'userspn') . ' ' . esc_html($userspn_email) . ".<br>" . __('You have been subscribed to our newsletter. Welcome aboard!', 'userspn');
+								wp_mail($userspn_email, $subject, $body);
 							}
 
 							echo 'userspn_newsletter_success';exit();

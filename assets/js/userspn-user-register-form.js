@@ -20,6 +20,7 @@
       }
 
       $('#userspn-user-register-fields input:not([type="submit"]), #userspn-user-register-fields select, #userspn-user-register-fields textarea').each(function(index, element) {
+        
         if ($(this).attr('multiple') && $(this).parents('.userspn-html-multi-group').length) {
           if (!(typeof window['userspn_window_vars']['form_field_' + element.name] !== 'undefined')) {
             window['userspn_window_vars']['form_field_' + element.name] = [];
@@ -40,7 +41,10 @@
               data[element.name] = $(element).val();
             }
           }else{
-            data[element.name] = $(element).val();
+            // Only set the value if it's not already set or if the current value is not empty
+            if (!data.hasOwnProperty(element.name) || data[element.name] === '' || data[element.name] === null) {
+              data[element.name] = $(element).val();
+            }
           }
         }
 

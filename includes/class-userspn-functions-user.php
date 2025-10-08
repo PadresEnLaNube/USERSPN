@@ -324,18 +324,29 @@ class USERSPN_Functions_User {
     
     $user_roles = $user_info->roles;
 
-    if (class_exists('MAILPN') && in_array('userspn_newsletter_subscriber', $user_roles)) {
+    $is_newsletter_subscriber = in_array('userspn_newsletter_subscriber', $user_roles, true);
+
+    if ($is_newsletter_subscriber) {
       $userspn_mailing = new USERSPN_Mailing();
       $userspn_emails_newsletter = $userspn_mailing->userspn_get_email_newsletter_welcome($user_id);
-      if (!empty($userspn_emails_newsletter)) {
+
+      if (class_exists('MAILPN') && !empty($userspn_emails_newsletter)) {
         foreach ($userspn_emails_newsletter as $mail_id) {
           do_shortcode('[mailpn-sender mailpn_type="newsletter_welcome" mailpn_user_to="' . $user_id . '" mailpn_subject="' . get_the_title($mail_id) . '" mailpn_id="' . $mail_id . '"]');
         }
+        return true;
+      }
 
+      // Fallback: send a basic welcome email if MAILPN is not active or no templates found
+      $user_info = get_userdata($user_id);
+      if ($user_info && !empty($user_info->user_email)) {
+        $subject = __('Welcome to our newsletter', 'userspn');
+        $body = __('Hello', 'userspn') . ' ' . esc_html($user_info->user_email) . ".<br>" . __('You have been subscribed to our newsletter. Welcome aboard!', 'userspn');
+        wp_mail($user_info->user_email, $subject, $body);
         return true;
       }
     }
-    
+
     return false;
   }
 
@@ -417,7 +428,26 @@ class USERSPN_Functions_User {
     $userspn_user_register_fields_filtered = apply_filters('userspn_register_fields', $base_fields);
     $userspn_user_option_register_fields = !empty(get_option('userspn_user_register_fields')) ? get_option('userspn_user_register_fields') : [];
 
-    $userspn_user_register_fields = array_merge($userspn_user_register_base_fields, $userspn_user_register_fields_filtered, $userspn_user_option_register_fields);
+    // Merge fields but avoid duplicates by using array keys
+    $userspn_user_register_fields = $userspn_user_register_base_fields;
+    
+    // Add filtered fields, but skip if they already exist
+    if (!empty($userspn_user_register_fields_filtered)) {
+      foreach ($userspn_user_register_fields_filtered as $key => $field) {
+        if (!array_key_exists($key, $userspn_user_register_fields)) {
+          $userspn_user_register_fields[$key] = $field;
+        }
+      }
+    }
+    
+    // Add option fields, but skip if they already exist
+    if (!empty($userspn_user_option_register_fields)) {
+      foreach ($userspn_user_option_register_fields as $key => $field) {
+        if (!array_key_exists($key, $userspn_user_register_fields)) {
+          $userspn_user_register_fields[$key] = $field;
+        }
+      }
+    }
 
     return $userspn_user_register_fields;
   }
@@ -580,6 +610,7 @@ class USERSPN_Functions_User {
     return $userspn_return_string;
   }
 
+
   public function userspn_profile_edit() {
     /* echo do_shortcode('[userspn-profile-edit]'); */
 
@@ -622,13 +653,18 @@ class USERSPN_Functions_User {
           $value = get_user_meta($user_id, $meta_key, true);
           $is_completed = !empty($value);
           
+          // Get page info with Polylang support
+          $plugin_i18n = new USERSPN_i18n();
+          $page_info = $plugin_i18n->userspn_get_polylang_page_info($page_id);
+          
           if ($is_completed) {
             $completed_fields++;
           } else {
             $incomplete_fields[] = [
               'meta_key' => $meta_key,
               'page_id' => $page_id,
-              'page_link' => !empty($page_id) ? get_permalink($page_id) : ''
+              'page_link' => $page_info['link'],
+              'available_languages' => $page_info['available_languages']
             ];
           }
           
@@ -636,9 +672,10 @@ class USERSPN_Functions_User {
           $all_fields[] = [
             'meta_key' => $meta_key,
             'page_id' => $page_id,
-            'page_link' => !empty($page_id) ? get_permalink($page_id) : '',
-            'page_title' => !empty($page_id) ? get_the_title($page_id) : '',
-            'is_completed' => $is_completed
+            'page_link' => $page_info['link'],
+            'page_title' => $page_info['title'],
+            'is_completed' => $is_completed,
+            'available_languages' => $page_info['available_languages']
           ];
         }
       }
@@ -696,6 +733,28 @@ class USERSPN_Functions_User {
                             <a class="userspn-text-decoration-none" href="<?php echo esc_url($field['page_link']); ?>">
                               <?php echo esc_html($field['page_title']); ?>
                             </a>
+                            <?php 
+                            // Show available languages if Polylang is active and there are translations
+                            if (!empty($field['available_languages']) && class_exists('Polylang')): 
+                              $current_lang = pll_current_language('slug');
+                              $other_languages = array_diff_key($field['available_languages'], [$current_lang => '']);
+                              if (!empty($other_languages)): ?>
+                                <div class="userspn-profile-completion-languages userspn-mt-5">
+                                  <small class="userspn-text-muted">
+                                    <?php esc_html_e('Available in:', 'userspn'); ?>
+                                    <?php foreach ($other_languages as $lang_code => $translated_page_id): ?>
+                                      <?php if (!empty($translated_page_id)): ?>
+                                        <a href="<?php echo esc_url(get_permalink($translated_page_id)); ?>" 
+                                           class="userspn-text-decoration-none userspn-ml-5" 
+                                           title="<?php echo esc_attr($plugin_i18n->userspn_get_language_name($lang_code)); ?>">
+                                          <?php echo esc_html(strtoupper($lang_code)); ?>
+                                        </a>
+                                      <?php endif; ?>
+                                    <?php endforeach; ?>
+                                  </small>
+                                </div>
+                              <?php endif; ?>
+                            <?php endif; ?>
                           <?php else: ?>
                             <?php echo esc_html($field['meta_key']); ?>
                           <?php endif; ?>
