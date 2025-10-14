@@ -435,6 +435,121 @@ class USERSPN_Settings {
       'section' => 'end',
     ];
 
+    $userspn_options['userspn_section_security_start'] = [
+      'section' => 'start',
+      'label' => __('Security Settings', 'userspn'),
+    ];
+      $userspn_options['userspn_recaptcha_enabled'] = [
+        'id' => 'userspn_recaptcha_enabled',
+        'class' => 'userspn-input userspn-width-100-percent',
+        'input' => 'input',
+        'type' => 'checkbox',
+        'parent' => 'this',
+        'label' => __('Enable Google reCAPTCHA v3', 'userspn'),
+        'description' => __('Enable Google reCAPTCHA v3 protection for user registration forms.', 'userspn'),
+      ];
+        $userspn_options['userspn_recaptcha_site_key'] = [
+          'id' => 'userspn_recaptcha_site_key',
+          'class' => 'userspn-input userspn-width-100-percent',
+          'input' => 'input',
+          'type' => 'text',
+          'parent' => 'userspn_recaptcha_enabled',
+          'parent_option' => 'on',
+          'label' => __('reCAPTCHA Site Key', 'userspn'),
+          'placeholder' => __('Enter your reCAPTCHA Site Key', 'userspn'),
+          'description' => __('Get your Site Key from Google reCAPTCHA console.', 'userspn'),
+        ];
+        $userspn_options['userspn_recaptcha_secret_key'] = [
+          'id' => 'userspn_recaptcha_secret_key',
+          'class' => 'userspn-input userspn-width-100-percent',
+          'input' => 'input',
+          'type' => 'password',
+          'parent' => 'userspn_recaptcha_enabled',
+          'parent_option' => 'on',
+          'label' => __('reCAPTCHA Secret Key', 'userspn'),
+          'placeholder' => __('Enter your reCAPTCHA Secret Key', 'userspn'),
+          'description' => __('Get your Secret Key from Google reCAPTCHA console.', 'userspn'),
+        ];
+        $userspn_options['userspn_recaptcha_threshold'] = [
+          'id' => 'userspn_recaptcha_threshold',
+          'class' => 'userspn-input userspn-width-100-percent',
+          'input' => 'input',
+          'type' => 'number',
+          'parent' => 'userspn_recaptcha_enabled',
+          'parent_option' => 'on',
+          'label' => __('reCAPTCHA Score Threshold', 'userspn'),
+          'placeholder' => '0.5',
+          'min' => '0.1',
+          'max' => '1.0',
+          'step' => '0.1',
+          'description' => __('Score threshold for blocking (0.1 = very strict, 1.0 = very permissive). Recommended: 0.5', 'userspn'),
+        ];
+      $userspn_options['userspn_akismet_enabled'] = [
+        'id' => 'userspn_akismet_enabled',
+        'class' => 'userspn-input userspn-width-100-percent',
+        'input' => 'input',
+        'type' => 'checkbox',
+        'parent' => 'this',
+        'label' => __('Enable Akismet Protection', 'userspn'),
+        'description' => __('Enable Akismet spam protection for user registration (requires Akismet plugin).', 'userspn'),
+      ];
+      $userspn_options['userspn_honeypot_enabled'] = [
+        'id' => 'userspn_honeypot_enabled',
+        'class' => 'userspn-input userspn-width-100-percent',
+        'input' => 'input',
+        'type' => 'checkbox',
+        'label' => __('Enable Honeypot Protection', 'userspn'),
+        'description' => __('Add hidden honeypot field to catch bots.', 'userspn'),
+      ];
+      $userspn_options['userspn_rate_limiting_enabled'] = [
+        'id' => 'userspn_rate_limiting_enabled',
+        'class' => 'userspn-input userspn-width-100-percent',
+        'input' => 'input',
+        'type' => 'checkbox',
+        'parent' => 'this',
+        'label' => __('Enable Rate Limiting', 'userspn'),
+        'description' => __('Limit registration attempts per IP address.', 'userspn'),
+      ];
+        $userspn_options['userspn_rate_limit_attempts'] = [
+          'id' => 'userspn_rate_limit_attempts',
+          'class' => 'userspn-input userspn-width-100-percent',
+          'input' => 'input',
+          'type' => 'number',
+          'parent' => 'userspn_rate_limiting_enabled',
+          'parent_option' => 'on',
+          'label' => __('Max Registration Attempts', 'userspn'),
+          'placeholder' => '5',
+          'min' => '1',
+          'max' => '50',
+          'description' => __('Maximum registration attempts per IP per hour.', 'userspn'),
+        ];
+        $userspn_options['userspn_rate_limit_window'] = [
+          'id' => 'userspn_rate_limit_window',
+          'class' => 'userspn-input userspn-width-100-percent',
+          'input' => 'input',
+          'type' => 'number',
+          'parent' => 'userspn_rate_limiting_enabled',
+          'parent_option' => 'on',
+          'label' => __('Rate Limit Window (hours)', 'userspn'),
+          'placeholder' => '1',
+          'min' => '1',
+          'max' => '24',
+          'description' => __('Time window in hours for rate limiting.', 'userspn'),
+        ];
+      $userspn_options['userspn_bot_analysis_button'] = [
+        'id' => 'userspn_bot_analysis_button',
+        'class' => 'userspn-btn userspn-btn-primary',
+        'input' => 'input',
+        'type' => 'button',
+        'label' => __('Bot Analysis Tool', 'userspn'),
+        'value' => __('Analyze Existing Users for Bots', 'userspn'),
+        'onclick' => 'userspn_open_bot_analysis_popup()',
+        'description' => __('This tool analyzes existing users to identify potential bots based on various patterns and behaviors such as suspicious email patterns, bot-like usernames, empty profiles, multiple registrations from same IP, and lack of activity.', 'userspn'),
+      ];
+    $userspn_options['userspn_section_security_end'] = [
+      'section' => 'end',
+    ];
+
     $userspn_options['userspn_submit'] = [
       'id' => 'userspn_submit',
       'input' => 'input',

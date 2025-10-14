@@ -734,27 +734,8 @@ class USERSPN_Functions_User {
                               <?php echo esc_html($field['page_title']); ?>
                             </a>
                             <?php 
-                            // Show available languages if Polylang is active and there are translations
-                            if (!empty($field['available_languages']) && class_exists('Polylang')): 
-                              $current_lang = pll_current_language('slug');
-                              $other_languages = array_diff_key($field['available_languages'], [$current_lang => '']);
-                              if (!empty($other_languages)): ?>
-                                <div class="userspn-profile-completion-languages userspn-mt-5">
-                                  <small class="userspn-text-muted">
-                                    <?php esc_html_e('Available in:', 'userspn'); ?>
-                                    <?php foreach ($other_languages as $lang_code => $translated_page_id): ?>
-                                      <?php if (!empty($translated_page_id)): ?>
-                                        <a href="<?php echo esc_url(get_permalink($translated_page_id)); ?>" 
-                                           class="userspn-text-decoration-none userspn-ml-5" 
-                                           title="<?php echo esc_attr($plugin_i18n->userspn_get_language_name($lang_code)); ?>">
-                                          <?php echo esc_html(strtoupper($lang_code)); ?>
-                                        </a>
-                                      <?php endif; ?>
-                                    <?php endforeach; ?>
-                                  </small>
-                                </div>
-                              <?php endif; ?>
-                            <?php endif; ?>
+                            // Languages list removed intentionally
+                            ?>
                           <?php else: ?>
                             <?php echo esc_html($field['meta_key']); ?>
                           <?php endif; ?>
@@ -1090,6 +1071,20 @@ class USERSPN_Functions_User {
       'placeholder' => __('Password', 'userspn'),
     ];
 
+    // Add honeypot field if enabled
+    if (get_option('userspn_honeypot_enabled') === 'on') {
+      $userspn_user_register_base_fields['userspn_honeypot_field'] = [
+        'id' => 'userspn_honeypot_field',
+        'class' => 'userspn-input userspn-width-100-percent',
+        'input' => 'input',
+        'type' => 'text',
+        'style' => 'position: absolute; left: -9999px; opacity: 0;',
+        'label' => '',
+        'placeholder' => '',
+        'tabindex' => '-1',
+        'autocomplete' => 'off',
+      ];
+    }
 
     $userspn_user_register_fields = self::userspn_user_register_get_fields($userspn_user_register_base_fields);
 

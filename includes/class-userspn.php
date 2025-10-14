@@ -52,7 +52,7 @@ class USERSPN {
 		if (defined('USERSPN_VERSION')) {
 			$this->version = USERSPN_VERSION;
 		} else {
-			$this->version = '1.0.6';
+			$this->version = '1.0.7';
 		}
 
 		$this->plugin_name = 'userspn';
@@ -212,6 +212,11 @@ class USERSPN {
 		 */
 		require_once USERSPN_DIR . 'includes/class-userspn-validation.php';
 
+		/**
+		 * The class responsible for security functions.
+		 */
+		require_once USERSPN_DIR . 'includes/class-userspn-security.php';
+
 		$this->loader = new USERSPN_Loader();
 	}
 
@@ -290,7 +295,11 @@ class USERSPN {
 		$this->loader->userspn_add_action('wp_enqueue_scripts', $plugin_public, 'userspn_enqueue_styles');
 		$this->loader->userspn_add_action('wp_enqueue_scripts', $plugin_public, 'userspn_enqueue_scripts');
 		$this->loader->userspn_add_filter('wp_nav_menu_items', $plugin_public, 'userspn_add_profile_icon_to_menu', 10, 2);
-		$this->loader->userspn_add_filter('render_block', $plugin_public, 'userspn_add_profile_icon_to_navigation_block', 10, 2);
+		
+		// Only register the render_block filter if the method exists
+		if (method_exists($plugin_public, 'userspn_add_profile_icon_to_navigation_block')) {
+			$this->loader->userspn_add_filter('render_block', $plugin_public, 'userspn_add_profile_icon_to_navigation_block', 10, 2);
+		}
 
 		$plugin_user = new USERSPN_Functions_User();
 		$this->loader->userspn_add_action('wp', $plugin_user, 'userspn_auto_login');

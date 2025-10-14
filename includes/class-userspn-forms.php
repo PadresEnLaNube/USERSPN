@@ -177,6 +177,13 @@ class USERSPN_Forms {
               </div>
             <?php
             break;
+          case 'button':
+            ?>
+              <div class="userspn-text-align-left">
+                <input type="button" value="<?php echo esc_attr($userspn_input['value']); ?>" name="<?php echo esc_attr($userspn_input['id']); ?>" id="<?php echo esc_attr($userspn_input['id']); ?>" class="<?php echo array_key_exists('class', $userspn_input) ? esc_attr($userspn_input['class']) : 'userspn-btn'; ?>" <?php echo (array_key_exists('onclick', $userspn_input) ? 'onclick="' . esc_attr($userspn_input['onclick']) . '"' : ''); ?> <?php echo (((array_key_exists('disabled', $userspn_input) && $userspn_input['disabled'] == 'true') || $disabled) ? 'disabled' : ''); ?> <?php echo wp_kses_post($userspn_parent_block); ?>/>
+              </div>
+            <?php
+            break;
           case 'hidden':
             ?>
               <input type="hidden" id="<?php echo esc_attr($userspn_input['id']); ?>" name="<?php echo esc_attr($userspn_input['id']); ?>" value="<?php echo esc_attr($userspn_value); ?>" <?php echo (array_key_exists('multiple', $userspn_input) && $userspn_input['multiple'] == 'true' ? 'multiple' : ''); ?>>

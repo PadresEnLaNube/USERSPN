@@ -123,6 +123,14 @@ class USERSPN_Common {
 		wp_enqueue_script($this->plugin_name . '-forms', USERSPN_URL . 'assets/js/userspn-forms.js', ['jquery'], $this->version, false, ['in_footer' => true, 'strategy' => 'defer']);
 		wp_enqueue_script($this->plugin_name . '-input-editor-builder', USERSPN_URL . 'assets/js/userspn-input-editor-builder.js', ['jquery'], $this->version, false, ['in_footer' => true, 'strategy' => 'defer']);
 		wp_enqueue_script($this->plugin_name . '-profile-progress', USERSPN_URL . 'assets/js/userspn-profile-progress.js', ['jquery'], $this->version, false, ['in_footer' => true, 'strategy' => 'defer']);
+		
+		// Load bot analysis script
+		wp_enqueue_script($this->plugin_name . '-bot-analysis', USERSPN_URL . 'assets/js/userspn-bot-analysis.js', ['jquery'], $this->version, false, ['in_footer' => true, 'strategy' => 'defer']);
+		
+		// Load Chart.js for bot analysis charts (only in admin)
+		if (is_admin()) {
+			wp_enqueue_script('chart-js', 'https://cdn.jsdelivr.net/npm/chart.js', [], '4.4.0', true);
+		}
 
 		$nonce = wp_create_nonce('userspn-nonce');
 		wp_localize_script($this->plugin_name, 'userspn_ajax', [
@@ -195,6 +203,14 @@ class USERSPN_Common {
 			'email_too_many' => esc_html(__('Your email has received too many emails. Please contact us.', 'userspn')),
 			'newsletter_subscribed' => esc_html(__('Congratulations! You have been successfully subscribed to our newsletter.', 'userspn')),
 			'email_sent' => esc_html(__('We have sent you an email. Please check your inbox or spam folder.', 'userspn')),
+			'security_error' => esc_html(__('Security validation failed. Please try again.', 'userspn')),
+		]);
+
+		// Security settings for JavaScript
+		wp_localize_script($this->plugin_name, 'userspn_security', [
+			'recaptcha_enabled' => (get_option('userspn_recaptcha_enabled') === 'on'),
+			'recaptcha_site_key' => get_option('userspn_recaptcha_site_key', ''),
+			'honeypot_enabled' => (get_option('userspn_honeypot_enabled') === 'on'),
 		]);
 			
 		$userspn_login = !empty($_GET['userspn_login']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_GET['userspn_login'])) : '';

@@ -167,16 +167,48 @@ class USERSPN_Ajax_Nopriv {
 						if (email_exists($userspn_email)) {
 							echo 'userspn_profile_create_existing';exit();
 						}else{
+							// Prepare user data for security validation
+							$user_data = [
+								'email' => $userspn_email,
+								'first_name' => $key_value['first_name'] ?? '',
+								'last_name' => $key_value['last_name'] ?? '',
+								'description' => $key_value['description'] ?? ''
+							];
+
+							// Perform security validation
+							$security_result = USERSPN_Security::validate_registration_security($_POST, $user_data);
+							if (is_wp_error($security_result)) {
+								// Log security event
+								USERSPN_Security::log_security_event('registration_blocked', $security_result->get_error_message(), [
+									'email' => $userspn_email,
+									'ip' => USERSPN_Security::get_user_ip()
+								]);
+								echo 'userspn_profile_create_security_error';exit();
+							}
+
 							$userspn_login = sanitize_title(substr($userspn_email, 0, strpos($userspn_email, '@')) . '-' . bin2hex(openssl_random_pseudo_bytes(4)));
 							$user_id = USERSPN_Functions_User::userspn_user_insert($userspn_login, $userspn_password, $userspn_email, '', '', $userspn_login, $userspn_login, $userspn_login, '', ['subscriber'], [
 								['userspn_secret_token' => bin2hex(openssl_random_pseudo_bytes(16))],
 							]);
 
+							// Store registration IP and user agent for bot analysis
+							if ($user_id) {
+								update_user_meta($user_id, 'userspn_registration_ip', USERSPN_Security::get_user_ip());
+								update_user_meta($user_id, 'userspn_registration_user_agent', $_SERVER['HTTP_USER_AGENT'] ?? '');
+							}
+
 							foreach ($key_value as $key => $value) {
-								if (!in_array($key, ['action', 'userspn_ajax_nopriv', 'userspn_ajax_nopriv_type', 'userspn_email', 'userspn_password'])) {
+								if (!in_array($key, ['action', 'userspn_ajax_nopriv', 'userspn_ajax_nopriv_type', 'userspn_email', 'userspn_password', 'g-recaptcha-response', 'userspn_honeypot_field'])) {
 									update_user_meta($user_id, $key, $value);
 								}
 							}
+
+							// Log successful registration
+							USERSPN_Security::log_security_event('registration_success', 'User registration completed successfully', [
+								'user_id' => $user_id,
+								'email' => $userspn_email,
+								'ip' => USERSPN_Security::get_user_ip()
+							]);
 
 							do_action('userspn_profile_create', $user_id, $key_value);
 							echo 'userspn_profile_create_success';exit();

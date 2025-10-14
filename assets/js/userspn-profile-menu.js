@@ -34,22 +34,33 @@ jQuery(document).ready(function($) {
     function copyProfileToMenu() {
         var $existingProfile = $('.userspn-profile');
         var $menuContainer = $('#userspn-profile-menu-container');
-        
+
         if ($existingProfile.length && $menuContainer.length) {
-            // Copy the existing profile element to the menu container
-            var $profileCopy = $existingProfile.clone();
-            $profileCopy.appendTo($menuContainer);
-            
-            // Add menu-specific classes
-            $profileCopy.addClass('userspn-profile-in-menu');
+            // Clone only the trigger button that opens the popup
+            var $triggerBtn = $existingProfile.find('.userspn-profile-popup-btn').first();
+            if ($triggerBtn.length && !$menuContainer.find('.userspn-profile-popup-btn').length) {
+                var $btnClone = $triggerBtn.clone(true);
+                // Mark as in-menu for styling purposes
+                $btnClone.addClass('userspn-profile-in-menu');
+                $menuContainer.empty().append($btnClone);
+            }
+        }
+    }
+
+    function movePopupOutOfProfile() {
+        // Ensure the popup is not inside the hidden profile wrapper on mobile
+        var $popup = $('#userspn-profile-popup');
+        if ($popup.length && !$popup.parent().is('body')) {
+            $('body').append($popup);
         }
     }
     
     // Check periodically in case the profile element loads after this script
     var checkInterval = setInterval(function() {
-        if ($('.userspn-profile').length && !$('.userspn-profile-in-menu').length) {
+        if ($('.userspn-profile').length) {
             addContainerToMenu();
             copyProfileToMenu();
+            movePopupOutOfProfile();
         }
     }, 1000);
     
@@ -61,9 +72,10 @@ jQuery(document).ready(function($) {
     // Also check when window loads completely
     $(window).on('load', function() {
         setTimeout(function() {
-            if ($('.userspn-profile').length && !$('.userspn-profile-in-menu').length) {
+            if ($('.userspn-profile').length) {
                 addContainerToMenu();
                 copyProfileToMenu();
+                movePopupOutOfProfile();
             }
         }, 500);
     });

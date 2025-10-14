@@ -596,6 +596,57 @@ class USERSPN_Ajax {
             echo 'userspn_csv_template_upload_error';exit();
           }
           break;
+        case 'userspn_analyze_bots':
+          if (!current_user_can('manage_options')) {
+            wp_send_json_error('Insufficient permissions');
+          }
+          
+          $limit = !empty($_POST['limit']) ? intval($_POST['limit']) : 100;
+          $results = USERSPN_Security::analyze_existing_users_for_bots($limit);
+          wp_send_json_success($results);
+          break;
+        case 'userspn_get_bot_analysis':
+          if (!current_user_can('manage_options')) {
+            wp_send_json_error('Insufficient permissions');
+          }
+          
+          $results = USERSPN_Security::get_bot_analysis_results();
+          wp_send_json_success($results);
+          break;
+        case 'userspn_mark_user_as_bot':
+          if (!current_user_can('manage_options')) {
+            wp_send_json_error('Insufficient permissions');
+          }
+          
+          $user_id = !empty($_POST['user_id']) ? intval($_POST['user_id']) : 0;
+          if ($user_id) {
+            USERSPN_Security::mark_user_as_bot($user_id);
+            wp_send_json_success('User marked as bot');
+          } else {
+            wp_send_json_error('Invalid user ID');
+          }
+          break;
+        case 'userspn_mark_user_as_human':
+          if (!current_user_can('manage_options')) {
+            wp_send_json_error('Insufficient permissions');
+          }
+          
+          $user_id = !empty($_POST['user_id']) ? intval($_POST['user_id']) : 0;
+          if ($user_id) {
+            USERSPN_Security::mark_user_as_human($user_id);
+            wp_send_json_success('User marked as human');
+          } else {
+            wp_send_json_error('Invalid user ID');
+          }
+          break;
+        case 'userspn_delete_confirmed_bots':
+          if (!current_user_can('manage_options')) {
+            wp_send_json_error('Insufficient permissions');
+          }
+          
+          $deleted_count = USERSPN_Security::delete_confirmed_bots();
+          wp_send_json_success(['deleted_count' => $deleted_count]);
+          break;
       }
 
       echo wp_json_encode(['error_key' => 'userspn_save_error', ]);exit();
