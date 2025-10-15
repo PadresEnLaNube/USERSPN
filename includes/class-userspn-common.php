@@ -138,6 +138,47 @@ class USERSPN_Common {
 			'userspn_ajax_nonce' => $nonce,
 		]);
 
+		// Add CPTs data to JavaScript
+		$userspn_cpts = defined('USERSPN_CPTS') ? USERSPN_CPTS : [];
+		wp_localize_script($this->plugin_name . '-ajax', 'userspn_cpts', $userspn_cpts);
+
+		// Verify nonce for GET parameters
+		$nonce_verified = false;
+		if (!empty($_GET['userspn_nonce'])) {
+			$nonce_verified = wp_verify_nonce(sanitize_text_field(wp_unslash($_GET['userspn_nonce'])), 'userspn-get-nonce');
+		}
+
+		// Allow bypass via explicit GET parameter
+		$bypass_nonce = (!empty($_GET['userspn_nonce_skip']) && $_GET['userspn_nonce_skip'] == '1') || (!empty($_GET['userspn_skip_nonce']) && $_GET['userspn_skip_nonce'] == '1');
+
+		$userspn_action = '';
+		$userspn_btn_id = '';
+		$userspn_popup = '';
+		$userspn_tab = '';
+
+		if ($nonce_verified || $bypass_nonce) {
+			$userspn_action = !empty($_GET['userspn_action']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_GET['userspn_action'])) : '';
+			$userspn_btn_id = !empty($_GET['userspn_btn_id']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_GET['userspn_btn_id'])) : '';
+			$userspn_popup = !empty($_GET['userspn_popup']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_GET['userspn_popup'])) : '';
+			$userspn_tab = !empty($_GET['userspn_tab']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_GET['userspn_tab'])) : '';
+		}
+		
+		wp_localize_script($this->plugin_name, 'userspn_action', [
+			'action' => $userspn_action,
+			'btn_id' => $userspn_btn_id,
+			'popup' => $userspn_popup,
+			'tab' => $userspn_tab,
+			'userspn_get_nonce' => wp_create_nonce('userspn-get-nonce'),
+		]);
+
+		wp_localize_script($this->plugin_name, 'userspn_path', [
+			'main' => USERSPN_URL,
+			'assets' => USERSPN_URL . 'assets/',
+			'css' => USERSPN_URL . 'assets/css/',
+			'js' => USERSPN_URL . 'assets/js/',
+			'media' => USERSPN_URL . 'assets/media/',
+		]);
+
 		if (class_exists('MAILPN')) {
 			wp_localize_script($this->plugin_name, 'mailpn_ajax', [
 				'mailpn_class' => class_exists('MAILPN_Ajax') ? true : false,

@@ -432,5 +432,27 @@
         });
       });
     }
+
+    if (userspn_action.action != '') {
+      if (userspn_action.btn_id != '') {
+        $(window).on('load', function(e) {
+          $('#' + userspn_action.btn_id).click();
+        });
+      }
+
+      if (userspn_action.popup != '') {
+        $(window).on('load', function(e) {
+          USERSPN_Popups.open($('#' + userspn_action.popup));
+
+          if (typeof userspn_action.tab != '') {
+            $('.userspn-tab-links[data-userspn-id="userspn-tab-' + userspn_action.tab + '"]').click();
+            $('#userspn-' + userspn_action.tab + ' input#userspn_email').focus();
+          } else {
+            $('.userspn-tab-links[data-userspn-id="userspn-tab-login"]').click();
+            $('#userspn-login input#user_login').focus();
+          }
+        });
+      }
+    }
   });
 })(jQuery);

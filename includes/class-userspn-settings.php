@@ -959,3 +959,12 @@ class USERSPN_Settings {
     return $menus;
   }
 }
+
+/**
+ * Add Settings link to plugin actions - standalone function
+ */
+function userspn_add_settings_link_standalone($links) {
+  $settings_link = '<a href="' . admin_url('admin.php?page=userspn_options') . '">' . __('Settings', 'userspn') . '</a>';
+  array_unshift($links, $settings_link);
+  return $links;
+}
