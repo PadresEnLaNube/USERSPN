@@ -18,7 +18,7 @@ class USERSPN_Security {
      *
      * @param string $token The reCAPTCHA token
      * @param string $action The action name
-     * @return bool|WP_Error True if valid, WP_Error if invalid
+     * @return array|WP_Error Array with success status and score, or WP_Error if invalid
      */
     public static function verify_recaptcha($token, $action = 'register') {
         $secret_key = get_option('userspn_recaptcha_secret_key');
@@ -47,15 +47,17 @@ class USERSPN_Security {
             return new WP_Error('recaptcha_verification_failed', __('reCAPTCHA verification failed: Invalid token.', 'userspn'));
         }
 
-        if ($result['score'] < $threshold) {
-            return new WP_Error('recaptcha_score_low', sprintf(__('reCAPTCHA verification failed: Score too low (%.2f < %.2f).', 'userspn'), $result['score'], $threshold));
-        }
-
         if ($result['action'] !== $action) {
             return new WP_Error('recaptcha_action_mismatch', __('reCAPTCHA verification failed: Action mismatch.', 'userspn'));
         }
 
-        return true;
+        // Return result with score information instead of blocking
+        return [
+            'success' => true,
+            'score' => floatval($result['score']),
+            'threshold' => $threshold,
+            'is_suspicious' => $result['score'] < $threshold
+        ];
     }
 
     /**
@@ -607,5 +609,119 @@ class USERSPN_Security {
         ]);
 
         return $deleted_count;
+    }
+
+    /**
+     * Send suspicious registration notification email
+     *
+     * @param int $user_id User ID
+     * @param array $recaptcha_data reCAPTCHA data
+     * @param array $user_data User registration data
+     * @return bool True if email sent successfully
+     */
+    public static function send_suspicious_registration_notification($user_id, $recaptcha_data, $user_data) {
+        $admin_email = get_option('admin_email');
+        if (empty($admin_email)) {
+            return false;
+        }
+
+        $user = get_user_by('ID', $user_id);
+        if (!$user) {
+            return false;
+        }
+
+        $site_name = get_bloginfo('name');
+        $site_url = get_site_url();
+        
+        $subject = sprintf(__('[%s] Posible registro fraudulento detectado', 'userspn'), $site_name);
+        
+        // Create delete user URL with nonce
+        $delete_nonce = wp_create_nonce('userspn_delete_suspicious_user_' . $user_id);
+        $delete_url = add_query_arg([
+            'action' => 'userspn_delete_suspicious_user',
+            'user_id' => $user_id,
+            'nonce' => $delete_nonce
+        ], admin_url('admin-ajax.php'));
+
+        $message = sprintf(
+            __("Se ha detectado un posible registro fraudulento en %s:\n\n", 'userspn') .
+            __("Usuario: %s\n", 'userspn') .
+            __("Email: %s\n", 'userspn') .
+            __("Score reCAPTCHA: %.2f (Umbral: %.2f)\n", 'userspn') .
+            __("IP: %s\n", 'userspn') .
+            __("User Agent: %s\n", 'userspn') .
+            __("Fecha: %s\n\n", 'userspn') .
+            __("El usuario ha sido registrado pero marcado como sospechoso.\n\n", 'userspn') .
+            __("Para borrar este usuario directamente, haz clic en el siguiente enlace:\n", 'userspn') .
+            "%s\n\n" .
+            __("Si no haces nada, el usuario podrá acceder normalmente a la web.", 'userspn'),
+            $site_name,
+            $user->user_login,
+            $user->user_email,
+            $recaptcha_data['score'],
+            $recaptcha_data['threshold'],
+            $user_data['ip'] ?? 'Desconocida',
+            $user_data['user_agent'] ?? 'Desconocido',
+            current_time('mysql'),
+            $delete_url
+        );
+
+        $headers = [
+            'Content-Type: text/plain; charset=UTF-8',
+            'From: ' . $site_name . ' <' . $admin_email . '>'
+        ];
+
+        return wp_mail($admin_email, $subject, $message, $headers);
+    }
+
+    /**
+     * Handle suspicious user deletion via email link
+     *
+     * @return void
+     */
+    public static function handle_suspicious_user_deletion() {
+        if (!isset($_GET['action']) || $_GET['action'] !== 'userspn_delete_suspicious_user') {
+            return;
+        }
+
+        if (!isset($_GET['user_id']) || !isset($_GET['nonce'])) {
+            wp_die(__('Parámetros inválidos.', 'userspn'));
+        }
+
+        $user_id = intval($_GET['user_id']);
+        $nonce = sanitize_text_field($_GET['nonce']);
+
+        if (!wp_verify_nonce($nonce, 'userspn_delete_suspicious_user_' . $user_id)) {
+            wp_die(__('Verificación de seguridad fallida.', 'userspn'));
+        }
+
+        $user = get_user_by('ID', $user_id);
+        if (!$user) {
+            wp_die(__('Usuario no encontrado.', 'userspn'));
+        }
+
+        // Check if user is marked as suspicious
+        $is_suspicious = get_user_meta($user_id, 'userspn_recaptcha_suspicious', true);
+        if (!$is_suspicious) {
+            wp_die(__('Este usuario no está marcado como sospechoso.', 'userspn'));
+        }
+
+        // Delete the user
+        if (wp_delete_user($user_id)) {
+            // Log the action
+            self::log_security_event('suspicious_user_deleted', 'Suspicious user deleted via email link', [
+                'user_id' => $user_id,
+                'user_email' => $user->user_email,
+                'deleted_by' => 'admin_email'
+            ]);
+
+            wp_die(
+                sprintf(__('Usuario %s eliminado correctamente.', 'userspn'), $user->user_login),
+                __('Usuario eliminado', 'userspn'),
+                ['response' => 200]
+            );
+        } else {
+            wp_die(__('Error al eliminar el usuario.', 'userspn'));
+        }
     }
 }

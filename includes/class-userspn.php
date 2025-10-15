@@ -402,6 +402,9 @@ class USERSPN {
 		$plugin_ajax_nopriv = new USERSPN_Ajax_Nopriv();
 		$this->loader->userspn_add_action('wp_ajax_userspn_ajax_nopriv', $plugin_ajax_nopriv, 'userspn_ajax_nopriv_server');
 		$this->loader->userspn_add_action('wp_ajax_nopriv_userspn_ajax_nopriv', $plugin_ajax_nopriv, 'userspn_ajax_nopriv_server');
+		
+		// Add hook for suspicious user deletion
+		$this->loader->userspn_add_action('init', 'USERSPN_Security', 'handle_suspicious_user_deletion');
 	}
 
 	/**

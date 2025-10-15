@@ -2,8 +2,8 @@
 	'use strict';
 
   $(document).ready(function() {
-    // Load reCAPTCHA if enabled
-    if (typeof userspn_security !== 'undefined' && userspn_security.recaptcha_enabled && userspn_security.recaptcha_site_key) {
+    // Load reCAPTCHA if enabled AND registration form is present
+    if (typeof userspn_security !== 'undefined' && userspn_security.recaptcha_enabled && userspn_security.recaptcha_site_key && $('#userspn-user-register-fields').length > 0) {
       var script = document.createElement('script');
       script.src = 'https://www.google.com/recaptcha/api.js?render=' + userspn_security.recaptcha_site_key;
       script.async = true;

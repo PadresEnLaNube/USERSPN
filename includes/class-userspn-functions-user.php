@@ -1075,10 +1075,10 @@ class USERSPN_Functions_User {
     if (get_option('userspn_honeypot_enabled') === 'on') {
       $userspn_user_register_base_fields['userspn_honeypot_field'] = [
         'id' => 'userspn_honeypot_field',
-        'class' => 'userspn-input userspn-width-100-percent',
+        'class' => 'userspn-input userspn-width-100-percent userspn-honeypot-field',
         'input' => 'input',
         'type' => 'text',
-        'style' => 'position: absolute; left: -9999px; opacity: 0;',
+        'style' => 'position: absolute !important; left: -9999px !important; opacity: 0 !important; visibility: hidden !important; height: 0 !important; width: 0 !important;',
         'label' => '',
         'placeholder' => '',
         'tabindex' => '-1',

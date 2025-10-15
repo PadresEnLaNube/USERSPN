@@ -172,7 +172,9 @@ class USERSPN_Ajax_Nopriv {
 								'email' => $userspn_email,
 								'first_name' => $key_value['first_name'] ?? '',
 								'last_name' => $key_value['last_name'] ?? '',
-								'description' => $key_value['description'] ?? ''
+								'description' => $key_value['description'] ?? '',
+								'ip' => USERSPN_Security::get_user_ip(),
+								'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? ''
 							];
 
 							// Perform security validation
@@ -195,6 +197,39 @@ class USERSPN_Ajax_Nopriv {
 							if ($user_id) {
 								update_user_meta($user_id, 'userspn_registration_ip', USERSPN_Security::get_user_ip());
 								update_user_meta($user_id, 'userspn_registration_user_agent', $_SERVER['HTTP_USER_AGENT'] ?? '');
+								
+								// Store reCAPTCHA score and handle suspicious registrations
+								if (get_option('userspn_recaptcha_enabled') === 'on') {
+									$recaptcha_token = $_POST['g-recaptcha-response'] ?? '';
+									if (!empty($recaptcha_token)) {
+										$recaptcha_result = USERSPN_Security::verify_recaptcha($recaptcha_token, 'register');
+										if (!is_wp_error($recaptcha_result)) {
+											// Store reCAPTCHA score
+											update_user_meta($user_id, 'userspn_recaptcha_score', $recaptcha_result['score']);
+											update_user_meta($user_id, 'userspn_recaptcha_threshold', $recaptcha_result['threshold']);
+											update_user_meta($user_id, 'userspn_recaptcha_timestamp', current_time('timestamp'));
+											
+											// Check if registration is suspicious
+											if ($recaptcha_result['is_suspicious']) {
+												update_user_meta($user_id, 'userspn_recaptcha_suspicious', true);
+												
+												// Send notification email to admin
+												USERSPN_Security::send_suspicious_registration_notification($user_id, $recaptcha_result, $user_data);
+												
+												// Log suspicious registration
+												USERSPN_Security::log_security_event('suspicious_registration', 'Suspicious user registration detected', [
+													'user_id' => $user_id,
+													'email' => $userspn_email,
+													'score' => $recaptcha_result['score'],
+													'threshold' => $recaptcha_result['threshold'],
+													'ip' => USERSPN_Security::get_user_ip()
+												]);
+											} else {
+												update_user_meta($user_id, 'userspn_recaptcha_suspicious', false);
+											}
+										}
+									}
+								}
 							}
 
 							foreach ($key_value as $key => $value) {
