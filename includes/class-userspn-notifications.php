@@ -202,6 +202,10 @@ class USERSPN_Notifications {
 
     ob_start();
     ?>
+      <?php
+      // Apply filter to allow other plugins to add content before the notifications form
+      echo apply_filters('userspn_notifications_before_form', '', $user_id);
+      ?>
       <form id="userspn-form" class="userspn-mt-30 userspn-form">
         <?php foreach ($userspn_notifications as $notifications_field): ?>
           <?php USERSPN_Forms::userspn_input_wrapper_builder($notifications_field, 'user', esc_html($user_id), 0, 'full'); ?>
@@ -210,6 +214,7 @@ class USERSPN_Notifications {
     <?php
     $userspn_return_string = ob_get_contents(); 
     ob_end_clean(); 
+    
     return $userspn_return_string;
   }
 }

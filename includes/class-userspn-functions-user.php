@@ -607,6 +607,10 @@ class USERSPN_Functions_User {
     <?php
     $userspn_return_string = ob_get_contents(); 
     ob_end_clean(); 
+    
+    // Apply filter to allow other plugins to modify the profile icon content
+    $userspn_return_string = apply_filters('userspn_profile_content', $userspn_return_string, $user_id);
+    
     return $userspn_return_string;
   }
 
