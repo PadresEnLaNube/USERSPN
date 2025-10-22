@@ -550,13 +550,12 @@ class USERSPN_Ajax {
             require_once(ABSPATH . 'wp-admin' . '/includes/media.php');
 
             $file_handler = 'userspn_uploaded_file';
-            $userspn_file_id = media_handle_upload($file_handler, $pid);
+            $userspn_related_user_id = !empty($_POST['userspn_related_user_id']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_related_user_id'])) : '';
+            $userspn_file_id = media_handle_upload($file_handler, 0); // Use 0 for no specific post
 
             if (is_wp_error($userspn_file_id)) {
               echo 'userspn_profile_image_error';exit();
             }else{
-              $userspn_related_user_id = !empty($_POST['userspn_related_user_id']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_related_user_id'])) : '';
-
               update_post_meta($userspn_file_id, 'userspn_related_user_id', $userspn_related_user_id);
               update_user_meta($userspn_related_user_id, 'userspn_user_image', $userspn_file_id);
               ?>
@@ -571,6 +570,46 @@ class USERSPN_Ajax {
             }
           }else{
             echo 'userspn_profile_image_error';exit();
+          }
+          break;
+        case 'userspn_remove_avatar':
+          $userspn_user_id = !empty($_POST['userspn_user_id']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_user_id'])) : '';
+          
+          if (!empty($userspn_user_id)) {
+            // Get current avatar ID
+            $current_avatar_id = get_user_meta($userspn_user_id, 'userspn_user_image', true);
+            
+            if (!empty($current_avatar_id)) {
+              // Delete the attachment file
+              wp_delete_attachment($current_avatar_id, true);
+              
+              // Remove the user meta
+              delete_user_meta($userspn_user_id, 'userspn_user_image');
+              
+              echo wp_json_encode(['success' => true, 'message' => 'Avatar removed successfully']);
+              exit();
+            } else {
+              echo wp_json_encode(['success' => false, 'message' => 'No avatar to remove']);
+              exit();
+            }
+          } else {
+            echo wp_json_encode(['success' => false, 'message' => 'Invalid user ID']);
+            exit();
+          }
+          break;
+        case 'userspn_get_avatar_html':
+          $userspn_user_id = !empty($_POST['userspn_user_id']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_user_id'])) : '';
+          
+          if (!empty($userspn_user_id)) {
+            $plugin_user = new USERSPN_Functions_User();
+            $avatar_html = do_shortcode('[userspn-get-avatar user_id="' . $userspn_user_id . '" size="50"]');
+            
+            
+            echo wp_json_encode(['html' => $avatar_html]);
+            exit();
+          }else{
+            echo wp_json_encode(['html' => '']);
+            exit();
           }
           break;
         case 'userspn_csv_template_upload':

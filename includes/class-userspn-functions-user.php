@@ -802,6 +802,10 @@ class USERSPN_Functions_User {
             <?php wp_enqueue_script('userspn-user-profile-image', USERSPN_URL . 'assets/js/userspn-user-profile-image.js', ['jquery'], USERSPN_VERSION, false, ['in_footer' => true, 'strategy' => 'defer']); ?>
           <?php endif ?>
 
+          <?php if (!empty(get_user_meta(get_current_user_id(), 'userspn_user_image', true))): ?>
+            <a href="#" class="userspn-remove-avatar-btn userspn-font-size-12 userspn-text-decoration-none userspn-mr-10" data-userspn-user-id="<?php echo esc_attr(get_current_user_id()); ?>"><?php esc_html_e('Remove avatar', 'userspn'); ?></a><?php echo esc_html(USERSPN_Data::userspn_loader()); ?>
+          <?php endif ?>
+          
           <input type="submit" name="userspn-upload-files-btn" value="<?php esc_html_e('Upload avatar', 'userspn'); ?>" class="userspn-upload-files-btn userspn-btn" data-userspn-user-id="<?php echo esc_attr(get_current_user_id()); ?>"><?php echo esc_html(USERSPN_Data::userspn_loader()); ?>
         </div>
       </div>
@@ -848,10 +852,13 @@ class USERSPN_Functions_User {
 
   public function userspn_get_avatar($atts) {
     /* echo do_shortcode('[userspn-get-avatar user_id="1" size="36"]'); */
-    $a = extract(shortcode_atts([
+    $shortcode_atts = shortcode_atts([
       'user_id' => get_current_user_id(),
       'size' => '36',
-    ], $atts));
+    ], $atts);
+    
+    $user_id = $shortcode_atts['user_id'];
+    $size = $shortcode_atts['size'];
 
     ob_start();
 
@@ -870,7 +877,7 @@ class USERSPN_Functions_User {
         <?php echo wp_kses($avatar_params['html_extra'], USERSPN_KSES); ?>
       <?php endif ?>
 
-      <?php if ((!empty($user_image) && !empty(wp_get_attachment_image_src($user_image, 'thumbnail'[0])))): ?>
+      <?php if ((!empty($user_image) && !empty(wp_get_attachment_image_src($user_image, 'thumbnail')[0]))): ?>
         <img alt="<?php esc_html_e('Profile picture', 'userspn'); ?>" description="<?php esc_html_e('Profile picture of', 'userspn'); ?> <?php echo esc_attr(self::userspn_user_get_name($user_id)); ?>" src="<?php echo esc_url(wp_get_attachment_image_src($user_image, 'thumbnail')[0]); ?>" class="avatar avatar-<?php echo esc_attr($size); ?> photo userspn-border-radius-50-percent userspn-m-10" height="<?php echo esc_attr($size); ?>" width="<?php echo esc_attr($size); ?>">
       <?php elseif (self::userspn_validate_gravatar($user_id)): ?>
         <?php if (!empty(get_avatar($user_id))): ?>

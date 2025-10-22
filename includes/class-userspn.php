@@ -52,7 +52,7 @@ class USERSPN {
 		if (defined('USERSPN_VERSION')) {
 			$this->version = USERSPN_VERSION;
 		} else {
-			$this->version = '1.0.7';
+			$this->version = '1.0.13';
 		}
 
 		$this->plugin_name = 'userspn';
