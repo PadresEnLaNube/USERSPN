@@ -1125,47 +1125,142 @@ class USERSPN_Functions_User {
   }
 
   public function userspn_profile_save_fields($user_id){
+    error_log('USERSPN DEBUG: userspn_profile_save_fields called for user_id: ' . $user_id);
+    
+    // CRITICAL: Skip entirely if this is a userspn AJAX request
+    // The AJAX handler already processes and saves all fields correctly
+    // This prevents the hook from overwriting the correctly saved data
+    $is_userspn_ajax = array_key_exists('userspn_ajax_type', $_POST) || array_key_exists('userspn_ajax_nopriv_type', $_POST);
+    if ($is_userspn_ajax) {
+      error_log('USERSPN DEBUG: Skipping userspn_profile_save_fields - this is a userspn AJAX request (already handled by AJAX handler)');
+      return true; // Exit early - AJAX handler already processed everything
+    }
+    
+    error_log('USERSPN DEBUG: $_POST keys: ' . print_r(array_keys($_POST), true));
+    
     // No ejecutar durante el checkout de WooCommerce
     if (function_exists('is_checkout') && is_checkout()) {
+      error_log('USERSPN DEBUG: Skipping - is_checkout()');
       return;
     }
     
     // Skip validation if this is a password reset request (check both POST and GET parameters)
     if (isset($_GET['action']) && ($_GET['action'] === 'resetpassword' ||  $_GET['action'] === 'lostpassword')) {
+      error_log('USERSPN DEBUG: Skipping - password reset');
       return true;
-    }
-    
-    // Always require nonce verification
-    if (!array_key_exists('userspn_ajax_nopriv_nonce', $_POST)) {
-      echo wp_json_encode([
-        'error_key' => 'userspn_profile_ajax_nopriv_nonce_error_required',
-        'error_content' => esc_html(__('Security check failed: Nonce is required.', 'userspn')),
-      ]);
-
-      exit();
-    }
-
-    if (!wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['userspn_ajax_nopriv_nonce'])), 'userspn-nonce')) {
-      echo wp_json_encode([
-        'error_key' => 'userspn_profile_ajax_nopriv_nonce_error_invalid',
-        'error_content' => esc_html(__('Security check failed: Invalid nonce.', 'userspn')),
-      ]);
-
-      exit();
     }
 
     if(!current_user_can('manage_options') || get_option('userspn_user_register_fields_dashboard') != 'on'){
+      error_log('USERSPN DEBUG: Skipping - user cannot manage_options or dashboard fields disabled');
       return false;
     }
 
     $userspn_user_register_fields = self::userspn_user_register_get_fields([]);
+    error_log('USERSPN DEBUG: Processing ' . count($userspn_user_register_fields) . ' fields in userspn_profile_save_fields');
 
     foreach ($userspn_user_register_fields as $userspn_user_register_field) {
-      if (array_key_exists($userspn_user_register_field['id'], $_POST)) {
-        $field_value = sanitize_text_field(wp_unslash($_POST[$userspn_user_register_field['id']]));
-        update_user_meta($user_id, USERSPN_Forms::userspn_sanitizer(wp_unslash($userspn_user_register_field['id'])), $field_value);
+      $field_id = $userspn_user_register_field['id'];
+      $field_id_clear = str_replace('[]', '', $field_id);
+      
+      // Check if field exists in POST (try both with and without [])
+      $field_value = null;
+      if (array_key_exists($field_id, $_POST)) {
+        $field_value = wp_unslash($_POST[$field_id]);
+        error_log('USERSPN DEBUG: Found field ' . $field_id . ' in $_POST[' . $field_id . ']');
+      } elseif (array_key_exists($field_id_clear, $_POST)) {
+        $field_value = wp_unslash($_POST[$field_id_clear]);
+        error_log('USERSPN DEBUG: Found field ' . $field_id_clear . ' in $_POST[' . $field_id_clear . ']');
+      } else {
+        error_log('USERSPN DEBUG: Field ' . $field_id . ' (clear: ' . $field_id_clear . ') NOT found in $_POST');
+        
+        // CRITICAL: For select-multiple fields, if they're not in $_POST, 
+        // don't overwrite existing values (they were likely saved by AJAX handler)
+        $is_select_multiple = isset($userspn_user_register_field['input']) && 
+                              $userspn_user_register_field['input'] === 'select' &&
+                              isset($userspn_user_register_field['multiple']) && 
+                              $userspn_user_register_field['multiple'] === true;
+        
+        if ($is_select_multiple) {
+          $field_key = USERSPN_Forms::userspn_sanitizer(wp_unslash($field_id_clear));
+          $existing_value = get_user_meta($user_id, $field_key, true);
+          if (is_array($existing_value) && !empty($existing_value)) {
+            error_log('USERSPN DEBUG: Skipping select-multiple field ' . $field_id . ' - not in $_POST but has existing array value, preserving it');
+            continue; // Skip this field, preserve existing value
+          }
+        }
+      }
+      
+      if ($field_value !== null) {
+        $field_key = USERSPN_Forms::userspn_sanitizer(wp_unslash($field_id_clear));
+        
+        // Handle multiple fields (arrays) - especially select-multiple
+        $is_select_multiple = isset($userspn_user_register_field['input']) && 
+                              $userspn_user_register_field['input'] === 'select' &&
+                              isset($userspn_user_register_field['multiple']) && 
+                              $userspn_user_register_field['multiple'] === true;
+        
+        error_log('USERSPN DEBUG: Field ' . $field_id . ' - is_select_multiple: ' . ($is_select_multiple ? 'true' : 'false') . ', is_array: ' . (is_array($field_value) ? 'true' : 'false'));
+        
+        // CRITICAL: If select-multiple field is in $_POST but is empty, 
+        // and there's an existing value, preserve the existing value
+        if ($is_select_multiple && is_array($field_value)) {
+          $filtered_value = array_filter($field_value, function($v) { return $v !== '' && $v !== null; });
+          if (empty($filtered_value)) {
+            $existing_value = get_user_meta($user_id, $field_key, true);
+            if (is_array($existing_value) && !empty($existing_value)) {
+              error_log('USERSPN DEBUG: Select-multiple field ' . $field_id . ' in $_POST but empty, preserving existing value');
+              continue; // Skip this field, preserve existing value
+            }
+          }
+        }
+        
+        if ($is_select_multiple && is_array($field_value)) {
+          error_log('USERSPN DEBUG: Processing select-multiple field ' . $field_id . ' with value: ' . print_r($field_value, true));
+          // For select-multiple, sanitize as array
+          $sanitized_value = USERSPN_Forms::userspn_sanitizer(
+            $field_value,
+            'select',
+            'select-multiple',
+            $userspn_user_register_field
+          );
+          if (!is_array($sanitized_value)) {
+            error_log('USERSPN DEBUG: WARNING - sanitizer returned non-array for ' . $field_id);
+            $sanitized_value = [];
+          }
+          // Filter empty values and normalize
+          $sanitized_value = array_filter($sanitized_value, function($v) { return $v !== '' && $v !== null; });
+          $all_numeric = !empty($sanitized_value) && count(array_filter($sanitized_value, 'is_numeric')) === count($sanitized_value);
+          if ($all_numeric) {
+            $sanitized_value = array_map('intval', $sanitized_value);
+          }
+          $sanitized_value = array_values(array_unique($sanitized_value));
+          error_log('USERSPN DEBUG: Saving select-multiple field ' . $field_key . ' with value: ' . print_r($sanitized_value, true));
+          update_user_meta($user_id, $field_key, $sanitized_value);
+          $saved_value = get_user_meta($user_id, $field_key, true);
+          error_log('USERSPN DEBUG: Verification - saved value for ' . $field_key . ': ' . print_r($saved_value, true));
+        } elseif (is_array($field_value)) {
+          // For other array fields (like html_multi), preserve as array
+          error_log('USERSPN DEBUG: Processing array field ' . $field_id . ' with value: ' . print_r($field_value, true));
+          $sanitized_value = array_map(function($value) use ($userspn_user_register_field) {
+            return USERSPN_Forms::userspn_sanitizer(
+              $value,
+              $userspn_user_register_field['input'] ?? 'input',
+              $userspn_user_register_field['type'] ?? 'text',
+              $userspn_user_register_field
+            );
+          }, $field_value);
+          error_log('USERSPN DEBUG: Saving array field ' . $field_key . ' with value: ' . print_r($sanitized_value, true));
+          update_user_meta($user_id, $field_key, $sanitized_value);
+        } else {
+          // For single values, use sanitize_text_field as before
+          error_log('USERSPN DEBUG: Processing single field ' . $field_id . ' with value: ' . $field_value);
+          $sanitized_value = sanitize_text_field($field_value);
+          error_log('USERSPN DEBUG: Saving single field ' . $field_key . ' with value: ' . $sanitized_value);
+          update_user_meta($user_id, $field_key, $sanitized_value);
+        }
       }
     }
+    error_log('USERSPN DEBUG: userspn_profile_save_fields complete');
   }
 
   public function userspn_csv_template($file_name, $header, $body_rows) {

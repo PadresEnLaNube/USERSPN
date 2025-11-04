@@ -8,83 +8,118 @@
  * @since      1.0.0
  * @package    USERSPN
  * @subpackage USERSPN/includes
- * @author     Padres en la Nube <info@padresenlanube.com>
+ * @author     Padres en la Nube
  */
 class USERSPN_Ajax {
-	/**
-	 * Load ajax functions.
-	 *
-	 * @since    1.0.0
-	 */
-	public function userspn_ajax_server() {
+  /**
+   * Load ajax functions.
+   *
+   * @since    1.0.0
+   */
+  public function userspn_ajax_server() {
     if (array_key_exists('userspn_ajax_type', $_POST)) {
       // Always require nonce verification
       if (!array_key_exists('userspn_ajax_nonce', $_POST)) {
         echo wp_json_encode([
           'error_key' => 'userspn_nonce_ajax_error_required',
-          'error_content' => esc_html(__('Security check failed: Nonce is required.', 'userspn'))
+          'error_content' => esc_html(__('Security check failed: Nonce is required.', 'userspn')),
         ]);
 
-        exit();
+        exit;
       }
 
       if (!wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['userspn_ajax_nonce'])), 'userspn-nonce')) {
         echo wp_json_encode([
           'error_key' => 'userspn_nonce_ajax_error_invalid',
-          'error_content' => esc_html(__('Security check failed: Invalid nonce.', 'userspn'))
+          'error_content' => esc_html(__('Security check failed: Invalid nonce.', 'userspn')),
         ]);
-        
-        exit();
+
+        exit;
       }
 
-  		$userspn_ajax_type = USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_ajax_type']));
-      $ajax_keys = !empty($_POST['ajax_keys']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['ajax_keys'])) : [];
-      $key_value = [];
+      $userspn_ajax_type = USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_ajax_type']));
+
+      $userspn_ajax_keys = !empty($_POST['userspn_ajax_keys']) ? array_map(function($key) {
+        return array(
+          'id' => sanitize_key($key['id']),
+          'node' => sanitize_key($key['node']),
+          'type' => sanitize_key($key['type']),
+          'field_config' => !empty($key['field_config']) ? $key['field_config'] : []
+        );
+      }, wp_unslash($_POST['userspn_ajax_keys'])) : [];
+
+      $userspn_basecpt_id = !empty($_POST['userspn_basecpt_id']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_basecpt_id'])) : 0;
+      // Extra commonly used IDs
       $user_id = !empty($_POST['user_id']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['user_id'])) : 0;
       $current_user_id = !empty($_POST['current_user_id']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['current_user_id'])) : 0;
       $post_id = !empty($_POST['post_id']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['post_id'])) : 0;
       $file_id = !empty($_POST['file_id']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['file_id'])) : 0;
+      
+      $userspn_key_value = [];
 
-      if (!empty($ajax_keys)) {
-        foreach ($ajax_keys as $key) {
-          if (strpos($key['id'], '[]') !== false) {
-            $clear_key = str_replace('[]', '', $key['id']);
-            ${$clear_key} = $key_value[$clear_key] = [];
+      if (!empty($userspn_ajax_keys)) {
+        foreach ($userspn_ajax_keys as $userspn_key) {
+          if (strpos((string)$userspn_key['id'], '[]') !== false) {
+            $userspn_clear_key = str_replace('[]', '', $userspn_key['id']);
+            ${$userspn_clear_key} = $userspn_key_value[$userspn_clear_key] = [];
 
-            if (!empty($_POST[$clear_key])) {
-              $sanitized_post_data = wp_unslash($_POST[$clear_key]);
-              foreach ($sanitized_post_data as $multi_key => $multi_value) {
-                $final_value = !empty($sanitized_post_data[$multi_key]) ? USERSPN_Forms::userspn_sanitizer($sanitized_post_data[$multi_key], $key['node'], $key['type']) : '';
-                ${$clear_key}[$multi_key] = $key_value[$clear_key][$multi_key] = $final_value;
+            if (!empty($_POST[$userspn_clear_key])) {
+              $unslashed_array = wp_unslash($_POST[$userspn_clear_key]);
+              $sanitized_array = array_map(function($value) use ($userspn_key) {
+                return USERSPN_Forms::userspn_sanitizer(
+                  $value,
+                  $userspn_key['node'],
+                  $userspn_key['type'],
+                  $userspn_key['field_config']
+                );
+              }, $unslashed_array);
+              
+              // filter empty entries
+              $sanitized_array = array_filter($sanitized_array, function($v) { return $v !== '' && $v !== null; });
+              // generic normalization: ints if all numeric, unique, reindex
+              $all_numeric = !empty($sanitized_array) && count(array_filter($sanitized_array, 'is_numeric')) === count($sanitized_array);
+              if ($all_numeric) {
+                $sanitized_array = array_map('intval', $sanitized_array);
               }
-            }else{
-              ${$clear_key} = '';
-              $key_value[$clear_key][$multi_key] = '';
+              $sanitized_array = array_values(array_unique($sanitized_array));
+              ${$userspn_clear_key} = $userspn_key_value[$userspn_clear_key] = $sanitized_array;
+            } else {
+              // explicit empty array for multiple fields
+              ${$userspn_clear_key} = [];
+              $userspn_key_value[$userspn_clear_key] = [];
             }
-          }else{
-            $key_id = !empty($_POST[$key['id']]) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST[$key['id']]), $key['node'], $key['type']) : '';
-            ${$key['id']} = $key_value[$key['id']] = $key_id;
+          } else {
+            $sanitized_key = sanitize_key($userspn_key['id']);
+            $userspn_key_id = !empty($_POST[$sanitized_key]) ? 
+              USERSPN_Forms::userspn_sanitizer(
+                wp_unslash($_POST[$sanitized_key]), 
+                $userspn_key['node'], 
+                $userspn_key['type'],
+                $userspn_key['field_config']
+              ) : '';
+            ${$userspn_key['id']} = $userspn_key_value[$userspn_key['id']] = $userspn_key_id;
           }
         }
       }
 
       switch ($userspn_ajax_type) {
         case 'userspn_options_save':
-          if (!empty($key_value)) {
-            foreach ($key_value as $key => $value) {
+          if (!empty($userspn_key_value)) {
+            foreach ($userspn_key_value as $key => $value) {
               if (!in_array($key, ['action', 'userspn_ajax_type'])) {
                 update_option($key, $value);
               }
             }
 
             update_option('userspn_options_changed', true);
-            echo wp_json_encode(['error_key' => '', ]);exit();
-          }else{
-            echo wp_json_encode(['error_key' => 'userspn_options_save_error', ]);exit();
+            echo wp_json_encode(['error_key' => '']);
+            exit;
+          } else {
+            echo wp_json_encode(['error_key' => 'userspn_options_save_error']);
+            exit;
           }
           break;
         case 'userspn_popup_manager_edit':
-
           if (!empty($user_id)) {
             global $wp_roles;
             $profile_array = apply_filters('userspn_register_fields', []);
@@ -124,36 +159,38 @@ class USERSPN_Ajax {
                 </div>
               </form>
             <?php
-            exit();
-          }else{
-            echo 'userspn_popup_manager_edit_error';exit();
+            exit;
+          } else {
+            echo 'userspn_popup_manager_edit_error';
+            exit;
           }
           break;
         case 'userspn_manager_edit':
           if (!empty($user_id) && user_can($current_user_id, 'administrator')) {
-            if (!empty($key_value)) {
-              foreach ($key_value as $key => $value) {
+            if (!empty($userspn_key_value)) {
+              foreach ($userspn_key_value as $key => $value) {
                 if ($key == 'userspn_roles') {
                   global $wp_roles;
                   $user = new WP_User($user_id);
-
                   foreach (array_keys($wp_roles->roles) as $role_key) {
                     if (in_array($role_key, $value)) {
                       $user->add_role($role_key);
-                    }else{
+                    } else {
                       $user->remove_role($role_key);
                     }
-                  }                
-                }else{
+                  }
+                } else {
                   update_user_meta($user_id, $key, $value);
                 }
               }
             }
 
-            do_action('userspn_manager_edit', $user_id, $key_value);
-            echo 'userspn_manager_edit_success';exit();
-          }else{
-            echo 'userspn_manager_edit_error';exit();
+            do_action('userspn_manager_edit', $user_id, $userspn_key_value);
+            echo 'userspn_manager_edit_success';
+            exit;
+          } else {
+            echo 'userspn_manager_edit_error';
+            exit;
           }
           break;
         case 'userspn_popup_manager_remove':
@@ -173,18 +210,20 @@ class USERSPN_Ajax {
                 </div>
               </div>
             <?php
-            exit();
-          }else{
-            echo 'userspn_popup_manager_remove_error';exit();
+            exit;
+          } else {
+            echo 'userspn_popup_manager_remove_error';
+            exit;
           }
           break;
         case 'userspn_manager_remove':
           if (!empty($user_id) && user_can($current_user_id, 'administrator')) {
             wp_delete_user($user_id);
-
-            echo 'userspn_manager_remove_success';exit();
-          }else{
-            echo 'userspn_manager_remove_error';exit();
+            echo 'userspn_manager_remove_success';
+            exit;
+          } else {
+            echo 'userspn_manager_remove_error';
+            exit;
           }
           break;
         case 'userspn_profile_progress':
@@ -192,13 +231,10 @@ class USERSPN_Ajax {
             $user = get_user_by('id', $user_id);
             if (!$user) {
               wp_send_json_error();
-              exit();
+              exit;
             }
 
-            // Get all required fields
             $required_fields = [];
-            
-            // Add base fields
             if (get_option('userspn_user_name') == 'on') {
               $required_fields[] = [
                 'id' => 'first_name',
@@ -212,7 +248,6 @@ class USERSPN_Ajax {
               ];
             }
 
-            // Add custom fields
             $custom_fields = apply_filters('userspn_register_fields', []);
             foreach ($custom_fields as $field) {
               if (!empty($field['required'])) {
@@ -224,18 +259,14 @@ class USERSPN_Ajax {
               }
             }
 
-            // Calculate progress
             $completed_fields = 0;
             $fields_status = [];
-
             foreach ($required_fields as $field) {
               $value = get_user_meta($user_id, $field['id'], true);
               $is_completed = !empty($value);
-              
               if ($is_completed) {
                 $completed_fields++;
               }
-
               $fields_status[] = [
                 'name' => $field['name'],
                 'completed' => $is_completed
@@ -249,10 +280,10 @@ class USERSPN_Ajax {
               'percentage' => $percentage,
               'fields' => $fields_status
             ]);
-            exit();
+            exit;
           }
           wp_send_json_error();
-          exit();
+          exit;
           break;
         case 'userspn_input_editor_builder_add':
           $userspn_meta = !empty($_POST['userspn_meta']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_meta'])) : [];
@@ -267,7 +298,8 @@ class USERSPN_Ajax {
             'userspn_meta' => $userspn_meta,
           ];
 
-          USERSPN_Forms::userspn_input_editor_builder($userspn_array);exit();
+          USERSPN_Forms::userspn_input_editor_builder($userspn_array);
+          exit;
           break;
         case 'userspn_input_editor_builder_save':
           $userspn_input_name = !empty($_POST['userspn_input_name']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_input_name'])) : '';
@@ -349,46 +381,42 @@ class USERSPN_Ajax {
 
             switch ($userspn_form_type) {
               case 'option':
-                if(empty(get_option('userspn_user_register_fields'))) {
+                if (empty(get_option('userspn_user_register_fields'))) {
                   update_option('userspn_user_register_fields', [$userspn_input_id => $userspn_meta_value]);
-                }else{
+                } else {
                   $userspn_option_new = get_option('userspn_user_register_fields', true);
                   $userspn_option_new[$userspn_input_id] = $userspn_meta_value;
                   update_option('userspn_user_register_fields', $userspn_option_new);
                 }
-
                 break;
               case 'forum':
-                if(empty(get_post_meta($post_id, $userspn_meta, true))) {
+                if (empty(get_post_meta($post_id, $userspn_meta, true))) {
                   update_post_meta($post_id, $userspn_meta, [$userspn_input_id => $userspn_meta_value]);
-                }else{
+                } else {
                   $userspn_post_meta_new = get_post_meta($post_id, $userspn_meta, true);
                   $userspn_post_meta_new[$userspn_input_id] = $userspn_meta_value;
                   update_post_meta($post_id, $userspn_meta, $userspn_post_meta_new);
                 }
-
                 break;
               case 'table':
-                if(empty(get_post_meta($post_id, $userspn_meta, true))) {
+                if (empty(get_post_meta($post_id, $userspn_meta, true))) {
                   update_post_meta($post_id, $userspn_meta, [$userspn_input_id => $userspn_meta_value]);
-                }else{
+                } else {
                   $userspn_post_meta_new = get_post_meta($post_id, $userspn_meta, true);
                   $userspn_post_meta_new[$userspn_input_id] = $userspn_meta_value;
                   update_post_meta($post_id, $userspn_meta, $userspn_post_meta_new);
                 }
-
                 break;
               case 'questionnaire':
-                if(empty(get_post_meta($post_id, $userspn_meta, true))) {
+                if (empty(get_post_meta($post_id, $userspn_meta, true))) {
                   update_post_meta($post_id, $userspn_meta, [$userspn_input_id => $userspn_meta_value]);
-                }else{
+                } else {
                   $userspn_post_meta_new = get_post_meta($post_id, $userspn_meta, true);
                   $userspn_post_meta_new[$userspn_input_id] = $userspn_meta_value;
                   update_post_meta($post_id, $userspn_meta, $userspn_post_meta_new);
                 }
-                
                 break;
-              }
+            }
 
             ob_start();
             ?>
@@ -397,11 +425,13 @@ class USERSPN_Ajax {
                 <?php USERSPN_Forms::userspn_input_builder($userspn_meta_value, 'user'); ?>
               </div>
             <?php
-            $userspn_return_string = ob_get_contents(); 
-            ob_end_clean(); 
-            echo wp_json_encode(['error_key' => 0, 'html' => wp_kses($userspn_return_string, USERSPN_KSES), 'field_id' => $userspn_input_id, 'label' => $userspn_input_name, 'type' => $userspn_form_type, 'userspn_meta' => $userspn_meta, ]);exit();
-          }else{
-            echo wp_json_encode(['error_key' => 'empty', ]);exit();
+            $userspn_return_string = ob_get_contents();
+            ob_end_clean();
+            echo wp_json_encode(['error_key' => 0, 'html' => wp_kses($userspn_return_string, USERSPN_KSES), 'field_id' => $userspn_input_id, 'label' => $userspn_input_name, 'type' => $userspn_form_type, 'userspn_meta' => $userspn_meta]);
+            exit;
+          } else {
+            echo wp_json_encode(['error_key' => 'empty']);
+            exit;
           }
           break;
         case 'userspn_input_editor_builder_remove':
@@ -412,118 +442,108 @@ class USERSPN_Ajax {
           if (!empty($userspn_input_id) && !empty($userspn_form_type)) {
             if ($userspn_form_type == 'option') {
               $userspn_user_register_fields = get_option('userspn_user_register_fields');
-
-              if(!empty($userspn_user_register_fields[$userspn_input_id])) {
+              if (!empty($userspn_user_register_fields[$userspn_input_id])) {
                 unset($userspn_user_register_fields[$userspn_input_id]);
                 update_option('userspn_user_register_fields', $userspn_user_register_fields);
               }
-            }else{
+            } else {
               $userspn_user_register_fields = get_post_meta($post_id, $userspn_meta, true);
-
-              if(!empty($userspn_user_register_fields[$userspn_input_id])) {
+              if (!empty($userspn_user_register_fields[$userspn_input_id])) {
                 unset($userspn_user_register_fields[$userspn_input_id]);
                 update_post_meta($post_id, $userspn_meta, $userspn_user_register_fields);
               }
             }
 
-            echo 'userspn_input_editor_builder_remove_success';exit();
-          }else{
-            echo 'userspn_input_editor_builder_remove_error';exit();
+            echo 'userspn_input_editor_builder_remove_success';
+            exit;
+          } else {
+            echo 'userspn_input_editor_builder_remove_error';
+            exit;
           }
           break;
         case 'userspn_notifications':
           if (!empty($user_id)) {
-            foreach ($key_value as $key => $value) {
+            foreach ($userspn_key_value as $key => $value) {
               if (!in_array($key, ['userspn_ajax_type', 'user_id', 'action', 'userspn-notifications-btn'])) {
                 update_user_meta($user_id, $key, $value);
               }
             }
-
-            echo 'userspn_notifications_success';exit();
-          }else{
-            echo 'userspn_notifications_error';exit();
+            echo 'userspn_notifications_success';
+            exit;
+          } else {
+            echo 'userspn_notifications_error';
+            exit;
           }
           break;
         case 'userspn_file_uploaded_share':
           if (!empty($file_id) && !empty($post_id)) {
             $userspn_meta_value = $file_id;
-            if(empty(get_post_meta($post_id, 'userspn_file_uploaded_shared', true))) {
+            if (empty(get_post_meta($post_id, 'userspn_file_uploaded_shared', true))) {
               update_post_meta($post_id, 'userspn_file_uploaded_shared', [$userspn_meta_value]);
-            }else{
+            } else {
               $userspn_post_meta_new = get_post_meta($post_id, 'userspn_file_uploaded_shared', true);
-
               if (in_array($userspn_meta_value, $userspn_post_meta_new)) {
                 unset($userspn_post_meta_new[array_search($file_id, $userspn_post_meta_new)]);
-              }else{
+              } else {
                 $userspn_post_meta_new[] = $userspn_meta_value;
               }
-
               update_post_meta($post_id, 'userspn_file_uploaded_shared', $userspn_post_meta_new);
             }
-              
-            echo 'userspn_file_uploaded_share_success';exit();
-          }else{
-            echo 'userspn_file_uploaded_share_error';exit();
+            echo 'userspn_file_uploaded_share_success';
+            exit;
+          } else {
+            echo 'userspn_file_uploaded_share_error';
+            exit;
           }
           break;
         case 'userspn_user_remove':
           $password = !empty($_POST['password']) ? sanitize_text_field(wp_unslash($_POST['password'])) : '';
-
           if (!empty($user_id) && !empty($password)) {
             $plugin_user = new USERSPN_Functions_User();
-
             if ($plugin_user->userspn_check_password($user_id, $password)) {
               require_once(ABSPATH . 'wp-admin/includes/user.php');
-
               if (!user_can($user_id, 'administrator') && $user_id == get_current_user_id()) {
                 wp_delete_user($user_id);
-                echo 'userspn_user_remove_success';exit();
-              }else{
-                echo 'userspn_user_remove_error';exit();
+                echo 'userspn_user_remove_success';
+                exit;
+              } else {
+                echo 'userspn_user_remove_error';
+                exit;
               }
-            }else{
-              echo 'userspn_user_remove_error_invalid_password';exit();
+            } else {
+              echo 'userspn_user_remove_error_invalid_password';
+              exit;
             }
-          }else{
-            echo 'userspn_user_remove_error_empty';exit();
-          }
-          break;
-        case 'userspn_options_save':
-          if (!empty($key_value)) {
-            foreach ($key_value as $key => $value) {
-              if (!in_array($key, ['action', 'userspn_ajax_type'])) {
-                update_option($key, $value);
-              }
-            }
-
-            update_option('userspn_options_changed', true);
-            echo 'userspn_options_save_success';exit();
-          }else{
-            echo 'userspn_options_save_error';exit();
+          } else {
+            echo 'userspn_user_remove_error_empty';
+            exit;
           }
           break;
         case 'userspn_csv_add_contacts':
           if (!empty($user_id)) {
-            $userspn_uploaded_file = get_posts(['fields' => 'ids', 'numberposts' => 1, 'post_type' => 'attachment', 'post_status' => ['any'], 'author' => $user_id, 'orderby' => 'ID', 'order' => 'DESC', ]);
-
+            $userspn_uploaded_file = get_posts(['fields' => 'ids', 'numberposts' => 1, 'post_type' => 'attachment', 'post_status' => ['any'], 'author' => $user_id, 'orderby' => 'ID', 'order' => 'DESC']);
             $plugin_csv = new USERSPN_CSV();
             $plugin_csv->userspn_csv_template_creator(esc_url(wp_get_attachment_url($userspn_uploaded_file[0])));
-
-            echo 'userspn_csv_add_contacts_success';exit();
-          }else{
-            echo 'userspn_csv_add_contacts_error';exit();
+            echo 'userspn_csv_add_contacts_success';
+            exit;
+          } else {
+            echo 'userspn_csv_add_contacts_error';
+            exit;
           }
           break;
         case 'userspn_file_private_remove':
           if (!empty($user_id) && !empty($file_id)) {
             if (get_post($file_id)->post_author == $user_id || current_user_can('administrator')) {
               wp_delete_post($file_id, true);
-              echo 'userspn_file_private_remove_success';exit();
-            }else{
-              echo 'userspn_file_private_remove_error';exit();
+              echo 'userspn_file_private_remove_success';
+              exit;
+            } else {
+              echo 'userspn_file_private_remove_error';
+              exit;
             }
-          }else{
-            echo 'userspn_file_private_remove_error';exit();
+          } else {
+            echo 'userspn_file_private_remove_error';
+            exit;
           }
           break;
         case 'userspn_user_files':
@@ -536,12 +556,12 @@ class USERSPN_Ajax {
             $userspn_uploaded_file = 'userspn_uploaded_file';
             $attach_id = media_handle_upload($userspn_uploaded_file, $post_id);
             update_post_meta($attach_id, 'userspn_user_files', strtotime('now'));
-            
-            echo wp_json_encode(['error_key' => '', 'response' => esc_html(__('Your file has been uploaded succesfully.', 'userspn')), 'html' => $plugin_attachment->userspn_get_private_file_uploaded($attach_id), ]);exit();
-          }else{
-            echo wp_json_encode(['error_key' => 'empty', 'response' => esc_html(__('Please, select a valid file.', 'userspn')), ]);exit();
+            echo wp_json_encode(['error_key' => '', 'response' => esc_html(__('Your file has been uploaded succesfully.', 'userspn')), 'html' => $plugin_attachment->userspn_get_private_file_uploaded($attach_id)]);
+            exit;
+          } else {
+            echo wp_json_encode(['error_key' => 'empty', 'response' => esc_html(__('Please, select a valid file.', 'userspn'))]);
+            exit;
           }
-
           break;
         case 'userspn_profile_image':
           if ($_FILES) {
@@ -551,11 +571,12 @@ class USERSPN_Ajax {
 
             $file_handler = 'userspn_uploaded_file';
             $userspn_related_user_id = !empty($_POST['userspn_related_user_id']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_related_user_id'])) : '';
-            $userspn_file_id = media_handle_upload($file_handler, 0); // Use 0 for no specific post
+            $userspn_file_id = media_handle_upload($file_handler, 0);
 
             if (is_wp_error($userspn_file_id)) {
-              echo 'userspn_profile_image_error';exit();
-            }else{
+              echo 'userspn_profile_image_error';
+              exit;
+            } else {
               update_post_meta($userspn_file_id, 'userspn_related_user_id', $userspn_related_user_id);
               update_user_meta($userspn_related_user_id, 'userspn_user_image', $userspn_file_id);
               ?>
@@ -566,50 +587,41 @@ class USERSPN_Ajax {
                   <div class="userspn-display-table-cell userspn-width-20-percent userspn-text-align-right userspn-vertical-align-middle"></div>
                 </div>
               <?php
-              exit();
+              exit;
             }
-          }else{
-            echo 'userspn_profile_image_error';exit();
+          } else {
+            echo 'userspn_profile_image_error';
+            exit;
           }
           break;
         case 'userspn_remove_avatar':
           $userspn_user_id = !empty($_POST['userspn_user_id']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_user_id'])) : '';
-          
           if (!empty($userspn_user_id)) {
-            // Get current avatar ID
             $current_avatar_id = get_user_meta($userspn_user_id, 'userspn_user_image', true);
-            
             if (!empty($current_avatar_id)) {
-              // Delete the attachment file
               wp_delete_attachment($current_avatar_id, true);
-              
-              // Remove the user meta
               delete_user_meta($userspn_user_id, 'userspn_user_image');
-              
               echo wp_json_encode(['success' => true, 'message' => 'Avatar removed successfully']);
-              exit();
+              exit;
             } else {
               echo wp_json_encode(['success' => false, 'message' => 'No avatar to remove']);
-              exit();
+              exit;
             }
           } else {
             echo wp_json_encode(['success' => false, 'message' => 'Invalid user ID']);
-            exit();
+            exit;
           }
           break;
         case 'userspn_get_avatar_html':
           $userspn_user_id = !empty($_POST['userspn_user_id']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_user_id'])) : '';
-          
           if (!empty($userspn_user_id)) {
             $plugin_user = new USERSPN_Functions_User();
             $avatar_html = do_shortcode('[userspn-get-avatar user_id="' . $userspn_user_id . '" size="50"]');
-            
-            
             echo wp_json_encode(['html' => $avatar_html]);
-            exit();
-          }else{
+            exit;
+          } else {
             echo wp_json_encode(['html' => '']);
-            exit();
+            exit;
           }
           break;
         case 'userspn_csv_template_upload':
@@ -618,28 +630,29 @@ class USERSPN_Ajax {
             require_once(ABSPATH . 'wp-admin/includes/image.php');
             require_once(ABSPATH . 'wp-admin/includes/file.php');
             require_once(ABSPATH . 'wp-admin/includes/media.php');
-            
             $file_handler = 'userspn_csv_template_upload';
             $post_id = 0;
             $userspn_file_id = media_handle_upload($file_handler, $post_id);
-          
             if (empty($userspn_file_id)) {
-              echo 'userspn_csv_template_upload_error_empty';exit();
-            }elseif (is_wp_error($userspn_file_id)) {
-              echo 'userspn_csv_template_upload_error';exit();
-            }else{
+              echo 'userspn_csv_template_upload_error_empty';
+              exit;
+            } elseif (is_wp_error($userspn_file_id)) {
+              echo 'userspn_csv_template_upload_error';
+              exit;
+            } else {
               $plugin_user = new USERSPN_Functions_User();
-              echo wp_kses($plugin_user->userspn_csv_template_reader(wp_get_attachment_url($userspn_file_id)), USERSPN_KSES);exit();
+              echo wp_kses($plugin_user->userspn_csv_template_reader(wp_get_attachment_url($userspn_file_id)), USERSPN_KSES);
+              exit;
             }
-          }else{
-            echo 'userspn_csv_template_upload_error';exit();
+          } else {
+            echo 'userspn_csv_template_upload_error';
+            exit;
           }
           break;
         case 'userspn_analyze_bots':
           if (!current_user_can('manage_options')) {
             wp_send_json_error('Insufficient permissions');
           }
-          
           $limit = !empty($_POST['limit']) ? intval($_POST['limit']) : 100;
           $results = USERSPN_Security::analyze_existing_users_for_bots($limit);
           wp_send_json_success($results);
@@ -648,7 +661,6 @@ class USERSPN_Ajax {
           if (!current_user_can('manage_options')) {
             wp_send_json_error('Insufficient permissions');
           }
-          
           $results = USERSPN_Security::get_bot_analysis_results();
           wp_send_json_success($results);
           break;
@@ -656,7 +668,6 @@ class USERSPN_Ajax {
           if (!current_user_can('manage_options')) {
             wp_send_json_error('Insufficient permissions');
           }
-          
           $user_id = !empty($_POST['user_id']) ? intval($_POST['user_id']) : 0;
           if ($user_id) {
             USERSPN_Security::mark_user_as_bot($user_id);
@@ -669,7 +680,6 @@ class USERSPN_Ajax {
           if (!current_user_can('manage_options')) {
             wp_send_json_error('Insufficient permissions');
           }
-          
           $user_id = !empty($_POST['user_id']) ? intval($_POST['user_id']) : 0;
           if ($user_id) {
             USERSPN_Security::mark_user_as_human($user_id);
@@ -682,13 +692,172 @@ class USERSPN_Ajax {
           if (!current_user_can('manage_options')) {
             wp_send_json_error('Insufficient permissions');
           }
-          
           $deleted_count = USERSPN_Security::delete_confirmed_bots();
           wp_send_json_success(['deleted_count' => $deleted_count]);
           break;
+        case 'userspn_basecpt_view':
+          if (!empty($userspn_basecpt_id)) {
+            try {
+              $plugin_post_type_userspn = new USERSPN_Post_Type_BaseCPT();
+              $basecpt_html = $plugin_post_type_userspn->userspn_basecpt_view(intval($userspn_basecpt_id));
+              
+              echo wp_json_encode([
+                'error_key' => '', 
+                'html' => $basecpt_html, 
+              ]);
+            } catch (Exception $e) {
+              error_log('USERSPN Error in userspn_basecpt_view: ' . $e->getMessage());
+              echo wp_json_encode([
+                'error_key' => 'userspn_basecpt_view_error', 
+                'error_content' => esc_html(__('An error occurred while showing the BaseCPT.', 'userspn')), 
+              ]);
+            }
+
+            exit;
+          }else{
+            echo wp_json_encode([
+              'error_key' => 'userspn_basecpt_view_error', 
+              'error_content' => esc_html(__('BaseCPT ID is required.', 'userspn')), 
+            ]);
+
+            exit;
+          }
+          break;
+        case 'userspn_basecpt_edit':
+          // Check if the BaseCPT exists
+          $userspn_basecpt = get_post($userspn_basecpt_id);
+          
+
+          if (!empty($userspn_basecpt_id)) {
+            $plugin_post_type_userspn = new USERSPN_Post_Type_BaseCPT();
+            echo wp_json_encode([
+              'error_key' => '', 
+              'html' => $plugin_post_type_userspn->userspn_basecpt_edit($userspn_basecpt_id), 
+            ]);
+
+            exit;
+          }else{
+            echo wp_json_encode([
+              'error_key' => 'userspn_basecpt_edit_error', 
+              'error_content' => esc_html(__('An error occurred while showing the BaseCPT.', 'userspn')), 
+            ]);
+
+            exit;
+          }
+          break;
+        case 'userspn_basecpt_new':
+          if (!is_user_logged_in()) {
+            echo wp_json_encode([
+              'error_key' => 'not_logged_in',
+              'error_content' => esc_html(__('You must be logged in to create a new asset.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          $plugin_post_type_userspn = new USERSPN_Post_Type_BaseCPT();
+
+          echo wp_json_encode([
+            'error_key' => '', 
+            'html' => $plugin_post_type_userspn->userspn_basecpt_new($userspn_basecpt_id), 
+          ]);
+
+          exit;
+          break;
+        case 'userspn_basecpt_check':
+          if (!empty($userspn_basecpt_id)) {
+            $plugin_post_type_userspn = new USERSPN_Post_Type_BaseCPT();
+            echo wp_json_encode([
+              'error_key' => '', 
+              'html' => $plugin_post_type_userspn->userspn_basecpt_check($userspn_basecpt_id), 
+            ]);
+
+            exit;
+          }else{
+            echo wp_json_encode([
+              'error_key' => 'userspn_basecpt_check_error', 
+              'error_content' => esc_html(__('An error occurred while checking the BaseCPT.', 'userspn')), 
+              ]);
+
+            exit;
+          }
+          break;
+        case 'userspn_basecpt_duplicate':
+          if (!empty($userspn_basecpt_id)) {
+            $plugin_post_type_post = new USERSPN_Functions_Post();
+            $plugin_post_type_post->userspn_duplicate_post($userspn_basecpt_id, 'publish');
+            
+            $plugin_post_type_userspn = new USERSPN_Post_Type_BaseCPT();
+            echo wp_json_encode([
+              'error_key' => '', 
+              'html' => $plugin_post_type_userspn->userspn_basecpt_list(), 
+            ]);
+
+            exit;
+          }else{
+            echo wp_json_encode([
+              'error_key' => 'userspn_basecpt_duplicate_error', 
+              'error_content' => esc_html(__('An error occurred while duplicating the BaseCPT.', 'userspn')), 
+            ]);
+
+            exit;
+          }
+          break;
+        case 'userspn_basecpt_remove':
+          if (!empty($userspn_basecpt_id)) {
+            wp_delete_post($userspn_basecpt_id, true);
+
+            $plugin_post_type_userspn = new USERSPN_Post_Type_BaseCPT();
+            echo wp_json_encode([
+              'error_key' => '', 
+              'html' => $plugin_post_type_userspn->userspn_basecpt_list(), 
+            ]);
+
+            exit;
+          }else{
+            echo wp_json_encode([
+              'error_key' => 'userspn_basecpt_remove_error', 
+              'error_content' => esc_html(__('An error occurred while removing the BaseCPT.', 'userspn')), 
+            ]);
+
+            exit;
+          }
+          break;
+        case 'userspn_basecpt_share':
+          $plugin_post_type_userspn = new USERSPN_Post_Type_BaseCPT();
+          echo wp_json_encode([
+            'error_key' => '', 
+            'html' => $plugin_post_type_userspn->userspn_basecpt_share(), 
+          ]);
+
+          exit;
+          break;
+        case 'userspn_calendar_view':
+          $calendar_view = !empty($_POST['calendar_view']) ? sanitize_text_field(wp_unslash($_POST['calendar_view'])) : 'month';
+          $calendar_year = !empty($_POST['calendar_year']) ? intval($_POST['calendar_year']) : date('Y');
+          $calendar_month = !empty($_POST['calendar_month']) ? intval($_POST['calendar_month']) : date('m');
+          $calendar_day = !empty($_POST['calendar_day']) ? intval($_POST['calendar_day']) : date('d');
+          
+          $plugin_calendar = new USERSPN_Calendar();
+          $calendar_html = $plugin_calendar->userspn_calendar_render_view_content($calendar_view, $calendar_year, $calendar_month, $calendar_day);
+          
+          echo wp_json_encode([
+            'error_key' => '', 
+            'html' => $calendar_html,
+            'view' => $calendar_view,
+            'year' => $calendar_year,
+            'month' => $calendar_month,
+            'day' => $calendar_day
+          ]);
+
+          exit;
+          break;
       }
 
-      echo wp_json_encode(['error_key' => 'userspn_save_error', ]);exit();
+      echo wp_json_encode([
+        'error_key' => 'userspn_save_error', 
+      ]);
+
+      exit;
     }
-	}
+  }
 }

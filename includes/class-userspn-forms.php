@@ -67,11 +67,113 @@ class USERSPN_Forms {
     }
 
     // If no value is found and there's a default value in the input config, use it
+    // BUT NOT for checkboxes in multiple fields, as empty string and 'off' are valid states (unchecked)
     if (empty($current_value) && !empty($userspn_input['value'])) {
-      $current_value = $userspn_input['value'];
+      // For checkboxes in multiple fields, don't override empty values or 'off' with default
+      if (!($userspn_meta_array && isset($userspn_input['type']) && $userspn_input['type'] === 'checkbox')) {
+        $current_value = $userspn_input['value'];
+      }
+    }
+    
+    // For checkboxes in multiple fields, normalize 'off' to empty string for display
+    if ($userspn_meta_array && isset($userspn_input['type']) && $userspn_input['type'] === 'checkbox' && $current_value === 'off') {
+      $current_value = '';
     }
 
     return $current_value;
+  }
+
+  public static function userspn_input_editor_builder($input_array) {
+    $post_id = get_the_ID();
+    ?>      
+      <div class="userspn-toggle-wrapper userspn-mb-10 <?php echo esc_attr($input_array['id']); ?>">
+        <a href="#" class="userspn-btn userspn-toggle userspn-text-align-left userspn-width-100-percent"><span class="userspn-input-name-span"><?php echo !empty($input_array['label']) ? esc_html($input_array['label']) : esc_html(__('New field', 'userspn')); ?></span> <i class="material-icons-outlined userspn-float-right userspn-cursor-pointer">add</i></a>
+
+        <div class="userspn-content userspn-toggle-content userspn-mb-20 userspn-pl-20 userspn-display-none-soft">
+          <ul id="<?php echo esc_attr($input_array['id']); ?>" class="userspn-input-editor-builder-ul userspn-list-style-none">
+            <li>
+              <label class="userspn-display-block"><?php esc_html_e('Input name', 'userspn'); ?></label>
+              <input type="text" name="userspn-input-name" id="userspn-input-name" class="userspn-input userspn-input-name userspn-input userspn-width-100-percent" value="<?php echo !empty($input_array['label']) ? esc_html($input_array['label']) : esc_html(__('New field', 'userspn')); ?>" placeholder="<?php esc_html_e('Input name', 'userspn'); ?>" <?php echo ($input_array['form_type'] == 'option' && in_array($input_array['id'], ['first_name', 'last_name']) ? 'disabled=""' : '') ?>>
+            </li>
+
+            <li>
+              <label class="userspn-display-block"><?php esc_html_e('Input type', 'userspn'); ?></label>
+              <select class="userspn-select userspn-input-type userspn-select search-disabled userspn-cursor-pointer userspn-vertical-align-top userspn-width-100-percent" <?php echo ($input_array['form_type'] == 'option' && in_array($input_array['id'], ['first_name', 'last_name']) ? 'disabled=""' : '') ?>>
+                <option value="" disabled=""><?php esc_html_e('Select type', 'userspn'); ?></option>
+                <?php foreach (['input' => esc_html(__('Input', 'userspn')), 'select' => esc_html(__('Select', 'userspn')), 'textarea' => esc_html(__('Textarea', 'userspn')), ] as $global_key => $global_value): ?>
+                  <option value="<?php echo esc_attr($global_key); ?>" <?php echo ($input_array['input'] == $global_key) ? 'selected=""' : ''; ?>><?php echo esc_html($global_value); ?></option>
+                <?php endforeach ?>
+              </select>
+            </li>
+
+            <li class="userspn-input-subtype">
+              <label class="userspn-display-block"><?php esc_html_e('Input subtype', 'userspn'); ?></label>
+
+              <select class="userspn-select userspn-input-subtype userspn-select search-disabled userspn-cursor-pointer userspn-vertical-align-top userspn-width-100-percent" <?php echo ($input_array['form_type'] == 'option' && in_array($input_array['id'], ['first_name', 'last_name']) ? 'disabled=""' : '') ?>>
+                <option value="" disabled=""><?php esc_html_e('Select subtype', 'userspn'); ?></option>
+                <?php foreach (['text' => esc_html(__('Text', 'userspn')), 'number' => esc_html(__('Number', 'userspn')), 'date' => esc_html(__('Date', 'userspn')),  'time' => esc_html(__('Time', 'userspn')),'url' => esc_html(__('Url', 'userspn')),  'email' => esc_html(__('Email', 'userspn')), 'password' => esc_html(__('Password', 'userspn')), ] as $global_key => $global_value): ?>
+                  <option value="<?php echo esc_attr($global_key); ?>" <?php echo (!empty($input_array['type']) && $input_array['type'] == $global_key) ? 'selected=""' : ''; ?>><?php echo esc_attr($global_value); ?></option>
+                <?php endforeach ?>
+              </select>
+            </li>
+
+            <li class="userspn-select-subtype userspn-display-none-soft">
+              <label class="userspn-display-block"><?php esc_html_e('Selector subtype', 'userspn'); ?></label>
+
+              <select class="userspn-select userspn-select-subtype userspn-select search-disabled userspn-cursor-pointer userspn-vertical-align-top userspn-width-100-percent" <?php echo ($input_array['form_type'] == 'option' && in_array($input_array['id'], ['first_name', 'last_name']) ? 'disabled=""' : '') ?>>
+                <option value="" disabled=""><?php esc_html_e('Select multiple', 'userspn'); ?></option>
+                <?php foreach (['false' => esc_html(__('Simple selector', 'userspn')), 'true' => esc_html(__('Multiple selector', 'userspn')), ] as $global_key => $global_value): ?>
+                  <option value="<?php echo esc_attr($global_key); ?>" <?php echo ((!empty($input_array['multiple']) && $input_array['multiple']) == $global_key) ? 'selected=""' : ''; ?>><?php echo esc_html($global_value); ?></option>
+                <?php endforeach ?>
+              </select>
+
+              <textarea class="userspn-input userspn-select-options userspn-width-100-percent" name="userspn-select-options" class="userspn-input width-100-percent"><?php echo !empty($input_array['options']) ? implode(PHP_EOL, esc_html($input_array['options'])) : esc_html(__('One option per line', 'userspn')); ?></textarea>
+            </li>
+
+            <li>
+              <label class="userspn-display-block"><?php esc_html_e('Input classes', 'userspn'); ?></label>
+              <input type="text" name="userspn-input-class" id="userspn-input-class" class="userspn-input-class userspn-field userspn-input userspn-width-100-percent" value="<?php echo esc_attr($input_array['class']); ?>" placeholder="<?php esc_html_e('Classes separated by spaces', 'userspn'); ?>">
+            </li>
+
+            <li>
+              <label class="userspn-display-block"><?php esc_html_e('Input required', 'userspn'); ?></label>
+              <select class="userspn-input-required userspn-select search-disabled userspn-cursor-pointer userspn-vertical-align-top userspn-width-100-percent" <?php echo ($input_array['form_type'] == 'option' && in_array($input_array['id'], ['first_name', 'last_name']) ? 'disabled=""' : '') ?>>
+                <option value="" disabled=""><?php esc_html_e('Select requirement', 'userspn'); ?></option>
+                <option value="false" <?php echo $input_array['required'] == 'false' ? 'selected=""' : ''; ?>><?php esc_html_e('Not required', 'userspn'); ?></option>
+                <option value="true" <?php echo $input_array['required'] == 'true' ? 'selected=""' : ''; ?>><?php esc_html_e('Required', 'userspn'); ?></option>
+              </select>
+            </li>
+          </ul>
+
+          <div class="userspn-text-align-center">
+            <div class="userspn-display-table userspn-width-100-percent">
+              <?php if (!in_array($input_array['id'], ['first_name', 'last_name'])): ?>
+                <div class="userspn-display-inline-table userspn-width-30-percent userspn-tablet-display-block userspn-tablet-width-100-percent">
+                  <a href="#" class="userspn-popup" data-userspn-popup-id="userspn-input-editor-builder-btn-remove-popup-<?php echo esc_attr($input_array['id']); ?>"><?php esc_html_e('Remove field', 'userspn'); ?></a>
+
+                  <div id="userspn-input-editor-builder-btn-remove-popup-<?php echo esc_attr($input_array['id']); ?>" data-userspn-input-id="<?php echo esc_attr($input_array['id']); ?>" data-userspn-input-type="<?php echo array_key_exists('form_type', $input_array) ? esc_attr($input_array['form_type']) : ''; ?>" data-userspn-meta="<?php echo array_key_exists('meta', $input_array) ? esc_attr($input_array['meta']) : ''; ?>" class="userspn-popup userspn-input-editor-builder-btn-remove-popup userspn-display-none-soft">
+                    <p><?php esc_html_e('The field will be removed. This action cannot be undone.', 'userspn'); ?></p>
+                    <div class="userspn-display-table userspn-width-100-percent">
+                      <div class="userspn-display-inline-table userspn-width-30-percent userspn-tablet-display-block userspn-tablet-width-100-percent userspn-text-align-center">
+                        <a href="#" class="userspn-popup-close"><?php esc_html_e('Cancel', 'userspn'); ?></a>
+                      </div>
+
+                      <div class="userspn-display-inline-table userspn-width-70-percent userspn-tablet-display-block userspn-tablet-width-100-percent userspn-text-align-center">
+                        <a href="#" class="userspn-btn userspn-input-editor-builder-btn-remove userspn-pl-50 userspn-pr-50" data-userspn-post-id="<?php echo esc_attr($post_id); ?>"><?php esc_html_e('Remove', 'userspn'); ?></a>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+                <div class="userspn-display-inline-table userspn-width-70-percent userspn-tablet-display-block userspn-tablet-width-100-percent userspn-text-align-right">
+                  <a href="#" class="userspn-btn userspn-input-editor-builder-btn-save userspn-pl-50 userspn-pr-50" data-userspn-post-id="<?php echo esc_attr($post_id); ?>"><?php esc_html_e('Save field', 'userspn'); ?></a>
+                </div>
+              <?php endif ?>
+            </div>
+          </div>
+        </div>
+      </div>
+    <?php
   }
 
   public static function userspn_input_builder($userspn_input, $userspn_type, $userspn_id = 0, $disabled = 0, $userspn_meta_array = 0, $userspn_array_index = 0) {
@@ -97,7 +199,7 @@ class USERSPN_Forms {
           case 'checkbox':
             ?>
               <label class="userspn-switch">
-                <input id="<?php echo esc_attr($userspn_input['id']) . ((array_key_exists('multiple', $userspn_input) && $userspn_input['multiple']) ? '[]' : ''); ?>" name="<?php echo esc_attr($userspn_input['id']) . ((array_key_exists('multiple', $userspn_input) && $userspn_input['multiple']) ? '[]' : ''); ?>" class="<?php echo array_key_exists('class', $userspn_input) ? esc_attr($userspn_input['class']) : ''; ?> userspn-checkbox userspn-checkbox-switch userspn-field" type="<?php echo esc_attr($userspn_input['type']); ?>" <?php echo $userspn_value == 'on' ? 'checked="checked"' : ''; ?> <?php echo (((array_key_exists('disabled', $userspn_input) && $userspn_input['disabled'] == 'true') || $disabled) ? 'disabled' : ''); ?> <?php echo ((array_key_exists('required', $userspn_input) && $userspn_input['required'] == true) ? 'required' : ''); ?> <?php echo wp_kses_post($userspn_parent_block); ?>>
+                <input id="<?php echo esc_attr($userspn_input['id']) . ((array_key_exists('multiple', $userspn_input) && $userspn_input['multiple']) ? '[]' : ''); ?>" name="<?php echo esc_attr($userspn_input['id']) . ((array_key_exists('multiple', $userspn_input) && $userspn_input['multiple']) ? '[]' : ''); ?>" class="<?php echo array_key_exists('class', $userspn_input) ? esc_attr($userspn_input['class']) : ''; ?> userspn-checkbox userspn-checkbox-switch userspn-field" type="<?php echo esc_attr($userspn_input['type']); ?>" <?php echo $userspn_value == 'on' ? 'checked="checked"' : ''; ?> <?php echo (((array_key_exists('disabled', $userspn_input) && $userspn_input['disabled'] == 'true') || $disabled) ? 'disabled' : ''); ?> <?php echo ((array_key_exists('required', $userspn_input) && $userspn_input['required'] == true) ? 'required' : ''); ?> <?php echo (array_key_exists('multiple', $userspn_input) && $userspn_input['multiple'] ? 'multiple' : ''); ?> <?php echo wp_kses_post($userspn_parent_block); ?>>
                 <span class="userspn-slider userspn-round"></span>
               </label>
             <?php
@@ -177,13 +279,13 @@ class USERSPN_Forms {
               </div>
             <?php
             break;
-          case 'button':
-            ?>
-              <div class="userspn-text-align-left">
-                <input type="button" value="<?php echo esc_attr($userspn_input['value']); ?>" name="<?php echo esc_attr($userspn_input['id']); ?>" id="<?php echo esc_attr($userspn_input['id']); ?>" class="<?php echo array_key_exists('class', $userspn_input) ? esc_attr($userspn_input['class']) : 'userspn-btn'; ?>" <?php echo (array_key_exists('onclick', $userspn_input) ? 'onclick="' . esc_attr($userspn_input['onclick']) . '"' : ''); ?> <?php echo (((array_key_exists('disabled', $userspn_input) && $userspn_input['disabled'] == 'true') || $disabled) ? 'disabled' : ''); ?> <?php echo wp_kses_post($userspn_parent_block); ?>/>
-              </div>
-            <?php
-            break;
+      case 'button':
+        ?>
+          <div class="userspn-text-align-left">
+            <input type="button" value="<?php echo esc_attr($userspn_input['value']); ?>" name="<?php echo esc_attr($userspn_input['id']); ?>" id="<?php echo esc_attr($userspn_input['id']); ?>" class="<?php echo array_key_exists('class', $userspn_input) ? esc_attr($userspn_input['class']) : 'userspn-btn'; ?>" <?php echo (array_key_exists('onclick', $userspn_input) ? 'onclick="' . esc_attr($userspn_input['onclick']) . '"' : ''); ?> <?php echo (((array_key_exists('disabled', $userspn_input) && $userspn_input['disabled'] == 'true') || $disabled) ? 'disabled' : ''); ?> <?php echo wp_kses_post($userspn_parent_block); ?>/>
+          </div>
+        <?php
+        break;
           case 'hidden':
             ?>
               <input type="hidden" id="<?php echo esc_attr($userspn_input['id']); ?>" name="<?php echo esc_attr($userspn_input['id']); ?>" value="<?php echo esc_attr($userspn_value); ?>" <?php echo (array_key_exists('multiple', $userspn_input) && $userspn_input['multiple'] == 'true' ? 'multiple' : ''); ?>>
@@ -198,7 +300,7 @@ class USERSPN_Forms {
             ?>
               <div class="userspn-password-checker">
                 <div class="userspn-password-input userspn-position-relative">
-                  <input id="<?php echo esc_attr($userspn_input['id']) . ((array_key_exists('multiple', $userspn_input) && $userspn_input['multiple'] == 'true') ? '[]' : ''); ?>" name="<?php echo esc_attr($userspn_input['id']) . ((array_key_exists('multiple', $userspn_input) && $userspn_input['multiple'] == 'true') ? '[]' : ''); ?>" <?php echo (array_key_exists('multiple', $userspn_input) && $userspn_input['multiple'] == 'true' ? 'multiple' : ''); ?> class="userspn-field userspn-password-strength <?php echo array_key_exists('class', $userspn_input) ? esc_attr($userspn_input['class']) : ''; ?>" type="<?php echo esc_attr($userspn_input['type']); ?>" <?php echo ((array_key_exists('required', $userspn_input) && $userspn_input['required'] == 'true') ? 'required' : ''); ?> <?php echo ((array_key_exists('disabled', $userspn_input) && $userspn_input['disabled'] == 'true') ? 'disabled' : ''); ?> value="<?php echo (!empty($userspn_input['button_text']) ? esc_html($userspn_input['button_text']) : esc_attr($userspn_value)); ?>" placeholder="<?php echo (array_key_exists('placeholder', $userspn_input) ? esc_attr($userspn_input['placeholder']) : ''); ?>" pattern="[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{}|;:,.<>?]+" title="<?php esc_attr_e('Only letters, numbers, and these symbols are permitted: !@#$%^&*()_+-=[]{}|;:,.<>?', 'userspn'); ?>" <?php echo wp_kses_post($userspn_parent_block); ?>/>
+                  <input id="<?php echo esc_attr($userspn_input['id']) . ((array_key_exists('multiple', $userspn_input) && $userspn_input['multiple'] == 'true') ? '[]' : ''); ?>" name="<?php echo esc_attr($userspn_input['id']) . ((array_key_exists('multiple', $userspn_input) && $userspn_input['multiple'] == 'true') ? '[]' : ''); ?>" <?php echo (array_key_exists('multiple', $userspn_input) && $userspn_input['multiple'] == 'true' ? 'multiple' : ''); ?> class="userspn-field userspn-password-strength <?php echo array_key_exists('class', $userspn_input) ? esc_attr($userspn_input['class']) : ''; ?>" type="<?php echo esc_attr($userspn_input['type']); ?>" <?php echo ((array_key_exists('required', $userspn_input) && $userspn_input['required'] == 'true') ? 'required' : ''); ?> <?php echo ((array_key_exists('disabled', $userspn_input) && $userspn_input['disabled'] == 'true') ? 'disabled' : ''); ?> value="<?php echo (!empty($userspn_input['button_text']) ? esc_html($userspn_input['button_text']) : esc_attr($userspn_value)); ?>" placeholder="<?php echo (array_key_exists('placeholder', $userspn_input) ? esc_attr($userspn_input['placeholder']) : ''); ?>" <?php echo wp_kses_post($userspn_parent_block); ?>/>
 
                   <a href="#" class="userspn-show-pass userspn-cursor-pointer userspn-display-none-soft">
                     <i class="material-icons-outlined userspn-font-size-20">visibility</i>
@@ -210,7 +312,7 @@ class USERSPN_Forms {
                     <div class="userspn-password-strength-bar"></div>
                   </div>
 
-                  <h3 class="userspn-mt-20 userspn-position-relative"><?php esc_html_e('Password strength checker', 'userspn'); ?> <i class="material-icons-outlined userspn-cursor-pointer userspn-close-icon userspn-mt-30">close</i></h3>
+                  <h3 class="userspn-mt-20"><?php esc_html_e('Password strength checker', 'userspn'); ?> <i class="material-icons-outlined userspn-cursor-pointer userspn-close-icon userspn-mt-30">close</i></h3>
                   <ul class="userspn-list-style-none">
                     <li class="low-upper-case">
                       <i class="material-icons-outlined userspn-font-size-20 userspn-vertical-align-middle">radio_button_unchecked</i>
@@ -222,7 +324,7 @@ class USERSPN_Forms {
                     </li>
                     <li class="one-special-char">
                       <i class="material-icons-outlined userspn-font-size-20 userspn-vertical-align-middle">radio_button_unchecked</i>
-                      <span><?php esc_html_e('Special Character (!@#$%^&*()_+-=[]{}|;:,.<>?)', 'userspn'); ?></span>
+                      <span><?php esc_html_e('Special Character (!@#$%^&*)', 'userspn'); ?></span>
                     </li>
                     <li class="eight-character">
                       <i class="material-icons-outlined userspn-font-size-20 userspn-vertical-align-middle">radio_button_unchecked</i>
@@ -429,7 +531,9 @@ class USERSPN_Forms {
                 <div class="userspn-html-multi-group userspn-display-table userspn-width-100-percent userspn-mb-30">
                   <div class="userspn-display-inline-table userspn-width-90-percent">
                     <?php foreach ($userspn_input['html_multi_fields'] as $index => $html_multi_field): ?>
-                      <label><?php echo esc_html($html_multi_field['label']); ?></label>
+                      <?php if (isset($html_multi_field['label']) && !empty($html_multi_field['label'])): ?>
+                        <label><?php echo esc_html($html_multi_field['label']); ?></label>
+                      <?php endif; ?>
 
                       <?php self::userspn_input_builder($html_multi_field, $userspn_type, $userspn_id, false, true, $length_index); ?>
                     <?php endforeach ?>
@@ -575,6 +679,44 @@ class USERSPN_Forms {
           </div>
         <?php
         break;
+      case 'tags':
+        // Get current tags value
+        $current_tags = self::userspn_get_userspn_value($userspn_type, $userspn_id, $userspn_input);
+        $tags_array = is_array($current_tags) ? $current_tags : [];
+        $tags_string = implode(', ', $tags_array);
+        ?>
+        <div class="userspn-tags-wrapper" <?php echo wp_kses_post($userspn_parent_block); ?>>
+          <input type="text" 
+            id="<?php echo esc_attr($userspn_input['id']); ?>" 
+            name="<?php echo esc_attr($userspn_input['id']); ?>" 
+            class="userspn-field userspn-tags-input <?php echo array_key_exists('class', $userspn_input) ? esc_attr($userspn_input['class']) : ''; ?>" 
+            value="<?php echo esc_attr($tags_string); ?>" 
+            placeholder="<?php echo (array_key_exists('placeholder', $userspn_input) ? esc_attr($userspn_input['placeholder']) : ''); ?>"
+            <?php echo ((array_key_exists('required', $userspn_input) && $userspn_input['required'] == true) ? 'required' : ''); ?>
+            <?php echo (((array_key_exists('disabled', $userspn_input) && $userspn_input['disabled'] == 'true') || $disabled) ? 'disabled' : ''); ?> />
+          
+          <div class="userspn-tags-suggestions" style="display: none;">
+            <div class="userspn-tags-suggestions-list"></div>
+          </div>
+          
+          <div class="userspn-tags-display">
+            <?php if (!empty($tags_array)): ?>
+              <?php foreach ($tags_array as $tag): ?>
+                <span class="userspn-tag">
+                  <?php echo esc_html($tag); ?>
+                  <i class="material-icons-outlined userspn-tag-remove">close</i>
+                </span>
+              <?php endforeach; ?>
+            <?php endif; ?>
+          </div>
+          
+          <input type="hidden" 
+            id="<?php echo esc_attr($userspn_input['id']); ?>_tags_array" 
+            name="<?php echo esc_attr($userspn_input['id']); ?>_tags_array" 
+            value="<?php echo esc_attr(json_encode($tags_array)); ?>" />
+        </div>
+        <?php
+        break;
     }
   }
 
@@ -699,95 +841,182 @@ class USERSPN_Forms {
     return ob_get_clean();
   }
 
-  public static function userspn_input_editor_builder($input_array) {
-    $post_id = get_the_ID();
-    ?>      
-      <div class="userspn-toggle-wrapper userspn-mb-10 <?php echo esc_attr($input_array['id']); ?>">
-        <a href="#" class="userspn-btn userspn-toggle userspn-text-align-left userspn-width-100-percent"><span class="userspn-input-name-span"><?php echo !empty($input_array['label']) ? esc_html($input_array['label']) : esc_html(__('New field', 'userspn')); ?></span> <i class="material-icons-outlined userspn-float-right userspn-cursor-pointer">add</i></a>
+  /**
+   * Display formatted values of userspn_input_builder fields in frontend
+   * 
+   * @param array $userspn_input The input array containing field configuration
+   * @param string $userspn_type The type of field (user, post, option)
+   * @param int $userspn_id The ID of the user/post/option
+   * @param int $userspn_meta_array Whether the field is part of a meta array
+   * @param int $userspn_array_index The index in the meta array
+   * @return string Formatted HTML output of field values
+   */
+  public static function userspn_input_display($userspn_input, $userspn_type, $userspn_id = 0, $userspn_meta_array = 0, $userspn_array_index = 0) {
+    // Get the current value using the new function
+    $current_value = self::userspn_get_field_value($userspn_input['id'], $userspn_type, $userspn_id, $userspn_meta_array, $userspn_array_index, $userspn_input);
 
-        <div class="userspn-content userspn-toggle-content userspn-mb-20 userspn-pl-20 userspn-display-none-soft">
-          <ul id="<?php echo esc_attr($input_array['id']); ?>" class="userspn-input-editor-builder-ul userspn-list-style-none">
-            <li>
-              <label class="userspn-display-block"><?php esc_html_e('Input name', 'userspn'); ?></label>
-              <input type="text" name="userspn-input-name" id="userspn-input-name" class="userspn-input userspn-input-name userspn-input userspn-width-100-percent" value="<?php echo !empty($input_array['label']) ? esc_html($input_array['label']) : esc_html(__('New field', 'userspn')); ?>" placeholder="<?php esc_html_e('Input name', 'userspn'); ?>" <?php echo ($input_array['form_type'] == 'option' && in_array($input_array['id'], ['first_name', 'last_name']) ? 'disabled=""' : '') ?>>
-            </li>
-
-            <li>
-              <label class="userspn-display-block"><?php esc_html_e('Input type', 'userspn'); ?></label>
-              <select class="userspn-select userspn-input-type userspn-select search-disabled userspn-cursor-pointer userspn-vertical-align-top userspn-width-100-percent" <?php echo ($input_array['form_type'] == 'option' && in_array($input_array['id'], ['first_name', 'last_name']) ? 'disabled=""' : '') ?>>
-                <option value="" disabled=""><?php esc_html_e('Select type', 'userspn'); ?></option>
-                <?php foreach (['input' => esc_html(__('Input', 'userspn')), 'select' => esc_html(__('Select', 'userspn')), 'textarea' => esc_html(__('Textarea', 'userspn')), ] as $global_key => $global_value): ?>
-                  <option value="<?php echo esc_attr($global_key); ?>" <?php echo ($input_array['input'] == $global_key) ? 'selected=""' : ''; ?>><?php echo esc_html($global_value); ?></option>
-                <?php endforeach ?>
-              </select>
-            </li>
-
-            <li class="userspn-input-subtype">
-              <label class="userspn-display-block"><?php esc_html_e('Input subtype', 'userspn'); ?></label>
-
-              <select class="userspn-select userspn-input-subtype userspn-select search-disabled userspn-cursor-pointer userspn-vertical-align-top userspn-width-100-percent" <?php echo ($input_array['form_type'] == 'option' && in_array($input_array['id'], ['first_name', 'last_name']) ? 'disabled=""' : '') ?>>
-                <option value="" disabled=""><?php esc_html_e('Select subtype', 'userspn'); ?></option>
-                <?php foreach (['text' => esc_html(__('Text', 'userspn')), 'number' => esc_html(__('Number', 'userspn')), 'date' => esc_html(__('Date', 'userspn')),  'time' => esc_html(__('Time', 'userspn')),'url' => esc_html(__('Url', 'userspn')),  'email' => esc_html(__('Email', 'userspn')), 'password' => esc_html(__('Password', 'userspn')), ] as $global_key => $global_value): ?>
-                  <option value="<?php echo esc_attr($global_key); ?>" <?php echo (!empty($input_array['type']) && $input_array['type'] == $global_key) ? 'selected=""' : ''; ?>><?php echo esc_attr($global_value); ?></option>
-                <?php endforeach ?>
-              </select>
-            </li>
-
-            <li class="userspn-select-subtype userspn-display-none-soft">
-              <label class="userspn-display-block"><?php esc_html_e('Selector subtype', 'userspn'); ?></label>
-
-              <select class="userspn-select userspn-select-subtype userspn-select search-disabled userspn-cursor-pointer userspn-vertical-align-top userspn-width-100-percent" <?php echo ($input_array['form_type'] == 'option' && in_array($input_array['id'], ['first_name', 'last_name']) ? 'disabled=""' : '') ?>>
-                <option value="" disabled=""><?php esc_html_e('Select multiple', 'userspn'); ?></option>
-                <?php foreach (['false' => esc_html(__('Simple selector', 'userspn')), 'true' => esc_html(__('Multiple selector', 'userspn')), ] as $global_key => $global_value): ?>
-                  <option value="<?php echo esc_attr($global_key); ?>" <?php echo ((!empty($input_array['multiple']) && $input_array['multiple']) == $global_key) ? 'selected=""' : ''; ?>><?php echo esc_html($global_value); ?></option>
-                <?php endforeach ?>
-              </select>
-
-              <textarea class="userspn-input userspn-select-options userspn-width-100-percent" name="userspn-select-options" class="userspn-input width-100-percent"><?php echo !empty($input_array['options']) ? implode(PHP_EOL, esc_html($input_array['options'])) : esc_html(__('One option per line', 'userspn')); ?></textarea>
-            </li>
-
-            <li>
-              <label class="userspn-display-block"><?php esc_html_e('Input classes', 'userspn'); ?></label>
-              <input type="text" name="userspn-input-class" id="userspn-input-class" class="userspn-input-class userspn-field userspn-input userspn-width-100-percent" value="<?php echo esc_attr($input_array['class']); ?>" placeholder="<?php esc_html_e('Classes separated by spaces', 'userspn'); ?>">
-            </li>
-
-            <li>
-              <label class="userspn-display-block"><?php esc_html_e('Input required', 'userspn'); ?></label>
-              <select class="userspn-input-required userspn-select search-disabled userspn-cursor-pointer userspn-vertical-align-top userspn-width-100-percent" <?php echo ($input_array['form_type'] == 'option' && in_array($input_array['id'], ['first_name', 'last_name']) ? 'disabled=""' : '') ?>>
-                <option value="" disabled=""><?php esc_html_e('Select requirement', 'userspn'); ?></option>
-                <option value="false" <?php echo $input_array['required'] == 'false' ? 'selected=""' : ''; ?>><?php esc_html_e('Not required', 'userspn'); ?></option>
-                <option value="true" <?php echo $input_array['required'] == 'true' ? 'selected=""' : ''; ?>><?php esc_html_e('Required', 'userspn'); ?></option>
-              </select>
-            </li>
-          </ul>
-
-          <div class="userspn-text-align-center">
-            <div class="userspn-display-table userspn-width-100-percent">
-              <?php if (!in_array($input_array['id'], ['first_name', 'last_name'])): ?>
-                <div class="userspn-display-inline-table userspn-width-30-percent userspn-tablet-display-block userspn-tablet-width-100-percent">
-                  <a href="#" class="userspn-popup" data-userspn-popup-id="userspn-input-editor-builder-btn-remove-popup-<?php echo esc_attr($input_array['id']); ?>"><?php esc_html_e('Remove field', 'userspn'); ?></a>
-
-                  <div id="userspn-input-editor-builder-btn-remove-popup-<?php echo esc_attr($input_array['id']); ?>" data-userspn-input-id="<?php echo esc_attr($input_array['id']); ?>" data-userspn-input-type="<?php echo array_key_exists('form_type', $input_array) ? esc_attr($input_array['form_type']) : ''; ?>" data-userspn-meta="<?php echo array_key_exists('meta', $input_array) ? esc_attr($input_array['meta']) : ''; ?>" class="userspn-popup userspn-input-editor-builder-btn-remove-popup userspn-display-none-soft">
-                    <p><?php esc_html_e('The field will be removed. This action cannot be undone.', 'userspn'); ?></p>
-                    <div class="userspn-display-table userspn-width-100-percent">
-                      <div class="userspn-display-inline-table userspn-width-30-percent userspn-tablet-display-block userspn-tablet-width-100-percent userspn-text-align-center">
-                        <a href="#" class="userspn-popup-close"><?php esc_html_e('Cancel', 'userspn'); ?></a>
-                      </div>
-
-                      <div class="userspn-display-inline-table userspn-width-70-percent userspn-tablet-display-block userspn-tablet-width-100-percent userspn-text-align-center">
-                        <a href="#" class="userspn-btn userspn-input-editor-builder-btn-remove userspn-pl-50 userspn-pr-50" data-userspn-post-id="<?php echo esc_attr($post_id); ?>"><?php esc_html_e('Remove', 'userspn'); ?></a>
-                      </div>
+    // Start the field value display
+    ?>
+      <div class="userspn-field-value">
+        <?php
+        switch ($userspn_input['input']) {
+          case 'input':
+            switch ($userspn_input['type']) {
+              case 'hidden':
+                break;
+              case 'nonce':
+                break;
+              case 'file':
+                if (!empty($current_value)) {
+                  $file_url = wp_get_attachment_url($current_value);
+                  ?>
+                    <div class="userspn-file-display">
+                      <a href="<?php echo esc_url($file_url); ?>" target="_blank" class="userspn-file-link">
+                        <?php echo esc_html(basename($file_url)); ?>
+                      </a>
                     </div>
+                  <?php
+                } else {
+                  echo '<span class="userspn-no-file">' . esc_html__('No file uploaded', 'userspn') . '</span>';
+                }
+                break;
 
+              case 'checkbox':
+                ?>
+                  <div class="userspn-checkbox-display">
+                    <span class="userspn-checkbox-status <?php echo $current_value === 'on' ? 'checked' : 'unchecked'; ?>">
+                      <?php echo $current_value === 'on' ? esc_html__('Yes', 'userspn') : esc_html__('No', 'userspn'); ?>
+                    </span>
                   </div>
+                <?php
+                break;
+
+              case 'radio':
+                if (!empty($userspn_input['radio_options'])) {
+                  foreach ($userspn_input['radio_options'] as $option) {
+                    if ($current_value === $option['value']) {
+                      ?>
+                        <span class="userspn-radio-selected"><?php echo esc_html($option['label']); ?></span>
+                      <?php
+                    }
+                  }
+                }
+                break;
+
+              case 'color':
+                ?>
+                  <div class="userspn-color-display">
+                    <span class="userspn-color-preview" style="background-color: <?php echo esc_attr($current_value); ?>"></span>
+                    <span class="userspn-color-value"><?php echo esc_html($current_value); ?></span>
+                  </div>
+                <?php
+                break;
+
+              default:
+                ?>
+                  <span class="userspn-text-value"><?php echo esc_html($current_value); ?></span>
+                <?php
+                break;
+            }
+            break;
+
+          case 'select':
+            if (!empty($userspn_input['options']) && is_array($userspn_input['options'])) {
+              if (array_key_exists('multiple', $userspn_input) && $userspn_input['multiple']) {
+                // Handle multiple select
+                $selected_values = is_array($current_value) ? $current_value : array();
+                if (!empty($selected_values)) {
+                  ?>
+                  <div class="userspn-select-values userspn-select-values-column">
+                    <?php foreach ($selected_values as $value): ?>
+                      <?php if (isset($userspn_input['options'][$value])): ?>
+                        <div class="userspn-select-value-item"><?php echo esc_html($userspn_input['options'][$value]); ?></div>
+                      <?php endif; ?>
+                    <?php endforeach; ?>
+                  </div>
+                  <?php
+                }
+              } else {
+                // Handle single select
+                $current_value = is_scalar($current_value) ? (string)$current_value : '';
+                if (isset($userspn_input['options'][$current_value])) {
+                  ?>
+                  <span class="userspn-select-value"><?php echo esc_html($userspn_input['options'][$current_value]); ?></span>
+                  <?php
+                }
+              }
+            }
+            break;
+
+          case 'textarea':
+            ?>
+              <div class="userspn-textarea-value"><?php echo wp_kses_post(nl2br($current_value)); ?></div>
+            <?php
+            break;
+          case 'image':
+            if (!empty($current_value)) {
+              $image_ids = is_array($current_value) ? $current_value : explode(',', $current_value);
+              ?>
+                <div class="userspn-image-gallery">
+                  <?php foreach ($image_ids as $image_id): ?>
+                    <div class="userspn-image-item">
+                      <?php echo wp_get_attachment_image($image_id, 'medium'); ?>
+                    </div>
+                  <?php endforeach; ?>
                 </div>
-                <div class="userspn-display-inline-table userspn-width-70-percent userspn-tablet-display-block userspn-tablet-width-100-percent userspn-text-align-right">
-                  <a href="#" class="userspn-btn userspn-input-editor-builder-btn-save userspn-pl-50 userspn-pr-50" data-userspn-post-id="<?php echo esc_attr($post_id); ?>"><?php esc_html_e('Save field', 'userspn'); ?></a>
-                </div>
-              <?php endif ?>
-            </div>
-          </div>
-        </div>
+              <?php
+            } else {
+              ?>
+                <span class="userspn-no-image"><?php esc_html_e('No images uploaded', 'userspn'); ?></span>
+              <?php
+            }
+            break;
+          case 'editor':
+            ?>
+              <div class="userspn-editor-content"><?php echo wp_kses_post($current_value); ?></div>
+            <?php
+            break;
+          case 'html':
+            if (!empty($userspn_input['html_content'])) {
+              ?>
+                <div class="userspn-html-content"><?php echo wp_kses_post(do_shortcode($userspn_input['html_content'])); ?></div>
+              <?php
+            }
+            break;
+          case 'html_multi':
+            switch ($userspn_type) {
+              case 'user':
+                $html_multi_fields_length = !empty(get_user_meta($userspn_id, $userspn_input['html_multi_fields'][0]['id'], true)) ? count(get_user_meta($userspn_id, $userspn_input['html_multi_fields'][0]['id'], true)) : 0;
+                break;
+              case 'post':
+                $html_multi_fields_length = !empty(get_post_meta($userspn_id, $userspn_input['html_multi_fields'][0]['id'], true)) ? count(get_post_meta($userspn_id, $userspn_input['html_multi_fields'][0]['id'], true)) : 0;
+                break;
+              case 'option':
+                $html_multi_fields_length = !empty(get_option($userspn_input['html_multi_fields'][0]['id'])) ? count(get_option($userspn_input['html_multi_fields'][0]['id'])) : 0;
+            }
+
+            ?>
+              <div class="userspn-html-multi-content">
+                <?php if ($html_multi_fields_length): ?>
+                  <?php foreach (range(0, ($html_multi_fields_length - 1)) as $length_index): ?>
+                    <div class="userspn-html-multi-group userspn-display-table userspn-width-100-percent userspn-mb-30">
+                      <?php foreach ($userspn_input['html_multi_fields'] as $index => $html_multi_field): ?>
+                          <div class="userspn-display-inline-table userspn-width-60-percent">
+                            <label><?php echo esc_html($html_multi_field['label']); ?></label>
+                          </div>
+
+                          <div class="userspn-display-inline-table userspn-width-40-percent">
+                            <?php self::userspn_input_display($html_multi_field, $userspn_type, $userspn_id, 1, $length_index); ?>
+                          </div>
+                      <?php endforeach ?>
+                    </div>
+                  <?php endforeach ?>
+                <?php endif; ?>
+              </div>
+            <?php
+            break;
+        }
+        ?>
       </div>
     <?php
   }
