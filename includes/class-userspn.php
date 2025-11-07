@@ -52,7 +52,7 @@ class USERSPN {
 		if (defined('USERSPN_VERSION')) {
 			$this->version = USERSPN_VERSION;
 		} else {
-			$this->version = '1.0.15';
+			$this->version = '1.0.16';
 		}
 
 		$this->plugin_name = 'userspn';
@@ -69,6 +69,7 @@ class USERSPN {
 		$this->userspn_load_settings();
 		$this->userspn_load_shortcodes();
 		$this->userspn_load_notifications();
+		$this->userspn_load_blocks();
 	}
 
 	/**
@@ -216,6 +217,11 @@ class USERSPN {
 		 * The class responsible for security functions.
 		 */
 		require_once USERSPN_DIR . 'includes/class-userspn-security.php';
+
+		/**
+		 * The class responsible for Gutenberg blocks.
+		 */
+		require_once USERSPN_DIR . 'includes/class-userspn-blocks.php';
 
 		$this->loader = new USERSPN_Loader();
 	}
@@ -458,6 +464,18 @@ class USERSPN {
 	private function userspn_load_notifications() {
 		$plugin_notifications = new USERSPN_Notifications();
 		$this->loader->userspn_add_action('wp_body_open', $plugin_notifications, 'userspn_wp_body_open');
+	}
+
+	/**
+	 * Gutenberg blocks registration.
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 */
+	private function userspn_load_blocks() {
+		$plugin_blocks = new USERSPN_Blocks($this->userspn_get_plugin_name(), $this->userspn_get_version());
+		$this->loader->userspn_add_action('init', $plugin_blocks, 'userspn_register_blocks');
+		$this->loader->userspn_add_action('enqueue_block_editor_assets', $plugin_blocks, 'userspn_enqueue_block_editor_assets');
 	}
 
 	/**

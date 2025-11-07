@@ -1284,6 +1284,15 @@ textarea{
   z-index:9999;
   border-radius: 50%;
 }
+.userspn-profile-inline{
+  position:static;
+  top:auto;
+  right:auto;
+  z-index:auto;
+  border-radius:0;
+  width:100%;
+  height:auto;
+}
 .userspn-avatar-blank{
   width:50px;
   height:50px;
@@ -1417,6 +1426,9 @@ textarea{
     --navigation-layout-justification-setting:flex-start;
     --navigation-layout-justify:flex-start;
   }
+  .userspn-profile-wrapper{
+    padding: 15px;
+  }
 }
 
 @media all and (max-width:450px){
@@ -1428,6 +1440,9 @@ textarea{
   }
   .userspn-mobile-display-table{
     display:table
+  }
+  .userspn-profile-wrapper{
+    padding: 5px;
   }
 }
 

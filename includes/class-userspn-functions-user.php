@@ -452,155 +452,290 @@ class USERSPN_Functions_User {
     return $userspn_user_register_fields;
   }
 
-  public function userspn_profile() {
+  public function userspn_profile($atts = []) {
     // echo do_shortcode('[userspn-profile]');
+    // Extract shortcode attributes
+    $a = shortcode_atts([
+      'inline' => 'false',
+    ], $atts);
+    
+    $is_inline = ($a['inline'] === 'true' || $a['inline'] === '1' || $a['inline'] === true);
+    
+    // Mark that the shortcode has been used on the page
+    if (!isset($GLOBALS['userspn_profile_shortcode_used'])) {
+      $GLOBALS['userspn_profile_shortcode_used'] = true;
+    }
+    
     $user_id = get_current_user_id();
     $functions_attachment = new USERSPN_Functions_Attachment();
 
     ob_start();
     ?>
       <?php if (!is_admin()): ?>
-        <div class="userspn-profile">
+        <div class="userspn-profile<?php echo $is_inline ? ' userspn-profile-inline' : ''; ?> userspn-max-width-700 userspn-margin-auto">
           <?php if (is_user_logged_in()): ?>
-            <a href="#" class="userspn-text-align-right userspn-profile-popup-btn<?php echo (get_option('userspn_disabled') == 'on') ? ' userspn-display-none-soft' : ''; ?>"><?php echo do_shortcode('[userspn-get-avatar user_id="' . $user_id . '" size="50"]'); ?></a>
-
-            <div id="userspn-profile-popup" class="userspn-popup userspn-popup-size-medium userspn-display-none-soft">
-              <div class="userspn-popup-content">
-                <div class="userspn-profile-wrapper" data-user-id="<?php echo esc_attr($user_id); ?>">
-                  <div class="userspn-tabs-wrapper">
-                    <div class="userspn-tabs">
-                      <div class="userspn-tab-links active" data-userspn-id="userspn-tab-edit"><?php esc_html_e('Profile', 'userspn'); ?></div>
-
-                      <?php if (get_option('userspn_user_image') == 'on'): ?>
-                        <div class="userspn-tab-links" data-userspn-id="userspn-tab-image"><?php esc_html_e('Image', 'userspn'); ?></div>
-                      <?php endif ?>
-
-                      <?php if (get_option('userspn_user_notifications') == 'on'): ?>
-                        <?php if (current_user_can('administrator') || class_exists('MAILPN')): ?>
-                          <div class="userspn-tab-links" data-userspn-id="userspn-tab-notifications"><?php esc_html_e('Notifications', 'userspn'); ?></div>
-                        <?php endif ?>
-                      <?php endif ?>
-
-                      <?php if ($functions_attachment->userspn_user_files_allowed($user_id)): ?>
-                        <div class="userspn-tab-links" data-userspn-id="userspn-tab-files"><?php esc_html_e('Files', 'userspn'); ?></div>
-                      <?php endif ?>
-
-                      <?php if (get_option('userspn_user_advanced') == 'on'): ?>
-                        <div class="userspn-tab-links" data-userspn-id="userspn-tab-advanced"><?php esc_html_e('Advanced', 'userspn'); ?></div>
-                      <?php endif ?>
-                    </div>
-
-                    <div id="userspn-tab-edit" class="userspn-tab-content">
-                      <?php echo do_shortcode('[userspn-profile-edit]'); ?>
-                    </div>
+            <?php if ($is_inline): ?>
+              <div class="userspn-profile-wrapper" data-user-id="<?php echo esc_attr($user_id); ?>">
+                <div class="userspn-tabs-wrapper">
+                  <div class="userspn-tabs">
+                    <div class="userspn-tab-links active" data-userspn-id="userspn-tab-edit"><?php esc_html_e('Profile', 'userspn'); ?></div>
 
                     <?php if (get_option('userspn_user_image') == 'on'): ?>
-                      <div id="userspn-tab-image" class="userspn-tab-content userspn-display-none">
-                        <?php echo do_shortcode('[userspn-profile-image]'); ?>
-                      </div>
+                      <div class="userspn-tab-links" data-userspn-id="userspn-tab-image"><?php esc_html_e('Image', 'userspn'); ?></div>
                     <?php endif ?>
 
                     <?php if (get_option('userspn_user_notifications') == 'on'): ?>
-                      <?php if (class_exists('MAILPN')): ?>
-                        <div id="userspn-tab-notifications" class="userspn-tab-content userspn-display-none">
-                          <?php echo do_shortcode('[userspn-notifications]'); ?>
-                        </div>
-                      <?php elseif (current_user_can('administrator')): ?>
-                        <div id="userspn-tab-notifications" class="userspn-tab-content userspn-display-none">
-                          <div class="userspn-mt-30 userspn-p-10">
-                            <p class="userspn-alert"><?php esc_html_e('Notifications are inactive. Please install and activate Mailing Manager - PN to allow integrated notifications in your platform.', 'userspn'); ?></p>
-                            <a href="/wp-admin/plugin-install.php?s=mailpn&tab=search&type=term" class="userspn-btn userspn-btn-mini"><?php esc_html_e('Mailing Manager - PN', 'userspn'); ?></a>
-                          </div>
-                        </div>
+                      <?php if (current_user_can('administrator') || class_exists('MAILPN')): ?>
+                        <div class="userspn-tab-links" data-userspn-id="userspn-tab-notifications"><?php esc_html_e('Notifications', 'userspn'); ?></div>
                       <?php endif ?>
                     <?php endif ?>
 
                     <?php if ($functions_attachment->userspn_user_files_allowed($user_id)): ?>
-                      <div id="userspn-tab-files" class="userspn-tab-content userspn-display-none">
-                        <?php echo do_shortcode('[userspn-user-files]'); ?>
-                      </div>
+                      <div class="userspn-tab-links" data-userspn-id="userspn-tab-files"><?php esc_html_e('Files', 'userspn'); ?></div>
                     <?php endif ?>
 
                     <?php if (get_option('userspn_user_advanced') == 'on'): ?>
-                      <div id="userspn-tab-advanced" class="userspn-tab-content userspn-display-none">
-                        <div class="userspn-display-table userspn-width-100-percent userspn-mt-30 userspn-mb-30 userspn-p-10">
-                          <div class="userspn-display-inline-table userspn-width-100-percent">
-                            <div class="userspn-toggle-wrapper userspn-position-relative userspn-mb-10">
-                              <a href="#" class="userspn-toggle userspn-width-100-percent userspn-text-decoration-none">
-                                <div class="userspn-display-table userspn-width-100-percent">
-                                  <div class="userspn-display-inline-table userspn-width-80-percent userspn-vertical-align-middle">
-                                    <label class="userspn-display-block"><?php esc_html_e('Disconnect account', 'userspn'); ?></label>
-                                  </div>
+                      <div class="userspn-tab-links" data-userspn-id="userspn-tab-advanced"><?php esc_html_e('Advanced', 'userspn'); ?></div>
+                    <?php endif ?>
+                  </div>
 
-                                  <div class="userspn-display-inline-table userspn-width-10-percent userspn-vertical-align-middle userspn-text-align-right">
-                                    <i class="material-icons-outlined userspn-cursor-pointer userspn-vertical-align-middle userspn-color-main-0">add</i>
-                                  </div>
+                  <div id="userspn-tab-edit" class="userspn-tab-content">
+                    <?php echo do_shortcode('[userspn-profile-edit]'); ?>
+                  </div>
+
+                  <?php if (get_option('userspn_user_image') == 'on'): ?>
+                    <div id="userspn-tab-image" class="userspn-tab-content userspn-display-none">
+                      <?php echo do_shortcode('[userspn-profile-image]'); ?>
+                    </div>
+                  <?php endif ?>
+
+                  <?php if (get_option('userspn_user_notifications') == 'on'): ?>
+                    <?php if (class_exists('MAILPN')): ?>
+                      <div id="userspn-tab-notifications" class="userspn-tab-content userspn-display-none">
+                        <?php echo do_shortcode('[userspn-notifications]'); ?>
+                      </div>
+                    <?php elseif (current_user_can('administrator')): ?>
+                      <div id="userspn-tab-notifications" class="userspn-tab-content userspn-display-none">
+                        <div class="userspn-mt-30 userspn-p-10">
+                          <p class="userspn-alert"><?php esc_html_e('Notifications are inactive. Please install and activate Mailing Manager - PN to allow integrated notifications in your platform.', 'userspn'); ?></p>
+                          <a href="/wp-admin/plugin-install.php?s=mailpn&tab=search&type=term" class="userspn-btn userspn-btn-mini"><?php esc_html_e('Mailing Manager - PN', 'userspn'); ?></a>
+                        </div>
+                      </div>
+                    <?php endif ?>
+                  <?php endif ?>
+
+                  <?php if ($functions_attachment->userspn_user_files_allowed($user_id)): ?>
+                    <div id="userspn-tab-files" class="userspn-tab-content userspn-display-none">
+                      <?php echo do_shortcode('[userspn-user-files]'); ?>
+                    </div>
+                  <?php endif ?>
+
+                  <?php if (get_option('userspn_user_advanced') == 'on'): ?>
+                    <div id="userspn-tab-advanced" class="userspn-tab-content userspn-display-none">
+                      <div class="userspn-display-table userspn-width-100-percent userspn-mt-30 userspn-mb-30 userspn-p-10">
+                        <div class="userspn-display-inline-table userspn-width-100-percent">
+                          <div class="userspn-toggle-wrapper userspn-position-relative userspn-mb-10">
+                            <a href="#" class="userspn-toggle userspn-width-100-percent userspn-text-decoration-none">
+                              <div class="userspn-display-table userspn-width-100-percent">
+                                <div class="userspn-display-inline-table userspn-width-80-percent userspn-vertical-align-middle">
+                                  <label class="userspn-display-block"><?php esc_html_e('Disconnect account', 'userspn'); ?></label>
                                 </div>
-                              </a>
 
-                              <div class="userspn-toggle-content userspn-display-none-soft">
-                                <small><?php esc_html_e('Disconnect your user from the system. You will need to log in again.', 'userspn'); ?></small>
+                                <div class="userspn-display-inline-table userspn-width-10-percent userspn-vertical-align-middle userspn-text-align-right">
+                                  <i class="material-icons-outlined userspn-cursor-pointer userspn-vertical-align-middle userspn-color-main-0">add</i>
+                                </div>
                               </div>
-                            </div>
-                          </div>
+                            </a>
 
-                          <div class="userspn-display-inline-table userspn-width-100-percent userspn-text-align-right">
-                            <a href="<?php echo esc_url(wp_logout_url(get_permalink())); ?>" class="userspn-btn userspn-btn-transparent userspn-btn-mini"><?php esc_html_e('Log out', 'userspn'); ?></a>
+                            <div class="userspn-toggle-content userspn-display-none-soft">
+                              <small><?php esc_html_e('Disconnect your user from the system. You will need to log in again.', 'userspn'); ?></small>
+                            </div>
                           </div>
                         </div>
 
-                        <?php if (get_option('userspn_user_change_password') == 'on'): ?>
-                          <?php echo do_shortcode('[userspn-user-change-password-btn]'); ?>
-                        <?php endif ?>
-
-                        <?php if (get_option('userspn_user_remove') == 'on'): ?>
-                          <?php echo do_shortcode('[userspn-user-remove-form]'); ?>
-                        <?php endif ?>
+                        <div class="userspn-display-inline-table userspn-width-100-percent userspn-text-align-right">
+                          <a href="<?php echo esc_url(wp_logout_url(get_permalink())); ?>" class="userspn-btn userspn-btn-transparent userspn-btn-mini"><?php esc_html_e('Log out', 'userspn'); ?></a>
+                        </div>
                       </div>
-                    <?php endif ?>
-                  </div>
-                </div>
-              </div>
-            </div>
-          <?php else: ?>
-            <?php if (get_option('userspn_image_custom') == 'on'): ?>
-              <?php $custom_ids = get_option('userspn_image_custom_ids'); ?>
 
-              <?php if (!empty($custom_ids)): ?>
-                <?php $custom_ids = explode(',', $custom_ids); ?>
-                <a href="#" class="userspn-profile-popup-btn userspn-tooltip-left<?php echo (get_option('userspn_disabled') == 'on') ? ' userspn-display-none-soft' : ''; ?>" title="<?php esc_html_e('Your profile', 'userspn'); ?>"><?php echo wp_get_attachment_image($custom_ids[array_rand($custom_ids)], [50, 50], false, ['class' => 'userspn-border-radius-50-percent userspn-m-10 userspn-display-block']); ?></a>
-              <?php else: ?>
-                <a href="#" class="userspn-profile-popup-btn userspn-tooltip-left<?php echo (get_option('userspn_disabled') == 'on') ? ' userspn-display-none-soft' : ''; ?>" title="<?php esc_html_e('Your profile', 'userspn'); ?>"><i class="material-icons-outlined userspn-profile-icon userspn-color-main-0 userspn-vertical-align-middle userspn-font-size-50">account_circle</i></a>
-              <?php endif ?>
-            <?php else: ?>
-              <a href="#" class="userspn-profile-popup-btn userspn-tooltip-left<?php echo (get_option('userspn_disabled') == 'on') ? ' userspn-display-none-soft' : ''; ?>" aria-label="<?php esc_html_e('Your profile link button', 'userspn'); ?>" title="<?php esc_html_e('Your profile', 'userspn'); ?>"><i class="material-icons-outlined userspn-profile-icon userspn-color-main-0 userspn-vertical-align-middle userspn-font-size-50">account_circle</i></a>
-            <?php endif ?>
+                      <?php if (get_option('userspn_user_change_password') == 'on'): ?>
+                        <?php echo do_shortcode('[userspn-user-change-password-btn]'); ?>
+                      <?php endif ?>
 
-            <div id="userspn-profile-popup" class="userspn-popup userspn-display-none-soft">
-              <div class="userspn-popup-content">
-                <div class="userspn-profile-wrapper">
-                  <div class="userspn-tabs-wrapper">
-                    <div class="userspn-tabs">
-                      <div class="userspn-tab-links active" data-userspn-id="userspn-tab-login"><?php esc_html_e('Login', 'userspn'); ?></div>
-
-                      <?php if (get_option('userspn_user_register') == 'on'): ?>
-                        <div class="userspn-tab-links" data-userspn-id="userspn-tab-register"><?php esc_html_e('Register', 'userspn'); ?></div>
+                      <?php if (get_option('userspn_user_remove') == 'on'): ?>
+                        <?php echo do_shortcode('[userspn-user-remove-form]'); ?>
                       <?php endif ?>
                     </div>
+                  <?php endif ?>
+                </div>
+              </div>
+            <?php else: ?>
+              <a href="#" class="userspn-text-align-right userspn-profile-popup-btn<?php echo (get_option('userspn_disabled') == 'on') ? ' userspn-display-none-soft' : ''; ?>"><?php echo do_shortcode('[userspn-get-avatar user_id="' . $user_id . '" size="50"]'); ?></a>
 
-                    <div id="userspn-tab-login" class="userspn-tab-content">
-                      <?php echo do_shortcode('[userspn-login]'); ?>
-                    </div>
+              <div id="userspn-profile-popup" class="userspn-popup userspn-popup-size-medium userspn-display-none-soft">
+                <div class="userspn-popup-content">
+                  <div class="userspn-profile-wrapper" data-user-id="<?php echo esc_attr($user_id); ?>">
+                    <div class="userspn-tabs-wrapper">
+                      <div class="userspn-tabs">
+                        <div class="userspn-tab-links active" data-userspn-id="userspn-tab-edit"><?php esc_html_e('Profile', 'userspn'); ?></div>
 
-                    <?php if (get_option('userspn_user_register') == 'on'): ?>
-                      <div id="userspn-tab-register" class="userspn-tab-content userspn-display-none">
-                        <?php echo do_shortcode('[userspn-user-register-form]'); ?>
+                        <?php if (get_option('userspn_user_image') == 'on'): ?>
+                          <div class="userspn-tab-links" data-userspn-id="userspn-tab-image"><?php esc_html_e('Image', 'userspn'); ?></div>
+                        <?php endif ?>
+
+                        <?php if (get_option('userspn_user_notifications') == 'on'): ?>
+                          <?php if (current_user_can('administrator') || class_exists('MAILPN')): ?>
+                            <div class="userspn-tab-links" data-userspn-id="userspn-tab-notifications"><?php esc_html_e('Notifications', 'userspn'); ?></div>
+                          <?php endif ?>
+                        <?php endif ?>
+
+                        <?php if ($functions_attachment->userspn_user_files_allowed($user_id)): ?>
+                          <div class="userspn-tab-links" data-userspn-id="userspn-tab-files"><?php esc_html_e('Files', 'userspn'); ?></div>
+                        <?php endif ?>
+
+                        <?php if (get_option('userspn_user_advanced') == 'on'): ?>
+                          <div class="userspn-tab-links" data-userspn-id="userspn-tab-advanced"><?php esc_html_e('Advanced', 'userspn'); ?></div>
+                        <?php endif ?>
                       </div>
-                    <?php endif ?>
+
+                      <div id="userspn-tab-edit" class="userspn-tab-content">
+                        <?php echo do_shortcode('[userspn-profile-edit]'); ?>
+                      </div>
+
+                      <?php if (get_option('userspn_user_image') == 'on'): ?>
+                        <div id="userspn-tab-image" class="userspn-tab-content userspn-display-none">
+                          <?php echo do_shortcode('[userspn-profile-image]'); ?>
+                        </div>
+                      <?php endif ?>
+
+                      <?php if (get_option('userspn_user_notifications') == 'on'): ?>
+                        <?php if (class_exists('MAILPN')): ?>
+                          <div id="userspn-tab-notifications" class="userspn-tab-content userspn-display-none">
+                            <?php echo do_shortcode('[userspn-notifications]'); ?>
+                          </div>
+                        <?php elseif (current_user_can('administrator')): ?>
+                          <div id="userspn-tab-notifications" class="userspn-tab-content userspn-display-none">
+                            <div class="userspn-mt-30 userspn-p-10">
+                              <p class="userspn-alert"><?php esc_html_e('Notifications are inactive. Please install and activate Mailing Manager - PN to allow integrated notifications in your platform.', 'userspn'); ?></p>
+                              <a href="/wp-admin/plugin-install.php?s=mailpn&tab=search&type=term" class="userspn-btn userspn-btn-mini"><?php esc_html_e('Mailing Manager - PN', 'userspn'); ?></a>
+                            </div>
+                          </div>
+                        <?php endif ?>
+                      <?php endif ?>
+
+                      <?php if ($functions_attachment->userspn_user_files_allowed($user_id)): ?>
+                        <div id="userspn-tab-files" class="userspn-tab-content userspn-display-none">
+                          <?php echo do_shortcode('[userspn-user-files]'); ?>
+                        </div>
+                      <?php endif ?>
+
+                      <?php if (get_option('userspn_user_advanced') == 'on'): ?>
+                        <div id="userspn-tab-advanced" class="userspn-tab-content userspn-display-none">
+                          <div class="userspn-display-table userspn-width-100-percent userspn-mt-30 userspn-mb-30 userspn-p-10">
+                            <div class="userspn-display-inline-table userspn-width-100-percent">
+                              <div class="userspn-toggle-wrapper userspn-position-relative userspn-mb-10">
+                                <a href="#" class="userspn-toggle userspn-width-100-percent userspn-text-decoration-none">
+                                  <div class="userspn-display-table userspn-width-100-percent">
+                                    <div class="userspn-display-inline-table userspn-width-80-percent userspn-vertical-align-middle">
+                                      <label class="userspn-display-block"><?php esc_html_e('Disconnect account', 'userspn'); ?></label>
+                                    </div>
+
+                                    <div class="userspn-display-inline-table userspn-width-10-percent userspn-vertical-align-middle userspn-text-align-right">
+                                      <i class="material-icons-outlined userspn-cursor-pointer userspn-vertical-align-middle userspn-color-main-0">add</i>
+                                    </div>
+                                  </div>
+                                </a>
+
+                                <div class="userspn-toggle-content userspn-display-none-soft">
+                                  <small><?php esc_html_e('Disconnect your user from the system. You will need to log in again.', 'userspn'); ?></small>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="userspn-display-inline-table userspn-width-100-percent userspn-text-align-right">
+                              <a href="<?php echo esc_url(wp_logout_url(get_permalink())); ?>" class="userspn-btn userspn-btn-transparent userspn-btn-mini"><?php esc_html_e('Log out', 'userspn'); ?></a>
+                            </div>
+                          </div>
+
+                          <?php if (get_option('userspn_user_change_password') == 'on'): ?>
+                            <?php echo do_shortcode('[userspn-user-change-password-btn]'); ?>
+                          <?php endif ?>
+
+                          <?php if (get_option('userspn_user_remove') == 'on'): ?>
+                            <?php echo do_shortcode('[userspn-user-remove-form]'); ?>
+                          <?php endif ?>
+                        </div>
+                      <?php endif ?>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            <?php endif ?>
+          <?php else: ?>
+            <?php if (!$is_inline): ?>
+              <?php if (get_option('userspn_image_custom') == 'on'): ?>
+                <?php $custom_ids = get_option('userspn_image_custom_ids'); ?>
+
+                <?php if (!empty($custom_ids)): ?>
+                  <?php $custom_ids = explode(',', $custom_ids); ?>
+                  <a href="#" class="userspn-profile-popup-btn userspn-tooltip-left<?php echo (get_option('userspn_disabled') == 'on') ? ' userspn-display-none-soft' : ''; ?>" title="<?php esc_html_e('Your profile', 'userspn'); ?>"><?php echo wp_get_attachment_image($custom_ids[array_rand($custom_ids)], [50, 50], false, ['class' => 'userspn-border-radius-50-percent userspn-m-10 userspn-display-block']); ?></a>
+                <?php else: ?>
+                  <a href="#" class="userspn-profile-popup-btn userspn-tooltip-left<?php echo (get_option('userspn_disabled') == 'on') ? ' userspn-display-none-soft' : ''; ?>" title="<?php esc_html_e('Your profile', 'userspn'); ?>"><i class="material-icons-outlined userspn-profile-icon userspn-color-main-0 userspn-vertical-align-middle userspn-font-size-50">account_circle</i></a>
+                <?php endif ?>
+              <?php else: ?>
+                <a href="#" class="userspn-profile-popup-btn userspn-tooltip-left<?php echo (get_option('userspn_disabled') == 'on') ? ' userspn-display-none-soft' : ''; ?>" aria-label="<?php esc_html_e('Your profile link button', 'userspn'); ?>" title="<?php esc_html_e('Your profile', 'userspn'); ?>"><i class="material-icons-outlined userspn-profile-icon userspn-color-main-0 userspn-vertical-align-middle userspn-font-size-50">account_circle</i></a>
+              <?php endif ?>
+            <?php endif ?>
+
+            <?php if ($is_inline): ?>
+              <div class="userspn-profile-wrapper">
+                <div class="userspn-tabs-wrapper">
+                  <div class="userspn-tabs">
+                    <div class="userspn-tab-links active" data-userspn-id="userspn-tab-login"><?php esc_html_e('Login', 'userspn'); ?></div>
+
+                    <?php if (get_option('userspn_user_register') == 'on'): ?>
+                      <div class="userspn-tab-links" data-userspn-id="userspn-tab-register"><?php esc_html_e('Register', 'userspn'); ?></div>
+                    <?php endif ?>
+                  </div>
+
+                  <div id="userspn-tab-login" class="userspn-tab-content">
+                    <?php echo do_shortcode('[userspn-login]'); ?>
+                  </div>
+
+                  <?php if (get_option('userspn_user_register') == 'on'): ?>
+                    <div id="userspn-tab-register" class="userspn-tab-content userspn-display-none">
+                      <?php echo do_shortcode('[userspn-user-register-form]'); ?>
+                    </div>
+                  <?php endif ?>
+                </div>
+              </div>
+            <?php else: ?>
+              <div id="userspn-profile-popup" class="userspn-popup userspn-display-none-soft">
+                <div class="userspn-popup-content">
+                  <div class="userspn-profile-wrapper">
+                    <div class="userspn-tabs-wrapper">
+                      <div class="userspn-tabs">
+                        <div class="userspn-tab-links active" data-userspn-id="userspn-tab-login"><?php esc_html_e('Login', 'userspn'); ?></div>
+
+                        <?php if (get_option('userspn_user_register') == 'on'): ?>
+                          <div class="userspn-tab-links" data-userspn-id="userspn-tab-register"><?php esc_html_e('Register', 'userspn'); ?></div>
+                        <?php endif ?>
+                      </div>
+
+                      <div id="userspn-tab-login" class="userspn-tab-content">
+                        <?php echo do_shortcode('[userspn-login]'); ?>
+                      </div>
+
+                      <?php if (get_option('userspn_user_register') == 'on'): ?>
+                        <div id="userspn-tab-register" class="userspn-tab-content userspn-display-none">
+                          <?php echo do_shortcode('[userspn-user-register-form]'); ?>
+                        </div>
+                      <?php endif ?>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <?php endif ?>
           <?php endif ?>
         </div>
       <?php endif ?>
@@ -1106,7 +1241,7 @@ class USERSPN_Functions_User {
           <?php wp_enqueue_script('userspn-user-register-form', USERSPN_URL . 'assets/js/userspn-user-register-form.js', ['jquery'], USERSPN_VERSION, false, ['in_footer' => true, 'strategy' => 'defer']); ?>
         <?php endif ?>
 
-        <form id="userspn-user-register-fields" class="userspn-mt-30 userspn-max-width-500 userspn-margin-auto">
+        <form id="userspn-user-register-fields" class="userspn-mt-30">
           <?php foreach ($userspn_user_register_fields as $userspn_user_register_field): ?>
             <?php USERSPN_Forms::userspn_input_wrapper_builder($userspn_user_register_field, 'user', 0, 0, 'full'); ?>
           <?php endforeach ?>

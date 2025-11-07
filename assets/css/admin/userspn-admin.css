@@ -81,3 +81,8 @@
 .userspn-dashboard .userspn-popup ul li:last-child {
     border-bottom: none;
 }
+
+.userspn-profile-block-preview{
+    max-width:500px;
+    margin:auto;
+}
