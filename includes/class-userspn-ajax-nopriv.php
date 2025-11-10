@@ -64,17 +64,6 @@ class USERSPN_Ajax_Nopriv {
       $userspn_key_value = [];
 
       if (!empty($userspn_ajax_keys)) {
-        // DEBUG: Log all POST data for select-multiple fields
-        $debug_log = [];
-        foreach ($_POST as $key => $value) {
-          if (strpos($key, '[]') !== false || (is_array($value) && strpos($key, 'commission') !== false || strpos($key, 'board') !== false)) {
-            $debug_log['POST_' . $key] = is_array($value) ? $value : substr((string)$value, 0, 100);
-          }
-        }
-        if (!empty($debug_log)) {
-          error_log('USERSPN DEBUG: POST data for multiple fields: ' . print_r($debug_log, true));
-        }
-        
         foreach ($userspn_ajax_keys as $userspn_key) {
           // Robust detection of multiple-value fields
           $raw_id = isset($userspn_key['id']) ? $userspn_key['id'] : '';
@@ -84,11 +73,7 @@ class USERSPN_Ajax_Nopriv {
           $is_select_multiple = ($userspn_key['node'] === 'SELECT' || $userspn_key['node'] === 'select') && 
                                 ($userspn_key['type'] === 'select-multiple');
           
-          if ($is_select_multiple) {
-            error_log('USERSPN DEBUG: Processing select-multiple field - raw_id: ' . $raw_id . ', clear_key: ' . $clear_key);
-            error_log('USERSPN DEBUG: Checking $_POST[' . $raw_id . '] = ' . (isset($_POST[$raw_id]) ? print_r($_POST[$raw_id], true) : 'NOT SET'));
-            error_log('USERSPN DEBUG: Checking $_POST[' . $clear_key . '] = ' . (isset($_POST[$clear_key]) ? print_r($_POST[$clear_key], true) : 'NOT SET'));
-          }
+          // Debug logs removed
           
           // For select-multiple fields, check both key formats (with and without [])
           // This is necessary because jQuery POST may preserve [] in key names
@@ -98,12 +83,8 @@ class USERSPN_Ajax_Nopriv {
             // Check both with [] and without [] for select multiple fields
             if (isset($_POST[$raw_id]) && is_array($_POST[$raw_id])) {
               $posted_value = wp_unslash($_POST[$raw_id]);
-              error_log('USERSPN DEBUG: Found value in $_POST[' . $raw_id . ']: ' . print_r($posted_value, true));
             } elseif (isset($_POST[$clear_key]) && is_array($_POST[$clear_key])) {
               $posted_value = wp_unslash($_POST[$clear_key]);
-              error_log('USERSPN DEBUG: Found value in $_POST[' . $clear_key . ']: ' . print_r($posted_value, true));
-            } else {
-              error_log('USERSPN DEBUG: No value found for select-multiple field ' . $raw_id . ' in either format');
             }
           } else {
             // For non-select-multiple fields, check only the clear key
@@ -131,16 +112,13 @@ class USERSPN_Ajax_Nopriv {
 
               // Special handling: for select[multiple], sanitize the full array at once
               if ($is_select_multiple) {
-                error_log('USERSPN DEBUG: Before sanitizer - unslashed_array: ' . print_r($unslashed_array, true));
                 $sanitized_array = USERSPN_Forms::userspn_sanitizer(
                   $unslashed_array,
                   'select',
                   'select-multiple',
                   $userspn_key['field_config'] ?? []
                 );
-                error_log('USERSPN DEBUG: After sanitizer - sanitized_array: ' . print_r($sanitized_array, true));
                 if (!is_array($sanitized_array)) {
-                  error_log('USERSPN DEBUG: WARNING - sanitizer returned non-array: ' . gettype($sanitized_array));
                   $sanitized_array = [];
                 }
               } else {
@@ -155,9 +133,7 @@ class USERSPN_Ajax_Nopriv {
               }
 
               // Keep only non-empty values
-              error_log('USERSPN DEBUG: Before filter - sanitized_array: ' . print_r($sanitized_array, true));
               $sanitized_array = array_filter($sanitized_array, function($v) { return $v !== '' && $v !== null; });
-              error_log('USERSPN DEBUG: After filter - sanitized_array: ' . print_r($sanitized_array, true));
               
               // Normalize: cast to int if all numeric, unique, and reindex
               $all_numeric = !empty($sanitized_array) && count(array_filter($sanitized_array, 'is_numeric')) === count($sanitized_array);
@@ -165,7 +141,6 @@ class USERSPN_Ajax_Nopriv {
                 $sanitized_array = array_map('intval', $sanitized_array);
               }
               $sanitized_array = array_values(array_unique($sanitized_array));
-              error_log('USERSPN DEBUG: Final sanitized_array for ' . $userspn_clear_key . ': ' . print_r($sanitized_array, true));
 
               ${$userspn_clear_key} = $userspn_key_value[$userspn_clear_key] = $sanitized_array;
             } else {
@@ -206,16 +181,11 @@ class USERSPN_Ajax_Nopriv {
           $userspn_form_type = !empty($_POST['userspn_form_type']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_form_type'])) : '';
 
           if (!empty($userspn_key_value) && !empty($userspn_form_type)) {
-            error_log('USERSPN DEBUG: ===== STARTING FORM SAVE =====');
-            error_log('USERSPN DEBUG: userspn_key_value at start of form_save: ' . print_r($userspn_key_value, true));
-            
             $userspn_form_id = !empty($_POST['userspn_form_id']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_form_id'])) : 0;
             $userspn_form_subtype = !empty($_POST['userspn_form_subtype']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_form_subtype'])) : '';
             $user_id = !empty($_POST['userspn_form_user_id']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_form_user_id'])) : 0;
             $post_id = !empty($_POST['userspn_form_post_id']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_form_post_id'])) : 0;
             $post_type = !empty($_POST['userspn_form_post_type']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_form_post_type'])) : '';
-            
-            error_log('USERSPN DEBUG: Form save params - form_type: ' . $userspn_form_type . ', user_id: ' . $user_id . ', form_subtype: ' . $userspn_form_subtype);
 
             if (($userspn_form_type == 'user' && empty($user_id) && !in_array($userspn_form_subtype, ['user_alt_new'])) || ($userspn_form_type == 'post' && (empty($post_id) && !(!empty($userspn_form_subtype) && in_array($userspn_form_subtype, ['post_new', 'post_edit'])))) || ($userspn_form_type == 'option' && !is_user_logged_in())) {
               session_start();
@@ -245,9 +215,6 @@ class USERSPN_Ajax_Nopriv {
                     }
 
                     if (!empty($user_id)) {
-                      error_log('USERSPN DEBUG: About to save user_meta for user_id: ' . $user_id);
-                      error_log('USERSPN DEBUG: userspn_key_value contents: ' . print_r($userspn_key_value, true));
-                      
                       foreach ($userspn_key_value as $userspn_key => $userspn_value) {
                         // Skip action and ajax type keys
                         if (in_array($userspn_key, ['action', 'userspn_ajax_nopriv_type'])) {
@@ -263,21 +230,13 @@ class USERSPN_Ajax_Nopriv {
                           // Key already has correct prefix
                         }
 
-                        error_log('USERSPN DEBUG: Saving user_meta - key: ' . $userspn_key . ' (original: ' . $original_key . '), value: ' . print_r($userspn_value, true));
                         update_user_meta($user_id, $userspn_key, $userspn_value);
                         
                         // Additionally write to the original (non-prefixed) key when value is an array
                         // This keeps legacy/unprefixed meta in sync for select-multiple and similar fields
                         if (!empty($original_key) && strpos((string)$original_key, 'userspn_') !== 0 && is_array($userspn_value)) {
-                          error_log('USERSPN DEBUG: Also saving non-prefixed user_meta - key: ' . $original_key . ', value: ' . print_r($userspn_value, true));
                           update_user_meta($user_id, $original_key, $userspn_value);
-                          $saved_value_original = get_user_meta($user_id, $original_key, true);
-                          error_log('USERSPN DEBUG: Verification - saved value for ' . $original_key . ': ' . print_r($saved_value_original, true));
                         }
-                        
-                        // Verify what was saved for prefixed key
-                        $saved_value = get_user_meta($user_id, $userspn_key, true);
-                        error_log('USERSPN DEBUG: Verification - saved value for ' . $userspn_key . ': ' . print_r($saved_value, true));
                       }
                     }
                   }
@@ -346,7 +305,7 @@ class USERSPN_Ajax_Nopriv {
                 case 'option':
                   if (USERSPN_Functions_User::userspn_user_is_admin(get_current_user_id())) {
                     $userspn_settings = new USERSPN_Settings();
-                    $userspn_options = $userspn_settings->userspn_get_options();
+                    $userspn_options = $userspn_settings->get_options();
                     $userspn_allowed_options = array_keys($userspn_options);
 
                     // First, add html_multi field IDs to allowed options temporarily
@@ -403,9 +362,6 @@ class USERSPN_Ajax_Nopriv {
                 $update_html = '';
               }
 
-              error_log('USERSPN DEBUG: ===== FORM SAVE COMPLETE =====');
-              error_log('USERSPN DEBUG: Final userspn_key_value: ' . print_r($userspn_key_value, true));
-              
               echo wp_json_encode(['error_key' => '', 'popup_close' => $popup_close, 'update_list' => $update_list, 'update_html' => $update_html, 'check' => $check]);exit;
             }
           }else{
