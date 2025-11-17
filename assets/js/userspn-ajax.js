@@ -2,6 +2,42 @@
 	'use strict';
 
   $(document).ready(function() {
+    var userspnRecaptchaLoaderPromise = null;
+
+    function userspnLoadRecaptchaScript() {
+      if (typeof userspn_security === 'undefined' || !userspn_security.recaptcha_enabled || !userspn_security.recaptcha_site_key) {
+        return null;
+      }
+
+      if (userspnRecaptchaLoaderPromise) {
+        return userspnRecaptchaLoaderPromise;
+      }
+
+      if (typeof grecaptcha !== 'undefined') {
+        userspnRecaptchaLoaderPromise = Promise.resolve();
+        return userspnRecaptchaLoaderPromise;
+      }
+
+      userspnRecaptchaLoaderPromise = new Promise(function(resolve, reject) {
+        var script = document.createElement('script');
+        script.src = 'https://www.google.com/recaptcha/api.js?render=' + userspn_security.recaptcha_site_key;
+        script.async = true;
+        script.defer = true;
+        script.onload = function() {
+          resolve();
+        };
+        script.onerror = function() {
+          reject();
+        };
+        document.head.appendChild(script);
+      });
+
+      return userspnRecaptchaLoaderPromise;
+    }
+
+    if ($('#userspn-newsletter-form').length > 0) {
+      userspnLoadRecaptchaScript();
+    }
     $(document).on('submit', '.userspn-form', function(e){
       var userspn_form = $(this);
       var userspn_btn = userspn_form.find('input[type="submit"]');
@@ -119,7 +155,8 @@
     });
 
     $(document).on('submit', '#userspn-newsletter-form', function(e) {
-      var userspn_btn = $(this).find('.userspn-newsletter-btn');
+      var userspn_form = $(this);
+      var userspn_btn = userspn_form.find('.userspn-newsletter-btn');
       userspn_btn.addClass('userspn-link-disabled').siblings('.userspn-waiting').fadeIn('slow');
 
       var ajax_url = userspn_ajax.ajax_url;
@@ -127,29 +164,69 @@
         action: 'userspn_ajax_nopriv',
         userspn_ajax_nopriv_type: 'userspn_newsletter',
         userspn_ajax_nopriv_nonce: userspn_ajax.userspn_ajax_nonce,
-        userspn_email: userspn_btn.closest('.userspn-newsletter-form').find('#userspn-newsletter-email').val(),
+        userspn_email: userspn_form.find('#userspn-newsletter-email').val(),
       };
 
-      $.post(ajax_url, data, function(response) {
-        console.log(data);console.log(response);
-        if (response == 'userspn_newsletter_success_activation_sent') {
-          userspn_get_main_message(userspn_i18n.activation_email);
-          $('.userspn-newsletter').html('<div class="userspn-alert-warning"><p>' + userspn_i18n.email_sent + '</p></div>');
-        }else if (response == 'userspn_newsletter_success') {
-          userspn_get_main_message(userspn_i18n.newsletter_subscribed);
-          $('.userspn-newsletter').html('<div class="userspn-alert-success"><p>' + userspn_i18n.newsletter_subscribed + '</p></div>');
-        }else if(response == 'userspn_newsletter_error_exceeded') {
-          userspn_get_main_message(userspn_i18n.email_too_many);
-          $('.userspn-newsletter').html('<div class="userspn-alert-error"><p>' + userspn_i18n.email_too_many + '</p></div>');
-        }else if(response == 'userspn_newsletter_error') {
-          userspn_get_main_message(userspn_i18n.an_error_has_occurred);
-        }else{
-          userspn_get_main_message(userspn_i18n.an_error_has_occurred);
-        }
+      var honeypotField = userspn_form.find('input[name="userspn_honeypot_field"]');
+      if (honeypotField.length) {
+        data['userspn_honeypot_field'] = honeypotField.val();
+      }
 
-        USERSPN_Popups.close();
-        userspn_btn.removeClass('userspn-link-disabled').siblings('.userspn-waiting').fadeOut('slow');
-      });
+      var recaptchaEnabled = (typeof userspn_security !== 'undefined' && userspn_security.recaptcha_enabled && userspn_security.recaptcha_site_key);
+
+      if (recaptchaEnabled) {
+        userspnLoadRecaptchaScript();
+      }
+
+      function submitNewsletter() {
+        $.post(ajax_url, data, function(response) {
+          console.log(data);console.log(response);
+          if (response == 'userspn_newsletter_success_activation_sent') {
+            userspn_get_main_message(userspn_i18n.activation_email);
+            $('.userspn-newsletter').html('<div class="userspn-alert-warning"><p>' + userspn_i18n.email_sent + '</p></div>');
+          }else if (response == 'userspn_newsletter_success') {
+            userspn_get_main_message(userspn_i18n.newsletter_subscribed);
+            $('.userspn-newsletter').html('<div class="userspn-alert-success"><p>' + userspn_i18n.newsletter_subscribed + '</p></div>');
+          }else if(response == 'userspn_newsletter_error_exceeded') {
+            userspn_get_main_message(userspn_i18n.email_too_many);
+            $('.userspn-newsletter').html('<div class="userspn-alert-error"><p>' + userspn_i18n.email_too_many + '</p></div>');
+          }else if(response == 'userspn_newsletter_security_error') {
+            userspn_get_main_message(userspn_i18n.security_error || userspn_i18n.an_error_has_occurred);
+          }else if(response == 'userspn_newsletter_error') {
+            userspn_get_main_message(userspn_i18n.an_error_has_occurred);
+          }else{
+            userspn_get_main_message(userspn_i18n.an_error_has_occurred);
+          }
+
+          USERSPN_Popups.close();
+          userspn_btn.removeClass('userspn-link-disabled').siblings('.userspn-waiting').fadeOut('slow');
+        });
+      }
+
+      function executeRecaptchaAndSubmit() {
+        if (recaptchaEnabled && typeof grecaptcha !== 'undefined') {
+          grecaptcha.ready(function() {
+            grecaptcha.execute(userspn_security.recaptcha_site_key, {action: 'newsletter'}).then(function(token) {
+              data['g-recaptcha-response'] = token;
+              submitNewsletter();
+            }).catch(function() {
+              submitNewsletter();
+            });
+          });
+        } else {
+          submitNewsletter();
+        }
+      }
+
+      if (recaptchaEnabled && typeof grecaptcha === 'undefined' && userspnRecaptchaLoaderPromise) {
+        userspnRecaptchaLoaderPromise.then(function() {
+          executeRecaptchaAndSubmit();
+        }).catch(function() {
+          submitNewsletter();
+        });
+      } else {
+        executeRecaptchaAndSubmit();
+      }
 
       return false;
     });

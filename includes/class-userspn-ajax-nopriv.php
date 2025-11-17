@@ -453,8 +453,31 @@ class USERSPN_Ajax_Nopriv {
         case 'userspn_newsletter':
           $plugin_user = new USERSPN_Functions_User();
           $userspn_email = !empty($_POST['userspn_email']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_email'])) : '';
+          $newsletter_recaptcha_result = null;
 
           if (!empty($userspn_email)) {
+            if (get_option('userspn_honeypot_enabled') === 'on') {
+              $honeypot_validation = USERSPN_Security::verify_honeypot($_POST);
+              if (is_wp_error($honeypot_validation)) {
+                USERSPN_Security::log_security_event('newsletter_honeypot_blocked', $honeypot_validation->get_error_message(), [
+                  'email' => $userspn_email,
+                ]);
+                echo 'userspn_newsletter_security_error';exit;
+              }
+            }
+
+            if (get_option('userspn_recaptcha_enabled') === 'on') {
+              $recaptcha_token = isset($_POST['g-recaptcha-response']) ? sanitize_text_field(wp_unslash($_POST['g-recaptcha-response'])) : '';
+              $recaptcha_validation = USERSPN_Security::verify_recaptcha($recaptcha_token, 'newsletter');
+              if (is_wp_error($recaptcha_validation)) {
+                USERSPN_Security::log_security_event('newsletter_recaptcha_blocked', $recaptcha_validation->get_error_message(), [
+                  'email' => $userspn_email,
+                ]);
+                echo 'userspn_newsletter_security_error';exit;
+              }
+              $newsletter_recaptcha_result = $recaptcha_validation;
+            }
+
             if (email_exists($userspn_email)) {
               $user_id = get_user_by('email', $userspn_email)->ID;
             } else {
@@ -467,6 +490,22 @@ class USERSPN_Ajax_Nopriv {
               $user_object = new WP_User($user_id);
               if (!in_array('userspn_newsletter_subscriber', (array) $user_object->roles, true)) {
                 $user_object->add_role('userspn_newsletter_subscriber');
+              }
+
+              if (!is_null($newsletter_recaptcha_result)) {
+                update_user_meta($user_id, 'userspn_newsletter_recaptcha_score', $newsletter_recaptcha_result['score']);
+                update_user_meta($user_id, 'userspn_newsletter_recaptcha_threshold', $newsletter_recaptcha_result['threshold']);
+                update_user_meta($user_id, 'userspn_newsletter_recaptcha_timestamp', current_time('timestamp'));
+                update_user_meta($user_id, 'userspn_newsletter_recaptcha_suspicious', $newsletter_recaptcha_result['is_suspicious'] ? '1' : '0');
+
+                if ($newsletter_recaptcha_result['is_suspicious']) {
+                  USERSPN_Security::log_security_event('newsletter_suspicious', 'Suspicious newsletter subscription detected', [
+                    'user_id' => $user_id,
+                    'email' => $userspn_email,
+                    'score' => $newsletter_recaptcha_result['score'],
+                    'threshold' => $newsletter_recaptcha_result['threshold'],
+                  ]);
+                }
               }
             }
 

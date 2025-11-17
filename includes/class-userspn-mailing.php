@@ -124,6 +124,13 @@ class USERSPN_Mailing {
             <label for="userspn-newsletter-email"><?php esc_html_e('Your email', 'userspn'); ?></label><br>
             <input type="email" required name="userspn-newsletter-email" id="userspn-newsletter-email" class="userspn-input userspn-newsletter-email userspn-width-100-percent userspn-mt-10" value="" placeholder="<?php esc_html_e('your@email.com', 'userspn'); ?>">
 
+            <?php if (get_option('userspn_honeypot_enabled') === 'on'): ?>
+              <div class="userspn-newsletter-honeypot userspn-display-none-soft" aria-hidden="true">
+                <label for="userspn-newsletter-honeypot" class="screen-reader-text"><?php esc_html_e('Leave this field empty', 'userspn'); ?></label>
+                <input type="text" name="userspn_honeypot_field" id="userspn-newsletter-honeypot" class="userspn-input userspn-honeypot-field" tabindex="-1" autocomplete="off" value="">
+              </div>
+            <?php endif; ?>
+
             <div class="userspn-newsletter-checkbox userspn-mb-20">
               <input type="checkbox" required name="userspn-newsletter-policies" class="userspn-mr-10" id="userspn-newsletter-policies"/><label for="userspn-newsletter-policies"><?php echo wp_kses_post($userspn_checkbox_policies); ?></label><br>
             </div>
