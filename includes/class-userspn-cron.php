@@ -40,6 +40,43 @@ class USERSPN_Cron {
    * @since       1.0.0
    */
   public function userspn_cron_daily() {
+    // Check if deletion of inactive accounts is enabled
+    $delete_inactive_enabled = get_option('userspn_newsletter_activation_delete_inactive') === 'on';
+    $delete_days = intval(get_option('userspn_newsletter_activation_delete_days', 5));
+    
+    // Delete inactive users if option is enabled
+    if ($delete_inactive_enabled && $delete_days > 0) {
+      require_once(ABSPATH . 'wp-admin/includes/user.php');
+      
+      $cutoff_date = date('Y-m-d H:i:s', strtotime('-' . $delete_days . ' days', current_time('timestamp')));
+      
+      $args_delete = array(
+        'meta_query' => array(
+          array(
+            'key' => 'userspn_newsletter_active',
+            'compare' => 'NOT EXISTS',
+          ),
+        ),
+        'role__in' => array('userspn_newsletter_subscriber'),
+        'date_query' => array(
+          array(
+            'before' => $cutoff_date,
+            'column' => 'user_registered',
+          ),
+        ),
+        'fields' => array('ID'),
+        'number' => 500, // Limit of users per execution
+      );
+      
+      $users_to_delete = get_users($args_delete);
+      if (!empty($users_to_delete)) {
+        foreach ($users_to_delete as $user) {
+          // Use wp_delete_user to properly delete user and all associated data
+          wp_delete_user($user->ID);
+        }
+      }
+    }
+    
     // Find users who have not activated their newsletter subscription
     $args = array(
       'meta_query' => array(

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Users manager - PN\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-01 18:54+0000\n"
-"PO-Revision-Date: 2025-05-01 18:56+0000\n"
+"PO-Revision-Date: 2025-12-13 18:51+0000\n"
 "Last-Translator: \n"
 "Language-Team: Catalan\n"
 "Language: ca\n"
@@ -15,104 +15,167 @@ msgstr ""
 "X-Loco-Version: 2.7.2; wp-6.8.1\n"
 "X-Domain: userspn"
 
-#: includes/class-userspn-functions-user.php:587
-msgid "%d of %d fields completed"
+#. 1: Number of completed fields, 2: Total number of fields
+#: includes/class-userspn-functions-user.php:849
+#, php-format
+#| msgid "%d of %d fields completed"
+msgid "%1$d of %2$d fields completed"
 msgstr "%d de %d camps completats"
 
-#: includes/class-userspn-functions-user.php:1086
+#: includes/class-userspn-validation.php:47
+#, php-format
+msgid "%s is required."
+msgstr "Cal %s."
+
+#: includes/class-userspn-functions-user.php:1491
 msgid "01 - Download a CSV template with the platform specifications."
 msgstr ""
 "01 - Baixeu una plantilla CSV amb les especificacions de la plataforma."
 
-#: includes/class-userspn-functions-user.php:1091
+#: includes/class-userspn-functions-user.php:1496
 msgid "02 - Upload the CSV with the new contacts information."
 msgstr "02 - Puja el CSV amb la informació dels nous contactes."
 
-#: includes/class-userspn-functions-user.php:834
+#: includes/class-userspn-security.php:636
+#, php-format
+msgid "[%s] Posible registro fraudulento detectado"
+msgstr "[%s] Possible registre fraudulento detectat"
+
+#: includes/class-userspn-functions-user.php:1110
 msgid "Account deletion!"
 msgstr "Eliminació del compte!"
 
-#: includes/class-userspn-mailing.php:137
+#: includes/class-userspn-mailing.php:144
 msgid "Activate now"
 msgstr "Activa ara"
 
-#: includes/class-userspn-mailing.php:159
+#: includes/class-userspn-mailing.php:166
 msgid "Activate your account"
 msgstr "Activa el teu compte"
 
-#: includes/class-userspn-ajax-nopriv.php:212
-#: includes/class-userspn-ajax-nopriv.php:215
+#: includes/class-userspn-mailing.php:201
+#: includes/class-userspn-mailing.php:204
 msgid "Activate your subscription"
 msgstr "Activa la teva subscripció"
 
-#: includes/class-userspn-forms.php:349
+#: includes/class-userspn-forms.php:473
 msgid "Add audio"
 msgstr "Afegeix àudio"
 
-#: includes/class-userspn-forms.php:349
+#: includes/class-userspn-forms.php:473
 msgid "Add audios"
 msgstr "Afegeix àudios"
 
-#: includes/class-userspn-functions-user.php:1125
-#: includes/class-userspn-functions-user.php:1134
+#: includes/class-userspn-functions-user.php:1545
+#: includes/class-userspn-functions-user.php:1554
 msgid "Add contacts"
 msgstr "Afegeix contactes"
 
-#: includes/class-userspn-forms.php:440
+#: includes/class-userspn-forms.php:568
 msgid "Add element"
 msgstr "Afegeix un element"
 
-#: includes/class-userspn-settings.php:337
+#: includes/class-userspn-settings.php:356
 msgid "Add extra profile fields on admin dashboard"
 msgstr "Afegir camps de perfil addicionals al tauler d'administració"
 
-#: includes/class-userspn-forms.php:370
+#: includes/class-userspn-forms.php:494
 msgid "Add file"
 msgstr "Afegeix un fitxer"
 
-#: includes/class-userspn-forms.php:370
+#: includes/class-userspn-forms.php:494
 msgid "Add files"
 msgstr "Afegeix fitxers"
 
-#: includes/class-userspn-forms.php:307
+#: includes/class-userspn-settings.php:525
+msgid "Add hidden honeypot field to catch bots."
+msgstr "Afegeix un camp honeypot ocult per atrapar bots."
+
+#: includes/class-userspn-forms.php:431
 msgid "Add image"
 msgstr "Afegeix una imatge"
 
-#: includes/class-userspn-forms.php:307
+#: includes/class-userspn-forms.php:431
 msgid "Add images"
 msgstr "Afegeix imatges"
 
-#: includes/class-userspn-functions-user.php:288
+#: includes/class-userspn-functions-user.php:382
 msgid "Add new field"
 msgstr "Afegeix un camp nou"
 
-#: includes/class-userspn-forms.php:328
+#: includes/class-userspn-settings.php:42
+msgid "Add profile icon to menu"
+msgstr "Afegeix una icona de perfil al menú"
+
+#: includes/class-userspn-forms.php:452
 msgid "Add video"
 msgstr "Afegeix vídeo"
 
-#: includes/class-userspn-forms.php:328
+#: includes/class-userspn-forms.php:452
 msgid "Add videos"
 msgstr "Afegeix vídeos"
 
-#: includes/class-userspn-functions-user.php:376
+#: templates/userspn-footer.php:63
+#: includes/class-userspn-functions-user.php:498
+#: includes/class-userspn-functions-user.php:597
 msgid "Advanced"
 msgstr "Avançat"
 
-#: includes/class-userspn-settings.php:180
+#: includes/class-userspn-settings.php:199
 msgid "Advanced options in profile"
 msgstr "Opcions avançades al perfil"
 
-#: includes/class-userspn-common.php:159
+#: includes/class-userspn-security.php:78
+msgid "Akismet API key not found."
+msgstr "No s'ha trobat la clau de l'API d'Akismet."
+
+#: includes/class-userspn-security.php:72
+msgid "Akismet plugin is not active."
+msgstr "El connector d'Akismet no està actiu."
+
+#: includes/class-userspn-settings.php:680
+msgid "Altas en newsletter en la última semana"
+msgstr "Altes en newsletter en la última semana"
+
+#: includes/class-userspn-common.php:213
 msgid "An error has occurred. Please try again in a few minutes."
 msgstr ""
 "S'ha produït un error. Si us plau, torneu-ho a intentar d'aquí a uns minuts."
 
-#: includes/class-userspn-functions-user.php:1126
+#: includes/class-userspn-ajax.php:778
+msgid "An error occurred while checking the BaseCPT."
+msgstr "S'ha produït un error en comprovar el BaseCPT."
+
+#: includes/class-userspn-ajax.php:799
+msgid "An error occurred while duplicating the BaseCPT."
+msgstr "S'ha produït un error en duplicar el BaseCPT."
+
+#: includes/class-userspn-ajax.php:819
+msgid "An error occurred while removing the BaseCPT."
+msgstr "S'ha produït un error en suprimir el BaseCPT."
+
+#: includes/class-userspn-ajax.php:712 includes/class-userspn-ajax.php:742
+msgid "An error occurred while showing the BaseCPT."
+msgstr "S'ha produït un error en mostrar el BaseCPT."
+
+#: templates/userspn-bot-analysis-popup.php:28
+msgid "Analysis Criteria:"
+msgstr "Criteris d'anàlisi:"
+
+#: includes/class-userspn-settings.php:568
+msgid "Analyze Existing Users for Bots"
+msgstr "Analitzar els usuaris existents per a bots"
+
+#: includes/class-userspn-functions-user.php:1546
 msgid "Are you sure to process this contacts and add them to the system?"
 msgstr ""
 "Esteu segur que voleu processar aquests contactes i afegir-los al sistema?"
 
-#: includes/class-userspn-functions-user.php:159
+#: includes/class-userspn-common.php:240
+msgid "Are you sure you want to remove your avatar?"
+msgstr "Esteu segur que voleu eliminar el vostre avatar?"
+
+#: includes/class-userspn-functions-user.php:172
 msgid ""
 "As you login with a new account, you will lose access to yours, so it´s "
 "better if you open this link in a private window or other browser."
@@ -121,30 +184,44 @@ msgstr ""
 "és millor que obriu aquest enllaç en una finestra privada o en un altre "
 "navegador."
 
-#: includes/class-userspn-forms.php:242
+#: includes/class-userspn-forms.php:331
 msgid "Atleast 8 Character"
 msgstr "Almenys 8 caràcters"
 
-#: includes/class-userspn-functions-user.php:158
+#: includes/class-userspn-functions-user.php:171
 msgid "Auto-login tool"
 msgstr "Eina d'inici de sessió automàtic"
 
-#: includes/class-userspn-ajax.php:167
-#: includes/class-userspn-functions-user.php:1130
-#: includes/class-userspn-forms.php:572
+#: includes/class-userspn-ajax.php:720
+msgid "BaseCPT ID is required."
+msgstr "Cal l'ID de BaseCPT."
+
+#: templates/userspn-bot-analysis-popup.php:21
+#: templates/userspn-bot-analysis-popup.php:24
+#: includes/class-userspn-settings.php:567
+msgid "Bot Analysis Tool"
+msgstr "Eina d'anàlisi de bots"
+
+#: templates/userspn-bot-analysis-popup.php:31
+msgid "Bot-like usernames (user123, test456, etc.)"
+msgstr "Noms d'usuari tipus bot (usuari123, test456, etc.)"
+
+#: includes/class-userspn-forms.php:158
+#: includes/class-userspn-functions-user.php:1550
+#: includes/class-userspn-ajax.php:205
 msgid "Cancel"
 msgstr "Cancel·la"
 
-#: includes/class-userspn-functions-user.php:872
-#: includes/class-userspn-functions-user.php:888
+#: includes/class-userspn-functions-user.php:1150
+#: includes/class-userspn-functions-user.php:1166
 msgid "Change password"
 msgstr "Canvia la contrasenya"
 
-#: includes/class-userspn-settings.php:190
+#: includes/class-userspn-settings.php:209
 msgid "Change password access"
 msgstr "Canviar la contrasenya d'accés"
 
-#: includes/class-userspn-functions-user.php:882
+#: includes/class-userspn-functions-user.php:1160
 msgid ""
 "Change your profile access password. The process will send you an email to "
 "your account to secure the process."
@@ -152,32 +229,50 @@ msgstr ""
 "Canvia la contrasenya d'accés al teu perfil. El procés t'enviarà un correu "
 "electrònic al teu compte per protegir el procés."
 
-#: includes/class-userspn-forms.php:549
+#: includes/class-userspn-settings.php:411
+msgid ""
+"Check this option if you already have a newsletter form loaded in the page. "
+"For example, if you are using the shortcode [userspn-newsletter] in the page "
+"footer, you should check this option."
+msgstr ""
+"Marqueu aquesta opció si ja teniu un formulari de butlletí carregat a la "
+"pàgina. Per exemple, si feu servir el codi curt [userspn-newsletter] al peu "
+"de pàgina, hauríeu de marcar aquesta opció."
+
+#: includes/class-userspn-settings.php:53
+msgid "Choose the navigation menu where you want to add the profile icon."
+msgstr "Trieu el menú de navegació on voleu afegir la icona del perfil."
+
+#: includes/class-userspn-forms.php:135
 msgid "Classes separated by spaces"
 msgstr "Classes separades per espais"
 
-#: includes/class-userspn-common.php:156
+#: includes/class-userspn-forms.php:643
+msgid "Clear"
+msgstr "Clar"
+
+#: includes/class-userspn-common.php:210
 msgid "Completed"
 msgstr "Completat"
 
-#: includes/class-userspn-common.php:191
+#: includes/class-userspn-common.php:247
 msgid ""
 "Congratulations! You have been successfully subscribed to our newsletter."
 msgstr "Enhorabona! T'has subscrit correctament al nostre butlletí."
 
-#: includes/class-userspn-notifications.php:67
+#: includes/class-userspn-notifications.php:104
 msgid "Congratulations! Your email has been activated successfully."
 msgstr "Enhorabona! El vostre correu electrònic s'ha activat correctament."
 
-#: includes/class-userspn-settings.php:150
+#: includes/class-userspn-settings.php:169
 msgid "Contact notifications"
 msgstr "Notificacions de contacte"
 
-#: includes/class-userspn-functions-user.php:1005
+#: includes/class-userspn-functions-user.php:1376
 msgid "Contacts upload template"
 msgstr "Plantilla de càrrega de contactes"
 
-#: includes/class-userspn-settings.php:372
+#: includes/class-userspn-settings.php:391
 msgid ""
 "Create a message that will be shown just above of the Newsletter "
 "registration form."
@@ -185,76 +280,94 @@ msgstr ""
 "Crea un missatge que es mostrarà just a sobre del formulari de registre del "
 "butlletí."
 
-#: includes/class-userspn-functions-user.php:958
+#: includes/class-userspn-functions-user.php:1250
 msgid "Create user"
 msgstr "Crea un usuari"
 
+#: includes/class-userspn-settings.php:442
+msgid ""
+"Cuando esta opción está activa, el sistema eliminará automáticamente las "
+"cuentas de usuarios que se hayan registrado en la newsletter pero no hayan "
+"activado su cuenta después de un número determinado de días."
+msgstr ""
+"Quan aquesta opció estigui activada, el sistema eliminarà automàticament els "
+"comptes dels usuaris que s'han registrat al butlletí però no s'han activat "
+"el seu compte després d'un nombre determinat de dies."
+
+#: includes/class-userspn-settings.php:179
 #: includes/class-userspn-functions-attachment.php:97
-#: includes/class-userspn-settings.php:160
 msgid "Current file max size allowed:"
 msgstr "Mida màxima permesa del fitxer actual:"
 
-#: includes/class-userspn-functions-user.php:285
+#: includes/class-userspn-functions-user.php:379
 msgid "Current form"
 msgstr "Formulari actual"
 
-#: includes/class-userspn-settings.php:122
+#: includes/class-userspn-settings.php:141
 msgid "Custom Profile Picture - PFP"
 msgstr "Foto de perfil personalitzada - PFP"
 
-#: includes/class-userspn-settings.php:219
+#: includes/class-userspn-settings.php:238
 msgid "Dashboard"
 msgstr "Tauler de control"
 
-#: includes/class-userspn-settings.php:227
+#: includes/class-userspn-settings.php:653
+msgid "Dashboard de Analíticas"
+msgstr "Tauler de control d'analítica"
+
+#: includes/class-userspn-settings.php:246
 msgid "Dashboard main login page"
 msgstr "Pàgina principal d'inici de sessió del tauler de control"
 
-#: includes/class-userspn-settings.php:269
-#: includes/class-userspn-settings.php:270
+#: includes/class-userspn-settings.php:288
+#: includes/class-userspn-settings.php:289
 msgid "Dashboard main login page CSS"
 msgstr "Pàgina principal d'inici de sessió del tauler de control CSS"
 
-#: includes/class-userspn-settings.php:248
+#: includes/class-userspn-settings.php:267
 msgid "Dashboard main login page header logo link text"
 msgstr ""
 "Text de l'enllaç del logotip de la capçalera de la pàgina d'inici de sessió "
 "principal del tauler de control"
 
-#: includes/class-userspn-settings.php:236
+#: includes/class-userspn-settings.php:255
 msgid "Dashboard main login page logo"
 msgstr "Logotip de la pàgina principal d'inici de sessió del tauler de control"
 
-#: includes/class-userspn-settings.php:259
-#: includes/class-userspn-settings.php:260
+#: includes/class-userspn-settings.php:278
+#: includes/class-userspn-settings.php:279
 msgid "Dashboard main login page logo link"
 msgstr ""
 "Enllaç del logotip de la pàgina d'inici de sessió principal del tauler de "
 "control"
 
-#: includes/class-userspn-settings.php:247
+#: includes/class-userspn-settings.php:266
 msgid "Dashboard main login page logo link text"
 msgstr ""
 "Text de l'enllaç del logotip de la pàgina d'inici de sessió principal del "
 "tauler de control"
 
-#: includes/class-userspn-settings.php:279
+#: includes/class-userspn-settings.php:298
 msgid "Dashboard main logo"
 msgstr "Logotip principal del tauler de control"
 
-#: includes/class-userspn-settings.php:289
+#: includes/class-userspn-settings.php:308
 msgid "Dashboard main logo link"
 msgstr "Enllaç del logotip principal del tauler de control"
 
-#: includes/class-userspn-forms.php:528
+#: includes/class-userspn-forms.php:114
 msgid "Date"
 msgstr "Data"
 
-#: includes/class-userspn-settings.php:318
+#: includes/class-userspn-settings.php:984
+msgid "Default Menu"
+msgstr "Menú predeterminat"
+
+#: includes/class-userspn-settings.php:337
 msgid "Disable admin bar"
 msgstr "Desactiva la barra d'administració"
 
-#: includes/class-userspn-settings.php:298
+#: includes/class-userspn-settings.php:317
 msgid "Disable dashboard access"
 msgstr "Desactiva l'accés al tauler de control"
 
@@ -262,16 +375,20 @@ msgstr "Desactiva l'accés al tauler de control"
 msgid "Disable Profile popup"
 msgstr "Desactiva la finestra emergent del perfil"
 
-#: includes/class-userspn-functions-user.php:419
+#: templates/userspn-footer.php:106
+#: includes/class-userspn-functions-user.php:541
+#: includes/class-userspn-functions-user.php:640
 msgid "Disconnect account"
 msgstr "Desconnecta el compte"
 
-#: includes/class-userspn-functions-user.php:429
+#: templates/userspn-footer.php:116
+#: includes/class-userspn-functions-user.php:551
+#: includes/class-userspn-functions-user.php:650
 msgid "Disconnect your user from the system. You will need to log in again."
 msgstr ""
 "Desconnecta el teu usuari del sistema. Hauràs de tornar a iniciar la sessió."
 
-#: includes/class-userspn-functions-user.php:1074
+#: includes/class-userspn-functions-user.php:1454
 msgid "Download CSV template"
 msgstr "Descarrega la plantilla CSV"
 
@@ -279,95 +396,193 @@ msgstr "Descarrega la plantilla CSV"
 msgid "Download file"
 msgstr "Descarrega el fitxer"
 
-#: includes/class-userspn-forms.php:345 includes/class-userspn-common.php:170
+#: includes/class-userspn-settings.php:451
+msgid "Días para eliminar cuenta no activada"
+msgstr "Dias per eliminar compte no activada"
+
+#: includes/class-userspn-forms.php:469 includes/class-userspn-common.php:224
 msgid "Edit audio"
 msgstr "Edita l'àudio"
 
-#: includes/class-userspn-forms.php:345 includes/class-userspn-common.php:171
+#: includes/class-userspn-forms.php:469 includes/class-userspn-common.php:225
 msgid "Edit audios"
 msgstr "Edita àudios"
 
-#: includes/class-userspn-forms.php:366 includes/class-userspn-common.php:174
+#: includes/class-userspn-forms.php:490 includes/class-userspn-common.php:228
 msgid "Edit file"
 msgstr "Edita el fitxer"
 
-#: includes/class-userspn-forms.php:366 includes/class-userspn-common.php:175
+#: includes/class-userspn-forms.php:490 includes/class-userspn-common.php:229
 msgid "Edit files"
 msgstr "Edita fitxers"
 
-#: includes/class-userspn-forms.php:303 includes/class-userspn-common.php:162
+#: includes/class-userspn-forms.php:427 includes/class-userspn-common.php:216
 msgid "Edit image"
 msgstr "Edita la imatge"
 
-#: includes/class-userspn-forms.php:303 includes/class-userspn-common.php:163
+#: includes/class-userspn-forms.php:427 includes/class-userspn-common.php:217
 msgid "Edit images"
 msgstr "Edita imatges"
 
-#: includes/class-userspn-forms.php:324 includes/class-userspn-common.php:166
+#: includes/class-userspn-forms.php:448 includes/class-userspn-common.php:220
 msgid "Edit video"
 msgstr "Edita vídeo"
 
-#: includes/class-userspn-forms.php:324 includes/class-userspn-common.php:167
+#: includes/class-userspn-forms.php:448 includes/class-userspn-common.php:221
 msgid "Edit videos"
 msgstr "Edita vídeos"
 
-#: includes/class-userspn-functions-user.php:929
-#: includes/class-userspn-functions-user.php:930
-#: includes/class-userspn-functions-user.php:1006
-#: includes/class-userspn-forms.php:528
+#: includes/class-userspn-security.php:654
+msgid ""
+"El usuario ha sido registrado pero marcado como sospechoso.\n"
+"\n"
+msgstr ""
+"L'usuari ha estat registrat però marcat com a sospechoso.\n"
+"\n"
+
+#: includes/class-userspn-settings.php:441
+msgid "Eliminar cuentas no activadas"
+msgstr "Eliminar comptes no activats"
+
+#: includes/class-userspn-forms.php:114
+#: includes/class-userspn-functions-user.php:1207
+#: includes/class-userspn-functions-user.php:1208
+#: includes/class-userspn-functions-user.php:1377
 msgid "Email"
 msgstr "Correu electrònic"
 
-#: includes/class-userspn-functions-user.php:1007
+#: includes/class-userspn-security.php:649
+#, php-format
+msgid ""
+"Email: %s\n"
+msgstr "Correu electrònic: %s"
+
+#: includes/class-userspn-functions-user.php:1378
 msgid "email@test.com"
 msgstr "correu electrònic@test.com"
 
-#: includes/class-userspn-settings.php:309
-#: includes/class-userspn-settings.php:329
+#: templates/userspn-bot-analysis-popup.php:32
+msgid "Empty or generic profile data"
+msgstr "Dades de perfil buides o genèriques"
+
+#: includes/class-userspn-settings.php:516
+msgid "Enable Akismet Protection"
+msgstr "Activa la protecció d'Akismet"
+
+#: includes/class-userspn-settings.php:517
+msgid ""
+"Enable Akismet spam protection for user registration (requires Akismet "
+"plugin)."
+msgstr ""
+"Activa la protecció contra correu brossa d'Akismet per al registre d'usuaris "
+"(requereix el connector d'Akismet)."
+
+#: includes/class-userspn-settings.php:471
+msgid "Enable Google reCAPTCHA v3"
+msgstr "Activa Google reCAPTCHA v3"
+
+#: includes/class-userspn-settings.php:472
+msgid "Enable Google reCAPTCHA v3 protection for user registration forms."
+msgstr ""
+"Activa la protecció de Google reCAPTCHA v3 per als formularis de registre "
+"d'usuaris."
+
+#: includes/class-userspn-settings.php:524
+msgid "Enable Honeypot Protection"
+msgstr "Activa la protecció del pot de mel"
+
+#: includes/class-userspn-settings.php:533
+msgid "Enable Rate Limiting"
+msgstr "Activa la limitació de velocitat"
+
+#: includes/class-userspn-settings.php:328
+#: includes/class-userspn-settings.php:348
 msgid "Enabled roles"
 msgstr "Rols habilitats"
 
-#: includes/class-userspn-settings.php:104
+#: includes/class-userspn-settings.php:123
 msgid "Enter meta key"
 msgstr "Introduïu la clau meta"
 
-#: includes/class-userspn-settings.php:95
+#: includes/class-userspn-settings.php:114
 msgid "Enter page ID"
 msgstr "Introduïu l'ID de la pàgina"
+
+#: includes/class-userspn-settings.php:493
+msgid "Enter your reCAPTCHA Secret Key"
+msgstr "Introdueix la teva clau secreta de reCAPTCHA"
+
+#: includes/class-userspn-settings.php:482
+msgid "Enter your reCAPTCHA Site Key"
+msgstr "Introduïu la vostra clau de lloc reCAPTCHA"
+
+#: includes/class-userspn-security.php:724
+msgid "Error al eliminar el usuario."
+msgstr "Error en eliminar l'usuari."
+
+#: includes/class-userspn-security.php:706
+msgid "Este usuario no está marcado como sospechoso."
+msgstr "Aquest usuari no està marcat com a sospechoso."
 
 #: includes/class-userspn-cron.php:32
 msgid "Every 30 minutes"
 msgstr "Cada 30 minuts"
 
-#: includes/class-userspn-common.php:182
+#: includes/class-userspn-common.php:236
 msgid "Existing user. Please login."
 msgstr "Usuari existent. Si us plau, inicia la sessió."
 
-#: includes/class-userspn-settings.php:67
+#: includes/class-userspn-settings.php:86
 msgid "Extra fields in the user profile"
 msgstr "Camps addicionals al perfil d'usuari"
 
-#: includes/class-userspn-functions-user.php:372
+#: includes/class-userspn-security.php:653
+#, php-format
+msgid ""
+"Fecha: %s\n"
+"\n"
+msgstr ""
+"Data: %s\n"
+"\n"
+
+#: templates/userspn-footer.php:59
+#: includes/class-userspn-functions-user.php:494
+#: includes/class-userspn-functions-user.php:593
 msgid "Files"
 msgstr "Fitxers"
 
-#: includes/class-userspn-ajax.php:204
+#: includes/class-userspn-ajax.php:241
 msgid "First Name"
 msgstr "Nom"
 
-#: includes/class-userspn-functions-user.php:910
+#: includes/class-userspn-settings.php:988
+msgid "Footer Menu"
+msgstr "Menú de peu de pàgina"
+
+#: includes/class-userspn-functions-user.php:1188
 msgid "Forgot your password?"
 msgstr "Has oblidat la contrasenya?"
 
-#: includes/class-userspn-settings.php:114
+#: includes/class-userspn-settings.php:133
 msgid "Front-end users registration"
 msgstr "Registre d'usuaris front-end"
 
-#: includes/class-userspn-settings.php:210
+#: includes/class-userspn-settings.php:229
 msgid "Front-end users removal"
 msgstr "Eliminació d'usuaris front-end"
 
-#: includes/class-userspn-ajax-nopriv.php:215
+#: includes/class-userspn-settings.php:494
+msgid "Get your Secret Key from Google reCAPTCHA console."
+msgstr "Obtén la teva clau secreta de la consola reCAPTCHA de Google."
+
+#: includes/class-userspn-settings.php:483
+msgid "Get your Site Key from Google reCAPTCHA console."
+msgstr ""
+"Obtén la clau del teu lloc web des de la consola de reCAPTCHA de Google."
+
+#: includes/class-userspn-mailing.php:204
+#: includes/class-userspn-ajax-nopriv.php:535
+#: includes/class-userspn-functions-user.php:344
 msgid "Hello"
 msgstr "Hola"
 
@@ -387,14 +602,14 @@ msgstr "He llegit i accepto"
 msgid "I have read and accept Terms and conditions."
 msgstr "He llegit i accepto els Termes i condicions."
 
-#: includes/class-userspn-settings.php:77
+#: includes/class-userspn-settings.php:96
 msgid ""
 "If enabled, a profile completion block will be shown in the profile popup."
 msgstr ""
 "Si està habilitat, es mostrarà un bloc de finalització de perfil a la "
 "finestra emergent del perfil."
 
-#: includes/class-userspn-settings.php:338
+#: includes/class-userspn-settings.php:357
 msgid ""
 "If you check this option, admin dashboard user edition and creation pages "
 "will show the added profile extra fields at the bottom. Administrators and "
@@ -406,7 +621,7 @@ msgstr ""
 "la part inferior. Els administradors i els rols amb accés a aquestes pàgines "
 "del tauler podran editar-les o afegir-les en crear nous contactes."
 
-#: includes/class-userspn-settings.php:43
+#: includes/class-userspn-settings.php:62
 msgid ""
 "If you check this option, the system will ask for the name and surname of "
 "the contact based on the WordPress custom database structure."
@@ -415,135 +630,225 @@ msgstr ""
 "contacte basant-se en l'estructura de la base de dades personalitzada de "
 "WordPress."
 
-#: includes/class-userspn-functions-user.php:362
+#: templates/userspn-footer.php:49
+#: includes/class-userspn-functions-user.php:484
+#: includes/class-userspn-functions-user.php:583
 msgid "Image"
 msgstr "Imatge"
 
-#: includes/class-userspn-functions-user.php:1047
+#: includes/class-userspn-functions-user.php:1418
 msgid "Include \"on\" for checked of leave the cell empty for unchecked"
 msgstr ""
 "Inclou \"activat\" per a marcat o deixa la cel·la buida per a no marcat"
 
-#: includes/class-userspn-functions-user.php:837
+#: includes/class-userspn-functions-user.php:1113
 msgid "Include your password to confirm deletion"
 msgstr "Inclou la teva contrasenya per confirmar l'eliminació"
 
-#: includes/class-userspn-forms.php:517
+#: includes/class-userspn-forms.php:103
 msgid "Input"
 msgstr "Entrada"
 
-#: includes/class-userspn-forms.php:548
+#: includes/class-userspn-forms.php:134
 msgid "Input classes"
 msgstr "Classes d'entrada"
 
-#: includes/class-userspn-forms.php:509 includes/class-userspn-forms.php:510
+#: includes/class-userspn-forms.php:95 includes/class-userspn-forms.php:96
 msgid "Input name"
 msgstr "Nom d'entrada"
 
-#: includes/class-userspn-forms.php:553
+#: includes/class-userspn-forms.php:139
 msgid "Input required"
 msgstr "Cal introduir informació"
 
-#: includes/class-userspn-forms.php:524
+#: includes/class-userspn-forms.php:110
 msgid "Input subtype"
 msgstr "Subtipus d'entrada"
 
-#: includes/class-userspn-forms.php:514
+#: includes/class-userspn-forms.php:100
 msgid "Input type"
 msgstr "Tipus d'entrada"
 
-#: includes/class-userspn-ajax.php:209
+#: includes/class-userspn-validation.php:162
+msgid "Invalid selection format."
+msgstr "Format de selecció no vàlid."
+
+#: includes/class-userspn-security.php:651
+#, php-format
+msgid ""
+"IP: %s\n"
+msgstr "IP: %s"
+
+#: includes/class-userspn-ajax.php:246
 msgid "Last Name"
 msgstr "Cognom"
 
-#: includes/class-userspn-functions-user.php:1134
+#: includes/class-userspn-mailing.php:129
+msgid "Leave this field empty"
+msgstr "Deixa aquest camp buit"
+
+#: includes/class-userspn-settings.php:534
+msgid "Limit registration attempts per IP address."
+msgstr "Limita els intents de registre per adreça IP."
+
+#: includes/class-userspn-functions-user.php:1554
 msgid "Loading..."
 msgstr "S'està carregant..."
 
-#: includes/class-userspn-functions-user.php:907
+#: includes/class-userspn-functions-user.php:1185
 msgid "Log In"
 msgstr "Inicia la sessió"
 
-#: includes/class-userspn-functions-user.php:435
+#: templates/userspn-footer.php:122
+#: includes/class-userspn-functions-user.php:557
+#: includes/class-userspn-functions-user.php:656
 msgid "Log out"
 msgstr "Tanca la sessió"
 
-#: includes/class-userspn-functions-user.php:471
+#: templates/userspn-footer.php:148
+#: includes/class-userspn-functions-user.php:694
+#: includes/class-userspn-functions-user.php:718
 msgid "Login"
 msgstr "Inicia la sessió"
 
-#: includes/class-userspn-functions-user.php:161
+#: includes/class-userspn-functions-user.php:174
 msgid "Login as"
 msgstr "Inicia la sessió com a"
 
-#: includes/class-userspn-forms.php:230
+#: includes/class-userspn-forms.php:319
 msgid "Lowercase & Uppercase"
 msgstr "Minúscules i majúscules"
 
-#: includes/class-userspn-functions-user.php:399
+#: templates/userspn-footer.php:86
+#: includes/class-userspn-functions-user.php:521
+#: includes/class-userspn-functions-user.php:620
 msgid "Mailing Manager - PN"
 msgstr "Gestor/a de correu - PN"
 
-#: includes/class-userspn-settings.php:401
-#: includes/class-userspn-settings.php:402
+#: includes/class-userspn-mailing.php:146
+msgid "Manage your subscription"
+msgstr "Gestiona la teva subscripció"
+
+#: includes/class-userspn-settings.php:543
+msgid "Max Registration Attempts"
+msgstr "Intents màxims de registre"
+
+#: includes/class-userspn-settings.php:430
+#: includes/class-userspn-settings.php:431
 msgid "Maximum number of activation emails"
 msgstr "Nombre màxim de correus electrònics d'activació"
 
-#: includes/class-userspn-settings.php:103
+#: includes/class-userspn-settings.php:547
+msgid "Maximum registration attempts per IP per hour."
+msgstr "Intents màxims de registre per IP per hora."
+
+#: includes/class-userspn-settings.php:122
 msgid "Meta key"
 msgstr "Tecla Meta"
 
-#: includes/class-userspn-forms.php:539
+#: templates/userspn-bot-analysis-popup.php:33
+msgid "Multiple registrations from same IP"
+msgstr "Diversos registres des de la mateixa IP"
+
+#: includes/class-userspn-forms.php:125
 msgid "Multiple selector"
 msgstr "Selector múltiple"
 
-#: includes/class-userspn-functions-user.php:320
-#: includes/class-userspn-functions-user.php:321
+#: includes/class-userspn-functions-user.php:414
+#: includes/class-userspn-functions-user.php:415
 msgid "Name"
 msgstr "Nom"
 
-#: includes/class-userspn-settings.php:42
+#: includes/class-userspn-settings.php:61
 msgid "Name and surname in profile"
 msgstr "Nom i cognoms al perfil"
 
-#: includes/class-userspn-settings.php:52
+#: includes/class-userspn-settings.php:71
 msgid "Name compulsory"
 msgstr "Nom obligatori"
 
-#: includes/class-userspn-forms.php:504 includes/class-userspn-forms.php:510
+#: includes/class-userspn-forms.php:90 includes/class-userspn-forms.php:96
 msgid "New field"
 msgstr "Nou camp"
 
-#: includes/class-userspn-settings.php:355
-#: includes/class-userspn-settings.php:363
+#: includes/class-userspn-settings.php:374
+#: includes/class-userspn-settings.php:382
 msgid "Newsletter"
 msgstr "Butlletí informatiu"
 
-#: includes/class-userspn-settings.php:391
+#: includes/class-userspn-settings.php:660
+msgid "Newsletter (7 días)"
+msgstr "Butlletí informatiu (7 dies)"
+
+#: includes/class-userspn-notifications.php:131
+msgid ""
+"Newsletter activation is currently disabled. Please contact the "
+"administrator."
+msgstr ""
+"L'activació del butlletí informatiu està actualment desactivada. Poseu-vos "
+"en contacte amb l'administrador."
+
+#: includes/class-userspn-settings.php:420
 msgid "Newsletter activation required"
 msgstr "Cal activació del butlletí informatiu"
 
-#: includes/class-userspn-settings.php:381
+#: includes/class-userspn-settings.php:400
 msgid "Newsletter exit popup"
 msgstr "Finestra emergent de sortida del butlletí informatiu"
 
-#: includes/class-userspn-settings.php:371
+#: includes/class-userspn-settings.php:410
+msgid "Newsletter is already loaded"
+msgstr "El butlletí ja està carregat"
+
+#: includes/class-userspn-settings.php:390
 msgid "Newsletter message"
 msgstr "Missatge del butlletí informatiu"
 
-#: includes/class-userspn-forms.php:116
+#: includes/class-userspn-forms.php:888
+msgid "No"
+msgstr "No"
+
+#: templates/userspn-bot-analysis-popup.php:35
+msgid "No activity since registration"
+msgstr "Sense activitat des del registre"
+
+#: includes/class-userspn-forms.php:191
 msgid "No file found"
 msgstr "No s'ha trobat cap fitxer"
 
-#: includes/class-userspn-forms.php:556
+#: includes/class-userspn-forms.php:880
+msgid "No file uploaded"
+msgstr "No s'ha carregat cap fitxer"
+
+#: includes/class-userspn-settings.php:751
+msgid "No hay altas en newsletter en la última semana"
+msgstr "No hay altas en newsletter en la última semana"
+
+#: includes/class-userspn-settings.php:778
+msgid "No hay registros de últimos accesos"
+msgstr "No hi ha registres dels últims accesos"
+
+#: includes/class-userspn-settings.php:721
+msgid "No hay usuarios nuevos en la última semana"
+msgstr "No hi ha usuaris nous a l'última setmana"
+
+#: includes/class-userspn-forms.php:970
+msgid "No images uploaded"
+msgstr "No s'han penjat imatges"
+
+#: includes/class-userspn-forms.php:142
 msgid "Not required"
 msgstr "No cal"
 
-#: includes/class-userspn-functions-user.php:367
+#: templates/userspn-footer.php:54
+#: includes/class-userspn-functions-user.php:489
+#: includes/class-userspn-functions-user.php:588
 msgid "Notifications"
 msgstr "Notificacions"
 
-#: includes/class-userspn-functions-user.php:398
+#: templates/userspn-footer.php:85
+#: includes/class-userspn-functions-user.php:520
+#: includes/class-userspn-functions-user.php:619
 msgid ""
 "Notifications are inactive. Please install and activate Mailing Manager - PN "
 "to allow integrated notifications in your platform."
@@ -551,27 +856,45 @@ msgstr ""
 "Les notificacions estan inactives. Si us plau, instal·leu i activeu Mailing "
 "Manager - PN per permetre notificacions integrades a la vostra plataforma."
 
-#: includes/class-userspn-notifications.php:117
+#: includes/class-userspn-notifications.php:192
 msgid "Notifications language"
 msgstr "Idioma de les notificacions"
 
-#: includes/class-userspn-forms.php:528
+#: includes/class-userspn-forms.php:114
 msgid "Number"
 msgstr "Número"
 
-#: includes/class-userspn-forms.php:234
+#: includes/class-userspn-forms.php:323
 msgid "Number (0-9)"
 msgstr "Número (0-9)"
 
-#: includes/class-userspn-functions-user.php:1038
+#: includes/class-userspn-functions-user.php:1409
 msgid "Number for"
 msgstr "Número per a"
 
-#: includes/class-userspn-forms.php:544
+#: includes/class-userspn-validation.php:101
+#, php-format
+msgid "Number must be at least %s."
+msgstr "El número ha de ser com a mínim %s."
+
+#: includes/class-userspn-validation.php:110
+#, php-format
+msgid "Number must be at most %s."
+msgstr "El número ha de ser com a màxim %s."
+
+#: includes/class-userspn-settings.php:455
+msgid ""
+"Número de días que deben pasar desde el registro para que se elimine la "
+"cuenta si no ha sido activada. Por defecto: 5 días."
+msgstr ""
+"Número de dies que han de passar des del registre per eliminar el compte si "
+"no s'ha activat. Per defecte: 5 dies."
+
+#: includes/class-userspn-forms.php:130
 msgid "One option per line"
 msgstr "Una opció per línia"
 
-#: includes/class-userspn-notifications.php:74
+#: includes/class-userspn-notifications.php:140
 msgid ""
 "Oppps! We are not able to verify your account. Please try to subscribe again "
 "or contact us."
@@ -579,11 +902,11 @@ msgstr ""
 "Ups! No podem verificar el teu compte. Si us plau, intenta subscriure't de "
 "nou o contacta amb nosaltres."
 
-#: includes/class-userspn-forms.php:414 includes/class-userspn-forms.php:430
+#: includes/class-userspn-forms.php:542 includes/class-userspn-forms.php:558
 msgid "Order element"
 msgstr "Element de comanda"
 
-#: includes/class-userspn-common.php:178
+#: includes/class-userspn-common.php:232
 msgid "Ordered element"
 msgstr "Element ordenat"
 
@@ -591,42 +914,80 @@ msgstr "Element ordenat"
 msgid "Padres en la Nube"
 msgstr "Pares al Núvol"
 
-#: includes/class-userspn-settings.php:94
+#: includes/class-userspn-settings.php:113
 msgid "Page ID"
 msgstr "ID de pàgina"
 
-#: includes/class-userspn-functions-user.php:839
-#: includes/class-userspn-functions-user.php:938
-#: includes/class-userspn-functions-user.php:939
-#: includes/class-userspn-forms.php:528
+#: includes/class-userspn-security.php:655
+msgid ""
+"Para borrar este usuario directamente, haz clic en el siguiente enlace:\n"
+msgstr ""
+"Per borrar aquest usuari directament, feu clic al següent enllaç:\n"
+
+#: includes/class-userspn-security.php:688
+msgid "Parámetros inválidos."
+msgstr "Paràmetres invàlids."
+
+#: includes/class-userspn-forms.php:114
+#: includes/class-userspn-functions-user.php:1115
+#: includes/class-userspn-functions-user.php:1216
+#: includes/class-userspn-functions-user.php:1217
 msgid "Password"
 msgstr "Contrasenya"
 
-#: includes/class-userspn-forms.php:226
+#: includes/class-userspn-validation.php:65
+msgid ""
+"Password contains characters that are not allowed. Only letters, numbers, "
+"and these symbols are permitted: !@#$%^&*()_+-=[]{}|;:,.<>?"
+msgstr ""
+"La contrasenya conté caràcters que no estan permesos. Només es permeten "
+"lletres, números i aquests símbols: !@#$%^&*()_+-=[]{}|;:,.<>?"
+
+#: includes/class-userspn-forms.php:315
 msgid "Password strength checker"
 msgstr "Verificador de força de contrasenya"
 
-#: includes/class-userspn-common.php:157
+#: includes/class-userspn-common.php:211
 msgid "Pending"
 msgstr "Pendent"
 
-#: includes/class-userspn-common.php:155
+#: includes/class-userspn-forms.php:611
+msgid "Play audio"
+msgstr "Reprodueix àudio"
+
+#: includes/class-userspn-common.php:209
 msgid "Please complete all required fields"
 msgstr "Si us plau, ompliu tots els camps obligatoris"
 
-#: includes/class-userspn-ajax-nopriv.php:212
-#: includes/class-userspn-ajax-nopriv.php:215
+#: includes/class-userspn-mailing.php:201
+#: includes/class-userspn-mailing.php:204
 msgid "Please confirm your email address clicking in the link."
 msgstr ""
 "Si us plau, confirmeu la vostra adreça de correu electrònic fent clic a "
 "l'enllaç."
 
-#: includes/class-userspn-common.php:160
+#: includes/class-userspn-common.php:214
 msgid "Please create a new user or login to save the information."
 msgstr ""
 "Si us plau, crea un usuari nou o inicia la sessió per desar la informació."
 
-#: includes/class-userspn-functions-user.php:1019
+#: includes/class-userspn-validation.php:144
+msgid "Please enter a valid date."
+msgstr "Si us plau, introduïu una data vàlida."
+
+#: includes/class-userspn-validation.php:74
+msgid "Please enter a valid email address."
+msgstr "Si us plau, introduïu una adreça electrònica vàlida."
+
+#: includes/class-userspn-validation.php:93
+msgid "Please enter a valid number."
+msgstr "Si us plau, introduïu un número vàlid."
+
+#: includes/class-userspn-validation.php:83
+msgid "Please enter a valid URL."
+msgstr "Si us plau, introduïu una URL vàlida."
+
+#: includes/class-userspn-functions-user.php:1390
 msgid ""
 "Please include data in YEAR-MONTH-DAY format as today is shown in the "
 "example."
@@ -634,7 +995,7 @@ msgstr ""
 "Si us plau, incloeu les dades en format ANY-MES-DIA tal com es mostra avui a "
 "l'exemple."
 
-#: includes/class-userspn-functions-user.php:1025
+#: includes/class-userspn-functions-user.php:1396
 msgid ""
 "Please include EXACTLY one of the values shown in the example row separated "
 "by the symbol |."
@@ -642,40 +1003,62 @@ msgstr ""
 "Si us plau, incloeu EXACTAMENT un dels valors que es mostren a la fila "
 "d'exemple separats pel símbol |."
 
-#: includes/class-userspn-common.php:188
+#: includes/class-userspn-common.php:244
 msgid "Please provide at least field name and type."
 msgstr "Si us plau, proporcioneu com a mínim el nom i el tipus de camp."
 
-#: includes/class-userspn-common.php:180
+#: includes/class-userspn-common.php:241
+msgid "Please select a file to upload."
+msgstr "Seleccioneu un fitxer per carregar."
+
+#: includes/class-userspn-validation.php:153
+msgid "Please select a valid option."
+msgstr "Si us plau, seleccioneu una opció vàlida."
+
+#: includes/class-userspn-validation.php:170
+msgid "Please select valid options."
+msgstr "Si us plau, seleccioneu opcions vàlides."
+
+#: includes/class-userspn-common.php:234
 msgid "Please, include your account password to complete the operation"
 msgstr ""
 "Si us plau, incloeu la contrasenya del vostre compte per completar l'operació"
 
-#: includes/class-userspn-ajax.php:541
+#: includes/class-userspn-ajax.php:562
 msgid "Please, select a valid file."
 msgstr "Si us plau, seleccioneu un fitxer vàlid."
 
-#: includes/class-userspn-settings.php:467
+#: includes/class-userspn-settings.php:627
+msgid "Plugin main Banner"
+msgstr "Bàner principal del complement"
+
+#: includes/class-userspn-settings.php:802
 msgid "Powered by"
 msgstr "Amb la tecnologia de"
 
-#: includes/class-userspn-functions-user.php:359
+#: includes/class-userspn-settings.php:986
+msgid "Primary Menu"
+msgstr "Menú principal"
+
+#: templates/userspn-footer.php:46
+#: includes/class-userspn-functions-user.php:481
+#: includes/class-userspn-functions-user.php:580
 msgid "Profile"
 msgstr "Perfil"
 
-#: includes/class-userspn-functions-user.php:574
+#: includes/class-userspn-functions-user.php:833
 msgid "Profile Completion"
 msgstr "Completament del perfil"
 
-#: includes/class-userspn-settings.php:85
+#: includes/class-userspn-settings.php:104
 msgid "Profile completion field"
 msgstr "Camp de finalització del perfil"
 
-#: includes/class-userspn-functions-user.php:746
+#: includes/class-userspn-functions-user.php:1020
 msgid "Profile picture"
 msgstr "foto de perfil"
 
-#: includes/class-userspn-functions-user.php:746
+#: includes/class-userspn-functions-user.php:1020
 msgid "Profile picture of"
 msgstr "Foto de perfil de"
 
@@ -683,31 +1066,89 @@ msgstr "Foto de perfil de"
 msgid "Profile popup"
 msgstr "Finestra emergent del perfil"
 
-#: includes/class-userspn-settings.php:131
+#: includes/class-userspn-settings.php:150
 msgid "Random images in avatar block"
 msgstr "Imatges aleatòries en un bloc d'avatar"
 
-#: includes/class-userspn-notifications.php:93
+#: includes/class-userspn-settings.php:556
+msgid "Rate Limit Window (hours)"
+msgstr "Finestra de límit de velocitat (hores)"
+
+#: includes/class-userspn-forms.php:586
+msgid "Ready to record"
+msgstr "Llest per gravar"
+
+#: includes/class-userspn-settings.php:503
+msgid "reCAPTCHA Score Threshold"
+msgstr "Llindar de puntuació de reCAPTCHA"
+
+#: includes/class-userspn-settings.php:492
+msgid "reCAPTCHA Secret Key"
+msgstr "Clau secreta de reCAPTCHA"
+
+#: includes/class-userspn-settings.php:481
+msgid "reCAPTCHA Site Key"
+msgstr "Clau del lloc reCAPTCHA"
+
+#: includes/class-userspn-security.php:51
+msgid "reCAPTCHA verification failed: Action mismatch."
+msgstr "La verificació de reCAPTCHA ha fallat: L'acció no coincideix."
+
+#: includes/class-userspn-security.php:47
+msgid "reCAPTCHA verification failed: Invalid token."
+msgstr "La verificació de reCAPTCHA ha fallat: testimoni no vàlid."
+
+#: includes/class-userspn-security.php:28
+msgid "reCAPTCHA verification failed: Missing credentials or token."
+msgstr "La verificació de reCAPTCHA ha fallat: falten credencials o testimoni."
+
+#: includes/class-userspn-security.php:40
+msgid "reCAPTCHA verification failed: Unable to connect to Google."
+msgstr ""
+"La verificació de reCAPTCHA ha fallat: no s'ha pogut connectar amb Google."
+
+#: includes/class-userspn-notifications.php:168
 msgid "Receive notifications"
 msgstr "Rebre notificacions"
 
-#: includes/class-userspn-functions-user.php:474
+#: templates/userspn-footer.php:151
+#: includes/class-userspn-functions-user.php:697
+#: includes/class-userspn-functions-user.php:721
 msgid "Register"
 msgstr "Registra't"
 
-#: includes/class-userspn-functions-user.php:907
+#: includes/class-userspn-security.php:113
+msgid "Registration blocked: Bot detected by honeypot."
+msgstr "Registre bloquejat: Bot detectat pel honeypot."
+
+#: includes/class-userspn-security.php:97
+msgid "Registration blocked: Content appears to be spam."
+msgstr "Registre bloquejat: el contingut sembla ser correu brossa."
+
+#: includes/class-userspn-security.php:141
+msgid ""
+"Registration blocked: Too many attempts. Please try again in %d hour(s)."
+msgstr ""
+"Registre bloquejat: Massa intents. Si us plau, torneu-ho a intentar en %d "
+"hora(es)."
+
+#: includes/class-userspn-functions-user.php:1185
 msgid "Remember Me"
 msgstr "Recorda'm"
 
-#: includes/class-userspn-forms.php:576
+#: includes/class-userspn-forms.php:162
 msgid "Remove"
 msgstr "Elimina"
 
-#: includes/class-userspn-forms.php:418 includes/class-userspn-forms.php:434
+#: includes/class-userspn-functions-user.php:945
+msgid "Remove avatar"
+msgstr "Elimina l'avatar"
+
+#: includes/class-userspn-forms.php:546 includes/class-userspn-forms.php:562
 msgid "Remove element"
 msgstr "Elimina l'element"
 
-#: includes/class-userspn-forms.php:566
+#: includes/class-userspn-forms.php:152
 msgid "Remove field"
 msgstr "Elimina el camp"
 
@@ -715,137 +1156,178 @@ msgstr "Elimina el camp"
 msgid "Remove file"
 msgstr "Elimina el fitxer"
 
-#: includes/class-userspn-ajax.php:161 includes/class-userspn-ajax.php:171
-#: includes/class-userspn-functions-user.php:810
-#: includes/class-userspn-functions-user.php:826
-#: includes/class-userspn-functions-user.php:842
+#: includes/class-userspn-functions-user.php:1084
+#: includes/class-userspn-functions-user.php:1100
+#: includes/class-userspn-functions-user.php:1118
+#: includes/class-userspn-ajax.php:199 includes/class-userspn-ajax.php:209
 msgid "Remove user"
 msgstr "Elimina l'usuari"
 
-#: includes/class-userspn-functions-user.php:820
+#: includes/class-userspn-functions-user.php:1094
 msgid "Remove your user from the system. This action cannot be undone."
 msgstr "Elimina l'usuari del sistema. Aquesta acció no es pot desfer."
 
-#: includes/class-userspn-functions-user.php:1006
-#: includes/class-userspn-functions-user.php:1013
-#: includes/class-userspn-forms.php:557
+#: includes/class-userspn-forms.php:143
+#: includes/class-userspn-functions-user.php:1377
+#: includes/class-userspn-functions-user.php:1384
 msgid "Required"
 msgstr "Obligatori"
 
-#: includes/class-userspn-forms.php:479
+#: includes/class-userspn-forms.php:753 includes/class-userspn-forms.php:818
 msgid "Required field"
 msgstr "Camp obligatori"
 
-#: includes/class-userspn-functions-user.php:1006
+#: includes/class-userspn-functions-user.php:1377
 msgid "Role"
 msgstr "Rol"
 
-#: includes/class-userspn-ajax.php:99
+#: includes/class-userspn-ajax.php:135
 msgid "Roles"
 msgstr "Rols"
 
-#: includes/class-userspn-settings.php:170
-#: includes/class-userspn-settings.php:171
+#: includes/class-userspn-settings.php:189
+#: includes/class-userspn-settings.php:190
 msgid "Roles allowed to upload files"
 msgstr "Rols amb permís per pujar fitxers"
 
-#: includes/class-userspn-forms.php:583
+#: includes/class-userspn-forms.php:169
 msgid "Save field"
 msgstr "Desa el camp"
 
-#: includes/class-userspn-settings.php:413
-#: includes/class-userspn-notifications.php:125
+#: includes/class-userspn-notifications.php:200
+#: includes/class-userspn-settings.php:580
 msgid "Save options"
 msgstr "Desa les opcions"
 
-#: includes/class-userspn-common.php:161
+#: includes/class-userspn-common.php:215
 msgid "Saved successfully"
 msgstr "S'ha desat correctament"
 
-#: includes/class-userspn-ajax.php:34
-#: includes/class-userspn-functions-user.php:984
-#: includes/class-userspn-ajax-nopriv.php:33
+#: includes/class-userspn-security.php:650
+#, php-format
+msgid ""
+"Score reCAPTCHA: %.2f (Umbral: %.2f)\n"
+msgstr "Puntuació reCAPTCHA: %.2f (Umbral: %.2f)"
+
+#: includes/class-userspn-settings.php:508
+msgid ""
+"Score threshold for blocking (0.1 = very strict, 1.0 = very permissive). "
+"Recommended: 0.5"
+msgstr ""
+"Llindar de puntuació per al bloqueig (0,1 = molt estricte, 1,0 = molt "
+"permissiu). Recomanat: 0,5"
+
+#: includes/class-userspn-security.php:647
+#, php-format
+msgid ""
+"Se ha detectado un posible registro fraudulento en %s:\n"
+"\n"
+msgstr ""
+"S'ha detectat un possible registre fraudulento a %s:\n"
+"\n"
+
+#: includes/class-userspn-settings.php:987
+msgid "Secondary Menu"
+msgstr "Menú secundari"
+
+#: includes/class-userspn-ajax-nopriv.php:173
+msgid "Security check failed. Please try again."
+msgstr "La comprovació de seguretat ha fallat. Torna-ho a provar."
+
+#: includes/class-userspn-ajax-nopriv.php:33 includes/class-userspn-ajax.php:34
 msgid "Security check failed: Invalid nonce."
 msgstr "La comprovació de seguretat ha fallat: valor no vàlid."
 
-#: includes/class-userspn-ajax.php:25
-#: includes/class-userspn-functions-user.php:975
-#: includes/class-userspn-ajax-nopriv.php:24
+#: includes/class-userspn-ajax-nopriv.php:24 includes/class-userspn-ajax.php:25
 msgid "Security check failed: Nonce is required."
 msgstr "Fallada la comprovació de seguretat: Cal un valor no necessari."
 
-#: includes/class-userspn-forms.php:517
+#: includes/class-userspn-ajax-nopriv.php:177
+msgid "Security check passed. Proceeding with password reset..."
+msgstr ""
+"Comprovació de seguretat superada. S'està procedint amb el restabliment de "
+"la contrasenya..."
+
+#: includes/class-userspn-settings.php:463
+msgid "Security Settings"
+msgstr "Configuració de seguretat"
+
+#: includes/class-userspn-common.php:249
+msgid "Security validation failed. Please try again."
+msgstr "La validació de seguretat ha fallat. Torna-ho a provar."
+
+#: includes/class-userspn-forms.php:103
 msgid "Select"
 msgstr "Selecciona"
 
-#: includes/class-userspn-forms.php:279
-msgid "Select an option"
-msgstr "Selecciona una opció"
-
-#: includes/class-userspn-common.php:172
+#: includes/class-userspn-common.php:226
 msgid "Select audio"
 msgstr "Selecciona l'àudio"
 
-#: includes/class-userspn-common.php:173
+#: includes/class-userspn-common.php:227
 msgid "Select audios"
 msgstr "Selecciona àudios"
 
-#: includes/class-userspn-settings.php:141
-#: includes/class-userspn-settings.php:142
+#: includes/class-userspn-settings.php:160
+#: includes/class-userspn-settings.php:161
 msgid "Select avatar block images"
 msgstr "Selecciona imatges de bloc d'avatar"
 
-#: includes/class-userspn-common.php:176
+#: includes/class-userspn-common.php:230
 msgid "Select file"
 msgstr "Selecciona un fitxer"
 
-#: includes/class-userspn-common.php:177
+#: includes/class-userspn-common.php:231
 msgid "Select files"
 msgstr "Selecciona fitxers"
 
-#: includes/class-userspn-common.php:164
+#: includes/class-userspn-common.php:218
 msgid "Select image"
 msgstr "Selecciona la imatge"
 
-#: includes/class-userspn-common.php:165
+#: includes/class-userspn-common.php:219
 msgid "Select images"
 msgstr "Selecciona imatges"
 
-#: includes/class-userspn-forms.php:538
+#: includes/class-userspn-settings.php:52
+msgid "Select menu location"
+msgstr "Selecciona la ubicació del menú"
+
+#: includes/class-userspn-forms.php:124
 msgid "Select multiple"
 msgstr "Selecciona diversos"
 
-#: includes/class-userspn-forms.php:555
+#: includes/class-userspn-forms.php:141
 msgid "Select requirement"
 msgstr "Selecciona el requisit"
 
-#: includes/class-userspn-forms.php:527
+#: includes/class-userspn-forms.php:113
 msgid "Select subtype"
 msgstr "Selecciona el subtipus"
 
-#: includes/class-userspn-settings.php:86
+#: includes/class-userspn-settings.php:105
 msgid "Select the page and meta key to track for profile completion."
 msgstr ""
 "Seleccioneu la pàgina i la meta-clau per fer el seguiment de la finalització "
 "del perfil."
 
-#: includes/class-userspn-forms.php:516
+#: includes/class-userspn-forms.php:102
 msgid "Select type"
 msgstr "Selecciona el tipus"
 
-#: includes/class-userspn-common.php:168
+#: includes/class-userspn-common.php:222
 msgid "Select video"
 msgstr "Selecciona el vídeo"
 
-#: includes/class-userspn-common.php:169
+#: includes/class-userspn-common.php:223
 msgid "Select videos"
 msgstr "Selecciona vídeos"
 
-#: includes/class-userspn-forms.php:535
+#: includes/class-userspn-forms.php:121
 msgid "Selector subtype"
 msgstr "Subtipus de selector"
 
-#: includes/class-userspn-settings.php:310
+#: includes/class-userspn-settings.php:329
 msgid ""
 "Set up the roles to get dashboard access. This option takes priority over "
 "the previous one. If a role appears in both fields, this \"Enabled roles\" "
@@ -855,7 +1337,7 @@ msgstr ""
 "prioritat sobre l'anterior. Si un rol apareix en tots dos camps, aquest camp "
 "\"Rols activats\" serà el que es tindrà en compte i es proporcionarà l'accés."
 
-#: includes/class-userspn-settings.php:330
+#: includes/class-userspn-settings.php:349
 msgid ""
 "Set up the roles to get the admin bar. This option takes priority over the "
 "previous one. If a role appears in both fields, this \"Enabled roles\" field "
@@ -867,17 +1349,47 @@ msgstr ""
 "\"Rols activats\" serà el que es tindrà en compte i es mostrarà la barra "
 "d'administració."
 
-#: includes/class-userspn-settings.php:76
+#: includes/class-userspn-settings.php:933
+#: includes/class-userspn-settings.php:1000
+msgid "Settings"
+msgstr "Configuració"
+
+#: includes/class-userspn-settings.php:95
 msgid "Show profile completion block"
 msgstr "Mostra el bloc de finalització del perfil"
 
-#: includes/class-userspn-forms.php:539
+#: includes/class-userspn-security.php:657
+msgid "Si no haces nada, el usuario podrá acceder normalmente a la web."
+msgstr "Si no fa res, l'usuari podrà accedir normalment a la web."
+
+#: includes/class-userspn-forms.php:125
 msgid "Simple selector"
 msgstr "Selector simple"
 
-#: includes/class-userspn-forms.php:238
+#: includes/class-userspn-forms.php:327
 msgid "Special Character (!@#$%^&*)"
 msgstr "Caràcter especial (!@#$%^&*)"
+
+#: templates/userspn-bot-analysis-popup.php:42
+msgid "Start Analysis"
+msgstr "Inicia l'anàlisi"
+
+#: includes/class-userspn-forms.php:595
+msgid "Start recording"
+msgstr "Comença a gravar"
+
+#: includes/class-userspn-settings.php:597
+#: includes/class-userspn-settings.php:598
+msgid "Statistics"
+msgstr "Estadístiques"
+
+#: includes/class-userspn-forms.php:618
+msgid "Stop audio"
+msgstr "Atura l'àudio"
+
+#: includes/class-userspn-forms.php:602
+msgid "Stop recording"
+msgstr "Atura l'enregistrament"
 
 #. Description of the plugin
 msgid ""
@@ -893,63 +1405,119 @@ msgstr ""
 msgid "Submit"
 msgstr "Enviar"
 
-#: includes/class-userspn-functions-user.php:329
-#: includes/class-userspn-functions-user.php:330
+#: includes/class-userspn-functions-user.php:423
+#: includes/class-userspn-functions-user.php:424
 msgid "Surname"
 msgstr "Cognom"
 
-#: includes/class-userspn-settings.php:61
+#: includes/class-userspn-settings.php:80
 msgid "Surname compulsory"
 msgstr "Cognom obligatori"
 
-#: includes/class-userspn-forms.php:528
+#: templates/userspn-bot-analysis-popup.php:30
+msgid "Suspicious email patterns (sequential, temp emails)"
+msgstr ""
+"Patrons de correu electrònic sospitosos (correus electrònics seqüencials i "
+"temporals)"
+
+#: templates/userspn-bot-analysis-popup.php:34
+msgid "Suspicious user agent strings"
+msgstr "Cadenes d'agent d'usuari sospitoses"
+
+#: includes/class-userspn-settings.php:608
+msgid "Test: Delete Inactive"
+msgstr "Prova: Suprimeix els elements inactius"
+
+#: includes/class-userspn-settings.php:607
+msgid "Test: Delete Inactive Users"
+msgstr "Prova: Suprimeix els usuaris inactius"
+
+#: includes/class-userspn-forms.php:114
 msgid "Text"
 msgstr "Text"
 
-#: includes/class-userspn-functions-user.php:1035
-#: includes/class-userspn-functions-user.php:1050
+#: includes/class-userspn-functions-user.php:1406
+#: includes/class-userspn-functions-user.php:1421
 msgid "Text for"
 msgstr "Text per a"
 
-#: includes/class-userspn-forms.php:517
+#: includes/class-userspn-validation.php:124
+msgid "Text must be at least %d characters long."
+msgstr "El text ha de tenir com a mínim %d caràcters de llargada."
+
+#: includes/class-userspn-validation.php:133
+msgid "Text must be at most %d characters long."
+msgstr "El text ha de tenir com a màxim %d caràcters de llargada."
+
+#: includes/class-userspn-forms.php:103
 msgid "Textarea"
 msgstr "Àrea de text"
 
-#: includes/class-userspn-common.php:186
+#: includes/class-userspn-notifications.php:122
+msgid "The activation link has expired. Please request a new activation email."
+msgstr ""
+"L'enllaç d'activació ha caducat. Sol·liciteu un nou correu electrònic "
+"d'activació."
+
+#: includes/class-userspn-common.php:242
 msgid "The field has been removed."
 msgstr "El camp s'ha eliminat."
 
-#: includes/class-userspn-common.php:187
+#: includes/class-userspn-common.php:243
 msgid "The field has been saved successfully."
 msgstr "El camp s'ha desat correctament."
 
-#: includes/class-userspn-forms.php:569
+#: includes/class-userspn-forms.php:155
 msgid "The field will be removed. This action cannot be undone."
 msgstr "El camp s'eliminarà. Aquesta acció no es pot desfer."
 
-#: includes/class-userspn-common.php:185
+#: includes/class-userspn-common.php:239
 msgid "The file has been removed."
 msgstr "L'arxiu s'ha eliminat."
 
-#: includes/class-userspn-common.php:184
-msgid "The file has been uploaded successfully. Reloading page..."
-msgstr ""
-"El fitxer s'ha carregat correctament. S'està tornant a carregar la pàgina..."
+#: includes/class-userspn-common.php:238
+msgid "The file has been uploaded successfully."
+msgstr "El fitxer s'ha carregat correctament."
 
-#: includes/class-userspn-common.php:179
+#: includes/class-userspn-common.php:233
 msgid "The password is not correct. Please try again"
 msgstr "La contrasenya no és correcta. Si us plau, torna-ho a intentar."
 
-#: includes/class-userspn-common.php:181
+#: includes/class-userspn-common.php:235
 msgid "The user has been successfully removed from the system. Reloading..."
 msgstr ""
 "L'usuari s'ha eliminat correctament del sistema. S'està tornant a carregar..."
 
-#: includes/class-userspn-functions-user.php:651
+#: includes/class-userspn-functions-user.php:918
 msgid "There are no extra fields in the profile"
 msgstr "No hi ha camps addicionals al perfil"
 
-#: includes/class-userspn-settings.php:172
+#: templates/userspn-bot-analysis-popup.php:46
+msgid ""
+"This analysis is based on patterns and may produce false positives. Always "
+"review results carefully before taking action."
+msgstr ""
+"Aquesta anàlisi es basa en patrons i pot produir falsos positius. Reviseu "
+"sempre els resultats acuradament abans de prendre mesures."
+
+#: includes/class-userspn-blocks.php:102
+msgid ""
+"This block displays the user profile content directly on the page. If the "
+"user is logged in, it shows the profile editing form with tabs for Profile, "
+"Image, Notifications, and Advanced options. If the user is not logged in, it "
+"shows login and registration forms."
+msgstr ""
+"Aquest bloc mostra el contingut del perfil d'usuari directament a la pàgina. "
+"Si l'usuari ha iniciat la sessió, es mostra el formulari d'edició del perfil "
+"amb pestanyes per a Perfil, Imatge, Notificacions i Opcions avançades. Si "
+"l'usuari no ha iniciat la sessió, es mostren els formularis d'inici de "
+"sessió i registre."
+
+#: includes/class-userspn-validation.php:48
+msgid "This field"
+msgstr "Aquest camp"
+
+#: includes/class-userspn-settings.php:191
 msgid ""
 "This option allow only specific roles to have the option to upload files to "
 "the system. If this option is empty and \"User files\" field is on, all the "
@@ -961,8 +1529,8 @@ msgstr ""
 "d'usuari\" està activat, tots els rols podran carregar fitxers al sistema. "
 "Els administradors sempre tindran permís."
 
-#: includes/class-userspn-settings.php:132
-#: includes/class-userspn-settings.php:143
+#: includes/class-userspn-settings.php:151
+#: includes/class-userspn-settings.php:162
 msgid ""
 "This option allow you to include custom images to be shown randomly in the "
 "avatar image block."
@@ -970,7 +1538,7 @@ msgstr ""
 "Aquesta opció us permet incloure imatges personalitzades que es mostraran "
 "aleatòriament al bloc d'imatges d'avatar."
 
-#: includes/class-userspn-settings.php:191
+#: includes/class-userspn-settings.php:210
 msgid ""
 "This option allows users to access to the password change integrated "
 "function."
@@ -978,7 +1546,7 @@ msgstr ""
 "Aquesta opció permet als usuaris accedir a la funció integrada de canvi de "
 "contrasenya."
 
-#: includes/class-userspn-settings.php:115
+#: includes/class-userspn-settings.php:134
 msgid ""
 "This option allows users to create their account from the front-end profile "
 "popup."
@@ -986,7 +1554,7 @@ msgstr ""
 "Aquesta opció permet als usuaris crear el seu compte des de la finestra "
 "emergent del perfil del front-end."
 
-#: includes/class-userspn-settings.php:181
+#: includes/class-userspn-settings.php:200
 msgid ""
 "This option allows users to do user from the advanced option in the profile "
 "popup."
@@ -994,7 +1562,7 @@ msgstr ""
 "Aquesta opció permet als usuaris fer-ho des de l'opció avançada de la "
 "finestra emergent del perfil."
 
-#: includes/class-userspn-settings.php:211
+#: includes/class-userspn-settings.php:230
 msgid ""
 "This option allows users to remove their account from the advanced option in "
 "the profile popup."
@@ -1002,19 +1570,26 @@ msgstr ""
 "Aquesta opció permet als usuaris eliminar el seu compte des de l'opció "
 "avançada de la finestra emergent del perfil."
 
-#: includes/class-userspn-settings.php:160
+#: includes/class-userspn-settings.php:179
 msgid ""
 "This option allows users to upload and manage their files to the system."
 msgstr ""
 "Aquesta opció permet als usuaris carregar i gestionar els seus fitxers al "
 "sistema."
 
-#: includes/class-userspn-settings.php:237
+#: includes/class-userspn-settings.php:43
+msgid ""
+"This option allows you to add the profile icon to a selected navigation menu."
+msgstr ""
+"Aquesta opció us permet afegir la icona del perfil a un menú de navegació "
+"seleccionat."
+
+#: includes/class-userspn-settings.php:256
 msgid "This option changes the main login page logo."
 msgstr ""
 "Aquesta opció canvia el logotip de la pàgina d'inici de sessió principal."
 
-#: includes/class-userspn-settings.php:249
+#: includes/class-userspn-settings.php:268
 msgid ""
 "This option changes your main login page header logo link text. By default "
 "\"Powered by WordPress\"."
@@ -1023,7 +1598,7 @@ msgstr ""
 "pàgina d'inici de sessió principal. Per defecte, està \"Funcionat amb "
 "WordPress\"."
 
-#: includes/class-userspn-settings.php:261
+#: includes/class-userspn-settings.php:280
 msgid ""
 "This option changes your main login page logo link. By default https:"
 "//wordpress.org/."
@@ -1031,7 +1606,7 @@ msgstr ""
 "Aquesta opció canvia l'enllaç del logotip de la pàgina d'inici de sessió "
 "principal. Per defecte, https://wordpress.org/."
 
-#: includes/class-userspn-settings.php:201
+#: includes/class-userspn-settings.php:220
 msgid ""
 "This option force system to use the password recovery WordPress tool by "
 "default. It will generate an unique nonce and will send it to the user to "
@@ -1041,7 +1616,7 @@ msgstr ""
 "contrasenyes de WordPress per defecte. Generarà un nonce únic i l'enviarà a "
 "l'usuari per canviar la contrasenya de manera segura."
 
-#: includes/class-userspn-settings.php:403
+#: includes/class-userspn-settings.php:432
 msgid ""
 "This option set up the maximum numer of activating emails allowed to be sent "
 "from the platform."
@@ -1049,7 +1624,7 @@ msgstr ""
 "Aquesta opció configura el nombre màxim de correus electrònics d'activació "
 "que es poden enviar des de la plataforma."
 
-#: includes/class-userspn-settings.php:151
+#: includes/class-userspn-settings.php:170
 msgid ""
 "This option shows a notifications tab in the profile popup that allows users "
 "to manage their notifications."
@@ -1057,7 +1632,7 @@ msgstr ""
 "Aquesta opció mostra una pestanya de notificacions a la finestra emergent "
 "del perfil que permet als usuaris gestionar les seves notificacions."
 
-#: includes/class-userspn-settings.php:347
+#: includes/class-userspn-settings.php:366
 msgid ""
 "This option will allow administrators to login as any user on the platform "
 "with no administrator role. Please use this option with caution and "
@@ -1069,7 +1644,7 @@ msgstr ""
 "aquesta opció amb precaució i responsabilitat, sempre amb el consentiment "
 "dels usuaris. Comporta riscos de privadesa i seguretat."
 
-#: includes/class-userspn-functions-user.php:159
+#: includes/class-userspn-functions-user.php:172
 msgid ""
 "This option will allow you to login the platform as the current user profile."
 " This won´t work for administrator profiles, but any other contact all "
@@ -1079,7 +1654,7 @@ msgstr ""
 "d'usuari actual. Això no funcionarà per a perfils d'administrador, però sí "
 "per a qualsevol altre contacte de tot el lloc web."
 
-#: includes/class-userspn-settings.php:290
+#: includes/class-userspn-settings.php:309
 msgid ""
 "This option will modify also the dashboard main top left logo link using the "
 "link and text set above."
@@ -1088,7 +1663,7 @@ msgstr ""
 "superior esquerra del tauler de control utilitzant l'enllaç i el text "
 "definits anteriorment."
 
-#: includes/class-userspn-settings.php:280
+#: includes/class-userspn-settings.php:299
 msgid ""
 "This option will modify also the dashboard main top left logo using the "
 "image set above."
@@ -1096,13 +1671,13 @@ msgstr ""
 "Aquesta opció també modificarà el logotip principal superior esquerre del "
 "tauler de control utilitzant la imatge definida anteriorment."
 
-#: includes/class-userspn-settings.php:228
+#: includes/class-userspn-settings.php:247
 msgid "This option will modify the dashboard main login page aspect."
 msgstr ""
 "Aquesta opció modificarà l'aspecte de la pàgina d'inici de sessió principal "
 "del tauler de control."
 
-#: includes/class-userspn-notifications.php:94
+#: includes/class-userspn-notifications.php:169
 msgid ""
 "This option will set if you receive notifications from the system. If you "
 "uncheck it you won't receive no notifications from the system."
@@ -1110,7 +1685,7 @@ msgstr ""
 "Aquesta opció configurarà si rebeu notificacions del sistema. Si la "
 "desmarqueu, no rebreu cap notificació del sistema."
 
-#: includes/class-userspn-settings.php:123
+#: includes/class-userspn-settings.php:142
 msgid ""
 "This options allow contacts to include a custom Profile Pictures in their "
 "profiles."
@@ -1118,25 +1693,57 @@ msgstr ""
 "Aquestes opcions permeten als contactes incloure imatges de perfil "
 "personalitzades als seus perfils."
 
-#: includes/class-userspn-forms.php:528
+#: includes/class-userspn-settings.php:570
+msgid ""
+"This tool analyzes existing users to identify potential bots based on "
+"various patterns and behaviors such as suspicious email patterns, bot-like "
+"usernames, empty profiles, multiple registrations from same IP, and lack of "
+"activity."
+msgstr ""
+"Aquesta eina analitza els usuaris existents per identificar possibles bots "
+"basant-se en diversos patrons i comportaments, com ara patrons de correu "
+"electrònic sospitosos, noms d'usuari semblants als bots, perfils buits, "
+"registres múltiples des de la mateixa IP i manca d'activitat."
+
+#: templates/userspn-bot-analysis-popup.php:25
+msgid ""
+"This tool analyzes existing users to identify potential bots based on "
+"various patterns and behaviors."
+msgstr ""
+"Aquesta eina analitza els usuaris existents per identificar possibles bots "
+"basant-se en diversos patrons i comportaments."
+
+#: includes/class-userspn-forms.php:114
 msgid "Time"
 msgstr "Temps"
 
-#: includes/class-userspn-functions-user.php:648
+#: includes/class-userspn-settings.php:560
+msgid "Time window in hours for rate limiting."
+msgstr "Finestra de temps en hores per a la limitació de la velocitat."
+
+#: includes/class-userspn-forms.php:636
+msgid "Transcribe Audio"
+msgstr "Transcripció d'àudio"
+
+#: includes/class-userspn-forms.php:657
+msgid "Transcribed text will appear here..."
+msgstr "El text transcrit apareixerà aquí..."
+
+#: includes/class-userspn-functions-user.php:915
 msgid "Update profile"
 msgstr "Actualitza el perfil"
 
-#: includes/class-userspn-ajax.php:122
+#: includes/class-userspn-ajax.php:158
 msgid "Update user"
 msgstr "Actualitza l'usuari"
 
-#: includes/class-userspn-functions-user.php:1092
-#: includes/class-userspn-functions-user.php:1095
+#: includes/class-userspn-functions-user.php:1497
+#: includes/class-userspn-functions-user.php:1500
 #: includes/class-userspn-functions-attachment.php:105
 msgid "Upload"
 msgstr "Pujada"
 
-#: includes/class-userspn-functions-user.php:677
+#: includes/class-userspn-functions-user.php:948
 msgid "Upload avatar"
 msgstr "Puja l'avatar"
 
@@ -1144,39 +1751,49 @@ msgstr "Puja l'avatar"
 msgid "Upload your private file"
 msgstr "Puja el teu fitxer privat"
 
-#: includes/class-userspn-forms.php:528
+#: includes/class-userspn-forms.php:114
 msgid "Url"
 msgstr "URL"
 
-#: includes/class-userspn-settings.php:200
+#: includes/class-userspn-settings.php:219
 msgid "Use WordPress password recovery system"
 msgstr "Utilitzeu el sistema de recuperació de contrasenyes de WordPress"
 
-#: includes/class-userspn-functions-user.php:664
+#: includes/class-userspn-security.php:652
+#, php-format
+msgid ""
+"User Agent: %s\n"
+msgstr "Agent d'usuari: %s"
+
+#: includes/class-userspn-functions-user.php:931
 msgid "User avatar (recommended square images)"
 msgstr "Avatar d'usuari (imatges quadrades recomanades)"
 
-#: includes/class-userspn-common.php:183
+#: includes/class-userspn-common.php:237
 msgid "User created. Please login."
 msgstr "Usuari creat. Si us plau, inicia la sessió."
 
-#: includes/class-userspn-ajax.php:93 includes/class-userspn-ajax.php:163
+#: includes/class-userspn-ajax.php:129 includes/class-userspn-ajax.php:201
 msgid "User ID#"
 msgstr "ID d'usuari"
 
-#: includes/class-userspn-functions-user.php:136
+#: includes/class-userspn-functions-user.php:145
 msgid "User management - PN Extra profile fields"
 msgstr "Gestió d'usuaris - Camps de perfil addicionals de PN"
 
-#: includes/class-userspn-settings.php:346
+#: includes/class-userspn-blocks.php:106
+msgid "User Profile Block"
+msgstr "Bloc de perfil d'usuari"
+
+#: includes/class-userspn-settings.php:365
 msgid "Users auto-login"
 msgstr "Inici de sessió automàtic dels usuaris"
 
-#: includes/class-userspn-settings.php:159
+#: includes/class-userspn-settings.php:178
 msgid "Users files"
 msgstr "Fitxers d'usuari"
 
-#: includes/class-userspn-settings.php:425
+#: includes/class-userspn-settings.php:592
 msgid "Users manager"
 msgstr "Gestor d'usuaris"
 
@@ -1184,32 +1801,73 @@ msgstr "Gestor d'usuaris"
 msgid "Users manager - PN"
 msgstr "Gestor d'usuaris - PN"
 
-#: includes/class-userspn-settings.php:440
+#: includes/class-userspn-settings.php:629
 msgid "Users manager - PN Settings"
 msgstr "Gestor d'usuaris - Configuració de PN"
 
-#: includes/class-userspn-activator.php:25
-msgid "Users manager - PN"
-msgstr "Gestor d'usuaris - PN"
+#: templates/userspn-bot-analysis-popup.php:40
+msgid "Users to analyze:"
+msgstr "Usuaris a analitzar:"
 
-#: includes/class-userspn-functions-user.php:594
+#: includes/class-userspn-security.php:719
+#, php-format
+msgid "Usuario %s eliminado correctamente."
+msgstr "L'usuari %s s'ha eliminat correctament."
+
+#: includes/class-userspn-security.php:720
+msgid "Usuario eliminado"
+msgstr "Usuari eliminat"
+
+#: includes/class-userspn-security.php:700
+msgid "Usuario no encontrado."
+msgstr "Usuari no trobat."
+
+#: includes/class-userspn-security.php:648
+#, php-format
+msgid ""
+"Usuario: %s\n"
+msgstr ""
+"Usuari: %s\n"
+
+#: includes/class-userspn-settings.php:656
+msgid "Usuarios nuevos (7 días)"
+msgstr "Usuaris nous (7 dies)"
+
+#: includes/class-userspn-settings.php:672
+msgid "Usuarios nuevos en la última semana"
+msgstr "Usuaris nous en l'última setmana"
+
+#: includes/class-userspn-security.php:695
+msgid "Verificación de seguridad fallida."
+msgstr "Verificació de seguretat fallida."
+
+#: includes/class-userspn-functions-user.php:856
 msgid "View details"
 msgstr "Veure detalls"
 
-#: includes/class-userspn-common.php:189
+#: templates/userspn-bot-analysis-popup.php:46
+msgid "Warning:"
+msgstr "Avís:"
+
+#: includes/class-userspn-common.php:245
 msgid ""
 "We have sent you an activation email. Please check your inbox or spam folder."
 msgstr ""
 "T'hem enviat un correu electrònic d'activació. Si us plau, revisa la teva "
 "safata d'entrada o la carpeta de correu brossa."
 
-#: includes/class-userspn-common.php:192
+#: includes/class-userspn-common.php:248
 msgid "We have sent you an email. Please check your inbox or spam folder."
 msgstr ""
 "T'hem enviat un correu electrònic. Si us plau, revisa la safata d'entrada o "
 "la carpeta de correu brossa."
 
-#: includes/class-userspn-settings.php:392
+#: includes/class-userspn-ajax-nopriv.php:534
+#: includes/class-userspn-functions-user.php:343
+msgid "Welcome to our newsletter"
+msgstr "Benvinguts al nostre butlletí"
+
+#: includes/class-userspn-settings.php:421
 msgid ""
 "When this option is active, the system asks contacts to verify their emails "
 "via a link sent to their email address as they register in the platform."
@@ -1218,7 +1876,7 @@ msgstr ""
 "verifiquin els seus correus electrònics mitjançant un enllaç enviat a la "
 "seva adreça de correu electrònic quan es registren a la plataforma."
 
-#: includes/class-userspn-settings.php:382
+#: includes/class-userspn-settings.php:401
 msgid ""
 "When this option is active, the system shows a popup when a contact tries to "
 "exit page without completing the newsletter registration form."
@@ -1227,7 +1885,7 @@ msgstr ""
 "un contacte intenta sortir de la pàgina sense completar el formulari de "
 "registre del butlletí."
 
-#: includes/class-userspn-ajax.php:163
+#: includes/class-userspn-ajax.php:201
 msgid ""
 "will be removed completely from the system. This action cannot be undone. "
 "Are you sure?"
@@ -1235,7 +1893,11 @@ msgstr ""
 "s'eliminarà completament del sistema. Aquesta acció no es pot desfer. Esteu "
 "segur?"
 
-#: includes/class-userspn-functions-user.php:962
+#: includes/class-userspn-forms.php:888
+msgid "Yes"
+msgstr "Sí"
+
+#: includes/class-userspn-functions-user.php:1254
 msgid ""
 "You are already registered and logged in the system. So you cannot create a "
 "new user. Please close your session to register a new account."
@@ -1244,11 +1906,11 @@ msgstr ""
 "crear un usuari nou. Si us plau, tanqueu la sessió per registrar un compte "
 "nou."
 
-#: includes/class-userspn-mailing.php:139
+#: includes/class-userspn-mailing.php:146
 msgid "You are already subscribed to the newsletter"
 msgstr "Ja estàs subscrit al butlletí"
 
-#: includes/class-userspn-functions-user.php:962
+#: includes/class-userspn-functions-user.php:1254
 msgid "You are registered"
 msgstr "Estàs registrat/da"
 
@@ -1259,7 +1921,7 @@ msgstr ""
 "Podeu desactivar temporalment l'accés emergent marcant aquesta casella de "
 "selecció."
 
-#: includes/class-userspn-settings.php:68
+#: includes/class-userspn-settings.php:87
 msgid ""
 "You can include the fields that will be asked in the profile popup. The base "
 "login or registration will include email and password. The fields that you "
@@ -1270,13 +1932,13 @@ msgstr ""
 "contrasenya. Els camps que afegiu aquí s'inclouran a sota dels dos camps "
 "bàsics de correu electrònic i contrasenya."
 
-#: includes/class-userspn-settings.php:319
+#: includes/class-userspn-settings.php:338
 msgid "You can remove the front-end admin bar by contacts role."
 msgstr ""
 "Podeu eliminar la barra d'administració del front-end mitjançant el rol de "
 "contactes."
 
-#: includes/class-userspn-settings.php:299
+#: includes/class-userspn-settings.php:318
 msgid ""
 "You can revoke the accesss to certain roles to the administrator dashboard "
 "completely."
@@ -1288,20 +1950,29 @@ msgstr ""
 msgid "You can upload files to the system and access them from your profile."
 msgstr "Podeu pujar fitxers al sistema i accedir-hi des del vostre perfil."
 
-#: includes/class-userspn-mailing.php:137
+#: includes/class-userspn-ajax-nopriv.php:535
+#: includes/class-userspn-functions-user.php:344
+msgid "You have been subscribed to our newsletter. Welcome aboard!"
+msgstr "T'has subscrit al nostre butlletí. Benvingut/da!"
+
+#: includes/class-userspn-mailing.php:144
 msgid "You have disabled your email notifications."
 msgstr "Has desactivat les notificacions per correu electrònic."
 
-#: includes/class-userspn-ajax-nopriv.php:212
-#: includes/class-userspn-ajax-nopriv.php:215
+#: includes/class-userspn-mailing.php:201
+#: includes/class-userspn-mailing.php:204
 msgid "You have just subscribed to our newsletter."
 msgstr "Acabes de subscriure't al nostre butlletí."
 
-#: includes/class-userspn-functions-user.php:300
+#: includes/class-userspn-functions-user.php:394
 msgid "You have not registered any field yet"
 msgstr "Encara no has registrat cap camp"
 
-#: includes/class-userspn-functions-user.php:835
+#: includes/class-userspn-ajax.php:752
+msgid "You must be logged in to create a new asset."
+msgstr "Heu d'iniciar la sessió per crear un nou actiu."
+
+#: includes/class-userspn-functions-user.php:1111
 msgid "Your account removal will be permanent. This action cannot be undone!"
 msgstr ""
 "L'eliminació del teu compte serà permanent. Aquesta acció no es pot desfer!"
@@ -1310,23 +1981,28 @@ msgstr ""
 msgid "Your email"
 msgstr "El vostre correu electrònic"
 
-#: includes/class-userspn-common.php:190
+#: includes/class-userspn-common.php:246
 msgid "Your email has received too many emails. Please contact us."
 msgstr ""
 "El vostre correu electrònic ha rebut massa correus electrònics. Poseu-vos en "
 "contacte amb nosaltres."
 
-#: includes/class-userspn-ajax.php:539
+#: includes/class-userspn-notifications.php:113
+msgid "Your email is already activated. No further action is needed."
+msgstr ""
+"El vostre correu electrònic ja està activat. No cal fer cap altra acció."
+
+#: includes/class-userspn-ajax.php:559
 msgid "Your file has been uploaded succesfully."
 msgstr "El vostre fitxer s'ha carregat correctament."
 
-#: includes/class-userspn-functions-user.php:458
-#: includes/class-userspn-functions-user.php:460
-#: includes/class-userspn-functions-user.php:463
+#: includes/class-userspn-functions-user.php:681
+#: includes/class-userspn-functions-user.php:683
+#: includes/class-userspn-functions-user.php:686
 msgid "Your profile"
 msgstr "El vostre perfil"
 
-#: includes/class-userspn-functions-user.php:463
+#: includes/class-userspn-functions-user.php:686
 msgid "Your profile link button"
 msgstr "Botó d'enllaç del vostre perfil"
 
@@ -1334,14 +2010,7 @@ msgstr "Botó d'enllaç del vostre perfil"
 msgid "your@email.com"
 msgstr "el vostre@correu.com"
 
-#: includes/class-userspn-validation.php:67
-msgid "Password contains characters that are not allowed. Only letters, numbers, and these symbols are permitted: !@#$%^&*()_+-=[]{}|;:,.<>?"
-msgstr "La contrasenya conté caràcters que no estan permesos. Només es permeten lletres, números i aquests símbols: !@#$%^&*()_+-=[]{}|;:,.<>?"
-
-#: includes/class-userspn-forms.php:217
-msgid "Special Character (!@#$%^&*()_+-=[]{}|;:,.<>?)"
-msgstr "Caràcter especial (!@#$%^&*()_+-=[]{}|;:,.<>?)"
-
-#: includes/class-userspn-forms.php:194
-msgid "Only letters, numbers, and these symbols are permitted: !@#$%^&*()_+-=[]{}|;:,.<>?"
-msgstr "Només es permeten lletres, números i aquests símbols: !@#$%^&*()_+-=[]{}|;:,.<>?"
+#: includes/class-userspn-settings.php:664
+#: includes/class-userspn-settings.php:688
+msgid "Últimos accesos"
+msgstr "Últims accessos"

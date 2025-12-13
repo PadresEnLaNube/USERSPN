@@ -69,6 +69,7 @@ class USERSPN {
 		$this->userspn_load_settings();
 		$this->userspn_load_shortcodes();
 		$this->userspn_load_notifications();
+		$this->userspn_load_cron();
 		$this->userspn_load_blocks();
 	}
 

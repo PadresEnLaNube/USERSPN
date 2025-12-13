@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Users manager - PN\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-10-17 07:19+0000\n"
-"PO-Revision-Date: 2025-05-01 18:55+0000\n"
+"PO-Revision-Date: 2025-12-13 18:51+0000\n"
 "Last-Translator: \n"
 "Language-Team: Basque\n"
 "Language: eu\n"
@@ -15,102 +15,165 @@ msgstr ""
 "X-Loco-Version: 2.7.2; wp-6.8.1\n"
 "X-Domain: userspn"
 
-#: includes/class-userspn-functions-user.php:587
-msgid "%d of %d fields completed"
+#. 1: Number of completed fields, 2: Total number of fields
+#: includes/class-userspn-functions-user.php:849
+#, php-format
+#| msgid "%d of %d fields completed"
+msgid "%1$d of %2$d fields completed"
 msgstr "%d eremuetatik %d beteta"
 
-#: includes/class-userspn-functions-user.php:1086
+#: includes/class-userspn-validation.php:47
+#, php-format
+msgid "%s is required."
+msgstr "%s beharrezkoa da."
+
+#: includes/class-userspn-functions-user.php:1491
 msgid "01 - Download a CSV template with the platform specifications."
 msgstr "01 - Deskargatu plataformaren zehaztapenekin CSV txantiloi bat."
 
-#: includes/class-userspn-functions-user.php:1091
+#: includes/class-userspn-functions-user.php:1496
 msgid "02 - Upload the CSV with the new contacts information."
 msgstr "02 - Igo CSV fitxategia kontaktuen informazio berriarekin."
 
-#: includes/class-userspn-functions-user.php:834
+#: includes/class-userspn-security.php:636
+#, php-format
+msgid "[%s] Posible registro fraudulento detectado"
+msgstr "[%s] Erregistro posiblea detektatu iruzurra"
+
+#: includes/class-userspn-functions-user.php:1110
 msgid "Account deletion!"
 msgstr "Kontua ezabatzea!"
 
-#: includes/class-userspn-mailing.php:137
+#: includes/class-userspn-mailing.php:144
 msgid "Activate now"
 msgstr "Aktibatu orain"
 
-#: includes/class-userspn-mailing.php:159
+#: includes/class-userspn-mailing.php:166
 msgid "Activate your account"
 msgstr "Aktibatu zure kontua"
 
-#: includes/class-userspn-ajax-nopriv.php:212
-#: includes/class-userspn-ajax-nopriv.php:215
+#: includes/class-userspn-mailing.php:201
+#: includes/class-userspn-mailing.php:204
 msgid "Activate your subscription"
 msgstr "Aktibatu zure harpidetza"
 
-#: includes/class-userspn-forms.php:349
+#: includes/class-userspn-forms.php:473
 msgid "Add audio"
 msgstr "Gehitu audioa"
 
-#: includes/class-userspn-forms.php:349
+#: includes/class-userspn-forms.php:473
 msgid "Add audios"
 msgstr "Gehitu audioak"
 
-#: includes/class-userspn-functions-user.php:1125
-#: includes/class-userspn-functions-user.php:1134
+#: includes/class-userspn-functions-user.php:1545
+#: includes/class-userspn-functions-user.php:1554
 msgid "Add contacts"
 msgstr "Gehitu kontaktuak"
 
-#: includes/class-userspn-forms.php:440
+#: includes/class-userspn-forms.php:568
 msgid "Add element"
 msgstr "Gehitu elementua"
 
-#: includes/class-userspn-settings.php:337
+#: includes/class-userspn-settings.php:356
 msgid "Add extra profile fields on admin dashboard"
 msgstr "Gehitu profilaren eremu gehigarriak administratzailearen panelean"
 
-#: includes/class-userspn-forms.php:370
+#: includes/class-userspn-forms.php:494
 msgid "Add file"
 msgstr "Gehitu fitxategia"
 
-#: includes/class-userspn-forms.php:370
+#: includes/class-userspn-forms.php:494
 msgid "Add files"
 msgstr "Gehitu fitxategiak"
 
-#: includes/class-userspn-forms.php:307
+#: includes/class-userspn-settings.php:525
+msgid "Add hidden honeypot field to catch bots."
+msgstr "Gehitu ezkutuko ezti-eremu bat bot-ak harrapatzeko."
+
+#: includes/class-userspn-forms.php:431
 msgid "Add image"
 msgstr "Gehitu irudia"
 
-#: includes/class-userspn-forms.php:307
+#: includes/class-userspn-forms.php:431
 msgid "Add images"
 msgstr "Gehitu irudiak"
 
-#: includes/class-userspn-functions-user.php:288
+#: includes/class-userspn-functions-user.php:382
 msgid "Add new field"
 msgstr "Gehitu eremu berria"
 
-#: includes/class-userspn-forms.php:328
+#: includes/class-userspn-settings.php:42
+msgid "Add profile icon to menu"
+msgstr "Gehitu profilaren ikonoa menura"
+
+#: includes/class-userspn-forms.php:452
 msgid "Add video"
 msgstr "Gehitu bideoa"
 
-#: includes/class-userspn-forms.php:328
+#: includes/class-userspn-forms.php:452
 msgid "Add videos"
 msgstr "Gehitu bideoak"
 
-#: includes/class-userspn-functions-user.php:376
+#: templates/userspn-footer.php:63
+#: includes/class-userspn-functions-user.php:498
+#: includes/class-userspn-functions-user.php:597
 msgid "Advanced"
 msgstr "Aurreratua"
 
-#: includes/class-userspn-settings.php:180
+#: includes/class-userspn-settings.php:199
 msgid "Advanced options in profile"
 msgstr "Aukera aurreratuak profilean"
 
-#: includes/class-userspn-common.php:159
+#: includes/class-userspn-security.php:78
+msgid "Akismet API key not found."
+msgstr "Akismet API gakoa ez da aurkitu."
+
+#: includes/class-userspn-security.php:72
+msgid "Akismet plugin is not active."
+msgstr "Akismet plugina ez dago aktibo."
+
+#: includes/class-userspn-settings.php:680
+msgid "Altas en newsletter en la última semana"
+msgstr "Altas en newsletter en la última semana"
+
+#: includes/class-userspn-common.php:213
 msgid "An error has occurred. Please try again in a few minutes."
 msgstr "Errore bat gertatu da. Mesedez, saiatu berriro minutu batzuk barru."
 
-#: includes/class-userspn-functions-user.php:1126
+#: includes/class-userspn-ajax.php:778
+msgid "An error occurred while checking the BaseCPT."
+msgstr "Errore bat gertatu da BaseCPT egiaztatzean."
+
+#: includes/class-userspn-ajax.php:799
+msgid "An error occurred while duplicating the BaseCPT."
+msgstr "Errore bat gertatu da BaseCPT bikoiztean."
+
+#: includes/class-userspn-ajax.php:819
+msgid "An error occurred while removing the BaseCPT."
+msgstr "Errore bat gertatu da BaseCPT kentzean."
+
+#: includes/class-userspn-ajax.php:712 includes/class-userspn-ajax.php:742
+msgid "An error occurred while showing the BaseCPT."
+msgstr "Errore bat gertatu da BaseCPT erakustean."
+
+#: templates/userspn-bot-analysis-popup.php:28
+msgid "Analysis Criteria:"
+msgstr "Analisiaren irizpideak:"
+
+#: includes/class-userspn-settings.php:568
+msgid "Analyze Existing Users for Bots"
+msgstr "Aztertu dauden erabiltzaileak bot-en bila"
+
+#: includes/class-userspn-functions-user.php:1546
 msgid "Are you sure to process this contacts and add them to the system?"
 msgstr ""
 "Ziur zaude kontaktu hauek prozesatu eta sistemara gehitu nahi dituzula?"
 
-#: includes/class-userspn-functions-user.php:159
+#: includes/class-userspn-common.php:240
+msgid "Are you sure you want to remove your avatar?"
+msgstr "Ziur zaude zure avatarra kendu nahi duzula?"
+
+#: includes/class-userspn-functions-user.php:172
 msgid ""
 "As you login with a new account, you will lose access to yours, so it´s "
 "better if you open this link in a private window or other browser."
@@ -119,30 +182,44 @@ msgstr ""
 "duzu, beraz, hobe da esteka hau leiho pribatu batean edo beste arakatzaile "
 "batean irekitzea."
 
-#: includes/class-userspn-forms.php:242
+#: includes/class-userspn-forms.php:331
 msgid "Atleast 8 Character"
 msgstr "Gutxienez 8 pertsonaia"
 
-#: includes/class-userspn-functions-user.php:158
+#: includes/class-userspn-functions-user.php:171
 msgid "Auto-login tool"
 msgstr "Automatikoki saioa hasteko tresna"
 
-#: includes/class-userspn-ajax.php:167
-#: includes/class-userspn-functions-user.php:1130
-#: includes/class-userspn-forms.php:572
+#: includes/class-userspn-ajax.php:720
+msgid "BaseCPT ID is required."
+msgstr "BaseCPT IDa beharrezkoa da."
+
+#: templates/userspn-bot-analysis-popup.php:21
+#: templates/userspn-bot-analysis-popup.php:24
+#: includes/class-userspn-settings.php:567
+msgid "Bot Analysis Tool"
+msgstr "Bot-en analisi tresna"
+
+#: templates/userspn-bot-analysis-popup.php:31
+msgid "Bot-like usernames (user123, test456, etc.)"
+msgstr "Bot-en antzeko erabiltzaile-izenak (erabiltzailea123, test456, etab.)"
+
+#: includes/class-userspn-forms.php:158
+#: includes/class-userspn-functions-user.php:1550
+#: includes/class-userspn-ajax.php:205
 msgid "Cancel"
 msgstr "Utzi"
 
-#: includes/class-userspn-functions-user.php:872
-#: includes/class-userspn-functions-user.php:888
+#: includes/class-userspn-functions-user.php:1150
+#: includes/class-userspn-functions-user.php:1166
 msgid "Change password"
 msgstr "Aldatu pasahitza"
 
-#: includes/class-userspn-settings.php:190
+#: includes/class-userspn-settings.php:209
 msgid "Change password access"
 msgstr "Aldatu pasahitz sarbidea"
 
-#: includes/class-userspn-functions-user.php:882
+#: includes/class-userspn-functions-user.php:1160
 msgid ""
 "Change your profile access password. The process will send you an email to "
 "your account to secure the process."
@@ -150,102 +227,138 @@ msgstr ""
 "Aldatu zure profilera sartzeko pasahitza. Prozesuak mezu elektroniko bat "
 "bidaliko dizu zure kontura prozesua ziurtatzeko."
 
-#: includes/class-userspn-forms.php:549
+#: includes/class-userspn-settings.php:411
+msgid ""
+"Check this option if you already have a newsletter form loaded in the page. "
+"For example, if you are using the shortcode [userspn-newsletter] in the page "
+"footer, you should check this option."
+msgstr ""
+"Markatu aukera hau orrialdean buletin-formulario bat kargatuta baduzu. "
+"Adibidez, orrialde-oinean [userspn-newsletter] kode laburra erabiltzen ari "
+"bazara, aukera hau markatu beharko zenuke."
+
+#: includes/class-userspn-settings.php:53
+msgid "Choose the navigation menu where you want to add the profile icon."
+msgstr "Aukeratu profilaren ikonoa gehitu nahi duzun nabigazio menua."
+
+#: includes/class-userspn-forms.php:135
 msgid "Classes separated by spaces"
 msgstr "Klaseak espazioz bereizita"
 
-#: includes/class-userspn-common.php:156
+#: includes/class-userspn-forms.php:643
+msgid "Clear"
+msgstr "Garbitu"
+
+#: includes/class-userspn-common.php:210
 msgid "Completed"
 msgstr "Osatuta"
 
-#: includes/class-userspn-common.php:191
+#: includes/class-userspn-common.php:247
 msgid ""
 "Congratulations! You have been successfully subscribed to our newsletter."
 msgstr "Zorionak! Gure buletinera harpidetu zara."
 
-#: includes/class-userspn-notifications.php:67
+#: includes/class-userspn-notifications.php:104
 msgid "Congratulations! Your email has been activated successfully."
 msgstr "Zorionak! Zure posta elektronikoa behar bezala aktibatu da."
 
-#: includes/class-userspn-settings.php:150
+#: includes/class-userspn-settings.php:169
 msgid "Contact notifications"
 msgstr "Harremanetarako jakinarazpenak"
 
-#: includes/class-userspn-functions-user.php:1005
+#: includes/class-userspn-functions-user.php:1376
 msgid "Contacts upload template"
 msgstr "Kontaktuak igotzeko txantiloia"
 
-#: includes/class-userspn-settings.php:372
+#: includes/class-userspn-settings.php:391
 msgid ""
 "Create a message that will be shown just above of the Newsletter "
 "registration form."
 msgstr ""
 "Sortu Buletinaren izena emateko formularioaren gainean agertuko den mezu bat."
 
-#: includes/class-userspn-functions-user.php:958
+#: includes/class-userspn-functions-user.php:1250
 msgid "Create user"
 msgstr "Sortu erabiltzailea"
 
+#: includes/class-userspn-settings.php:442
+msgid ""
+"Cuando esta opción está activa, el sistema eliminará automáticamente las "
+"cuentas de usuarios que se hayan registrado en la newsletter pero no hayan "
+"activado su cuenta después de un número determinado de días."
+msgstr ""
+"Aukera hau aktibatuta dagoenean, sistemak erabiltzaileen kontuak "
+"automatikoki desagerraraziko ditu buletinean erregistratuta daudela, baina "
+"ez du aktibatu zure kontua ondoren egun jakin batzuetako bat."
+
+#: includes/class-userspn-settings.php:179
 #: includes/class-userspn-functions-attachment.php:97
-#: includes/class-userspn-settings.php:160
 msgid "Current file max size allowed:"
 msgstr "Uneko fitxategiaren gehienezko tamaina onartzen da:"
 
-#: includes/class-userspn-functions-user.php:285
+#: includes/class-userspn-functions-user.php:379
 msgid "Current form"
 msgstr "Egungo forma"
 
-#: includes/class-userspn-settings.php:122
+#: includes/class-userspn-settings.php:141
 msgid "Custom Profile Picture - PFP"
 msgstr "Perfil-irudi pertsonalizatua - PFP"
 
-#: includes/class-userspn-settings.php:219
+#: includes/class-userspn-settings.php:238
 msgid "Dashboard"
 msgstr "Aginte-panela"
 
-#: includes/class-userspn-settings.php:227
+#: includes/class-userspn-settings.php:653
+msgid "Dashboard de Analíticas"
+msgstr "Analisiaren aginte-panela"
+
+#: includes/class-userspn-settings.php:246
 msgid "Dashboard main login page"
 msgstr "Arbeleko saioa hasteko orri nagusia"
 
-#: includes/class-userspn-settings.php:269
-#: includes/class-userspn-settings.php:270
+#: includes/class-userspn-settings.php:288
+#: includes/class-userspn-settings.php:289
 msgid "Dashboard main login page CSS"
 msgstr "Arbeleko saio-hasiera orri nagusia CSS"
 
-#: includes/class-userspn-settings.php:248
+#: includes/class-userspn-settings.php:267
 msgid "Dashboard main login page header logo link text"
 msgstr "Arbelaren saio-hasiera-orriaren goiburuko logoaren estekaren testua"
 
-#: includes/class-userspn-settings.php:236
+#: includes/class-userspn-settings.php:255
 msgid "Dashboard main login page logo"
 msgstr "Arbeleko saioa hasteko orri nagusiaren logotipoa"
 
-#: includes/class-userspn-settings.php:259
-#: includes/class-userspn-settings.php:260
+#: includes/class-userspn-settings.php:278
+#: includes/class-userspn-settings.php:279
 msgid "Dashboard main login page logo link"
 msgstr "Arbeleko saioa hasteko orri nagusiaren logoaren esteka"
 
-#: includes/class-userspn-settings.php:247
+#: includes/class-userspn-settings.php:266
 msgid "Dashboard main login page logo link text"
 msgstr "Arbelaren saio-hasiera orri nagusia logoaren esteka testua"
 
-#: includes/class-userspn-settings.php:279
+#: includes/class-userspn-settings.php:298
 msgid "Dashboard main logo"
 msgstr "Arbelaren logotipo nagusia"
 
-#: includes/class-userspn-settings.php:289
+#: includes/class-userspn-settings.php:308
 msgid "Dashboard main logo link"
 msgstr "Arbelaren logotipo nagusiaren esteka"
 
-#: includes/class-userspn-forms.php:528
+#: includes/class-userspn-forms.php:114
 msgid "Date"
 msgstr "Data"
 
-#: includes/class-userspn-settings.php:318
+#: includes/class-userspn-settings.php:984
+msgid "Default Menu"
+msgstr "Menu lehenetsia"
+
+#: includes/class-userspn-settings.php:337
 msgid "Disable admin bar"
 msgstr "Desgaitu administrazio-barra"
 
-#: includes/class-userspn-settings.php:298
+#: includes/class-userspn-settings.php:317
 msgid "Disable dashboard access"
 msgstr "Desgaitu panelerako sarbidea"
 
@@ -253,16 +366,20 @@ msgstr "Desgaitu panelerako sarbidea"
 msgid "Disable Profile popup"
 msgstr "Desgaitu profilaren leihoa"
 
-#: includes/class-userspn-functions-user.php:419
+#: templates/userspn-footer.php:106
+#: includes/class-userspn-functions-user.php:541
+#: includes/class-userspn-functions-user.php:640
 msgid "Disconnect account"
 msgstr "Deskonektatu kontua"
 
-#: includes/class-userspn-functions-user.php:429
+#: templates/userspn-footer.php:116
+#: includes/class-userspn-functions-user.php:551
+#: includes/class-userspn-functions-user.php:650
 msgid "Disconnect your user from the system. You will need to log in again."
 msgstr ""
 "Deskonektatu zure erabiltzailea sistematik. Berriro saioa hasi beharko duzu."
 
-#: includes/class-userspn-functions-user.php:1074
+#: includes/class-userspn-functions-user.php:1454
 msgid "Download CSV template"
 msgstr "Deskargatu CSV txantiloia"
 
@@ -270,95 +387,191 @@ msgstr "Deskargatu CSV txantiloia"
 msgid "Download file"
 msgstr "Deskargatu fitxategia"
 
-#: includes/class-userspn-forms.php:345 includes/class-userspn-common.php:170
+#: includes/class-userspn-settings.php:451
+msgid "Días para eliminar cuenta no activada"
+msgstr "Egunak ezabatzeko cuenta ez aktibatuta"
+
+#: includes/class-userspn-forms.php:469 includes/class-userspn-common.php:224
 msgid "Edit audio"
 msgstr "Editatu audioa"
 
-#: includes/class-userspn-forms.php:345 includes/class-userspn-common.php:171
+#: includes/class-userspn-forms.php:469 includes/class-userspn-common.php:225
 msgid "Edit audios"
 msgstr "Editatu audioak"
 
-#: includes/class-userspn-forms.php:366 includes/class-userspn-common.php:174
+#: includes/class-userspn-forms.php:490 includes/class-userspn-common.php:228
 msgid "Edit file"
 msgstr "Editatu fitxategia"
 
-#: includes/class-userspn-forms.php:366 includes/class-userspn-common.php:175
+#: includes/class-userspn-forms.php:490 includes/class-userspn-common.php:229
 msgid "Edit files"
 msgstr "Editatu fitxategiak"
 
-#: includes/class-userspn-forms.php:303 includes/class-userspn-common.php:162
+#: includes/class-userspn-forms.php:427 includes/class-userspn-common.php:216
 msgid "Edit image"
 msgstr "Editatu irudia"
 
-#: includes/class-userspn-forms.php:303 includes/class-userspn-common.php:163
+#: includes/class-userspn-forms.php:427 includes/class-userspn-common.php:217
 msgid "Edit images"
 msgstr "Editatu irudiak"
 
-#: includes/class-userspn-forms.php:324 includes/class-userspn-common.php:166
+#: includes/class-userspn-forms.php:448 includes/class-userspn-common.php:220
 msgid "Edit video"
 msgstr "Editatu bideoa"
 
-#: includes/class-userspn-forms.php:324 includes/class-userspn-common.php:167
+#: includes/class-userspn-forms.php:448 includes/class-userspn-common.php:221
 msgid "Edit videos"
 msgstr "Editatu bideoak"
 
-#: includes/class-userspn-functions-user.php:929
-#: includes/class-userspn-functions-user.php:930
-#: includes/class-userspn-functions-user.php:1006
-#: includes/class-userspn-forms.php:528
+#: includes/class-userspn-security.php:654
+msgid ""
+"El usuario ha sido registrado pero marcado como sospechoso.\n"
+"\n"
+msgstr ""
+"Erabiltzailea erregistratua izan da baina sospechoso gisa markatuta dago.\n"
+"\n"
+
+#: includes/class-userspn-settings.php:441
+msgid "Eliminar cuentas no activadas"
+msgstr "Aktibatu gabeko kontuak ezabatu"
+
+#: includes/class-userspn-forms.php:114
+#: includes/class-userspn-functions-user.php:1207
+#: includes/class-userspn-functions-user.php:1208
+#: includes/class-userspn-functions-user.php:1377
 msgid "Email"
 msgstr "Posta elektronikoa"
 
-#: includes/class-userspn-functions-user.php:1007
+#: includes/class-userspn-security.php:649
+#, php-format
+msgid ""
+"Email: %s\n"
+msgstr "Helbide elektronikoa: %s"
+
+#: includes/class-userspn-functions-user.php:1378
 msgid "email@test.com"
 msgstr "email@test.com"
 
-#: includes/class-userspn-settings.php:309
-#: includes/class-userspn-settings.php:329
+#: templates/userspn-bot-analysis-popup.php:32
+msgid "Empty or generic profile data"
+msgstr "Profil-datu hutsak edo generikoak"
+
+#: includes/class-userspn-settings.php:516
+msgid "Enable Akismet Protection"
+msgstr "Gaitu Akismet babesa"
+
+#: includes/class-userspn-settings.php:517
+msgid ""
+"Enable Akismet spam protection for user registration (requires Akismet "
+"plugin)."
+msgstr ""
+"Gaitu Akismet spam babesa erabiltzaileen erregistroan (Akismet plugina behar "
+"du)."
+
+#: includes/class-userspn-settings.php:471
+msgid "Enable Google reCAPTCHA v3"
+msgstr "Gaitu Google reCAPTCHA v3"
+
+#: includes/class-userspn-settings.php:472
+msgid "Enable Google reCAPTCHA v3 protection for user registration forms."
+msgstr ""
+"Gaitu Google reCAPTCHA v3 babesa erabiltzaileen erregistro-formularioetarako."
+
+#: includes/class-userspn-settings.php:524
+msgid "Enable Honeypot Protection"
+msgstr "Gaitu ezti-potaren babesa"
+
+#: includes/class-userspn-settings.php:533
+msgid "Enable Rate Limiting"
+msgstr "Gaitu abiadura mugatzea"
+
+#: includes/class-userspn-settings.php:328
+#: includes/class-userspn-settings.php:348
 msgid "Enabled roles"
 msgstr "Gaitutako rolak"
 
-#: includes/class-userspn-settings.php:104
+#: includes/class-userspn-settings.php:123
 msgid "Enter meta key"
 msgstr "Sartu meta gakoa"
 
-#: includes/class-userspn-settings.php:95
+#: includes/class-userspn-settings.php:114
 msgid "Enter page ID"
 msgstr "Sartu orriaren IDa"
+
+#: includes/class-userspn-settings.php:493
+msgid "Enter your reCAPTCHA Secret Key"
+msgstr "Sartu zure reCAPTCHA gako sekretua"
+
+#: includes/class-userspn-settings.php:482
+msgid "Enter your reCAPTCHA Site Key"
+msgstr "Sartu zure reCAPTCHA gunearen gakoa"
+
+#: includes/class-userspn-security.php:724
+msgid "Error al eliminar el usuario."
+msgstr "Errorea erabiltzailea ezabatzean."
+
+#: includes/class-userspn-security.php:706
+msgid "Este usuario no está marcado como sospechoso."
+msgstr "Este usuario no está marcado como sospechoso."
 
 #: includes/class-userspn-cron.php:32
 msgid "Every 30 minutes"
 msgstr "30 minuturo"
 
-#: includes/class-userspn-common.php:182
+#: includes/class-userspn-common.php:236
 msgid "Existing user. Please login."
 msgstr "Lehendik dagoen erabiltzailea. Mesedez, hasi saioa."
 
-#: includes/class-userspn-settings.php:67
+#: includes/class-userspn-settings.php:86
 msgid "Extra fields in the user profile"
 msgstr "Erabiltzailearen profileko eremu gehigarriak"
 
-#: includes/class-userspn-functions-user.php:372
+#: includes/class-userspn-security.php:653
+#, php-format
+msgid ""
+"Fecha: %s\n"
+"\n"
+msgstr ""
+"Data: %s\n"
+"\n"
+
+#: templates/userspn-footer.php:59
+#: includes/class-userspn-functions-user.php:494
+#: includes/class-userspn-functions-user.php:593
 msgid "Files"
 msgstr "Fitxategiak"
 
-#: includes/class-userspn-ajax.php:204
+#: includes/class-userspn-ajax.php:241
 msgid "First Name"
 msgstr "Izena"
 
-#: includes/class-userspn-functions-user.php:910
+#: includes/class-userspn-settings.php:988
+msgid "Footer Menu"
+msgstr "Oin-orriko menua"
+
+#: includes/class-userspn-functions-user.php:1188
 msgid "Forgot your password?"
 msgstr "Pasahitza ahaztu al duzu?"
 
-#: includes/class-userspn-settings.php:114
+#: includes/class-userspn-settings.php:133
 msgid "Front-end users registration"
 msgstr "Frontend erabiltzaileen erregistroa"
 
-#: includes/class-userspn-settings.php:210
+#: includes/class-userspn-settings.php:229
 msgid "Front-end users removal"
 msgstr "Frontend erabiltzaileak kentzea"
 
-#: includes/class-userspn-ajax-nopriv.php:215
+#: includes/class-userspn-settings.php:494
+msgid "Get your Secret Key from Google reCAPTCHA console."
+msgstr "Lortu zure gako sekretua Google reCAPTCHA kontsolatik."
+
+#: includes/class-userspn-settings.php:483
+msgid "Get your Site Key from Google reCAPTCHA console."
+msgstr "Lortu zure Gunearen Gakoa Google reCAPTCHA kontsolatik."
+
+#: includes/class-userspn-mailing.php:204
+#: includes/class-userspn-ajax-nopriv.php:535
+#: includes/class-userspn-functions-user.php:344
 msgid "Hello"
 msgstr "Kaixo"
 
@@ -378,14 +591,14 @@ msgstr "Irakurri eta onartzen dut"
 msgid "I have read and accept Terms and conditions."
 msgstr "Zehaztapenak eta baldintzak irakurri eta onartzen ditut."
 
-#: includes/class-userspn-settings.php:77
+#: includes/class-userspn-settings.php:96
 msgid ""
 "If enabled, a profile completion block will be shown in the profile popup."
 msgstr ""
 "Gaituta badago, profila osatzeko bloke bat agertuko da profilaren leiho "
 "gainerakorrean."
 
-#: includes/class-userspn-settings.php:338
+#: includes/class-userspn-settings.php:357
 msgid ""
 "If you check this option, admin dashboard user edition and creation pages "
 "will show the added profile extra fields at the bottom. Administrators and "
@@ -398,7 +611,7 @@ msgstr ""
 "administratzaileek eta rolak editatu edo gehitu ahal izango dituzte kontaktu "
 "berriak sortzean."
 
-#: includes/class-userspn-settings.php:43
+#: includes/class-userspn-settings.php:62
 msgid ""
 "If you check this option, the system will ask for the name and surname of "
 "the contact based on the WordPress custom database structure."
@@ -406,140 +619,230 @@ msgstr ""
 "Aukera hau markatzen baduzu, sistemak kontaktuaren izena eta abizena "
 "eskatuko du WordPress datu-base pertsonalizatuaren egituran oinarrituta."
 
-#: includes/class-userspn-functions-user.php:362
+#: templates/userspn-footer.php:49
+#: includes/class-userspn-functions-user.php:484
+#: includes/class-userspn-functions-user.php:583
 msgid "Image"
 msgstr "Irudia"
 
-#: includes/class-userspn-functions-user.php:1047
+#: includes/class-userspn-functions-user.php:1418
 msgid "Include \"on\" for checked of leave the cell empty for unchecked"
 msgstr ""
 "Sartu \"piztuta\" markatuta dagoenean edo utzi gelaxka hutsik markatu gabe "
 "dagoenean"
 
-#: includes/class-userspn-functions-user.php:837
+#: includes/class-userspn-functions-user.php:1113
 msgid "Include your password to confirm deletion"
 msgstr "Sartu pasahitza ezabatzea berresteko"
 
-#: includes/class-userspn-forms.php:517
+#: includes/class-userspn-forms.php:103
 msgid "Input"
 msgstr "Sarrera"
 
-#: includes/class-userspn-forms.php:548
+#: includes/class-userspn-forms.php:134
 msgid "Input classes"
 msgstr "Sarrerako klaseak"
 
-#: includes/class-userspn-forms.php:509 includes/class-userspn-forms.php:510
+#: includes/class-userspn-forms.php:95 includes/class-userspn-forms.php:96
 msgid "Input name"
 msgstr "Sarrerako izena"
 
-#: includes/class-userspn-forms.php:553
+#: includes/class-userspn-forms.php:139
 msgid "Input required"
 msgstr "Sarrera behar da"
 
-#: includes/class-userspn-forms.php:524
+#: includes/class-userspn-forms.php:110
 msgid "Input subtype"
 msgstr "Sarrerako azpimota"
 
-#: includes/class-userspn-forms.php:514
+#: includes/class-userspn-forms.php:100
 msgid "Input type"
 msgstr "Sarrera mota"
 
-#: includes/class-userspn-ajax.php:209
+#: includes/class-userspn-validation.php:162
+msgid "Invalid selection format."
+msgstr "Hautapen formatu baliogabea."
+
+#: includes/class-userspn-security.php:651
+#, php-format
+msgid ""
+"IP: %s\n"
+msgstr "IPa: %s"
+
+#: includes/class-userspn-ajax.php:246
 msgid "Last Name"
 msgstr "Abizena"
 
-#: includes/class-userspn-functions-user.php:1134
+#: includes/class-userspn-mailing.php:129
+msgid "Leave this field empty"
+msgstr "Utzi eremu hau hutsik"
+
+#: includes/class-userspn-settings.php:534
+msgid "Limit registration attempts per IP address."
+msgstr "Mugatu IP helbide bakoitzeko erregistro saiakerak."
+
+#: includes/class-userspn-functions-user.php:1554
 msgid "Loading..."
 msgstr "Kargatzen..."
 
-#: includes/class-userspn-functions-user.php:907
+#: includes/class-userspn-functions-user.php:1185
 msgid "Log In"
 msgstr "Hasi saioa"
 
-#: includes/class-userspn-functions-user.php:435
+#: templates/userspn-footer.php:122
+#: includes/class-userspn-functions-user.php:557
+#: includes/class-userspn-functions-user.php:656
 msgid "Log out"
 msgstr "Amaitu saioa"
 
-#: includes/class-userspn-functions-user.php:471
+#: templates/userspn-footer.php:148
+#: includes/class-userspn-functions-user.php:694
+#: includes/class-userspn-functions-user.php:718
 msgid "Login"
 msgstr "Saioa hasi"
 
-#: includes/class-userspn-functions-user.php:161
+#: includes/class-userspn-functions-user.php:174
 msgid "Login as"
 msgstr "Hasi saioa honela"
 
-#: includes/class-userspn-forms.php:230
+#: includes/class-userspn-forms.php:319
 msgid "Lowercase & Uppercase"
 msgstr "Maiuskulak eta minuskulak"
 
-#: includes/class-userspn-functions-user.php:399
+#: templates/userspn-footer.php:86
+#: includes/class-userspn-functions-user.php:521
+#: includes/class-userspn-functions-user.php:620
 msgid "Mailing Manager - PN"
 msgstr "Posta Kudeatzailea - PN"
 
-#: includes/class-userspn-settings.php:401
-#: includes/class-userspn-settings.php:402
+#: includes/class-userspn-mailing.php:146
+msgid "Manage your subscription"
+msgstr "Kudeatu zure harpidetza"
+
+#: includes/class-userspn-settings.php:543
+msgid "Max Registration Attempts"
+msgstr "Gehienezko erregistro saiakerak"
+
+#: includes/class-userspn-settings.php:430
+#: includes/class-userspn-settings.php:431
 #| msgid "Max number of activation emails"
 msgid "Maximum number of activation emails"
 msgstr "Aktibazio-mezu elektronikoen gehienezko kopurua"
 
-#: includes/class-userspn-settings.php:103
+#: includes/class-userspn-settings.php:547
+msgid "Maximum registration attempts per IP per hour."
+msgstr "IP bakoitzeko orduko erregistro saiakera gehien."
+
+#: includes/class-userspn-settings.php:122
 msgid "Meta key"
 msgstr "Meta tekla"
 
-#: includes/class-userspn-forms.php:539
+#: templates/userspn-bot-analysis-popup.php:33
+msgid "Multiple registrations from same IP"
+msgstr "IP beretik hainbat erregistro"
+
+#: includes/class-userspn-forms.php:125
 msgid "Multiple selector"
 msgstr "Hautatzaile anitza"
 
-#: includes/class-userspn-functions-user.php:320
-#: includes/class-userspn-functions-user.php:321
+#: includes/class-userspn-functions-user.php:414
+#: includes/class-userspn-functions-user.php:415
 msgid "Name"
 msgstr "Izena"
 
-#: includes/class-userspn-settings.php:42
+#: includes/class-userspn-settings.php:61
 msgid "Name and surname in profile"
 msgstr "Izen-abizenak profilean"
 
-#: includes/class-userspn-settings.php:52
+#: includes/class-userspn-settings.php:71
 msgid "Name compulsory"
 msgstr "Izena derrigorrezkoa"
 
-#: includes/class-userspn-forms.php:504 includes/class-userspn-forms.php:510
+#: includes/class-userspn-forms.php:90 includes/class-userspn-forms.php:96
 msgid "New field"
 msgstr "Eremu berria"
 
-#: includes/class-userspn-settings.php:355
-#: includes/class-userspn-settings.php:363
+#: includes/class-userspn-settings.php:374
+#: includes/class-userspn-settings.php:382
 msgid "Newsletter"
 msgstr "Buletina"
 
-#: includes/class-userspn-settings.php:391
+#: includes/class-userspn-settings.php:660
+msgid "Newsletter (7 días)"
+msgstr "Buletina (7 egun)"
+
+#: includes/class-userspn-notifications.php:131
+msgid ""
+"Newsletter activation is currently disabled. Please contact the "
+"administrator."
+msgstr ""
+"Buletinaren aktibazioa desgaituta dago une honetan. Jarri harremanetan "
+"administratzailearekin."
+
+#: includes/class-userspn-settings.php:420
 msgid "Newsletter activation required"
 msgstr "Buletinaren aktibazioa beharrezkoa da"
 
-#: includes/class-userspn-settings.php:381
+#: includes/class-userspn-settings.php:400
 msgid "Newsletter exit popup"
 msgstr "Buletinaren irteerako leihoa"
 
-#: includes/class-userspn-settings.php:371
+#: includes/class-userspn-settings.php:410
+msgid "Newsletter is already loaded"
+msgstr "Buletina dagoeneko kargatuta dago"
+
+#: includes/class-userspn-settings.php:390
 msgid "Newsletter message"
 msgstr "Buletinaren mezua"
 
-#: includes/class-userspn-forms.php:116
+#: includes/class-userspn-forms.php:888
+msgid "No"
+msgstr "Ez"
+
+#: templates/userspn-bot-analysis-popup.php:35
+msgid "No activity since registration"
+msgstr "Ez dago jarduerarik erregistratu zenetik"
+
+#: includes/class-userspn-forms.php:191
 msgid "No file found"
 msgstr "Ez da fitxategirik aurkitu"
 
-#: includes/class-userspn-forms.php:556
+#: includes/class-userspn-forms.php:880
+msgid "No file uploaded"
+msgstr "Ez da fitxategirik igo"
+
+#: includes/class-userspn-settings.php:751
+msgid "No hay altas en newsletter en la última semana"
+msgstr "No hay altas en buletinean azken astean"
+
+#: includes/class-userspn-settings.php:778
+msgid "No hay registros de últimos accesos"
+msgstr "Ez dago azken osagarrien erregistrorik"
+
+#: includes/class-userspn-settings.php:721
+msgid "No hay usuarios nuevos en la última semana"
+msgstr "Ez dago erabiltzaile berririk azken astean"
+
+#: includes/class-userspn-forms.php:970
+msgid "No images uploaded"
+msgstr "Ez da irudirik igo"
+
+#: includes/class-userspn-forms.php:142
 msgid "Not required"
 msgstr "Ez da beharrezkoa"
 
-#: includes/class-userspn-functions-user.php:367
+#: templates/userspn-footer.php:54
+#: includes/class-userspn-functions-user.php:489
+#: includes/class-userspn-functions-user.php:588
 msgid "Notifications"
 msgstr "Jakinarazpenak"
 
-#: includes/class-userspn-functions-user.php:398
+#: templates/userspn-footer.php:85
+#: includes/class-userspn-functions-user.php:520
+#: includes/class-userspn-functions-user.php:619
 #| msgid ""
-#| "Notifications are inactive. Please install and activate Mailing Manager - PN "
-#| "Plugin to allow integrated notifications in your platform."
+#| "Notifications are inactive. Please install and activate Mailing Manager - "
+#| "PN Plugin to allow integrated notifications in your platform."
 msgid ""
 "Notifications are inactive. Please install and activate Mailing Manager - PN "
 "to allow integrated notifications in your platform."
@@ -547,27 +850,45 @@ msgstr ""
 "Jakinarazpenak inaktibo daude. Mesedez, instalatu eta aktibatu Mailing "
 "Manager - PN zure plataforman jakinarazpenak integratuta uzteko."
 
-#: includes/class-userspn-notifications.php:117
+#: includes/class-userspn-notifications.php:192
 msgid "Notifications language"
 msgstr "Jakinarazpenen hizkuntza"
 
-#: includes/class-userspn-forms.php:528
+#: includes/class-userspn-forms.php:114
 msgid "Number"
 msgstr "Zenbakia"
 
-#: includes/class-userspn-forms.php:234
+#: includes/class-userspn-forms.php:323
 msgid "Number (0-9)"
 msgstr "Zenbakia (0-9)"
 
-#: includes/class-userspn-functions-user.php:1038
+#: includes/class-userspn-functions-user.php:1409
 msgid "Number for"
 msgstr "Zenbakia"
 
-#: includes/class-userspn-forms.php:544
+#: includes/class-userspn-validation.php:101
+#, php-format
+msgid "Number must be at least %s."
+msgstr "Zenbakia gutxienez %s izan behar da."
+
+#: includes/class-userspn-validation.php:110
+#, php-format
+msgid "Number must be at most %s."
+msgstr "Zenbakia gehienez %s izan behar da."
+
+#: includes/class-userspn-settings.php:455
+msgid ""
+"Número de días que deben pasar desde el registro para que se elimine la "
+"cuenta si no ha sido activada. Por defecto: 5 días."
+msgstr ""
+"Número de días que debe pasar desde el registro para que se da la cuenta "
+"desaparecida si no ha sido activada. Defektua: 5 egun."
+
+#: includes/class-userspn-forms.php:130
 msgid "One option per line"
 msgstr "Aukera bat lerro bakoitzeko"
 
-#: includes/class-userspn-notifications.php:74
+#: includes/class-userspn-notifications.php:140
 msgid ""
 "Oppps! We are not able to verify your account. Please try to subscribe again "
 "or contact us."
@@ -575,11 +896,11 @@ msgstr ""
 "Aupa! Ezin dugu zure kontua egiaztatu. Mesedez, saiatu berriro harpidetzen "
 "edo jarri gurekin harremanetan."
 
-#: includes/class-userspn-forms.php:414 includes/class-userspn-forms.php:430
+#: includes/class-userspn-forms.php:542 includes/class-userspn-forms.php:558
 msgid "Order element"
 msgstr "Agindu elementua"
 
-#: includes/class-userspn-common.php:178
+#: includes/class-userspn-common.php:232
 msgid "Ordered element"
 msgstr "Ordenatutako elementua"
 
@@ -587,40 +908,78 @@ msgstr "Ordenatutako elementua"
 msgid "Padres en la Nube"
 msgstr "Aitak Hodeian"
 
-#: includes/class-userspn-settings.php:94
+#: includes/class-userspn-settings.php:113
 msgid "Page ID"
 msgstr "Orriaren IDa"
 
-#: includes/class-userspn-functions-user.php:839
-#: includes/class-userspn-functions-user.php:938
-#: includes/class-userspn-functions-user.php:939
-#: includes/class-userspn-forms.php:528
+#: includes/class-userspn-security.php:655
+msgid ""
+"Para borrar este usuario directamente, haz clic en el siguiente enlace:\n"
+msgstr ""
+"Erabiltzaile hau zuzenean kendu, egin klik hurrengo estekan:\n"
+
+#: includes/class-userspn-security.php:688
+msgid "Parámetros inválidos."
+msgstr "Baliogabeko parametroak."
+
+#: includes/class-userspn-forms.php:114
+#: includes/class-userspn-functions-user.php:1115
+#: includes/class-userspn-functions-user.php:1216
+#: includes/class-userspn-functions-user.php:1217
 msgid "Password"
 msgstr "Pasahitza"
 
-#: includes/class-userspn-forms.php:226
+#: includes/class-userspn-validation.php:65
+msgid ""
+"Password contains characters that are not allowed. Only letters, numbers, "
+"and these symbols are permitted: !@#$%^&*()_+-=[]{}|;:,.<>?"
+msgstr ""
+"Pasahitzak ez diren karaktereak ditu. Hitzak, zenbakiak eta ikur hauek "
+"soilik dira onartzen: !@#$%^&*()_+-=[]{}|;:,.<>?"
+
+#: includes/class-userspn-forms.php:315
 msgid "Password strength checker"
 msgstr "Pasahitzaren sendotasuna egiaztatzailea"
 
-#: includes/class-userspn-common.php:157
+#: includes/class-userspn-common.php:211
 msgid "Pending"
 msgstr "Zain"
 
-#: includes/class-userspn-common.php:155
+#: includes/class-userspn-forms.php:611
+msgid "Play audio"
+msgstr "Erreproduzitu audioa"
+
+#: includes/class-userspn-common.php:209
 msgid "Please complete all required fields"
 msgstr "Mesedez, bete beharrezko eremu guztiak"
 
-#: includes/class-userspn-ajax-nopriv.php:212
-#: includes/class-userspn-ajax-nopriv.php:215
+#: includes/class-userspn-mailing.php:201
+#: includes/class-userspn-mailing.php:204
 msgid "Please confirm your email address clicking in the link."
 msgstr "Mesedez, berretsi zure helbide elektronikoa estekan klik eginez."
 
-#: includes/class-userspn-common.php:160
+#: includes/class-userspn-common.php:214
 msgid "Please create a new user or login to save the information."
 msgstr ""
 "Mesedez, sortu erabiltzaile berri bat edo hasi saioa informazioa gordetzeko."
 
-#: includes/class-userspn-functions-user.php:1019
+#: includes/class-userspn-validation.php:144
+msgid "Please enter a valid date."
+msgstr "Mesedez, sartu data baliozkoa."
+
+#: includes/class-userspn-validation.php:74
+msgid "Please enter a valid email address."
+msgstr "Mesedez, sartu baliozko helbide elektroniko bat."
+
+#: includes/class-userspn-validation.php:93
+msgid "Please enter a valid number."
+msgstr "Mesedez, sartu zenbaki baliodun bat."
+
+#: includes/class-userspn-validation.php:83
+msgid "Please enter a valid URL."
+msgstr "Mesedez, sartu URL baliodun bat."
+
+#: includes/class-userspn-functions-user.php:1390
 msgid ""
 "Please include data in YEAR-MONTH-DAY format as today is shown in the "
 "example."
@@ -628,7 +987,7 @@ msgstr ""
 "Mesedez, sartu datuak URTEA-HILABETE-EGUNA formatuan, gaur adibidean "
 "agertzen den bezala."
 
-#: includes/class-userspn-functions-user.php:1025
+#: includes/class-userspn-functions-user.php:1396
 msgid ""
 "Please include EXACTLY one of the values shown in the example row separated "
 "by the symbol |."
@@ -636,40 +995,62 @@ msgstr ""
 "Mesedez, sartu adibide-errenkadan agertzen diren balioetako BEHIN BETIKO bat,"
 " | ikurraz bereizita."
 
-#: includes/class-userspn-common.php:188
+#: includes/class-userspn-common.php:244
 msgid "Please provide at least field name and type."
 msgstr "Mesedez, eman gutxienez eremuaren izena eta mota."
 
-#: includes/class-userspn-common.php:180
+#: includes/class-userspn-common.php:241
+msgid "Please select a file to upload."
+msgstr "Mesedez, hautatu igotzeko fitxategi bat."
+
+#: includes/class-userspn-validation.php:153
+msgid "Please select a valid option."
+msgstr "Mesedez, hautatu aukera baliodun bat."
+
+#: includes/class-userspn-validation.php:170
+msgid "Please select valid options."
+msgstr "Mesedez, hautatu aukera baliodunak."
+
+#: includes/class-userspn-common.php:234
 #| msgid "Please, include your account password to complete the operation."
 msgid "Please, include your account password to complete the operation"
 msgstr "Mesedez, sartu zure kontuaren pasahitza eragiketa osatzeko"
 
-#: includes/class-userspn-ajax.php:541
+#: includes/class-userspn-ajax.php:562
 msgid "Please, select a valid file."
 msgstr "Mesedez, hautatu baliozko fitxategi bat."
 
-#: includes/class-userspn-settings.php:467
+#: includes/class-userspn-settings.php:627
+msgid "Plugin main Banner"
+msgstr "Pluginaren banner nagusia"
+
+#: includes/class-userspn-settings.php:802
 msgid "Powered by"
 msgstr "Powered by"
 
-#: includes/class-userspn-functions-user.php:359
+#: includes/class-userspn-settings.php:986
+msgid "Primary Menu"
+msgstr "Menu nagusia"
+
+#: templates/userspn-footer.php:46
+#: includes/class-userspn-functions-user.php:481
+#: includes/class-userspn-functions-user.php:580
 msgid "Profile"
 msgstr "Profila"
 
-#: includes/class-userspn-functions-user.php:574
+#: includes/class-userspn-functions-user.php:833
 msgid "Profile Completion"
 msgstr "Profilaren osaketa"
 
-#: includes/class-userspn-settings.php:85
+#: includes/class-userspn-settings.php:104
 msgid "Profile completion field"
 msgstr "Profila osatzeko eremua"
 
-#: includes/class-userspn-functions-user.php:746
+#: includes/class-userspn-functions-user.php:1020
 msgid "Profile picture"
 msgstr "Profileko argazkia"
 
-#: includes/class-userspn-functions-user.php:746
+#: includes/class-userspn-functions-user.php:1020
 msgid "Profile picture of"
 msgstr "ren profileko argazkia"
 
@@ -677,31 +1058,88 @@ msgstr "ren profileko argazkia"
 msgid "Profile popup"
 msgstr "Profilaren leihoa"
 
-#: includes/class-userspn-settings.php:131
+#: includes/class-userspn-settings.php:150
 msgid "Random images in avatar block"
 msgstr "Ausazko irudiak avatar blokean"
 
-#: includes/class-userspn-notifications.php:93
+#: includes/class-userspn-settings.php:556
+msgid "Rate Limit Window (hours)"
+msgstr "Tarifa Muga Leihoa (orduak)"
+
+#: includes/class-userspn-forms.php:586
+msgid "Ready to record"
+msgstr "Grabatzeko prest"
+
+#: includes/class-userspn-settings.php:503
+msgid "reCAPTCHA Score Threshold"
+msgstr "reCAPTCHA puntuazio-atalasea"
+
+#: includes/class-userspn-settings.php:492
+msgid "reCAPTCHA Secret Key"
+msgstr "reCAPTCHAren gako sekretua"
+
+#: includes/class-userspn-settings.php:481
+msgid "reCAPTCHA Site Key"
+msgstr "reCAPTCHA gunearen gakoa"
+
+#: includes/class-userspn-security.php:51
+msgid "reCAPTCHA verification failed: Action mismatch."
+msgstr "reCAPTCHA egiaztapena huts egin du: Ekintza ez dator bat."
+
+#: includes/class-userspn-security.php:47
+msgid "reCAPTCHA verification failed: Invalid token."
+msgstr "reCAPTCHA egiaztapena huts egin du: Token baliogabea."
+
+#: includes/class-userspn-security.php:28
+msgid "reCAPTCHA verification failed: Missing credentials or token."
+msgstr ""
+"reCAPTCHA egiaztapenak huts egin du: Kredentzialak edo tokena falta dira."
+
+#: includes/class-userspn-security.php:40
+msgid "reCAPTCHA verification failed: Unable to connect to Google."
+msgstr "reCAPTCHA egiaztapenak huts egin du: Ezin da Google-ra konektatu."
+
+#: includes/class-userspn-notifications.php:168
 msgid "Receive notifications"
 msgstr "Jakinarazpenak jaso"
 
-#: includes/class-userspn-functions-user.php:474
+#: templates/userspn-footer.php:151
+#: includes/class-userspn-functions-user.php:697
+#: includes/class-userspn-functions-user.php:721
 msgid "Register"
 msgstr "Izena eman"
 
-#: includes/class-userspn-functions-user.php:907
+#: includes/class-userspn-security.php:113
+msgid "Registration blocked: Bot detected by honeypot."
+msgstr "Erregistroa blokeatuta: Bot-a ezti-pot-ak detektatu du."
+
+#: includes/class-userspn-security.php:97
+msgid "Registration blocked: Content appears to be spam."
+msgstr "Erregistroa blokeatuta: Edukia spama dela dirudi."
+
+#: includes/class-userspn-security.php:141
+msgid ""
+"Registration blocked: Too many attempts. Please try again in %d hour(s)."
+msgstr ""
+"Erregistroa blokeatuta: Saiakera gehiegi. Saiatu berriro %d ordu barru."
+
+#: includes/class-userspn-functions-user.php:1185
 msgid "Remember Me"
 msgstr "Gogoratu Ni"
 
-#: includes/class-userspn-forms.php:576
+#: includes/class-userspn-forms.php:162
 msgid "Remove"
 msgstr "Kendu"
 
-#: includes/class-userspn-forms.php:418 includes/class-userspn-forms.php:434
+#: includes/class-userspn-functions-user.php:945
+msgid "Remove avatar"
+msgstr "Kendu avatarra"
+
+#: includes/class-userspn-forms.php:546 includes/class-userspn-forms.php:562
 msgid "Remove element"
 msgstr "Kendu elementua"
 
-#: includes/class-userspn-forms.php:566
+#: includes/class-userspn-forms.php:152
 msgid "Remove field"
 msgstr "Kendu eremua"
 
@@ -709,135 +1147,175 @@ msgstr "Kendu eremua"
 msgid "Remove file"
 msgstr "Kendu fitxategia"
 
-#: includes/class-userspn-ajax.php:161 includes/class-userspn-ajax.php:171
-#: includes/class-userspn-functions-user.php:810
-#: includes/class-userspn-functions-user.php:826
-#: includes/class-userspn-functions-user.php:842
+#: includes/class-userspn-functions-user.php:1084
+#: includes/class-userspn-functions-user.php:1100
+#: includes/class-userspn-functions-user.php:1118
+#: includes/class-userspn-ajax.php:199 includes/class-userspn-ajax.php:209
 msgid "Remove user"
 msgstr "Kendu erabiltzailea"
 
-#: includes/class-userspn-functions-user.php:820
+#: includes/class-userspn-functions-user.php:1094
 msgid "Remove your user from the system. This action cannot be undone."
 msgstr "Kendu zure erabiltzailea sistematik. Ekintza hau ezin da desegin."
 
-#: includes/class-userspn-functions-user.php:1006
-#: includes/class-userspn-functions-user.php:1013
-#: includes/class-userspn-forms.php:557
+#: includes/class-userspn-forms.php:143
+#: includes/class-userspn-functions-user.php:1377
+#: includes/class-userspn-functions-user.php:1384
 msgid "Required"
 msgstr "Beharrezkoa"
 
-#: includes/class-userspn-forms.php:479
+#: includes/class-userspn-forms.php:753 includes/class-userspn-forms.php:818
 msgid "Required field"
 msgstr "Beharrezko eremua"
 
-#: includes/class-userspn-functions-user.php:1006
+#: includes/class-userspn-functions-user.php:1377
 msgid "Role"
 msgstr "Rola"
 
-#: includes/class-userspn-ajax.php:99
+#: includes/class-userspn-ajax.php:135
 msgid "Roles"
 msgstr "Rolak"
 
-#: includes/class-userspn-settings.php:170
-#: includes/class-userspn-settings.php:171
+#: includes/class-userspn-settings.php:189
+#: includes/class-userspn-settings.php:190
 msgid "Roles allowed to upload files"
 msgstr "Fitxategiak kargatzeko baimenduta dauden rolak"
 
-#: includes/class-userspn-forms.php:583
+#: includes/class-userspn-forms.php:169
 msgid "Save field"
 msgstr "Gorde eremua"
 
-#: includes/class-userspn-settings.php:413
-#: includes/class-userspn-notifications.php:125
+#: includes/class-userspn-notifications.php:200
+#: includes/class-userspn-settings.php:580
 msgid "Save options"
 msgstr "Gorde aukerak"
 
-#: includes/class-userspn-common.php:161
+#: includes/class-userspn-common.php:215
 msgid "Saved successfully"
 msgstr "Behar bezala gorde da"
 
-#: includes/class-userspn-ajax.php:34
-#: includes/class-userspn-functions-user.php:984
-#: includes/class-userspn-ajax-nopriv.php:33
+#: includes/class-userspn-security.php:650
+#, php-format
+msgid ""
+"Score reCAPTCHA: %.2f (Umbral: %.2f)\n"
+msgstr "Puntuazioa reCAPTCHA: %.2f (Umbral: %.2f)"
+
+#: includes/class-userspn-settings.php:508
+msgid ""
+"Score threshold for blocking (0.1 = very strict, 1.0 = very permissive). "
+"Recommended: 0.5"
+msgstr ""
+"Blokeatzeko puntuazio-atalasea (0,1 = oso zorrotza, 1,0 = oso permisiboa). "
+"Gomendatua: 0,5"
+
+#: includes/class-userspn-security.php:647
+#, php-format
+msgid ""
+"Se ha detectado un posible registro fraudulento en %s:\n"
+"\n"
+msgstr ""
+"Se ha detectado un posible registro fraudulento %s en:\n"
+"\n"
+
+#: includes/class-userspn-settings.php:987
+msgid "Secondary Menu"
+msgstr "Bigarren mailako menua"
+
+#: includes/class-userspn-ajax-nopriv.php:173
+msgid "Security check failed. Please try again."
+msgstr "Segurtasun-egiaztapena huts egin du. Saiatu berriro."
+
+#: includes/class-userspn-ajax-nopriv.php:33 includes/class-userspn-ajax.php:34
 msgid "Security check failed: Invalid nonce."
 msgstr "Segurtasun-egiaztapena huts egin du: baliogabeko ezegonkortasuna."
 
-#: includes/class-userspn-ajax.php:25
-#: includes/class-userspn-functions-user.php:975
-#: includes/class-userspn-ajax-nopriv.php:24
+#: includes/class-userspn-ajax-nopriv.php:24 includes/class-userspn-ajax.php:25
 msgid "Security check failed: Nonce is required."
 msgstr "Segurtasun-egiaztapena huts egin du: Nonce beharrezkoa da."
 
-#: includes/class-userspn-forms.php:517
+#: includes/class-userspn-ajax-nopriv.php:177
+msgid "Security check passed. Proceeding with password reset..."
+msgstr ""
+"Segurtasun-egiaztapena gainditu da. Pasahitza berrezartzen jarraitzen..."
+
+#: includes/class-userspn-settings.php:463
+msgid "Security Settings"
+msgstr "Segurtasun ezarpenak"
+
+#: includes/class-userspn-common.php:249
+msgid "Security validation failed. Please try again."
+msgstr "Segurtasun-balidazioak huts egin du. Saiatu berriro."
+
+#: includes/class-userspn-forms.php:103
 msgid "Select"
 msgstr "Hautatu"
 
-#: includes/class-userspn-forms.php:279
-msgid "Select an option"
-msgstr "Hautatu aukera bat"
-
-#: includes/class-userspn-common.php:172
+#: includes/class-userspn-common.php:226
 msgid "Select audio"
 msgstr "Hautatu audioa"
 
-#: includes/class-userspn-common.php:173
+#: includes/class-userspn-common.php:227
 msgid "Select audios"
 msgstr "Aukeratu audioak"
 
-#: includes/class-userspn-settings.php:141
-#: includes/class-userspn-settings.php:142
+#: includes/class-userspn-settings.php:160
+#: includes/class-userspn-settings.php:161
 msgid "Select avatar block images"
 msgstr "Hautatu avatar bloke irudiak"
 
-#: includes/class-userspn-common.php:176
+#: includes/class-userspn-common.php:230
 msgid "Select file"
 msgstr "Hautatu fitxategia"
 
-#: includes/class-userspn-common.php:177
+#: includes/class-userspn-common.php:231
 msgid "Select files"
 msgstr "Hautatu fitxategiak"
 
-#: includes/class-userspn-common.php:164
+#: includes/class-userspn-common.php:218
 msgid "Select image"
 msgstr "Hautatu irudia"
 
-#: includes/class-userspn-common.php:165
+#: includes/class-userspn-common.php:219
 msgid "Select images"
 msgstr "Aukeratu irudiak"
 
-#: includes/class-userspn-forms.php:538
+#: includes/class-userspn-settings.php:52
+msgid "Select menu location"
+msgstr "Hautatu menuaren kokapena"
+
+#: includes/class-userspn-forms.php:124
 msgid "Select multiple"
 msgstr "Hautatu anitz"
 
-#: includes/class-userspn-forms.php:555
+#: includes/class-userspn-forms.php:141
 msgid "Select requirement"
 msgstr "Aukeratu eskakizuna"
 
-#: includes/class-userspn-forms.php:527
+#: includes/class-userspn-forms.php:113
 msgid "Select subtype"
 msgstr "Hautatu azpimota"
 
-#: includes/class-userspn-settings.php:86
+#: includes/class-userspn-settings.php:105
 msgid "Select the page and meta key to track for profile completion."
 msgstr "Hautatu profilaren osatze-jarraipena egiteko orria eta meta-gakoa."
 
-#: includes/class-userspn-forms.php:516
+#: includes/class-userspn-forms.php:102
 msgid "Select type"
 msgstr "Hautatu mota"
 
-#: includes/class-userspn-common.php:168
+#: includes/class-userspn-common.php:222
 msgid "Select video"
 msgstr "Hautatu bideoa"
 
-#: includes/class-userspn-common.php:169
+#: includes/class-userspn-common.php:223
 msgid "Select videos"
 msgstr "Hautatu bideoak"
 
-#: includes/class-userspn-forms.php:535
+#: includes/class-userspn-forms.php:121
 msgid "Selector subtype"
 msgstr "Hautatzailea azpimota"
 
-#: includes/class-userspn-settings.php:310
+#: includes/class-userspn-settings.php:329
 msgid ""
 "Set up the roles to get dashboard access. This option takes priority over "
 "the previous one. If a role appears in both fields, this \"Enabled roles\" "
@@ -847,7 +1325,7 @@ msgstr ""
 "aurrekoaren aurrean. Bi eremuetan rol bat agertzen bada, \"Gaituriko rolak\" "
 "eremu hau izango da kontuan hartuko dena eta sarbidea emango zaio."
 
-#: includes/class-userspn-settings.php:330
+#: includes/class-userspn-settings.php:349
 msgid ""
 "Set up the roles to get the admin bar. This option takes priority over the "
 "previous one. If a role appears in both fields, this \"Enabled roles\" field "
@@ -859,17 +1337,48 @@ msgstr ""
 "rolak\" eremu hau izango da kontuan hartuko dena eta administrazio-barra "
 "agertuko da."
 
-#: includes/class-userspn-settings.php:76
+#: includes/class-userspn-settings.php:933
+#: includes/class-userspn-settings.php:1000
+msgid "Settings"
+msgstr "Ezarpenak"
+
+#: includes/class-userspn-settings.php:95
 msgid "Show profile completion block"
 msgstr "Erakutsi profila osatzeko blokea"
 
-#: includes/class-userspn-forms.php:539
+#: includes/class-userspn-security.php:657
+msgid "Si no haces nada, el usuario podrá acceder normalmente a la web."
+msgstr ""
+"Ez badu ezer egin, erabiltzaileak sarean normalean sartu ahal izango du."
+
+#: includes/class-userspn-forms.php:125
 msgid "Simple selector"
 msgstr "Hautatzaile sinplea"
 
-#: includes/class-userspn-forms.php:238
+#: includes/class-userspn-forms.php:327
 msgid "Special Character (!@#$%^&*)"
 msgstr "Pertsonaia berezia (!@#$%^&*)"
+
+#: templates/userspn-bot-analysis-popup.php:42
+msgid "Start Analysis"
+msgstr "Hasi analisia"
+
+#: includes/class-userspn-forms.php:595
+msgid "Start recording"
+msgstr "Hasi grabatzen"
+
+#: includes/class-userspn-settings.php:597
+#: includes/class-userspn-settings.php:598
+msgid "Statistics"
+msgstr "Estatistikak"
+
+#: includes/class-userspn-forms.php:618
+msgid "Stop audio"
+msgstr "Gelditu audioa"
+
+#: includes/class-userspn-forms.php:602
+msgid "Stop recording"
+msgstr "Gelditu grabaketa"
 
 #. Description of the plugin
 msgid ""
@@ -885,63 +1394,118 @@ msgstr ""
 msgid "Submit"
 msgstr "Bidali"
 
-#: includes/class-userspn-functions-user.php:329
-#: includes/class-userspn-functions-user.php:330
+#: includes/class-userspn-functions-user.php:423
+#: includes/class-userspn-functions-user.php:424
 msgid "Surname"
 msgstr "Abizena"
 
-#: includes/class-userspn-settings.php:61
+#: includes/class-userspn-settings.php:80
 msgid "Surname compulsory"
 msgstr "Abizena derrigorrezkoa"
 
-#: includes/class-userspn-forms.php:528
+#: templates/userspn-bot-analysis-popup.php:30
+msgid "Suspicious email patterns (sequential, temp emails)"
+msgstr ""
+"Susmagarriak diren posta elektroniko ereduak (sekuentzialak, aldi baterako "
+"mezu elektronikoak)"
+
+#: templates/userspn-bot-analysis-popup.php:34
+msgid "Suspicious user agent strings"
+msgstr "Erabiltzaile-agente kate susmagarriak"
+
+#: includes/class-userspn-settings.php:608
+msgid "Test: Delete Inactive"
+msgstr "Proba: Ezabatu inaktiboak"
+
+#: includes/class-userspn-settings.php:607
+msgid "Test: Delete Inactive Users"
+msgstr "Proba: Ezabatu erabiltzaile inaktiboak"
+
+#: includes/class-userspn-forms.php:114
 msgid "Text"
 msgstr "Testua"
 
-#: includes/class-userspn-functions-user.php:1035
-#: includes/class-userspn-functions-user.php:1050
+#: includes/class-userspn-functions-user.php:1406
+#: includes/class-userspn-functions-user.php:1421
 msgid "Text for"
 msgstr "Testua honetarako"
 
-#: includes/class-userspn-forms.php:517
+#: includes/class-userspn-validation.php:124
+msgid "Text must be at least %d characters long."
+msgstr "Testuak gutxienez %d karaktere izan behar ditu."
+
+#: includes/class-userspn-validation.php:133
+msgid "Text must be at most %d characters long."
+msgstr "Testuak gehienez %d karaktere izan behar ditu."
+
+#: includes/class-userspn-forms.php:103
 msgid "Textarea"
 msgstr "Testu-eremua"
 
-#: includes/class-userspn-common.php:186
+#: includes/class-userspn-notifications.php:122
+msgid "The activation link has expired. Please request a new activation email."
+msgstr ""
+"Aktibazio esteka iraungi da. Eskatu aktibazio mezu elektroniko berri bat."
+
+#: includes/class-userspn-common.php:242
 msgid "The field has been removed."
 msgstr "Eremua kendu da."
 
-#: includes/class-userspn-common.php:187
+#: includes/class-userspn-common.php:243
 msgid "The field has been saved successfully."
 msgstr "Eremua behar bezala gorde da."
 
-#: includes/class-userspn-forms.php:569
+#: includes/class-userspn-forms.php:155
 msgid "The field will be removed. This action cannot be undone."
 msgstr "Eremua kenduko da. Ekintza hau ezin da desegin."
 
-#: includes/class-userspn-common.php:185
+#: includes/class-userspn-common.php:239
 msgid "The file has been removed."
 msgstr "Fitxategia kendu da."
 
-#: includes/class-userspn-common.php:184
-#| msgid "Your file has been uploaded successfully. Reloading page"
-msgid "The file has been uploaded successfully. Reloading page..."
-msgstr "Fitxategia behar bezala kargatu da. Orria berriro kargatzen..."
+#: includes/class-userspn-common.php:238
+msgid "The file has been uploaded successfully."
+msgstr "Fitxategia behar bezala igo da."
 
-#: includes/class-userspn-common.php:179
+#: includes/class-userspn-common.php:233
 #| msgid "The password is not correct. Please try again."
 msgid "The password is not correct. Please try again"
 msgstr "Pasahitza ez da zuzena. Mesedez, saiatu berriro"
 
-#: includes/class-userspn-common.php:181
+#: includes/class-userspn-common.php:235
 msgid "The user has been successfully removed from the system. Reloading..."
 msgstr "Erabiltzailea behar bezala kendu da sistematik. Berriro kargatzen..."
 
-#: includes/class-userspn-functions-user.php:651
+#: includes/class-userspn-functions-user.php:918
 msgid "There are no extra fields in the profile"
 msgstr "Ez dago aparteko eremurik profilean"
 
-#: includes/class-userspn-settings.php:172
+#: templates/userspn-bot-analysis-popup.php:46
+msgid ""
+"This analysis is based on patterns and may produce false positives. Always "
+"review results carefully before taking action."
+msgstr ""
+"Analisi hau ereduetan oinarritzen da eta positibo faltsuak sor ditzake. Beti "
+"berrikusi emaitzak arretaz neurriak hartu aurretik."
+
+#: includes/class-userspn-blocks.php:102
+msgid ""
+"This block displays the user profile content directly on the page. If the "
+"user is logged in, it shows the profile editing form with tabs for Profile, "
+"Image, Notifications, and Advanced options. If the user is not logged in, it "
+"shows login and registration forms."
+msgstr ""
+"Bloke honek erabiltzailearen profileko edukia zuzenean orrialdean erakusten "
+"du. Erabiltzailea saioa hasita badago, profila editatzeko formularioa "
+"erakusten du, Profila, Irudia, Jakinarazpenak eta Aukera aurreratuak "
+"fitxekin. Erabiltzailea saioa hasita ez badago, saioa hasteko eta "
+"erregistratzeko formularioak erakusten ditu."
+
+#: includes/class-userspn-validation.php:48
+msgid "This field"
+msgstr "Eremu hau"
+
+#: includes/class-userspn-settings.php:191
 msgid ""
 "This option allow only specific roles to have the option to upload files to "
 "the system. If this option is empty and \"User files\" field is on, all the "
@@ -953,8 +1517,8 @@ msgstr ""
 "fitxategiak\" eremua aktibatuta badago, rol guztiek fitxategiak sistemara "
 "igo ahal izango dituzte. Administratzaileak beti izango dira baimenduta."
 
-#: includes/class-userspn-settings.php:132
-#: includes/class-userspn-settings.php:143
+#: includes/class-userspn-settings.php:151
+#: includes/class-userspn-settings.php:162
 msgid ""
 "This option allow you to include custom images to be shown randomly in the "
 "avatar image block."
@@ -962,7 +1526,7 @@ msgstr ""
 "Aukera honek aukera ematen du avatar irudien blokean ausaz erakusteko irudi "
 "pertsonalizatuak sartzeko."
 
-#: includes/class-userspn-settings.php:191
+#: includes/class-userspn-settings.php:210
 msgid ""
 "This option allows users to access to the password change integrated "
 "function."
@@ -970,7 +1534,7 @@ msgstr ""
 "Aukera honek erabiltzaileei pasahitza aldatzeko funtzio integratuan sartzeko "
 "aukera ematen die."
 
-#: includes/class-userspn-settings.php:115
+#: includes/class-userspn-settings.php:134
 msgid ""
 "This option allows users to create their account from the front-end profile "
 "popup."
@@ -978,7 +1542,7 @@ msgstr ""
 "Aukera honek erabiltzaileei beren kontua sortzeko aukera ematen die frontend "
 "profileko popup-tik."
 
-#: includes/class-userspn-settings.php:181
+#: includes/class-userspn-settings.php:200
 msgid ""
 "This option allows users to do user from the advanced option in the profile "
 "popup."
@@ -986,7 +1550,7 @@ msgstr ""
 "Aukera honi esker, erabiltzaileek erabiltzaileak egin ditzakete profilaren "
 "popup-ko aukera aurreratutik."
 
-#: includes/class-userspn-settings.php:211
+#: includes/class-userspn-settings.php:230
 msgid ""
 "This option allows users to remove their account from the advanced option in "
 "the profile popup."
@@ -994,18 +1558,25 @@ msgstr ""
 "Aukera honek erabiltzaileei beren kontua kentzeko aukera ematen die "
 "profilaren popup-ko aukera aurreratutik."
 
-#: includes/class-userspn-settings.php:160
+#: includes/class-userspn-settings.php:179
 msgid ""
 "This option allows users to upload and manage their files to the system."
 msgstr ""
 "Aukera honek erabiltzaileei euren fitxategiak sistemara igo eta kudeatzeko "
 "aukera ematen die."
 
-#: includes/class-userspn-settings.php:237
+#: includes/class-userspn-settings.php:43
+msgid ""
+"This option allows you to add the profile icon to a selected navigation menu."
+msgstr ""
+"Aukera honek profilaren ikonoa hautatutako nabigazio menuan gehitzeko aukera "
+"ematen dizu."
+
+#: includes/class-userspn-settings.php:256
 msgid "This option changes the main login page logo."
 msgstr "Aukera honek saioa hasteko orri nagusiaren logotipoa aldatzen du."
 
-#: includes/class-userspn-settings.php:249
+#: includes/class-userspn-settings.php:268
 msgid ""
 "This option changes your main login page header logo link text. By default "
 "\"Powered by WordPress\"."
@@ -1013,7 +1584,7 @@ msgstr ""
 "Aukera honek zure saio-orriaren goiburuko logoaren estekaren testua aldatzen "
 "du. Lehenespenez \"WordPress-ek bultzatuta\"."
 
-#: includes/class-userspn-settings.php:261
+#: includes/class-userspn-settings.php:280
 msgid ""
 "This option changes your main login page logo link. By default https:"
 "//wordpress.org/."
@@ -1021,7 +1592,7 @@ msgstr ""
 "Aukera honek zure saio-orriaren logoaren esteka aldatzen du. Lehenespenez "
 "https://wordpress.org/."
 
-#: includes/class-userspn-settings.php:201
+#: includes/class-userspn-settings.php:220
 msgid ""
 "This option force system to use the password recovery WordPress tool by "
 "default. It will generate an unique nonce and will send it to the user to "
@@ -1031,7 +1602,7 @@ msgstr ""
 "lehenespenez erabiltzera. Nonce bakarra sortuko du eta erabiltzaileari "
 "bidaliko dio pasahitza segurtasunez alda dezan."
 
-#: includes/class-userspn-settings.php:403
+#: includes/class-userspn-settings.php:432
 msgid ""
 "This option set up the maximum numer of activating emails allowed to be sent "
 "from the platform."
@@ -1039,7 +1610,7 @@ msgstr ""
 "Aukera honek plataformatik bidal daitezkeen mezu elektroniko aktibatzeko "
 "gehienezko kopurua ezarri zuen."
 
-#: includes/class-userspn-settings.php:151
+#: includes/class-userspn-settings.php:170
 msgid ""
 "This option shows a notifications tab in the profile popup that allows users "
 "to manage their notifications."
@@ -1047,7 +1618,7 @@ msgstr ""
 "Aukera honek jakinarazpen-fitxa bat erakusten du profileko laster-leihoan, "
 "erabiltzaileei beren jakinarazpenak kudeatzeko aukera ematen diena."
 
-#: includes/class-userspn-settings.php:347
+#: includes/class-userspn-settings.php:366
 msgid ""
 "This option will allow administrators to login as any user on the platform "
 "with no administrator role. Please use this option with caution and "
@@ -1059,7 +1630,7 @@ msgstr ""
 "aukera hau kontuz eta arduraz, beti ere erabiltzaileen baimenarekin. "
 "Pribatutasun eta segurtasun arriskuak dakartza."
 
-#: includes/class-userspn-functions-user.php:159
+#: includes/class-userspn-functions-user.php:172
 msgid ""
 "This option will allow you to login the platform as the current user profile."
 " This won´t work for administrator profiles, but any other contact all "
@@ -1069,7 +1640,7 @@ msgstr ""
 "profil gisa. Honek ez du funtzionatuko administratzaileen profiletan, baizik "
 "eta webguneko beste edozein kontakturekin."
 
-#: includes/class-userspn-settings.php:290
+#: includes/class-userspn-settings.php:309
 msgid ""
 "This option will modify also the dashboard main top left logo link using the "
 "link and text set above."
@@ -1077,7 +1648,7 @@ msgstr ""
 "Aukera honek, goiko ezkerreko logo nagusiaren esteka ere aldatuko du aginte-"
 "panelaren goian ezarritako esteka eta testua erabiliz."
 
-#: includes/class-userspn-settings.php:280
+#: includes/class-userspn-settings.php:299
 msgid ""
 "This option will modify also the dashboard main top left logo using the "
 "image set above."
@@ -1085,12 +1656,12 @@ msgstr ""
 "Aukera honek aginte-panelaren goiko ezkerreko logotipo nagusia ere aldatuko "
 "du goian ezarritako irudia erabiliz."
 
-#: includes/class-userspn-settings.php:228
+#: includes/class-userspn-settings.php:247
 msgid "This option will modify the dashboard main login page aspect."
 msgstr ""
 "Aukera honek aginte-saioa hasteko orri nagusiaren alderdia aldatuko du."
 
-#: includes/class-userspn-notifications.php:94
+#: includes/class-userspn-notifications.php:169
 msgid ""
 "This option will set if you receive notifications from the system. If you "
 "uncheck it you won't receive no notifications from the system."
@@ -1098,7 +1669,7 @@ msgstr ""
 "Aukera hau ezarriko da sistemaren jakinarazpenak jasotzen badituzu. "
 "Desmarkatzen baduzu, ez duzu sistemaren jakinarazpenik jasoko."
 
-#: includes/class-userspn-settings.php:123
+#: includes/class-userspn-settings.php:142
 msgid ""
 "This options allow contacts to include a custom Profile Pictures in their "
 "profiles."
@@ -1106,25 +1677,57 @@ msgstr ""
 "Aukera hauei esker, kontaktuek Profileko Irudi pertsonalizatuak sar "
 "ditzakete beren profilean."
 
-#: includes/class-userspn-forms.php:528
+#: includes/class-userspn-settings.php:570
+msgid ""
+"This tool analyzes existing users to identify potential bots based on "
+"various patterns and behaviors such as suspicious email patterns, bot-like "
+"usernames, empty profiles, multiple registrations from same IP, and lack of "
+"activity."
+msgstr ""
+"Tresna honek erabiltzaileak aztertzen ditu bot potentzialak identifikatzeko, "
+"hainbat eredu eta portaeratan oinarrituta, hala nola posta elektroniko "
+"susmagarrien ereduak, bot-en antzeko erabiltzaile-izenak, profil hutsak, IP "
+"bereko hainbat erregistro eta jarduera falta."
+
+#: templates/userspn-bot-analysis-popup.php:25
+msgid ""
+"This tool analyzes existing users to identify potential bots based on "
+"various patterns and behaviors."
+msgstr ""
+"Tresna honek erabiltzaileak aztertzen ditu hainbat eredu eta portaeratan "
+"oinarritutako bot potentzialak identifikatzeko."
+
+#: includes/class-userspn-forms.php:114
 msgid "Time"
 msgstr "Denbora"
 
-#: includes/class-userspn-functions-user.php:648
+#: includes/class-userspn-settings.php:560
+msgid "Time window in hours for rate limiting."
+msgstr "Tasa mugatzeko denbora-tarte ordutan."
+
+#: includes/class-userspn-forms.php:636
+msgid "Transcribe Audio"
+msgstr "Audioa transkribatu"
+
+#: includes/class-userspn-forms.php:657
+msgid "Transcribed text will appear here..."
+msgstr "Transkripzio testua hemen agertuko da..."
+
+#: includes/class-userspn-functions-user.php:915
 msgid "Update profile"
 msgstr "Eguneratu profila"
 
-#: includes/class-userspn-ajax.php:122
+#: includes/class-userspn-ajax.php:158
 msgid "Update user"
 msgstr "Eguneratu erabiltzailea"
 
-#: includes/class-userspn-functions-user.php:1092
-#: includes/class-userspn-functions-user.php:1095
+#: includes/class-userspn-functions-user.php:1497
+#: includes/class-userspn-functions-user.php:1500
 #: includes/class-userspn-functions-attachment.php:105
 msgid "Upload"
 msgstr "Kargatu"
 
-#: includes/class-userspn-functions-user.php:677
+#: includes/class-userspn-functions-user.php:948
 msgid "Upload avatar"
 msgstr "Kargatu avatarra"
 
@@ -1132,40 +1735,50 @@ msgstr "Kargatu avatarra"
 msgid "Upload your private file"
 msgstr "Kargatu zure fitxategi pribatua"
 
-#: includes/class-userspn-forms.php:528
+#: includes/class-userspn-forms.php:114
 msgid "Url"
 msgstr "Url"
 
-#: includes/class-userspn-settings.php:200
+#: includes/class-userspn-settings.php:219
 msgid "Use WordPress password recovery system"
 msgstr "Erabili WordPress pasahitza berreskuratzeko sistema"
 
-#: includes/class-userspn-functions-user.php:664
+#: includes/class-userspn-security.php:652
+#, php-format
+msgid ""
+"User Agent: %s\n"
+msgstr "Erabiltzaile-agentea: %s"
+
+#: includes/class-userspn-functions-user.php:931
 msgid "User avatar (recommended square images)"
 msgstr "Erabiltzailearen avatarra (irudi karratu gomendatuak)"
 
-#: includes/class-userspn-common.php:183
+#: includes/class-userspn-common.php:237
 msgid "User created. Please login."
 msgstr "Erabiltzailea sortu da. Mesedez, hasi saioa."
 
-#: includes/class-userspn-ajax.php:93 includes/class-userspn-ajax.php:163
+#: includes/class-userspn-ajax.php:129 includes/class-userspn-ajax.php:201
 msgid "User ID#"
 msgstr "Erabiltzaile ID#"
 
-#: includes/class-userspn-functions-user.php:136
+#: includes/class-userspn-functions-user.php:145
 #| msgid "User management - PN Extra profile fields"
 msgid "User management - PN Extra profile fields"
 msgstr "Erabiltzaileen kudeaketa - PN Profil eremu gehigarriak"
 
-#: includes/class-userspn-settings.php:346
+#: includes/class-userspn-blocks.php:106
+msgid "User Profile Block"
+msgstr "Erabiltzaile-profilaren blokea"
+
+#: includes/class-userspn-settings.php:365
 msgid "Users auto-login"
 msgstr "Erabiltzaileak automatikoki saioa hasteko"
 
-#: includes/class-userspn-settings.php:159
+#: includes/class-userspn-settings.php:178
 msgid "Users files"
 msgstr "Erabiltzaileen fitxategiak"
 
-#: includes/class-userspn-settings.php:425
+#: includes/class-userspn-settings.php:592
 msgid "Users manager"
 msgstr "Erabiltzaileen kudeatzailea"
 
@@ -1173,33 +1786,72 @@ msgstr "Erabiltzaileen kudeatzailea"
 msgid "Users manager - PN"
 msgstr "Erabiltzaileen kudeatzailea - PN"
 
-#: includes/class-userspn-settings.php:440
+#: includes/class-userspn-settings.php:629
 msgid "Users manager - PN Settings"
 msgstr "Erabiltzaileen kudeatzailea - PN ezarpenak"
 
-#: includes/class-userspn-activator.php:25
-#| msgid "Users management - PN"
-msgid "Users manager - PN"
-msgstr "Erabiltzaileen kudeatzailea - PN"
+#: templates/userspn-bot-analysis-popup.php:40
+msgid "Users to analyze:"
+msgstr "Erabiltzaileak aztertzeko:"
 
-#: includes/class-userspn-functions-user.php:594
+#: includes/class-userspn-security.php:719
+#, php-format
+msgid "Usuario %s eliminado correctamente."
+msgstr "Erabiltzailea %s ondo ezabatu."
+
+#: includes/class-userspn-security.php:720
+msgid "Usuario eliminado"
+msgstr "Erabiltzaile ezabatua"
+
+#: includes/class-userspn-security.php:700
+msgid "Usuario no encontrado."
+msgstr "Ez dut aurkitu erabiltzailerik."
+
+#: includes/class-userspn-security.php:648
+#, php-format
+msgid ""
+"Usuario: %s\n"
+msgstr "Erabiltzailea: %s"
+
+#: includes/class-userspn-settings.php:656
+msgid "Usuarios nuevos (7 días)"
+msgstr "Erabiltzaile berriak (7 egun)"
+
+#: includes/class-userspn-settings.php:672
+msgid "Usuarios nuevos en la última semana"
+msgstr "Erabiltzaile berriak azken astean"
+
+#: includes/class-userspn-security.php:695
+msgid "Verificación de seguridad fallida."
+msgstr "Verificación de seguridad fallida."
+
+#: includes/class-userspn-functions-user.php:856
 msgid "View details"
 msgstr "Ikusi xehetasunak"
 
-#: includes/class-userspn-common.php:189
+#: templates/userspn-bot-analysis-popup.php:46
+msgid "Warning:"
+msgstr "Abisua:"
+
+#: includes/class-userspn-common.php:245
 msgid ""
 "We have sent you an activation email. Please check your inbox or spam folder."
 msgstr ""
 "Aktibazio-mezu elektroniko bat bidali dizugu. Mesedez, egiaztatu zure "
 "sarrera-ontzia edo spam karpeta."
 
-#: includes/class-userspn-common.php:192
+#: includes/class-userspn-common.php:248
 msgid "We have sent you an email. Please check your inbox or spam folder."
 msgstr ""
 "Mezu elektroniko bat bidali dizugu. Mesedez, egiaztatu zure sarrera-ontzia "
 "edo spam karpeta."
 
-#: includes/class-userspn-settings.php:392
+#: includes/class-userspn-ajax-nopriv.php:534
+#: includes/class-userspn-functions-user.php:343
+msgid "Welcome to our newsletter"
+msgstr "Ongi etorri gure buletinera"
+
+#: includes/class-userspn-settings.php:421
 msgid ""
 "When this option is active, the system asks contacts to verify their emails "
 "via a link sent to their email address as they register in the platform."
@@ -1208,7 +1860,7 @@ msgstr ""
 "elektronikoak egiaztatzeko, plataforman izena ematen dutenean beren helbide "
 "elektronikora bidalitako esteka baten bidez."
 
-#: includes/class-userspn-settings.php:382
+#: includes/class-userspn-settings.php:401
 msgid ""
 "When this option is active, the system shows a popup when a contact tries to "
 "exit page without completing the newsletter registration form."
@@ -1216,14 +1868,18 @@ msgstr ""
 "Aukera hau aktibo dagoenean, sistemak leiho bat erakusten du kontaktu batek "
 "buletineko izen-emate orria bete gabe orrialdetik irteten saiatzen denean."
 
-#: includes/class-userspn-ajax.php:163
+#: includes/class-userspn-ajax.php:201
 msgid ""
 "will be removed completely from the system. This action cannot be undone. "
 "Are you sure?"
 msgstr ""
 "sistematik erabat kenduko da. Ekintza hau ezin da desegin. Ziur al zaude?"
 
-#: includes/class-userspn-functions-user.php:962
+#: includes/class-userspn-forms.php:888
+msgid "Yes"
+msgstr "Bai"
+
+#: includes/class-userspn-functions-user.php:1254
 msgid ""
 "You are already registered and logged in the system. So you cannot create a "
 "new user. Please close your session to register a new account."
@@ -1232,11 +1888,11 @@ msgstr ""
 "duzu erabiltzaile berririk sortu. Mesedez, itxi saioa kontu berri bat "
 "erregistratzeko."
 
-#: includes/class-userspn-mailing.php:139
+#: includes/class-userspn-mailing.php:146
 msgid "You are already subscribed to the newsletter"
 msgstr "Dagoeneko harpidetuta zaude buletinera"
 
-#: includes/class-userspn-functions-user.php:962
+#: includes/class-userspn-functions-user.php:1254
 msgid "You are registered"
 msgstr "Erregistratuta zaude"
 
@@ -1246,7 +1902,7 @@ msgid ""
 msgstr ""
 "Popup sarbidea aldi baterako desgai dezakezu kontrol-lauki hau markatuta."
 
-#: includes/class-userspn-settings.php:68
+#: includes/class-userspn-settings.php:87
 msgid ""
 "You can include the fields that will be asked in the profile popup. The base "
 "login or registration will include email and password. The fields that you "
@@ -1257,12 +1913,12 @@ msgstr ""
 "Hemen gehitzen dituzun eremuak oinarrizko bi posta elektronikoaren eta "
 "pasahitzaren eremuen azpian sartuko dira."
 
-#: includes/class-userspn-settings.php:319
+#: includes/class-userspn-settings.php:338
 msgid "You can remove the front-end admin bar by contacts role."
 msgstr ""
 "Frontend-eko administrazio-barra ken dezakezu kontaktuen rolaren arabera."
 
-#: includes/class-userspn-settings.php:299
+#: includes/class-userspn-settings.php:318
 msgid ""
 "You can revoke the accesss to certain roles to the administrator dashboard "
 "completely."
@@ -1275,20 +1931,29 @@ msgid "You can upload files to the system and access them from your profile."
 msgstr ""
 "Fitxategiak sistemara igo ditzakezu eta zure profiletik atzi ditzakezu."
 
-#: includes/class-userspn-mailing.php:137
+#: includes/class-userspn-ajax-nopriv.php:535
+#: includes/class-userspn-functions-user.php:344
+msgid "You have been subscribed to our newsletter. Welcome aboard!"
+msgstr "Gure buletinera harpidetu zara. Ongi etorri!"
+
+#: includes/class-userspn-mailing.php:144
 msgid "You have disabled your email notifications."
 msgstr "Zure posta elektronikoko jakinarazpenak desgaitu dituzu."
 
-#: includes/class-userspn-ajax-nopriv.php:212
-#: includes/class-userspn-ajax-nopriv.php:215
+#: includes/class-userspn-mailing.php:201
+#: includes/class-userspn-mailing.php:204
 msgid "You have just subscribed to our newsletter."
 msgstr "Gure buletinera harpidetu berri zara."
 
-#: includes/class-userspn-functions-user.php:300
+#: includes/class-userspn-functions-user.php:394
 msgid "You have not registered any field yet"
 msgstr "Oraindik ez duzu inongo eremurik erregistratu"
 
-#: includes/class-userspn-functions-user.php:835
+#: includes/class-userspn-ajax.php:752
+msgid "You must be logged in to create a new asset."
+msgstr "Aktibo berri bat sortzeko saioa hasi behar duzu."
+
+#: includes/class-userspn-functions-user.php:1111
 msgid "Your account removal will be permanent. This action cannot be undone!"
 msgstr "Zure kontua kentzea betikoa izango da. Ekintza hau ezin da desegin!"
 
@@ -1296,23 +1961,29 @@ msgstr "Zure kontua kentzea betikoa izango da. Ekintza hau ezin da desegin!"
 msgid "Your email"
 msgstr "Zure posta elektronikoa"
 
-#: includes/class-userspn-common.php:190
+#: includes/class-userspn-common.php:246
 msgid "Your email has received too many emails. Please contact us."
 msgstr ""
 "Zure helbide elektronikoak mezu elektroniko gehiegi jaso ditu. Jarri gurekin "
 "harremanetan."
 
-#: includes/class-userspn-ajax.php:539
+#: includes/class-userspn-notifications.php:113
+msgid "Your email is already activated. No further action is needed."
+msgstr ""
+"Zure posta elektronikoa aktibatuta dago dagoeneko. Ez da beste ekintzarik "
+"behar."
+
+#: includes/class-userspn-ajax.php:559
 msgid "Your file has been uploaded succesfully."
 msgstr "Zure fitxategia behar bezala kargatu da."
 
-#: includes/class-userspn-functions-user.php:458
-#: includes/class-userspn-functions-user.php:460
-#: includes/class-userspn-functions-user.php:463
+#: includes/class-userspn-functions-user.php:681
+#: includes/class-userspn-functions-user.php:683
+#: includes/class-userspn-functions-user.php:686
 msgid "Your profile"
 msgstr "Zure profila"
 
-#: includes/class-userspn-functions-user.php:463
+#: includes/class-userspn-functions-user.php:686
 msgid "Your profile link button"
 msgstr "Zure profilaren esteka botoia"
 
@@ -1320,14 +1991,7 @@ msgstr "Zure profilaren esteka botoia"
 msgid "your@email.com"
 msgstr "zure@email.com"
 
-#: includes/class-userspn-validation.php:67
-msgid "Password contains characters that are not allowed. Only letters, numbers, and these symbols are permitted: !@#$%^&*()_+-=[]{}|;:,.<>?"
-msgstr "Pasahitzak ez diren karaktereak ditu. Hitzak, zenbakiak eta ikur hauek soilik dira onartzen: !@#$%^&*()_+-=[]{}|;:,.<>?"
-
-#: includes/class-userspn-forms.php:217
-msgid "Special Character (!@#$%^&*()_+-=[]{}|;:,.<>?)"
-msgstr "Pertsonaia berezia (!@#$%^&*()_+-=[]{}|;:,.<>?)"
-
-#: includes/class-userspn-forms.php:194
-msgid "Only letters, numbers, and these symbols are permitted: !@#$%^&*()_+-=[]{}|;:,.<>?"
-msgstr "Hitzak, zenbakiak eta ikur hauek soilik dira onartzen: !@#$%^&*()_+-=[]{}|;:,.<>?"
+#: includes/class-userspn-settings.php:664
+#: includes/class-userspn-settings.php:688
+msgid "Últimos accesos"
+msgstr "Azken sarbideak"

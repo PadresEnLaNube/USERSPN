@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Users manager - PN\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-01 18:54+0000\n"
+"POT-Creation-Date: 2025-12-13 18:50+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -16,230 +16,336 @@ msgstr ""
 "X-Loco-Version: 2.5.2; wp-5.7.1\n"
 "X-Domain: userspn"
 
-#: includes/class-userspn-functions-user.php:587
-msgid "%d of %d fields completed"
+#. 1: Number of completed fields, 2: Total number of fields
+#: includes/class-userspn-functions-user.php:849
+#, php-format
+msgid "%1$d of %2$d fields completed"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:1086
+#: includes/class-userspn-validation.php:47
+#, php-format
+msgid "%s is required."
+msgstr ""
+
+#: includes/class-userspn-functions-user.php:1491
 msgid "01 - Download a CSV template with the platform specifications."
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:1091
+#: includes/class-userspn-functions-user.php:1496
 msgid "02 - Upload the CSV with the new contacts information."
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:834
+#: includes/class-userspn-security.php:636
+#, php-format
+msgid "[%s] Posible registro fraudulento detectado"
+msgstr ""
+
+#: includes/class-userspn-functions-user.php:1110
 msgid "Account deletion!"
 msgstr ""
 
-#: includes/class-userspn-mailing.php:137
+#: includes/class-userspn-mailing.php:144
 msgid "Activate now"
 msgstr ""
 
-#: includes/class-userspn-mailing.php:159
+#: includes/class-userspn-mailing.php:166
 msgid "Activate your account"
 msgstr ""
 
-#: includes/class-userspn-ajax-nopriv.php:212
-#: includes/class-userspn-ajax-nopriv.php:215
+#: includes/class-userspn-mailing.php:201
+#: includes/class-userspn-mailing.php:204
 msgid "Activate your subscription"
 msgstr ""
 
-#: includes/class-userspn-forms.php:349
+#: includes/class-userspn-forms.php:473
 msgid "Add audio"
 msgstr ""
 
-#: includes/class-userspn-forms.php:349
+#: includes/class-userspn-forms.php:473
 msgid "Add audios"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:1125
-#: includes/class-userspn-functions-user.php:1134
+#: includes/class-userspn-functions-user.php:1545
+#: includes/class-userspn-functions-user.php:1554
 msgid "Add contacts"
 msgstr ""
 
-#: includes/class-userspn-forms.php:440
+#: includes/class-userspn-forms.php:568
 msgid "Add element"
 msgstr ""
 
-#: includes/class-userspn-settings.php:337
+#: includes/class-userspn-settings.php:356
 msgid "Add extra profile fields on admin dashboard"
 msgstr ""
 
-#: includes/class-userspn-forms.php:370
+#: includes/class-userspn-forms.php:494
 msgid "Add file"
 msgstr ""
 
-#: includes/class-userspn-forms.php:370
+#: includes/class-userspn-forms.php:494
 msgid "Add files"
 msgstr ""
 
-#: includes/class-userspn-forms.php:307
+#: includes/class-userspn-settings.php:525
+msgid "Add hidden honeypot field to catch bots."
+msgstr ""
+
+#: includes/class-userspn-forms.php:431
 msgid "Add image"
 msgstr ""
 
-#: includes/class-userspn-forms.php:307
+#: includes/class-userspn-forms.php:431
 msgid "Add images"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:288
+#: includes/class-userspn-functions-user.php:382
 msgid "Add new field"
 msgstr ""
 
-#: includes/class-userspn-forms.php:328
+#: includes/class-userspn-settings.php:42
+msgid "Add profile icon to menu"
+msgstr ""
+
+#: includes/class-userspn-forms.php:452
 msgid "Add video"
 msgstr ""
 
-#: includes/class-userspn-forms.php:328
+#: includes/class-userspn-forms.php:452
 msgid "Add videos"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:376
+#: templates/userspn-footer.php:63
+#: includes/class-userspn-functions-user.php:498
+#: includes/class-userspn-functions-user.php:597
 msgid "Advanced"
 msgstr ""
 
-#: includes/class-userspn-settings.php:180
+#: includes/class-userspn-settings.php:199
 msgid "Advanced options in profile"
 msgstr ""
 
-#: includes/class-userspn-common.php:159
+#: includes/class-userspn-security.php:78
+msgid "Akismet API key not found."
+msgstr ""
+
+#: includes/class-userspn-security.php:72
+msgid "Akismet plugin is not active."
+msgstr ""
+
+#: includes/class-userspn-settings.php:680
+msgid "Altas en newsletter en la última semana"
+msgstr ""
+
+#: includes/class-userspn-common.php:213
 msgid "An error has occurred. Please try again in a few minutes."
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:1126
+#: includes/class-userspn-ajax.php:778
+msgid "An error occurred while checking the BaseCPT."
+msgstr ""
+
+#: includes/class-userspn-ajax.php:799
+msgid "An error occurred while duplicating the BaseCPT."
+msgstr ""
+
+#: includes/class-userspn-ajax.php:819
+msgid "An error occurred while removing the BaseCPT."
+msgstr ""
+
+#: includes/class-userspn-ajax.php:712 includes/class-userspn-ajax.php:742
+msgid "An error occurred while showing the BaseCPT."
+msgstr ""
+
+#: templates/userspn-bot-analysis-popup.php:28
+msgid "Analysis Criteria:"
+msgstr ""
+
+#: includes/class-userspn-settings.php:568
+msgid "Analyze Existing Users for Bots"
+msgstr ""
+
+#: includes/class-userspn-functions-user.php:1546
 msgid "Are you sure to process this contacts and add them to the system?"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:159
+#: includes/class-userspn-common.php:240
+msgid "Are you sure you want to remove your avatar?"
+msgstr ""
+
+#: includes/class-userspn-functions-user.php:172
 msgid ""
 "As you login with a new account, you will lose access to yours, so it´s "
 "better if you open this link in a private window or other browser."
 msgstr ""
 
-#: includes/class-userspn-forms.php:242
+#: includes/class-userspn-forms.php:331
 msgid "Atleast 8 Character"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:158
+#: includes/class-userspn-functions-user.php:171
 msgid "Auto-login tool"
 msgstr ""
 
-#: includes/class-userspn-ajax.php:167
-#: includes/class-userspn-functions-user.php:1130
-#: includes/class-userspn-forms.php:572
+#: includes/class-userspn-ajax.php:720
+msgid "BaseCPT ID is required."
+msgstr ""
+
+#: templates/userspn-bot-analysis-popup.php:21
+#: templates/userspn-bot-analysis-popup.php:24
+#: includes/class-userspn-settings.php:567
+msgid "Bot Analysis Tool"
+msgstr ""
+
+#: templates/userspn-bot-analysis-popup.php:31
+msgid "Bot-like usernames (user123, test456, etc.)"
+msgstr ""
+
+#: includes/class-userspn-forms.php:158
+#: includes/class-userspn-functions-user.php:1550
+#: includes/class-userspn-ajax.php:205
 msgid "Cancel"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:872
-#: includes/class-userspn-functions-user.php:888
+#: includes/class-userspn-functions-user.php:1150
+#: includes/class-userspn-functions-user.php:1166
 msgid "Change password"
 msgstr ""
 
-#: includes/class-userspn-settings.php:190
+#: includes/class-userspn-settings.php:209
 msgid "Change password access"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:882
+#: includes/class-userspn-functions-user.php:1160
 msgid ""
 "Change your profile access password. The process will send you an email to "
 "your account to secure the process."
 msgstr ""
 
-#: includes/class-userspn-forms.php:549
+#: includes/class-userspn-settings.php:411
+msgid ""
+"Check this option if you already have a newsletter form loaded in the page. "
+"For example, if you are using the shortcode [userspn-newsletter] in the page "
+"footer, you should check this option."
+msgstr ""
+
+#: includes/class-userspn-settings.php:53
+msgid "Choose the navigation menu where you want to add the profile icon."
+msgstr ""
+
+#: includes/class-userspn-forms.php:135
 msgid "Classes separated by spaces"
 msgstr ""
 
-#: includes/class-userspn-common.php:156
+#: includes/class-userspn-forms.php:643
+msgid "Clear"
+msgstr ""
+
+#: includes/class-userspn-common.php:210
 msgid "Completed"
 msgstr ""
 
-#: includes/class-userspn-common.php:191
+#: includes/class-userspn-common.php:247
 msgid ""
 "Congratulations! You have been successfully subscribed to our newsletter."
 msgstr ""
 
-#: includes/class-userspn-notifications.php:67
+#: includes/class-userspn-notifications.php:104
 msgid "Congratulations! Your email has been activated successfully."
 msgstr ""
 
-#: includes/class-userspn-settings.php:150
+#: includes/class-userspn-settings.php:169
 msgid "Contact notifications"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:1005
+#: includes/class-userspn-functions-user.php:1376
 msgid "Contacts upload template"
 msgstr ""
 
-#: includes/class-userspn-settings.php:372
+#: includes/class-userspn-settings.php:391
 msgid ""
 "Create a message that will be shown just above of the Newsletter "
 "registration form."
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:958
+#: includes/class-userspn-functions-user.php:1250
 msgid "Create user"
 msgstr ""
 
+#: includes/class-userspn-settings.php:442
+msgid ""
+"Cuando esta opción está activa, el sistema eliminará automáticamente las "
+"cuentas de usuarios que se hayan registrado en la newsletter pero no hayan "
+"activado su cuenta después de un número determinado de días."
+msgstr ""
+
+#: includes/class-userspn-settings.php:179
 #: includes/class-userspn-functions-attachment.php:97
-#: includes/class-userspn-settings.php:160
 msgid "Current file max size allowed:"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:285
+#: includes/class-userspn-functions-user.php:379
 msgid "Current form"
 msgstr ""
 
-#: includes/class-userspn-settings.php:122
+#: includes/class-userspn-settings.php:141
 msgid "Custom Profile Picture - PFP"
 msgstr ""
 
-#: includes/class-userspn-settings.php:219
+#: includes/class-userspn-settings.php:238
 msgid "Dashboard"
 msgstr ""
 
-#: includes/class-userspn-settings.php:227
+#: includes/class-userspn-settings.php:653
+msgid "Dashboard de Analíticas"
+msgstr ""
+
+#: includes/class-userspn-settings.php:246
 msgid "Dashboard main login page"
 msgstr ""
 
-#: includes/class-userspn-settings.php:269
-#: includes/class-userspn-settings.php:270
+#: includes/class-userspn-settings.php:288
+#: includes/class-userspn-settings.php:289
 msgid "Dashboard main login page CSS"
 msgstr ""
 
-#: includes/class-userspn-settings.php:248
+#: includes/class-userspn-settings.php:267
 msgid "Dashboard main login page header logo link text"
 msgstr ""
 
-#: includes/class-userspn-settings.php:236
+#: includes/class-userspn-settings.php:255
 msgid "Dashboard main login page logo"
 msgstr ""
 
-#: includes/class-userspn-settings.php:259
-#: includes/class-userspn-settings.php:260
+#: includes/class-userspn-settings.php:278
+#: includes/class-userspn-settings.php:279
 msgid "Dashboard main login page logo link"
 msgstr ""
 
-#: includes/class-userspn-settings.php:247
+#: includes/class-userspn-settings.php:266
 msgid "Dashboard main login page logo link text"
 msgstr ""
 
-#: includes/class-userspn-settings.php:279
+#: includes/class-userspn-settings.php:298
 msgid "Dashboard main logo"
 msgstr ""
 
-#: includes/class-userspn-settings.php:289
+#: includes/class-userspn-settings.php:308
 msgid "Dashboard main logo link"
 msgstr ""
 
-#: includes/class-userspn-forms.php:528
+#: includes/class-userspn-forms.php:114
 msgid "Date"
 msgstr ""
 
-#: includes/class-userspn-settings.php:318
+#: includes/class-userspn-settings.php:984
+msgid "Default Menu"
+msgstr ""
+
+#: includes/class-userspn-settings.php:337
 msgid "Disable admin bar"
 msgstr ""
 
-#: includes/class-userspn-settings.php:298
+#: includes/class-userspn-settings.php:317
 msgid "Disable dashboard access"
 msgstr ""
 
@@ -247,15 +353,19 @@ msgstr ""
 msgid "Disable Profile popup"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:419
+#: templates/userspn-footer.php:106
+#: includes/class-userspn-functions-user.php:541
+#: includes/class-userspn-functions-user.php:640
 msgid "Disconnect account"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:429
+#: templates/userspn-footer.php:116
+#: includes/class-userspn-functions-user.php:551
+#: includes/class-userspn-functions-user.php:650
 msgid "Disconnect your user from the system. You will need to log in again."
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:1074
+#: includes/class-userspn-functions-user.php:1454
 msgid "Download CSV template"
 msgstr ""
 
@@ -263,95 +373,184 @@ msgstr ""
 msgid "Download file"
 msgstr ""
 
-#: includes/class-userspn-forms.php:345 includes/class-userspn-common.php:170
+#: includes/class-userspn-settings.php:451
+msgid "Días para eliminar cuenta no activada"
+msgstr ""
+
+#: includes/class-userspn-forms.php:469 includes/class-userspn-common.php:224
 msgid "Edit audio"
 msgstr ""
 
-#: includes/class-userspn-forms.php:345 includes/class-userspn-common.php:171
+#: includes/class-userspn-forms.php:469 includes/class-userspn-common.php:225
 msgid "Edit audios"
 msgstr ""
 
-#: includes/class-userspn-forms.php:366 includes/class-userspn-common.php:174
+#: includes/class-userspn-forms.php:490 includes/class-userspn-common.php:228
 msgid "Edit file"
 msgstr ""
 
-#: includes/class-userspn-forms.php:366 includes/class-userspn-common.php:175
+#: includes/class-userspn-forms.php:490 includes/class-userspn-common.php:229
 msgid "Edit files"
 msgstr ""
 
-#: includes/class-userspn-forms.php:303 includes/class-userspn-common.php:162
+#: includes/class-userspn-forms.php:427 includes/class-userspn-common.php:216
 msgid "Edit image"
 msgstr ""
 
-#: includes/class-userspn-forms.php:303 includes/class-userspn-common.php:163
+#: includes/class-userspn-forms.php:427 includes/class-userspn-common.php:217
 msgid "Edit images"
 msgstr ""
 
-#: includes/class-userspn-forms.php:324 includes/class-userspn-common.php:166
+#: includes/class-userspn-forms.php:448 includes/class-userspn-common.php:220
 msgid "Edit video"
 msgstr ""
 
-#: includes/class-userspn-forms.php:324 includes/class-userspn-common.php:167
+#: includes/class-userspn-forms.php:448 includes/class-userspn-common.php:221
 msgid "Edit videos"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:929
-#: includes/class-userspn-functions-user.php:930
-#: includes/class-userspn-functions-user.php:1006
-#: includes/class-userspn-forms.php:528
+#: includes/class-userspn-security.php:654
+msgid ""
+"El usuario ha sido registrado pero marcado como sospechoso.\n"
+"\n"
+msgstr ""
+
+#: includes/class-userspn-settings.php:441
+msgid "Eliminar cuentas no activadas"
+msgstr ""
+
+#: includes/class-userspn-forms.php:114
+#: includes/class-userspn-functions-user.php:1207
+#: includes/class-userspn-functions-user.php:1208
+#: includes/class-userspn-functions-user.php:1377
 msgid "Email"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:1007
+#: includes/class-userspn-security.php:649
+#, php-format
+msgid ""
+"Email: %s\n"
+msgstr ""
+
+#: includes/class-userspn-functions-user.php:1378
 msgid "email@test.com"
 msgstr ""
 
-#: includes/class-userspn-settings.php:309
-#: includes/class-userspn-settings.php:329
+#: templates/userspn-bot-analysis-popup.php:32
+msgid "Empty or generic profile data"
+msgstr ""
+
+#: includes/class-userspn-settings.php:516
+msgid "Enable Akismet Protection"
+msgstr ""
+
+#: includes/class-userspn-settings.php:517
+msgid ""
+"Enable Akismet spam protection for user registration (requires Akismet "
+"plugin)."
+msgstr ""
+
+#: includes/class-userspn-settings.php:471
+msgid "Enable Google reCAPTCHA v3"
+msgstr ""
+
+#: includes/class-userspn-settings.php:472
+msgid "Enable Google reCAPTCHA v3 protection for user registration forms."
+msgstr ""
+
+#: includes/class-userspn-settings.php:524
+msgid "Enable Honeypot Protection"
+msgstr ""
+
+#: includes/class-userspn-settings.php:533
+msgid "Enable Rate Limiting"
+msgstr ""
+
+#: includes/class-userspn-settings.php:328
+#: includes/class-userspn-settings.php:348
 msgid "Enabled roles"
 msgstr ""
 
-#: includes/class-userspn-settings.php:104
+#: includes/class-userspn-settings.php:123
 msgid "Enter meta key"
 msgstr ""
 
-#: includes/class-userspn-settings.php:95
+#: includes/class-userspn-settings.php:114
 msgid "Enter page ID"
+msgstr ""
+
+#: includes/class-userspn-settings.php:493
+msgid "Enter your reCAPTCHA Secret Key"
+msgstr ""
+
+#: includes/class-userspn-settings.php:482
+msgid "Enter your reCAPTCHA Site Key"
+msgstr ""
+
+#: includes/class-userspn-security.php:724
+msgid "Error al eliminar el usuario."
+msgstr ""
+
+#: includes/class-userspn-security.php:706
+msgid "Este usuario no está marcado como sospechoso."
 msgstr ""
 
 #: includes/class-userspn-cron.php:32
 msgid "Every 30 minutes"
 msgstr ""
 
-#: includes/class-userspn-common.php:182
+#: includes/class-userspn-common.php:236
 msgid "Existing user. Please login."
 msgstr ""
 
-#: includes/class-userspn-settings.php:67
+#: includes/class-userspn-settings.php:86
 msgid "Extra fields in the user profile"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:372
+#: includes/class-userspn-security.php:653
+#, php-format
+msgid ""
+"Fecha: %s\n"
+"\n"
+msgstr ""
+
+#: templates/userspn-footer.php:59
+#: includes/class-userspn-functions-user.php:494
+#: includes/class-userspn-functions-user.php:593
 msgid "Files"
 msgstr ""
 
-#: includes/class-userspn-ajax.php:204
+#: includes/class-userspn-ajax.php:241
 msgid "First Name"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:910
+#: includes/class-userspn-settings.php:988
+msgid "Footer Menu"
+msgstr ""
+
+#: includes/class-userspn-functions-user.php:1188
 msgid "Forgot your password?"
 msgstr ""
 
-#: includes/class-userspn-settings.php:114
+#: includes/class-userspn-settings.php:133
 msgid "Front-end users registration"
 msgstr ""
 
-#: includes/class-userspn-settings.php:210
+#: includes/class-userspn-settings.php:229
 msgid "Front-end users removal"
 msgstr ""
 
-#: includes/class-userspn-ajax-nopriv.php:215
+#: includes/class-userspn-settings.php:494
+msgid "Get your Secret Key from Google reCAPTCHA console."
+msgstr ""
+
+#: includes/class-userspn-settings.php:483
+msgid "Get your Site Key from Google reCAPTCHA console."
+msgstr ""
+
+#: includes/class-userspn-mailing.php:204
+#: includes/class-userspn-ajax-nopriv.php:535
+#: includes/class-userspn-functions-user.php:344
 msgid "Hello"
 msgstr ""
 
@@ -371,12 +570,12 @@ msgstr ""
 msgid "I have read and accept Terms and conditions."
 msgstr ""
 
-#: includes/class-userspn-settings.php:77
+#: includes/class-userspn-settings.php:96
 msgid ""
 "If enabled, a profile completion block will be shown in the profile popup."
 msgstr ""
 
-#: includes/class-userspn-settings.php:338
+#: includes/class-userspn-settings.php:357
 msgid ""
 "If you check this option, admin dashboard user edition and creation pages "
 "will show the added profile extra fields at the bottom. Administrators and "
@@ -384,176 +583,280 @@ msgid ""
 "on the creation of new contacts."
 msgstr ""
 
-#: includes/class-userspn-settings.php:43
+#: includes/class-userspn-settings.php:62
 msgid ""
 "If you check this option, the system will ask for the name and surname of "
 "the contact based on the WordPress custom database structure."
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:362
+#: templates/userspn-footer.php:49
+#: includes/class-userspn-functions-user.php:484
+#: includes/class-userspn-functions-user.php:583
 msgid "Image"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:1047
+#: includes/class-userspn-functions-user.php:1418
 msgid "Include \"on\" for checked of leave the cell empty for unchecked"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:837
+#: includes/class-userspn-functions-user.php:1113
 msgid "Include your password to confirm deletion"
 msgstr ""
 
-#: includes/class-userspn-forms.php:517
+#: includes/class-userspn-forms.php:103
 msgid "Input"
 msgstr ""
 
-#: includes/class-userspn-forms.php:548
+#: includes/class-userspn-forms.php:134
 msgid "Input classes"
 msgstr ""
 
-#: includes/class-userspn-forms.php:509 includes/class-userspn-forms.php:510
+#: includes/class-userspn-forms.php:95 includes/class-userspn-forms.php:96
 msgid "Input name"
 msgstr ""
 
-#: includes/class-userspn-forms.php:553
+#: includes/class-userspn-forms.php:139
 msgid "Input required"
 msgstr ""
 
-#: includes/class-userspn-forms.php:524
+#: includes/class-userspn-forms.php:110
 msgid "Input subtype"
 msgstr ""
 
-#: includes/class-userspn-forms.php:514
+#: includes/class-userspn-forms.php:100
 msgid "Input type"
 msgstr ""
 
-#: includes/class-userspn-ajax.php:209
+#: includes/class-userspn-validation.php:162
+msgid "Invalid selection format."
+msgstr ""
+
+#: includes/class-userspn-security.php:651
+#, php-format
+msgid ""
+"IP: %s\n"
+msgstr ""
+
+#: includes/class-userspn-ajax.php:246
 msgid "Last Name"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:1134
+#: includes/class-userspn-mailing.php:129
+msgid "Leave this field empty"
+msgstr ""
+
+#: includes/class-userspn-settings.php:534
+msgid "Limit registration attempts per IP address."
+msgstr ""
+
+#: includes/class-userspn-functions-user.php:1554
 msgid "Loading..."
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:907
+#: includes/class-userspn-functions-user.php:1185
 msgid "Log In"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:435
+#: templates/userspn-footer.php:122
+#: includes/class-userspn-functions-user.php:557
+#: includes/class-userspn-functions-user.php:656
 msgid "Log out"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:471
+#: templates/userspn-footer.php:148
+#: includes/class-userspn-functions-user.php:694
+#: includes/class-userspn-functions-user.php:718
 msgid "Login"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:161
+#: includes/class-userspn-functions-user.php:174
 msgid "Login as"
 msgstr ""
 
-#: includes/class-userspn-forms.php:230
+#: includes/class-userspn-forms.php:319
 msgid "Lowercase & Uppercase"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:399
+#: templates/userspn-footer.php:86
+#: includes/class-userspn-functions-user.php:521
+#: includes/class-userspn-functions-user.php:620
 msgid "Mailing Manager - PN"
 msgstr ""
 
-#: includes/class-userspn-settings.php:401
-#: includes/class-userspn-settings.php:402
+#: includes/class-userspn-mailing.php:146
+msgid "Manage your subscription"
+msgstr ""
+
+#: includes/class-userspn-settings.php:543
+msgid "Max Registration Attempts"
+msgstr ""
+
+#: includes/class-userspn-settings.php:430
+#: includes/class-userspn-settings.php:431
 msgid "Maximum number of activation emails"
 msgstr ""
 
-#: includes/class-userspn-settings.php:103
+#: includes/class-userspn-settings.php:547
+msgid "Maximum registration attempts per IP per hour."
+msgstr ""
+
+#: includes/class-userspn-settings.php:122
 msgid "Meta key"
 msgstr ""
 
-#: includes/class-userspn-forms.php:539
+#: templates/userspn-bot-analysis-popup.php:33
+msgid "Multiple registrations from same IP"
+msgstr ""
+
+#: includes/class-userspn-forms.php:125
 msgid "Multiple selector"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:320
-#: includes/class-userspn-functions-user.php:321
+#: includes/class-userspn-functions-user.php:414
+#: includes/class-userspn-functions-user.php:415
 msgid "Name"
 msgstr ""
 
-#: includes/class-userspn-settings.php:42
+#: includes/class-userspn-settings.php:61
 msgid "Name and surname in profile"
 msgstr ""
 
-#: includes/class-userspn-settings.php:52
+#: includes/class-userspn-settings.php:71
 msgid "Name compulsory"
 msgstr ""
 
-#: includes/class-userspn-forms.php:504 includes/class-userspn-forms.php:510
+#: includes/class-userspn-forms.php:90 includes/class-userspn-forms.php:96
 msgid "New field"
 msgstr ""
 
-#: includes/class-userspn-settings.php:355
-#: includes/class-userspn-settings.php:363
+#: includes/class-userspn-settings.php:374
+#: includes/class-userspn-settings.php:382
 msgid "Newsletter"
 msgstr ""
 
-#: includes/class-userspn-settings.php:391
+#: includes/class-userspn-settings.php:660
+msgid "Newsletter (7 días)"
+msgstr ""
+
+#: includes/class-userspn-notifications.php:131
+msgid ""
+"Newsletter activation is currently disabled. Please contact the "
+"administrator."
+msgstr ""
+
+#: includes/class-userspn-settings.php:420
 msgid "Newsletter activation required"
 msgstr ""
 
-#: includes/class-userspn-settings.php:381
+#: includes/class-userspn-settings.php:400
 msgid "Newsletter exit popup"
 msgstr ""
 
-#: includes/class-userspn-settings.php:371
+#: includes/class-userspn-settings.php:410
+msgid "Newsletter is already loaded"
+msgstr ""
+
+#: includes/class-userspn-settings.php:390
 msgid "Newsletter message"
 msgstr ""
 
-#: includes/class-userspn-forms.php:116
+#: includes/class-userspn-forms.php:888
+msgid "No"
+msgstr ""
+
+#: templates/userspn-bot-analysis-popup.php:35
+msgid "No activity since registration"
+msgstr ""
+
+#: includes/class-userspn-forms.php:191
 msgid "No file found"
 msgstr ""
 
-#: includes/class-userspn-forms.php:556
+#: includes/class-userspn-forms.php:880
+msgid "No file uploaded"
+msgstr ""
+
+#: includes/class-userspn-settings.php:751
+msgid "No hay altas en newsletter en la última semana"
+msgstr ""
+
+#: includes/class-userspn-settings.php:778
+msgid "No hay registros de últimos accesos"
+msgstr ""
+
+#: includes/class-userspn-settings.php:721
+msgid "No hay usuarios nuevos en la última semana"
+msgstr ""
+
+#: includes/class-userspn-forms.php:970
+msgid "No images uploaded"
+msgstr ""
+
+#: includes/class-userspn-forms.php:142
 msgid "Not required"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:367
+#: templates/userspn-footer.php:54
+#: includes/class-userspn-functions-user.php:489
+#: includes/class-userspn-functions-user.php:588
 msgid "Notifications"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:398
+#: templates/userspn-footer.php:85
+#: includes/class-userspn-functions-user.php:520
+#: includes/class-userspn-functions-user.php:619
 msgid ""
 "Notifications are inactive. Please install and activate Mailing Manager - PN "
 "to allow integrated notifications in your platform."
 msgstr ""
 
-#: includes/class-userspn-notifications.php:117
+#: includes/class-userspn-notifications.php:192
 msgid "Notifications language"
 msgstr ""
 
-#: includes/class-userspn-forms.php:528
+#: includes/class-userspn-forms.php:114
 msgid "Number"
 msgstr ""
 
-#: includes/class-userspn-forms.php:234
+#: includes/class-userspn-forms.php:323
 msgid "Number (0-9)"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:1038
+#: includes/class-userspn-functions-user.php:1409
 msgid "Number for"
 msgstr ""
 
-#: includes/class-userspn-forms.php:544
+#: includes/class-userspn-validation.php:101
+#, php-format
+msgid "Number must be at least %s."
+msgstr ""
+
+#: includes/class-userspn-validation.php:110
+#, php-format
+msgid "Number must be at most %s."
+msgstr ""
+
+#: includes/class-userspn-settings.php:455
+msgid ""
+"Número de días que deben pasar desde el registro para que se elimine la "
+"cuenta si no ha sido activada. Por defecto: 5 días."
+msgstr ""
+
+#: includes/class-userspn-forms.php:130
 msgid "One option per line"
 msgstr ""
 
-#: includes/class-userspn-notifications.php:74
+#: includes/class-userspn-notifications.php:140
 msgid ""
 "Oppps! We are not able to verify your account. Please try to subscribe again "
 "or contact us."
 msgstr ""
 
-#: includes/class-userspn-forms.php:414 includes/class-userspn-forms.php:430
+#: includes/class-userspn-forms.php:542 includes/class-userspn-forms.php:558
 msgid "Order element"
 msgstr ""
 
-#: includes/class-userspn-common.php:178
+#: includes/class-userspn-common.php:232
 msgid "Ordered element"
 msgstr ""
 
@@ -561,83 +864,140 @@ msgstr ""
 msgid "Padres en la Nube"
 msgstr ""
 
-#: includes/class-userspn-settings.php:94
+#: includes/class-userspn-settings.php:113
 msgid "Page ID"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:839
-#: includes/class-userspn-functions-user.php:938
-#: includes/class-userspn-functions-user.php:939
-#: includes/class-userspn-forms.php:528
+#: includes/class-userspn-security.php:655
+msgid ""
+"Para borrar este usuario directamente, haz clic en el siguiente enlace:\n"
+msgstr ""
+
+#: includes/class-userspn-security.php:688
+msgid "Parámetros inválidos."
+msgstr ""
+
+#: includes/class-userspn-forms.php:114
+#: includes/class-userspn-functions-user.php:1115
+#: includes/class-userspn-functions-user.php:1216
+#: includes/class-userspn-functions-user.php:1217
 msgid "Password"
 msgstr ""
 
-#: includes/class-userspn-forms.php:226
+#: includes/class-userspn-validation.php:65
+msgid ""
+"Password contains characters that are not allowed. Only letters, numbers, "
+"and these symbols are permitted: !@#$%^&*()_+-=[]{}|;:,.<>?"
+msgstr ""
+
+#: includes/class-userspn-forms.php:315
 msgid "Password strength checker"
 msgstr ""
 
-#: includes/class-userspn-common.php:157
+#: includes/class-userspn-common.php:211
 msgid "Pending"
 msgstr ""
 
-#: includes/class-userspn-common.php:155
+#: includes/class-userspn-forms.php:611
+msgid "Play audio"
+msgstr ""
+
+#: includes/class-userspn-common.php:209
 msgid "Please complete all required fields"
 msgstr ""
 
-#: includes/class-userspn-ajax-nopriv.php:212
-#: includes/class-userspn-ajax-nopriv.php:215
+#: includes/class-userspn-mailing.php:201
+#: includes/class-userspn-mailing.php:204
 msgid "Please confirm your email address clicking in the link."
 msgstr ""
 
-#: includes/class-userspn-common.php:160
+#: includes/class-userspn-common.php:214
 msgid "Please create a new user or login to save the information."
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:1019
+#: includes/class-userspn-validation.php:144
+msgid "Please enter a valid date."
+msgstr ""
+
+#: includes/class-userspn-validation.php:74
+msgid "Please enter a valid email address."
+msgstr ""
+
+#: includes/class-userspn-validation.php:93
+msgid "Please enter a valid number."
+msgstr ""
+
+#: includes/class-userspn-validation.php:83
+msgid "Please enter a valid URL."
+msgstr ""
+
+#: includes/class-userspn-functions-user.php:1390
 msgid ""
 "Please include data in YEAR-MONTH-DAY format as today is shown in the "
 "example."
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:1025
+#: includes/class-userspn-functions-user.php:1396
 msgid ""
 "Please include EXACTLY one of the values shown in the example row separated "
 "by the symbol |."
 msgstr ""
 
-#: includes/class-userspn-common.php:188
+#: includes/class-userspn-common.php:244
 msgid "Please provide at least field name and type."
 msgstr ""
 
-#: includes/class-userspn-common.php:180
+#: includes/class-userspn-common.php:241
+msgid "Please select a file to upload."
+msgstr ""
+
+#: includes/class-userspn-validation.php:153
+msgid "Please select a valid option."
+msgstr ""
+
+#: includes/class-userspn-validation.php:170
+msgid "Please select valid options."
+msgstr ""
+
+#: includes/class-userspn-common.php:234
 msgid "Please, include your account password to complete the operation"
 msgstr ""
 
-#: includes/class-userspn-ajax.php:541
+#: includes/class-userspn-ajax.php:562
 msgid "Please, select a valid file."
 msgstr ""
 
-#: includes/class-userspn-settings.php:467
+#: includes/class-userspn-settings.php:627
+msgid "Plugin main Banner"
+msgstr ""
+
+#: includes/class-userspn-settings.php:802
 msgid "Powered by"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:359
+#: includes/class-userspn-settings.php:986
+msgid "Primary Menu"
+msgstr ""
+
+#: templates/userspn-footer.php:46
+#: includes/class-userspn-functions-user.php:481
+#: includes/class-userspn-functions-user.php:580
 msgid "Profile"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:574
+#: includes/class-userspn-functions-user.php:833
 msgid "Profile Completion"
 msgstr ""
 
-#: includes/class-userspn-settings.php:85
+#: includes/class-userspn-settings.php:104
 msgid "Profile completion field"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:746
+#: includes/class-userspn-functions-user.php:1020
 msgid "Profile picture"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:746
+#: includes/class-userspn-functions-user.php:1020
 msgid "Profile picture of"
 msgstr ""
 
@@ -645,31 +1005,86 @@ msgstr ""
 msgid "Profile popup"
 msgstr ""
 
-#: includes/class-userspn-settings.php:131
+#: includes/class-userspn-settings.php:150
 msgid "Random images in avatar block"
 msgstr ""
 
-#: includes/class-userspn-notifications.php:93
+#: includes/class-userspn-settings.php:556
+msgid "Rate Limit Window (hours)"
+msgstr ""
+
+#: includes/class-userspn-forms.php:586
+msgid "Ready to record"
+msgstr ""
+
+#: includes/class-userspn-settings.php:503
+msgid "reCAPTCHA Score Threshold"
+msgstr ""
+
+#: includes/class-userspn-settings.php:492
+msgid "reCAPTCHA Secret Key"
+msgstr ""
+
+#: includes/class-userspn-settings.php:481
+msgid "reCAPTCHA Site Key"
+msgstr ""
+
+#: includes/class-userspn-security.php:51
+msgid "reCAPTCHA verification failed: Action mismatch."
+msgstr ""
+
+#: includes/class-userspn-security.php:47
+msgid "reCAPTCHA verification failed: Invalid token."
+msgstr ""
+
+#: includes/class-userspn-security.php:28
+msgid "reCAPTCHA verification failed: Missing credentials or token."
+msgstr ""
+
+#: includes/class-userspn-security.php:40
+msgid "reCAPTCHA verification failed: Unable to connect to Google."
+msgstr ""
+
+#: includes/class-userspn-notifications.php:168
 msgid "Receive notifications"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:474
+#: templates/userspn-footer.php:151
+#: includes/class-userspn-functions-user.php:697
+#: includes/class-userspn-functions-user.php:721
 msgid "Register"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:907
+#: includes/class-userspn-security.php:113
+msgid "Registration blocked: Bot detected by honeypot."
+msgstr ""
+
+#: includes/class-userspn-security.php:97
+msgid "Registration blocked: Content appears to be spam."
+msgstr ""
+
+#: includes/class-userspn-security.php:141
+msgid ""
+"Registration blocked: Too many attempts. Please try again in %d hour(s)."
+msgstr ""
+
+#: includes/class-userspn-functions-user.php:1185
 msgid "Remember Me"
 msgstr ""
 
-#: includes/class-userspn-forms.php:576
+#: includes/class-userspn-forms.php:162
 msgid "Remove"
 msgstr ""
 
-#: includes/class-userspn-forms.php:418 includes/class-userspn-forms.php:434
+#: includes/class-userspn-functions-user.php:945
+msgid "Remove avatar"
+msgstr ""
+
+#: includes/class-userspn-forms.php:546 includes/class-userspn-forms.php:562
 msgid "Remove element"
 msgstr ""
 
-#: includes/class-userspn-forms.php:566
+#: includes/class-userspn-forms.php:152
 msgid "Remove field"
 msgstr ""
 
@@ -677,142 +1092,177 @@ msgstr ""
 msgid "Remove file"
 msgstr ""
 
-#: includes/class-userspn-ajax.php:161 includes/class-userspn-ajax.php:171
-#: includes/class-userspn-functions-user.php:810
-#: includes/class-userspn-functions-user.php:826
-#: includes/class-userspn-functions-user.php:842
+#: includes/class-userspn-functions-user.php:1084
+#: includes/class-userspn-functions-user.php:1100
+#: includes/class-userspn-functions-user.php:1118
+#: includes/class-userspn-ajax.php:199 includes/class-userspn-ajax.php:209
 msgid "Remove user"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:820
+#: includes/class-userspn-functions-user.php:1094
 msgid "Remove your user from the system. This action cannot be undone."
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:1006
-#: includes/class-userspn-functions-user.php:1013
-#: includes/class-userspn-forms.php:557
+#: includes/class-userspn-forms.php:143
+#: includes/class-userspn-functions-user.php:1377
+#: includes/class-userspn-functions-user.php:1384
 msgid "Required"
 msgstr ""
 
-#: includes/class-userspn-forms.php:479
+#: includes/class-userspn-forms.php:753 includes/class-userspn-forms.php:818
 msgid "Required field"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:1006
+#: includes/class-userspn-functions-user.php:1377
 msgid "Role"
 msgstr ""
 
-#: includes/class-userspn-ajax.php:99
+#: includes/class-userspn-ajax.php:135
 msgid "Roles"
 msgstr ""
 
-#: includes/class-userspn-settings.php:170
-#: includes/class-userspn-settings.php:171
+#: includes/class-userspn-settings.php:189
+#: includes/class-userspn-settings.php:190
 msgid "Roles allowed to upload files"
 msgstr ""
 
-#: includes/class-userspn-forms.php:583
+#: includes/class-userspn-forms.php:169
 msgid "Save field"
 msgstr ""
 
-#: includes/class-userspn-settings.php:413
-#: includes/class-userspn-notifications.php:125
+#: includes/class-userspn-notifications.php:200
+#: includes/class-userspn-settings.php:580
 msgid "Save options"
 msgstr ""
 
-#: includes/class-userspn-common.php:161
+#: includes/class-userspn-common.php:215
 msgid "Saved successfully"
 msgstr ""
 
-#: includes/class-userspn-ajax.php:34
-#: includes/class-userspn-functions-user.php:984
-#: includes/class-userspn-ajax-nopriv.php:33
+#: includes/class-userspn-security.php:650
+#, php-format
+msgid ""
+"Score reCAPTCHA: %.2f (Umbral: %.2f)\n"
+msgstr ""
+
+#: includes/class-userspn-settings.php:508
+msgid ""
+"Score threshold for blocking (0.1 = very strict, 1.0 = very permissive). "
+"Recommended: 0.5"
+msgstr ""
+
+#: includes/class-userspn-security.php:647
+#, php-format
+msgid ""
+"Se ha detectado un posible registro fraudulento en %s:\n"
+"\n"
+msgstr ""
+
+#: includes/class-userspn-settings.php:987
+msgid "Secondary Menu"
+msgstr ""
+
+#: includes/class-userspn-ajax-nopriv.php:173
+msgid "Security check failed. Please try again."
+msgstr ""
+
+#: includes/class-userspn-ajax-nopriv.php:33 includes/class-userspn-ajax.php:34
 msgid "Security check failed: Invalid nonce."
 msgstr ""
 
-#: includes/class-userspn-ajax.php:25
-#: includes/class-userspn-functions-user.php:975
-#: includes/class-userspn-ajax-nopriv.php:24
+#: includes/class-userspn-ajax-nopriv.php:24 includes/class-userspn-ajax.php:25
 msgid "Security check failed: Nonce is required."
 msgstr ""
 
-#: includes/class-userspn-forms.php:517
+#: includes/class-userspn-ajax-nopriv.php:177
+msgid "Security check passed. Proceeding with password reset..."
+msgstr ""
+
+#: includes/class-userspn-settings.php:463
+msgid "Security Settings"
+msgstr ""
+
+#: includes/class-userspn-common.php:249
+msgid "Security validation failed. Please try again."
+msgstr ""
+
+#: includes/class-userspn-forms.php:103
 msgid "Select"
 msgstr ""
 
-#: includes/class-userspn-forms.php:279
-msgid "Select an option"
-msgstr ""
-
-#: includes/class-userspn-common.php:172
+#: includes/class-userspn-common.php:226
 msgid "Select audio"
 msgstr ""
 
-#: includes/class-userspn-common.php:173
+#: includes/class-userspn-common.php:227
 msgid "Select audios"
 msgstr ""
 
-#: includes/class-userspn-settings.php:141
-#: includes/class-userspn-settings.php:142
+#: includes/class-userspn-settings.php:160
+#: includes/class-userspn-settings.php:161
 msgid "Select avatar block images"
 msgstr ""
 
-#: includes/class-userspn-common.php:176
+#: includes/class-userspn-common.php:230
 msgid "Select file"
 msgstr ""
 
-#: includes/class-userspn-common.php:177
+#: includes/class-userspn-common.php:231
 msgid "Select files"
 msgstr ""
 
-#: includes/class-userspn-common.php:164
+#: includes/class-userspn-common.php:218
 msgid "Select image"
 msgstr ""
 
-#: includes/class-userspn-common.php:165
+#: includes/class-userspn-common.php:219
 msgid "Select images"
 msgstr ""
 
-#: includes/class-userspn-forms.php:538
+#: includes/class-userspn-settings.php:52
+msgid "Select menu location"
+msgstr ""
+
+#: includes/class-userspn-forms.php:124
 msgid "Select multiple"
 msgstr ""
 
-#: includes/class-userspn-forms.php:555
+#: includes/class-userspn-forms.php:141
 msgid "Select requirement"
 msgstr ""
 
-#: includes/class-userspn-forms.php:527
+#: includes/class-userspn-forms.php:113
 msgid "Select subtype"
 msgstr ""
 
-#: includes/class-userspn-settings.php:86
+#: includes/class-userspn-settings.php:105
 msgid "Select the page and meta key to track for profile completion."
 msgstr ""
 
-#: includes/class-userspn-forms.php:516
+#: includes/class-userspn-forms.php:102
 msgid "Select type"
 msgstr ""
 
-#: includes/class-userspn-common.php:168
+#: includes/class-userspn-common.php:222
 msgid "Select video"
 msgstr ""
 
-#: includes/class-userspn-common.php:169
+#: includes/class-userspn-common.php:223
 msgid "Select videos"
 msgstr ""
 
-#: includes/class-userspn-forms.php:535
+#: includes/class-userspn-forms.php:121
 msgid "Selector subtype"
 msgstr ""
 
-#: includes/class-userspn-settings.php:310
+#: includes/class-userspn-settings.php:329
 msgid ""
 "Set up the roles to get dashboard access. This option takes priority over "
 "the previous one. If a role appears in both fields, this \"Enabled roles\" "
 "field will be the one taken into account and the access will be provided."
 msgstr ""
 
-#: includes/class-userspn-settings.php:330
+#: includes/class-userspn-settings.php:349
 msgid ""
 "Set up the roles to get the admin bar. This option takes priority over the "
 "previous one. If a role appears in both fields, this \"Enabled roles\" field "
@@ -820,16 +1270,46 @@ msgid ""
 "displayed."
 msgstr ""
 
-#: includes/class-userspn-settings.php:76
+#: includes/class-userspn-settings.php:933
+#: includes/class-userspn-settings.php:1000
+msgid "Settings"
+msgstr ""
+
+#: includes/class-userspn-settings.php:95
 msgid "Show profile completion block"
 msgstr ""
 
-#: includes/class-userspn-forms.php:539
+#: includes/class-userspn-security.php:657
+msgid "Si no haces nada, el usuario podrá acceder normalmente a la web."
+msgstr ""
+
+#: includes/class-userspn-forms.php:125
 msgid "Simple selector"
 msgstr ""
 
-#: includes/class-userspn-forms.php:238
+#: includes/class-userspn-forms.php:327
 msgid "Special Character (!@#$%^&*)"
+msgstr ""
+
+#: templates/userspn-bot-analysis-popup.php:42
+msgid "Start Analysis"
+msgstr ""
+
+#: includes/class-userspn-forms.php:595
+msgid "Start recording"
+msgstr ""
+
+#: includes/class-userspn-settings.php:597
+#: includes/class-userspn-settings.php:598
+msgid "Statistics"
+msgstr ""
+
+#: includes/class-userspn-forms.php:618
+msgid "Stop audio"
+msgstr ""
+
+#: includes/class-userspn-forms.php:602
+msgid "Stop recording"
 msgstr ""
 
 #. Description of the plugin
@@ -843,61 +1323,107 @@ msgstr ""
 msgid "Submit"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:329
-#: includes/class-userspn-functions-user.php:330
+#: includes/class-userspn-functions-user.php:423
+#: includes/class-userspn-functions-user.php:424
 msgid "Surname"
 msgstr ""
 
-#: includes/class-userspn-settings.php:61
+#: includes/class-userspn-settings.php:80
 msgid "Surname compulsory"
 msgstr ""
 
-#: includes/class-userspn-forms.php:528
+#: templates/userspn-bot-analysis-popup.php:30
+msgid "Suspicious email patterns (sequential, temp emails)"
+msgstr ""
+
+#: templates/userspn-bot-analysis-popup.php:34
+msgid "Suspicious user agent strings"
+msgstr ""
+
+#: includes/class-userspn-settings.php:608
+msgid "Test: Delete Inactive"
+msgstr ""
+
+#: includes/class-userspn-settings.php:607
+msgid "Test: Delete Inactive Users"
+msgstr ""
+
+#: includes/class-userspn-forms.php:114
 msgid "Text"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:1035
-#: includes/class-userspn-functions-user.php:1050
+#: includes/class-userspn-functions-user.php:1406
+#: includes/class-userspn-functions-user.php:1421
 msgid "Text for"
 msgstr ""
 
-#: includes/class-userspn-forms.php:517
+#: includes/class-userspn-validation.php:124
+msgid "Text must be at least %d characters long."
+msgstr ""
+
+#: includes/class-userspn-validation.php:133
+msgid "Text must be at most %d characters long."
+msgstr ""
+
+#: includes/class-userspn-forms.php:103
 msgid "Textarea"
 msgstr ""
 
-#: includes/class-userspn-common.php:186
+#: includes/class-userspn-notifications.php:122
+msgid "The activation link has expired. Please request a new activation email."
+msgstr ""
+
+#: includes/class-userspn-common.php:242
 msgid "The field has been removed."
 msgstr ""
 
-#: includes/class-userspn-common.php:187
+#: includes/class-userspn-common.php:243
 msgid "The field has been saved successfully."
 msgstr ""
 
-#: includes/class-userspn-forms.php:569
+#: includes/class-userspn-forms.php:155
 msgid "The field will be removed. This action cannot be undone."
 msgstr ""
 
-#: includes/class-userspn-common.php:185
+#: includes/class-userspn-common.php:239
 msgid "The file has been removed."
 msgstr ""
 
-#: includes/class-userspn-common.php:184
-msgid "The file has been uploaded successfully. Reloading page..."
+#: includes/class-userspn-common.php:238
+msgid "The file has been uploaded successfully."
 msgstr ""
 
-#: includes/class-userspn-common.php:179
+#: includes/class-userspn-common.php:233
 msgid "The password is not correct. Please try again"
 msgstr ""
 
-#: includes/class-userspn-common.php:181
+#: includes/class-userspn-common.php:235
 msgid "The user has been successfully removed from the system. Reloading..."
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:651
+#: includes/class-userspn-functions-user.php:918
 msgid "There are no extra fields in the profile"
 msgstr ""
 
-#: includes/class-userspn-settings.php:172
+#: templates/userspn-bot-analysis-popup.php:46
+msgid ""
+"This analysis is based on patterns and may produce false positives. Always "
+"review results carefully before taking action."
+msgstr ""
+
+#: includes/class-userspn-blocks.php:102
+msgid ""
+"This block displays the user profile content directly on the page. If the "
+"user is logged in, it shows the profile editing form with tabs for Profile, "
+"Image, Notifications, and Advanced options. If the user is not logged in, it "
+"shows login and registration forms."
+msgstr ""
+
+#: includes/class-userspn-validation.php:48
+msgid "This field"
+msgstr ""
+
+#: includes/class-userspn-settings.php:191
 msgid ""
 "This option allow only specific roles to have the option to upload files to "
 "the system. If this option is empty and \"User files\" field is on, all the "
@@ -905,78 +1431,83 @@ msgid ""
 "allways allowed."
 msgstr ""
 
-#: includes/class-userspn-settings.php:132
-#: includes/class-userspn-settings.php:143
+#: includes/class-userspn-settings.php:151
+#: includes/class-userspn-settings.php:162
 msgid ""
 "This option allow you to include custom images to be shown randomly in the "
 "avatar image block."
 msgstr ""
 
-#: includes/class-userspn-settings.php:191
+#: includes/class-userspn-settings.php:210
 msgid ""
 "This option allows users to access to the password change integrated "
 "function."
 msgstr ""
 
-#: includes/class-userspn-settings.php:115
+#: includes/class-userspn-settings.php:134
 msgid ""
 "This option allows users to create their account from the front-end profile "
 "popup."
 msgstr ""
 
-#: includes/class-userspn-settings.php:181
+#: includes/class-userspn-settings.php:200
 msgid ""
 "This option allows users to do user from the advanced option in the profile "
 "popup."
 msgstr ""
 
-#: includes/class-userspn-settings.php:211
+#: includes/class-userspn-settings.php:230
 msgid ""
 "This option allows users to remove their account from the advanced option in "
 "the profile popup."
 msgstr ""
 
-#: includes/class-userspn-settings.php:160
+#: includes/class-userspn-settings.php:179
 msgid ""
 "This option allows users to upload and manage their files to the system."
 msgstr ""
 
-#: includes/class-userspn-settings.php:237
+#: includes/class-userspn-settings.php:43
+msgid ""
+"This option allows you to add the profile icon to a selected navigation menu."
+msgstr ""
+
+#: includes/class-userspn-settings.php:256
 msgid "This option changes the main login page logo."
 msgstr ""
 
-#: includes/class-userspn-settings.php:249
+#: includes/class-userspn-settings.php:268
 msgid ""
 "This option changes your main login page header logo link text. By default "
 "\"Powered by WordPress\"."
 msgstr ""
 
-#: includes/class-userspn-settings.php:261
+#: includes/class-userspn-settings.php:280
 msgid ""
 "This option changes your main login page logo link. By default https:"
 "//wordpress.org/."
 msgstr ""
 
-#: includes/class-userspn-settings.php:201
+#: includes/class-userspn-settings.php:220
 msgid ""
 "This option force system to use the password recovery WordPress tool by "
 "default. It will generate an unique nonce and will send it to the user to "
 "change password safely."
 msgstr ""
 
-#: includes/class-userspn-settings.php:403
+#: includes/class-userspn-settings.php:432
 msgid ""
 "This option set up the maximum numer of activating emails allowed to be sent "
 "from the platform."
 msgstr ""
 
-#: includes/class-userspn-settings.php:151
+#: includes/class-userspn-settings.php:170
 msgid ""
 "This option shows a notifications tab in the profile popup that allows users "
 "to manage their notifications."
 msgstr ""
 
-#: includes/class-userspn-settings.php:347
+#: includes/class-userspn-settings.php:366
 msgid ""
 "This option will allow administrators to login as any user on the platform "
 "with no administrator role. Please use this option with caution and "
@@ -984,60 +1515,86 @@ msgid ""
 "security risks."
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:159
+#: includes/class-userspn-functions-user.php:172
 msgid ""
 "This option will allow you to login the platform as the current user profile."
 " This won´t work for administrator profiles, but any other contact all "
 "across the website."
 msgstr ""
 
-#: includes/class-userspn-settings.php:290
+#: includes/class-userspn-settings.php:309
 msgid ""
 "This option will modify also the dashboard main top left logo link using the "
 "link and text set above."
 msgstr ""
 
-#: includes/class-userspn-settings.php:280
+#: includes/class-userspn-settings.php:299
 msgid ""
 "This option will modify also the dashboard main top left logo using the "
 "image set above."
 msgstr ""
 
-#: includes/class-userspn-settings.php:228
+#: includes/class-userspn-settings.php:247
 msgid "This option will modify the dashboard main login page aspect."
 msgstr ""
 
-#: includes/class-userspn-notifications.php:94
+#: includes/class-userspn-notifications.php:169
 msgid ""
 "This option will set if you receive notifications from the system. If you "
 "uncheck it you won't receive no notifications from the system."
 msgstr ""
 
-#: includes/class-userspn-settings.php:123
+#: includes/class-userspn-settings.php:142
 msgid ""
 "This options allow contacts to include a custom Profile Pictures in their "
 "profiles."
 msgstr ""
 
-#: includes/class-userspn-forms.php:528
+#: includes/class-userspn-settings.php:570
+msgid ""
+"This tool analyzes existing users to identify potential bots based on "
+"various patterns and behaviors such as suspicious email patterns, bot-like "
+"usernames, empty profiles, multiple registrations from same IP, and lack of "
+"activity."
+msgstr ""
+
+#: templates/userspn-bot-analysis-popup.php:25
+msgid ""
+"This tool analyzes existing users to identify potential bots based on "
+"various patterns and behaviors."
+msgstr ""
+
+#: includes/class-userspn-forms.php:114
 msgid "Time"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:648
+#: includes/class-userspn-settings.php:560
+msgid "Time window in hours for rate limiting."
+msgstr ""
+
+#: includes/class-userspn-forms.php:636
+msgid "Transcribe Audio"
+msgstr ""
+
+#: includes/class-userspn-forms.php:657
+msgid "Transcribed text will appear here..."
+msgstr ""
+
+#: includes/class-userspn-functions-user.php:915
 msgid "Update profile"
 msgstr ""
 
-#: includes/class-userspn-ajax.php:122
+#: includes/class-userspn-ajax.php:158
 msgid "Update user"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:1092
-#: includes/class-userspn-functions-user.php:1095
+#: includes/class-userspn-functions-user.php:1497
+#: includes/class-userspn-functions-user.php:1500
 #: includes/class-userspn-functions-attachment.php:105
 msgid "Upload"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:677
+#: includes/class-userspn-functions-user.php:948
 msgid "Upload avatar"
 msgstr ""
 
@@ -1045,39 +1602,49 @@ msgstr ""
 msgid "Upload your private file"
 msgstr ""
 
-#: includes/class-userspn-forms.php:528
+#: includes/class-userspn-forms.php:114
 msgid "Url"
 msgstr ""
 
-#: includes/class-userspn-settings.php:200
+#: includes/class-userspn-settings.php:219
 msgid "Use WordPress password recovery system"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:664
+#: includes/class-userspn-security.php:652
+#, php-format
+msgid ""
+"User Agent: %s\n"
+msgstr ""
+
+#: includes/class-userspn-functions-user.php:931
 msgid "User avatar (recommended square images)"
 msgstr ""
 
-#: includes/class-userspn-common.php:183
+#: includes/class-userspn-common.php:237
 msgid "User created. Please login."
 msgstr ""
 
-#: includes/class-userspn-ajax.php:93 includes/class-userspn-ajax.php:163
+#: includes/class-userspn-ajax.php:129 includes/class-userspn-ajax.php:201
 msgid "User ID#"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:136
+#: includes/class-userspn-functions-user.php:145
 msgid "User management - PN Extra profile fields"
 msgstr ""
 
-#: includes/class-userspn-settings.php:346
+#: includes/class-userspn-blocks.php:106
+msgid "User Profile Block"
+msgstr ""
+
+#: includes/class-userspn-settings.php:365
 msgid "Users auto-login"
 msgstr ""
 
-#: includes/class-userspn-settings.php:159
+#: includes/class-userspn-settings.php:178
 msgid "Users files"
 msgstr ""
 
-#: includes/class-userspn-settings.php:425
+#: includes/class-userspn-settings.php:592
 msgid "Users manager"
 msgstr ""
 
@@ -1085,56 +1652,100 @@ msgstr ""
 msgid "Users manager - PN"
 msgstr ""
 
-#: includes/class-userspn-settings.php:440
+#: includes/class-userspn-settings.php:629
 msgid "Users manager - PN Settings"
 msgstr ""
 
-#: includes/class-userspn-activator.php:25
-msgid "Users manager - PN"
+#: templates/userspn-bot-analysis-popup.php:40
+msgid "Users to analyze:"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:594
+#: includes/class-userspn-security.php:719
+#, php-format
+msgid "Usuario %s eliminado correctamente."
+msgstr ""
+
+#: includes/class-userspn-security.php:720
+msgid "Usuario eliminado"
+msgstr ""
+
+#: includes/class-userspn-security.php:700
+msgid "Usuario no encontrado."
+msgstr ""
+
+#: includes/class-userspn-security.php:648
+#, php-format
+msgid ""
+"Usuario: %s\n"
+msgstr ""
+
+#: includes/class-userspn-settings.php:656
+msgid "Usuarios nuevos (7 días)"
+msgstr ""
+
+#: includes/class-userspn-settings.php:672
+msgid "Usuarios nuevos en la última semana"
+msgstr ""
+
+#: includes/class-userspn-security.php:695
+msgid "Verificación de seguridad fallida."
+msgstr ""
+
+#: includes/class-userspn-functions-user.php:856
 msgid "View details"
 msgstr ""
 
-#: includes/class-userspn-common.php:189
+#: templates/userspn-bot-analysis-popup.php:46
+msgid "Warning:"
+msgstr ""
+
+#: includes/class-userspn-common.php:245
 msgid ""
 "We have sent you an activation email. Please check your inbox or spam folder."
 msgstr ""
 
-#: includes/class-userspn-common.php:192
+#: includes/class-userspn-common.php:248
 msgid "We have sent you an email. Please check your inbox or spam folder."
 msgstr ""
 
-#: includes/class-userspn-settings.php:392
+#: includes/class-userspn-ajax-nopriv.php:534
+#: includes/class-userspn-functions-user.php:343
+msgid "Welcome to our newsletter"
+msgstr ""
+
+#: includes/class-userspn-settings.php:421
 msgid ""
 "When this option is active, the system asks contacts to verify their emails "
 "via a link sent to their email address as they register in the platform."
 msgstr ""
 
-#: includes/class-userspn-settings.php:382
+#: includes/class-userspn-settings.php:401
 msgid ""
 "When this option is active, the system shows a popup when a contact tries to "
 "exit page without completing the newsletter registration form."
 msgstr ""
 
-#: includes/class-userspn-ajax.php:163
+#: includes/class-userspn-ajax.php:201
 msgid ""
 "will be removed completely from the system. This action cannot be undone. "
 "Are you sure?"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:962
+#: includes/class-userspn-forms.php:888
+msgid "Yes"
+msgstr ""
+
+#: includes/class-userspn-functions-user.php:1254
 msgid ""
 "You are already registered and logged in the system. So you cannot create a "
 "new user. Please close your session to register a new account."
 msgstr ""
 
-#: includes/class-userspn-mailing.php:139
+#: includes/class-userspn-mailing.php:146
 msgid "You are already subscribed to the newsletter"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:962
+#: includes/class-userspn-functions-user.php:1254
 msgid "You are registered"
 msgstr ""
 
@@ -1143,18 +1754,18 @@ msgid ""
 "You can disable the popup access temporarily by checking on this checkbox."
 msgstr ""
 
-#: includes/class-userspn-settings.php:68
+#: includes/class-userspn-settings.php:87
 msgid ""
 "You can include the fields that will be asked in the profile popup. The base "
 "login or registration will include email and password. The fields that you "
 "add here will be included below the two base email and password fields."
 msgstr ""
 
-#: includes/class-userspn-settings.php:319
+#: includes/class-userspn-settings.php:338
 msgid "You can remove the front-end admin bar by contacts role."
 msgstr ""
 
-#: includes/class-userspn-settings.php:299
+#: includes/class-userspn-settings.php:318
 msgid ""
 "You can revoke the accesss to certain roles to the administrator dashboard "
 "completely."
@@ -1164,20 +1775,29 @@ msgstr ""
 msgid "You can upload files to the system and access them from your profile."
 msgstr ""
 
-#: includes/class-userspn-mailing.php:137
+#: includes/class-userspn-ajax-nopriv.php:535
+#: includes/class-userspn-functions-user.php:344
+msgid "You have been subscribed to our newsletter. Welcome aboard!"
+msgstr ""
+
+#: includes/class-userspn-mailing.php:144
 msgid "You have disabled your email notifications."
 msgstr ""
 
-#: includes/class-userspn-ajax-nopriv.php:212
-#: includes/class-userspn-ajax-nopriv.php:215
+#: includes/class-userspn-mailing.php:201
+#: includes/class-userspn-mailing.php:204
 msgid "You have just subscribed to our newsletter."
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:300
+#: includes/class-userspn-functions-user.php:394
 msgid "You have not registered any field yet"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:835
+#: includes/class-userspn-ajax.php:752
+msgid "You must be logged in to create a new asset."
+msgstr ""
+
+#: includes/class-userspn-functions-user.php:1111
 msgid "Your account removal will be permanent. This action cannot be undone!"
 msgstr ""
 
@@ -1185,21 +1805,25 @@ msgstr ""
 msgid "Your email"
 msgstr ""
 
-#: includes/class-userspn-common.php:190
+#: includes/class-userspn-common.php:246
 msgid "Your email has received too many emails. Please contact us."
 msgstr ""
 
-#: includes/class-userspn-ajax.php:539
+#: includes/class-userspn-notifications.php:113
+msgid "Your email is already activated. No further action is needed."
+msgstr ""
+
+#: includes/class-userspn-ajax.php:559
 msgid "Your file has been uploaded succesfully."
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:458
-#: includes/class-userspn-functions-user.php:460
-#: includes/class-userspn-functions-user.php:463
+#: includes/class-userspn-functions-user.php:681
+#: includes/class-userspn-functions-user.php:683
+#: includes/class-userspn-functions-user.php:686
 msgid "Your profile"
 msgstr ""
 
-#: includes/class-userspn-functions-user.php:463
+#: includes/class-userspn-functions-user.php:686
 msgid "Your profile link button"
 msgstr ""
 
@@ -1207,14 +1831,7 @@ msgstr ""
 msgid "your@email.com"
 msgstr ""
 
-#: includes/class-userspn-validation.php:67
-msgid "Password contains characters that are not allowed. Only letters, numbers, and these symbols are permitted: !@#$%^&*()_+-=[]{}|;:,.<>?"
-msgstr ""
-
-#: includes/class-userspn-forms.php:217
-msgid "Special Character (!@#$%^&*()_+-=[]{}|;:,.<>?)"
-msgstr ""
-
-#: includes/class-userspn-forms.php:194
-msgid "Only letters, numbers, and these symbols are permitted: !@#$%^&*()_+-=[]{}|;:,.<>?"
+#: includes/class-userspn-settings.php:664
+#: includes/class-userspn-settings.php:688
+msgid "Últimos accesos"
 msgstr ""

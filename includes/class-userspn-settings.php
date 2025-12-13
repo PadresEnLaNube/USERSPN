@@ -431,6 +431,29 @@ class USERSPN_Settings {
             'placeholder' => __('Maximum number of activation emails', 'userspn'),
             'description' => __('This option set up the maximum numer of activating emails allowed to be sent from the platform.', 'userspn'),
           ];
+        $userspn_options['userspn_newsletter_activation_delete_inactive'] = [
+          'id' => 'userspn_newsletter_activation_delete_inactive',
+          'class' => 'userspn-input userspn-width-100-percent',
+          'input' => 'input',
+          'type' => 'checkbox',
+          'parent' => 'this userspn_newsletter',
+          'parent_option' => 'on',
+          'label' => __('Eliminar cuentas no activadas', 'userspn'),
+          'description' => __('Cuando esta opción está activa, el sistema eliminará automáticamente las cuentas de usuarios que se hayan registrado en la newsletter pero no hayan activado su cuenta después de un número determinado de días.', 'userspn'),
+        ];
+          $userspn_options['userspn_newsletter_activation_delete_days'] = [
+            'id' => 'userspn_newsletter_activation_delete_days',
+            'class' => 'userspn-input userspn-width-100-percent',
+            'input' => 'input',
+            'type' => 'number',
+            'parent' => 'userspn_newsletter_activation_delete_inactive',
+            'parent_option' => 'on',
+            'label' => __('Días para eliminar cuenta no activada', 'userspn'),
+            'placeholder' => '5',
+            'value' => '5',
+            'min' => '1',
+            'description' => __('Número de días que deben pasar desde el registro para que se elimine la cuenta si no ha sido activada. Por defecto: 5 días.', 'userspn'),
+          ];
     $userspn_options['userspn_section_newsletter_end'] = [
       'section' => 'end',
     ];
@@ -571,8 +594,8 @@ class USERSPN_Settings {
     // Add Dashboard menu as submenu of Users manager
     add_submenu_page(
       'userspn_options',
-      __('Dashboard', 'userspn'),
-      __('Dashboard', 'userspn'),
+      __('Statistics', 'userspn'),
+      __('Statistics', 'userspn'),
       'administrator',
       'userspn_dashboard',
       [$this, 'userspn_dashboard_page']
