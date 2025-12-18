@@ -1770,6 +1770,11 @@ textarea{
   }
   #userspn-popover-pass{
     font-size:16px;
+    position:relative;
+  }
+  #userspn-popover-pass ul{
+    width:100%;
+    position:relative;
   }
   .userspn-password-checker{
     max-width:470px;

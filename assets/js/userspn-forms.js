@@ -118,7 +118,7 @@
         userspn_pass_check_strength(password_value);
 
         if (!$('#userspn-popover-pass').is(':visible')) {
-          $('#userspn-popover-pass').fadeIn('slow');
+          $('#userspn-popover-pass, #userspn-popover-pass ul').fadeIn('slow');
         }
 
         if (!$('.userspn-show-pass').is(':visible')) {
