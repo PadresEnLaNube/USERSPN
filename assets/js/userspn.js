@@ -347,10 +347,12 @@
     }
 
     /* LOGIN BTN / REGISTER BTN */
-    /* <a href="#" class="userspn-profile-popup-btn" data-userspn-action="login|register|edit|image|notifications|advanced"><?php esc_html_e('register', 'userspn'); ?> */
+    /* <a href="#" class="userspn-profile-popup-btn" data-userspn-action="login|register|edit|image|notifications|advanced" data-userspn-message="Your custom message"><?php esc_html_e('register', 'userspn'); ?> */
     $(document).on('click', '.userspn-profile-popup-btn', function(e){
       e.preventDefault();
-      var userspn_btn = $(this).attr('data-userspn-action');
+      var $btn = $(this);
+      var userspn_btn = $btn.attr('data-userspn-action');
+      var userspn_popup_message = $btn.attr('data-userspn-message');
       
       // Close any active popups before opening the new one
       USERSPN_Popups.close();
@@ -365,6 +367,28 @@
         }else{
           $('.userspn-tab-links[data-userspn-id="userspn-tab-login"]').click();
           $('#userspn-login input#user_login').focus();
+        }
+
+        // If the trigger button includes a custom message, show it in the popup header
+        // and via the global main message bar, following the pattern used in
+        // userspn-profile-fields-validation.js (local alert + userspn_get_main_message()).
+        if (typeof userspn_popup_message !== 'undefined' && userspn_popup_message !== '') {
+          var $profile_wrapper = $('#userspn-profile-popup .userspn-profile-wrapper');
+
+          if ($profile_wrapper.length) {
+            // Remove any previous header message to avoid duplicates
+            $profile_wrapper.find('.userspn-popup-header-message').remove();
+
+            $profile_wrapper.prepend(
+              '<div class="userspn-alert userspn-alert-warning userspn-popup-header-message">' +
+                userspn_popup_message +
+              '</div>'
+            );
+          }
+
+          if (typeof userspn_get_main_message === 'function') {
+            userspn_get_main_message(userspn_popup_message);
+          }
         }
       }, 100);
     });

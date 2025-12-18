@@ -573,6 +573,77 @@ class USERSPN_Settings {
       'section' => 'end',
     ];
 
+    $userspn_options['userspn_section_design_start'] = [
+      'section' => 'start',
+      'label' => __('Design', 'userspn'),
+    ];
+      $userspn_options['userspn_color_main'] = [
+        'id' => 'userspn_color_main',
+        'class' => 'userspn-input userspn-width-100-percent',
+        'input' => 'input',
+        'type' => 'color',
+        'value' => get_option('userspn_color_main', '#00aa44'),
+        'label' => __('Main Color', 'userspn'),
+        'description' => __('Main color used throughout the plugin interface.', 'userspn'),
+      ];
+      $userspn_options['userspn_bg_color_main'] = [
+        'id' => 'userspn_bg_color_main',
+        'class' => 'userspn-input userspn-width-100-percent',
+        'input' => 'input',
+        'type' => 'color',
+        'value' => get_option('userspn_bg_color_main', '#00aa44'),
+        'label' => __('Main Background Color', 'userspn'),
+        'description' => __('Main background color used throughout the plugin interface.', 'userspn'),
+      ];
+      $userspn_options['userspn_border_color_main'] = [
+        'id' => 'userspn_border_color_main',
+        'class' => 'userspn-input userspn-width-100-percent',
+        'input' => 'input',
+        'type' => 'color',
+        'value' => get_option('userspn_border_color_main', '#00aa44'),
+        'label' => __('Main Border Color', 'userspn'),
+        'description' => __('Main border color used throughout the plugin interface.', 'userspn'),
+      ];
+      $userspn_options['userspn_color_main_alt'] = [
+        'id' => 'userspn_color_main_alt',
+        'class' => 'userspn-input userspn-width-100-percent',
+        'input' => 'input',
+        'type' => 'color',
+        'value' => get_option('userspn_color_main_alt', '#232323'),
+        'label' => __('Alternative Main Color', 'userspn'),
+        'description' => __('Alternative main color used throughout the plugin interface.', 'userspn'),
+      ];
+      $userspn_options['userspn_bg_color_main_alt'] = [
+        'id' => 'userspn_bg_color_main_alt',
+        'class' => 'userspn-input userspn-width-100-percent',
+        'input' => 'input',
+        'type' => 'color',
+        'value' => get_option('userspn_bg_color_main_alt', '#232323'),
+        'label' => __('Alternative Main Background Color', 'userspn'),
+        'description' => __('Alternative main background color used throughout the plugin interface.', 'userspn'),
+      ];
+      $userspn_options['userspn_border_color_main_alt'] = [
+        'id' => 'userspn_border_color_main_alt',
+        'class' => 'userspn-input userspn-width-100-percent',
+        'input' => 'input',
+        'type' => 'color',
+        'value' => get_option('userspn_border_color_main_alt', '#232323'),
+        'label' => __('Alternative Main Border Color', 'userspn'),
+        'description' => __('Alternative main border color used throughout the plugin interface.', 'userspn'),
+      ];
+      $userspn_options['userspn_color_main_blue'] = [
+        'id' => 'userspn_color_main_blue',
+        'class' => 'userspn-input userspn-width-100-percent',
+        'input' => 'input',
+        'type' => 'color',
+        'value' => get_option('userspn_color_main_blue', '#6e6eff'),
+        'label' => __('Main Blue Color', 'userspn'),
+        'description' => __('Main blue color used throughout the plugin interface.', 'userspn'),
+      ];
+    $userspn_options['userspn_section_design_end'] = [
+      'section' => 'end',
+    ];
+
     $userspn_options['userspn_submit'] = [
       'id' => 'userspn_submit',
       'input' => 'input',

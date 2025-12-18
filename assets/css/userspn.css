@@ -1235,11 +1235,11 @@ textarea{
   margin-bottom:10px;
 }
 .userspn-show-pass{
-  position:absolute;
-  top:40%;
-  transform:translateY(-50%);
-  right:15px;
-  width:15px;
+  position: absolute !important;
+  top:40% !important;
+  transform:translateY(-50%) !important;
+  right:15px !important;
+  width:15px !important;
 }
 .userspn-progress-bar-danger{
   border-radius:3px;

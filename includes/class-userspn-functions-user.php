@@ -238,13 +238,37 @@ class USERSPN_Functions_User {
       }
     }
 
-    ?>
-      <?php if (!empty($fields_required_pending)): ?>
-        <?php if (!wp_script_is('userspn-profile-fields-validation', 'enqueued')): ?>
-          <?php wp_enqueue_script('userspn-profile-fields-validation', USERSPN_URL . 'assets/js/userspn-profile-fields-validation.js', ['jquery'], USERSPN_VERSION, false, ['in_footer' => true, 'strategy' => 'defer']); ?>
-        <?php endif ?>
-      <?php endif ?>
-    <?php
+    // Si hay campos obligatorios pendientes, cargamos el script y pasamos los datos a JS
+    if (!empty($fields_required_pending) && !is_admin()) {
+      if (!wp_script_is('userspn-profile-fields-validation', 'enqueued')) {
+        wp_enqueue_script(
+          'userspn-profile-fields-validation',
+          USERSPN_URL . 'assets/js/userspn-profile-fields-validation.js',
+          ['jquery'],
+          USERSPN_VERSION,
+          false,
+          ['in_footer' => true, 'strategy' => 'defer']
+        );
+      }
+
+      // Preparamos un array simplificado solo con la información útil para depuración
+      $debug_required_fields = array_map(
+        function ($field) {
+          return [
+            'id'    => isset($field['id']) ? $field['id'] : '',
+            'label' => isset($field['label']) ? wp_strip_all_tags($field['label']) : '',
+            'type'  => isset($field['input']) ? $field['input'] : '',
+          ];
+        },
+        $fields_required_pending
+      );
+
+      wp_localize_script(
+        'userspn-profile-fields-validation',
+        'userspn_profile_required_pending',
+        $debug_required_fields
+      );
+    }
   }
 
   public function userspn_user_register($user_id) {

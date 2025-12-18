@@ -78,6 +78,39 @@ class USERSPN_Common {
 
 		wp_enqueue_style($this->plugin_name, USERSPN_URL . 'assets/css/userspn.css', [], $this->version, 'all');
 		wp_enqueue_style('userspn-profile-completion', USERSPN_URL . 'assets/css/userspn-profile-completion.css', [], $this->version, 'all');
+		
+		// Add dynamic CSS variables for design customization
+		$this->userspn_add_dynamic_css_variables();
+	}
+
+	/**
+	 * Add dynamic CSS variables based on settings.
+	 *
+	 * @since    1.0.0
+	 */
+	private function userspn_add_dynamic_css_variables() {
+		// Get color values from options, with defaults
+		$color_main = get_option('userspn_color_main', '#00aa44');
+		$bg_color_main = get_option('userspn_bg_color_main', '#00aa44');
+		$border_color_main = get_option('userspn_border_color_main', '#00aa44');
+		$color_main_alt = get_option('userspn_color_main_alt', '#232323');
+		$bg_color_main_alt = get_option('userspn_bg_color_main_alt', '#232323');
+		$border_color_main_alt = get_option('userspn_border_color_main_alt', '#232323');
+		$color_main_blue = get_option('userspn_color_main_blue', '#6e6eff');
+
+		// Build CSS with custom variables
+		$custom_css = ':root {';
+		$custom_css .= '--userspn-color-main:' . esc_attr($color_main) . ';';
+		$custom_css .= '--userspn-bg-color-main:' . esc_attr($bg_color_main) . ';';
+		$custom_css .= '--userspn-border-color-main:' . esc_attr($border_color_main) . ';';
+		$custom_css .= '--userspn-color-main-alt:' . esc_attr($color_main_alt) . ';';
+		$custom_css .= '--userspn-bg-color-main-alt:' . esc_attr($bg_color_main_alt) . ';';
+		$custom_css .= '--userspn-border-color-main-alt:' . esc_attr($border_color_main_alt) . ';';
+		$custom_css .= '--userspn-color-main-blue:' . esc_attr($color_main_blue) . ';';
+		$custom_css .= '}';
+
+		// Add inline style after the main CSS
+		wp_add_inline_style($this->plugin_name, $custom_css);
 	}
 
 	/**
