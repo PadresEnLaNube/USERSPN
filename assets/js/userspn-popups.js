@@ -9,6 +9,16 @@
         return;
       }
 
+      // Move the popup outside the .userspn-profile container if it's inside it
+      // This ensures the popup is visible at all resolutions
+      if (popupElement.attr('id') === 'userspn-profile-popup') {
+        var $profileContainer = popupElement.closest('.userspn-profile');
+        if ($profileContainer.length && !popupElement.parent().is('body')) {
+          // Move the popup to the body so it's always visible
+          $('body').append(popupElement);
+        }
+      }
+
       if (typeof options.beforeShow === 'function') {
         options.beforeShow();
       }
