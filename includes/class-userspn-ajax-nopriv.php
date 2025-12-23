@@ -454,28 +454,106 @@ class USERSPN_Ajax_Nopriv {
           $plugin_user = new USERSPN_Functions_User();
           $userspn_email = !empty($_POST['userspn_email']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_email'])) : '';
           $newsletter_recaptcha_result = null;
+          $ip_address = USERSPN_Security::get_user_ip();
 
           if (!empty($userspn_email)) {
-            if (get_option('userspn_honeypot_enabled') === 'on') {
-              $honeypot_validation = USERSPN_Security::verify_honeypot($_POST);
-              if (is_wp_error($honeypot_validation)) {
-                USERSPN_Security::log_security_event('newsletter_honeypot_blocked', $honeypot_validation->get_error_message(), [
+            // Validate email format first
+            if (!is_email($userspn_email)) {
+              USERSPN_Security::log_security_event('newsletter_invalid_email', 'Invalid email format', [
+                'email' => $userspn_email,
+              ]);
+              echo 'userspn_newsletter_error';exit;
+            }
+
+            // Rate limiting for newsletter (more strict)
+            if (get_option('userspn_rate_limiting_enabled') === 'on') {
+              $rate_limit_result = USERSPN_Security::check_rate_limit($ip_address, 'newsletter');
+              if (is_wp_error($rate_limit_result)) {
+                USERSPN_Security::log_security_event('newsletter_rate_limit_blocked', $rate_limit_result->get_error_message(), [
                   'email' => $userspn_email,
+                  'ip' => $ip_address,
                 ]);
                 echo 'userspn_newsletter_security_error';exit;
               }
             }
 
+            // Validate suspicious email patterns
+            $email_validation = USERSPN_Security::validate_email_suspicious($userspn_email);
+            if (is_wp_error($email_validation)) {
+              // Block temp emails and sequential patterns
+              if (in_array($email_validation->get_error_code(), ['suspicious_email_temp', 'suspicious_email_sequential'])) {
+                USERSPN_Security::log_security_event('newsletter_email_blocked', $email_validation->get_error_message(), [
+                  'email' => $userspn_email,
+                  'ip' => $ip_address,
+                ]);
+                echo 'userspn_newsletter_security_error';exit;
+              }
+            }
+
+            // Honeypot validation
+            if (get_option('userspn_honeypot_enabled') === 'on') {
+              $honeypot_validation = USERSPN_Security::verify_honeypot($_POST);
+              if (is_wp_error($honeypot_validation)) {
+                USERSPN_Security::log_security_event('newsletter_honeypot_blocked', $honeypot_validation->get_error_message(), [
+                  'email' => $userspn_email,
+                  'ip' => $ip_address,
+                ]);
+                echo 'userspn_newsletter_security_error';exit;
+              }
+            }
+
+            // reCAPTCHA validation
             if (get_option('userspn_recaptcha_enabled') === 'on') {
               $recaptcha_token = isset($_POST['g-recaptcha-response']) ? sanitize_text_field(wp_unslash($_POST['g-recaptcha-response'])) : '';
+              if (empty($recaptcha_token)) {
+                USERSPN_Security::log_security_event('newsletter_recaptcha_missing', 'reCAPTCHA token missing', [
+                  'email' => $userspn_email,
+                  'ip' => $ip_address,
+                ]);
+                echo 'userspn_newsletter_security_error';exit;
+              }
+              
               $recaptcha_validation = USERSPN_Security::verify_recaptcha($recaptcha_token, 'newsletter');
               if (is_wp_error($recaptcha_validation)) {
                 USERSPN_Security::log_security_event('newsletter_recaptcha_blocked', $recaptcha_validation->get_error_message(), [
                   'email' => $userspn_email,
+                  'ip' => $ip_address,
                 ]);
                 echo 'userspn_newsletter_security_error';exit;
               }
+              
               $newsletter_recaptcha_result = $recaptcha_validation;
+              
+              // Block suspicious reCAPTCHA scores
+              if ($recaptcha_validation['is_suspicious']) {
+                $block_suspicious = get_option('userspn_recaptcha_block_suspicious', 'on');
+                if ($block_suspicious === 'on') {
+                  USERSPN_Security::log_security_event('newsletter_recaptcha_suspicious_blocked', 'Suspicious reCAPTCHA score blocked', [
+                    'email' => $userspn_email,
+                    'ip' => $ip_address,
+                    'score' => $recaptcha_validation['score'],
+                    'threshold' => $recaptcha_validation['threshold'],
+                  ]);
+                  echo 'userspn_newsletter_security_error';exit;
+                }
+              }
+            }
+
+            // Akismet validation
+            if (get_option('userspn_akismet_enabled') === 'on') {
+              $akismet_data = [
+                'email' => $userspn_email,
+                'comment_type' => 'newsletter',
+                'comment_content' => '',
+              ];
+              $akismet_validation = USERSPN_Security::verify_akismet($akismet_data);
+              if (is_wp_error($akismet_validation)) {
+                USERSPN_Security::log_security_event('newsletter_akismet_blocked', $akismet_validation->get_error_message(), [
+                  'email' => $userspn_email,
+                  'ip' => $ip_address,
+                ]);
+                echo 'userspn_newsletter_security_error';exit;
+              }
             }
 
             if (email_exists($userspn_email)) {
@@ -492,6 +570,11 @@ class USERSPN_Ajax_Nopriv {
                 $user_object->add_role('userspn_newsletter_subscriber');
               }
 
+              // Store registration IP and user agent for bot analysis
+              update_user_meta($user_id, 'userspn_registration_ip', $ip_address);
+              update_user_meta($user_id, 'userspn_registration_user_agent', $_SERVER['HTTP_USER_AGENT'] ?? '');
+              update_user_meta($user_id, 'userspn_newsletter_registration_timestamp', current_time('timestamp'));
+
               if (!is_null($newsletter_recaptcha_result)) {
                 update_user_meta($user_id, 'userspn_newsletter_recaptcha_score', $newsletter_recaptcha_result['score']);
                 update_user_meta($user_id, 'userspn_newsletter_recaptcha_threshold', $newsletter_recaptcha_result['threshold']);
@@ -504,6 +587,7 @@ class USERSPN_Ajax_Nopriv {
                     'email' => $userspn_email,
                     'score' => $newsletter_recaptcha_result['score'],
                     'threshold' => $newsletter_recaptcha_result['threshold'],
+                    'ip' => $ip_address,
                   ]);
                 }
               }

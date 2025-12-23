@@ -507,6 +507,16 @@ class USERSPN_Settings {
           'step' => '0.1',
           'description' => __('Score threshold for blocking (0.1 = very strict, 1.0 = very permissive). Recommended: 0.5', 'userspn'),
         ];
+        $userspn_options['userspn_recaptcha_block_suspicious'] = [
+          'id' => 'userspn_recaptcha_block_suspicious',
+          'class' => 'userspn-input userspn-width-100-percent',
+          'input' => 'input',
+          'type' => 'checkbox',
+          'parent' => 'userspn_recaptcha_enabled',
+          'parent_option' => 'on',
+          'label' => __('Block Suspicious Scores', 'userspn'),
+          'description' => __('When enabled, registrations with reCAPTCHA scores below the threshold will be blocked. When disabled, they will be logged but allowed.', 'userspn'),
+        ];
       $userspn_options['userspn_akismet_enabled'] = [
         'id' => 'userspn_akismet_enabled',
         'class' => 'userspn-input userspn-width-100-percent',
@@ -558,6 +568,30 @@ class USERSPN_Settings {
           'min' => '1',
           'max' => '24',
           'description' => __('Time window in hours for rate limiting.', 'userspn'),
+        ];
+        $userspn_options['userspn_newsletter_rate_limit_attempts'] = [
+          'id' => 'userspn_newsletter_rate_limit_attempts',
+          'class' => 'userspn-input userspn-width-100-percent',
+          'input' => 'input',
+          'type' => 'number',
+          'parent' => 'userspn_rate_limiting_enabled',
+          'parent_option' => 'on',
+          'label' => __('Newsletter Max Attempts', 'userspn'),
+          'placeholder' => '3',
+          'min' => '1',
+          'description' => __('Maximum newsletter subscription attempts per IP (more strict than general rate limit). Leave empty to use general rate limit.', 'userspn'),
+        ];
+        $userspn_options['userspn_newsletter_rate_limit_window'] = [
+          'id' => 'userspn_newsletter_rate_limit_window',
+          'class' => 'userspn-input userspn-width-100-percent',
+          'input' => 'input',
+          'type' => 'number',
+          'parent' => 'userspn_rate_limiting_enabled',
+          'parent_option' => 'on',
+          'label' => __('Newsletter Rate Limit Window (hours)', 'userspn'),
+          'placeholder' => '1',
+          'min' => '1',
+          'description' => __('Time window in hours for newsletter rate limiting. Leave empty to use general rate limit.', 'userspn'),
         ];
       $userspn_options['userspn_bot_analysis_button'] = [
         'id' => 'userspn_bot_analysis_button',

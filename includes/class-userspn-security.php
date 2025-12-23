@@ -51,19 +51,21 @@ class USERSPN_Security {
             return new WP_Error('recaptcha_action_mismatch', __('reCAPTCHA verification failed: Action mismatch.', 'userspn'));
         }
 
-        // Return result with score information instead of blocking
+        // Return result with score information
+        $is_suspicious = $result['score'] < $threshold;
+        
         return [
             'success' => true,
             'score' => floatval($result['score']),
             'threshold' => $threshold,
-            'is_suspicious' => $result['score'] < $threshold
+            'is_suspicious' => $is_suspicious
         ];
     }
 
     /**
      * Check if Akismet is available and verify content
      *
-     * @param array $data User registration data
+     * @param array $data User registration data (must include 'email', optionally 'first_name', 'last_name', 'description')
      * @return bool|WP_Error True if not spam, WP_Error if spam
      */
     public static function verify_akismet($data) {
@@ -79,21 +81,32 @@ class USERSPN_Security {
         }
 
         // Prepare data for Akismet
+        $comment_author = '';
+        if (!empty($data['first_name']) || !empty($data['last_name'])) {
+            $comment_author = trim(($data['first_name'] ?? '') . ' ' . ($data['last_name'] ?? ''));
+        }
+        if (empty($comment_author) && !empty($data['email'])) {
+            // Use email username as fallback
+            $comment_author = substr($data['email'], 0, strpos($data['email'], '@'));
+        }
+
         $akismet_data = [
             'blog' => get_option('home'),
-            'user_ip' => $_SERVER['REMOTE_ADDR'],
-            'user_agent' => $_SERVER['HTTP_USER_AGENT'],
+            'user_ip' => self::get_user_ip(),
+            'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? '',
             'referrer' => $_SERVER['HTTP_REFERER'] ?? '',
             'permalink' => get_permalink(),
-            'comment_type' => 'registration',
-            'comment_author' => $data['first_name'] . ' ' . $data['last_name'],
-            'comment_author_email' => $data['email'],
-            'comment_content' => $data['description'] ?? '',
+            'comment_type' => isset($data['comment_type']) ? $data['comment_type'] : 'registration',
+            'comment_author' => $comment_author,
+            'comment_author_email' => $data['email'] ?? '',
+            'comment_content' => $data['description'] ?? $data['comment_content'] ?? '',
         ];
 
-        $response = akismet_http_post(build_query($akismet_data), 'comment-check', $akismet_key);
+        // Use http_build_query instead of build_query
+        $query_string = http_build_query($akismet_data);
+        $response = akismet_http_post($query_string, 'comment-check', $akismet_key);
         
-        if ($response[1] === 'true') {
+        if (is_array($response) && isset($response[1]) && $response[1] === 'true') {
             return new WP_Error('akismet_spam', __('Registration blocked: Content appears to be spam.', 'userspn'));
         }
 
@@ -120,17 +133,29 @@ class USERSPN_Security {
      * Check rate limiting
      *
      * @param string $ip_address IP address
+     * @param string $context Context for rate limiting (e.g., 'register', 'newsletter')
      * @return bool|WP_Error True if within limits, WP_Error if rate limited
      */
-    public static function check_rate_limit($ip_address) {
+    public static function check_rate_limit($ip_address, $context = 'register') {
         $max_attempts = intval(get_option('userspn_rate_limit_attempts', 5));
         $window_hours = intval(get_option('userspn_rate_limit_window', 1));
+        
+        // Newsletter-specific rate limiting (more strict)
+        if ($context === 'newsletter') {
+            $newsletter_max_attempts = intval(get_option('userspn_newsletter_rate_limit_attempts', 3));
+            $newsletter_window_hours = intval(get_option('userspn_newsletter_rate_limit_window', 1));
+            
+            if ($newsletter_max_attempts > 0) {
+                $max_attempts = $newsletter_max_attempts;
+                $window_hours = $newsletter_window_hours;
+            }
+        }
         
         if ($max_attempts <= 0) {
             return true; // Rate limiting disabled
         }
 
-        $cache_key = 'userspn_rate_limit_' . md5($ip_address);
+        $cache_key = 'userspn_rate_limit_' . $context . '_' . md5($ip_address);
         $attempts = get_transient($cache_key);
         
         if ($attempts === false) {
@@ -155,13 +180,24 @@ class USERSPN_Security {
      * @return bool|WP_Error True if all validations pass, WP_Error if any fail
      */
     public static function validate_registration_security($post_data, $user_data) {
-        $ip_address = $_SERVER['REMOTE_ADDR'];
+        $ip_address = self::get_user_ip();
         
         // Check rate limiting first
         if (get_option('userspn_rate_limiting_enabled') === 'on') {
-            $rate_limit_result = self::check_rate_limit($ip_address);
+            $rate_limit_result = self::check_rate_limit($ip_address, 'register');
             if (is_wp_error($rate_limit_result)) {
                 return $rate_limit_result;
+            }
+        }
+
+        // Validate email if present
+        if (!empty($user_data['email'])) {
+            $email_validation = self::validate_email_suspicious($user_data['email']);
+            if (is_wp_error($email_validation)) {
+                // Block temp emails and sequential patterns
+                if (in_array($email_validation->get_error_code(), ['suspicious_email_temp', 'suspicious_email_sequential'])) {
+                    return $email_validation;
+                }
             }
         }
 
@@ -176,9 +212,19 @@ class USERSPN_Security {
         // Check reCAPTCHA
         if (get_option('userspn_recaptcha_enabled') === 'on') {
             $recaptcha_token = $post_data['g-recaptcha-response'] ?? '';
+            if (empty($recaptcha_token)) {
+                return new WP_Error('recaptcha_missing', __('reCAPTCHA token is required.', 'userspn'));
+            }
             $recaptcha_result = self::verify_recaptcha($recaptcha_token, 'register');
             if (is_wp_error($recaptcha_result)) {
                 return $recaptcha_result;
+            }
+            // Block suspicious scores if enabled
+            if (isset($recaptcha_result['is_suspicious']) && $recaptcha_result['is_suspicious']) {
+                $block_suspicious = get_option('userspn_recaptcha_block_suspicious', 'on');
+                if ($block_suspicious === 'on') {
+                    return new WP_Error('recaptcha_suspicious', __('Registration blocked: Suspicious activity detected.', 'userspn'));
+                }
             }
         }
 
@@ -417,6 +463,44 @@ class USERSPN_Security {
         }
 
         return false;
+    }
+
+    /**
+     * Validate email for suspicious patterns (public method)
+     *
+     * @param string $email Email address to validate
+     * @return bool|WP_Error True if email is valid, WP_Error if suspicious
+     */
+    public static function validate_email_suspicious($email) {
+        if (empty($email) || !is_email($email)) {
+            return new WP_Error('invalid_email', __('Invalid email address.', 'userspn'));
+        }
+
+        // Check for temp email services (high suspicion)
+        $temp_email_patterns = [
+            '/@(tempmail|10minutemail|guerrillamail|mailinator|temp-mail|throwaway|mohmal|yopmail|getnada|maildrop|sharklasers|guerrillamailblock|pokemail|spam4|bccto|dispostable|mintemail|mytrashmail|tempail|tempr|throwawayemail|trashmail|meltmail|emailondeck|fakeinbox|getairmail|mailcatch|moburl|mytemp|tempinbox|tempmailo|throwawaymail|tmpmail|yopmail)\./i',
+        ];
+
+        foreach ($temp_email_patterns as $pattern) {
+            if (preg_match($pattern, $email)) {
+                return new WP_Error('suspicious_email_temp', __('Registration blocked: Temporary email addresses are not allowed.', 'userspn'));
+            }
+        }
+
+        // Check for sequential patterns (high suspicion)
+        if (self::is_sequential_email($email)) {
+            return new WP_Error('suspicious_email_sequential', __('Registration blocked: Email address appears to be automatically generated.', 'userspn'));
+        }
+
+        // Check for suspicious patterns (medium suspicion - log but allow)
+        if (self::is_suspicious_email($email)) {
+            // Log but don't block - let other filters handle it
+            self::log_security_event('suspicious_email_pattern', 'Suspicious email pattern detected', [
+                'email' => $email,
+            ]);
+        }
+
+        return true;
     }
 
     /**
