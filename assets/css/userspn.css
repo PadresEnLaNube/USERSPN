@@ -1966,6 +1966,18 @@ textarea{
   .userspn-input-radio-item input:checked + .userspn-radio-control::before {
     animation-name:s-ripple-dup;
   }
+  
+  /* Section vertical line for code-folding style */
+  .userspn-section-wrapper {
+    position: relative;
+  }
+
+  /* Vertical line for code folding style. We don't depend on JS: the block itself is hidden with display:none when closed, so the border only shows when open. */
+  .userspn-section-wrapper > .userspn-toggle-content {
+    position: relative;
+    border-left: 2px solid var(--userspn-color-main);
+    padding-left: 18px; /* 20px original - 2px border */
+  }
 /* END USERSPN FORMS */
 
 /* USERSPN SWITCH */
