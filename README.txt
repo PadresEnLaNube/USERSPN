@@ -216,6 +216,297 @@ The Users manager - PN plugin is tested with the latest version of WordPress. Ho
 To uninstall the plugin, go to the 'Plugins' screen in WordPress, find the Users manager - PN plugin, and click 'Deactivate'. After deactivating, you can click 'Delete' to remove the plugin and its files from your site. Note that this will not delete your recipes, but you should back up your data before uninstalling any plugin.
 
 
+== Developers ==
+
+=== Architecture Overview ===
+
+The plugin follows WordPress coding standards and uses an object-oriented architecture with a modular class structure. The core plugin class (`USERSPN`) orchestrates all functionality through a custom loader system (`USERSPN_Loader`) that manages actions, filters, and shortcodes.
+
+**Core Structure:**
+* Main plugin file: `userspn.php` - Defines constants, activation/deactivation hooks, and initializes the plugin
+* Core class: `includes/class-userspn.php` - Main orchestrator that loads all dependencies and registers hooks
+* Loader system: `includes/class-userspn-loader.php` - Manages all WordPress hooks (actions, filters, shortcodes)
+* Modular classes: Each major feature is encapsulated in its own class file
+
+=== Core Classes ===
+
+**Main Classes:**
+* `USERSPN` - Core plugin class that initializes all components
+* `USERSPN_Loader` - Hook management system for actions, filters, and shortcodes
+* `USERSPN_Common` - Shared functionality for both admin and public areas
+* `USERSPN_Admin` - Admin-specific functionality and UI
+* `USERSPN_Public` - Frontend functionality and public-facing features
+
+**Feature Classes:**
+* `USERSPN_Forms` - Form builder and field management system
+* `USERSPN_Functions_User` - User management, profiles, registration, and authentication
+* `USERSPN_Functions_Attachment` - File upload and attachment handling
+* `USERSPN_Security` - Security features (reCAPTCHA, Akismet, honeypot, rate limiting, bot analysis)
+* `USERSPN_Validation` - Form and data validation
+* `USERSPN_Notifications` - Notification system integration
+* `USERSPN_Mailing` - Email functionality
+* `USERSPN_CSV` - CSV import/export functionality
+* `USERSPN_Shortcodes` - Shortcode registration and rendering
+* `USERSPN_Templates` - Template loading system
+* `USERSPN_Settings` - Settings and configuration management
+* `USERSPN_Blocks` - Gutenberg block registration
+* `USERSPN_Data` - Data management and caching
+* `USERSPN_Cron` - Scheduled task management
+* `USERSPN_Popups` - Popup/modal functionality
+* `USERSPN_Selector` - Custom selector component
+* `USERSPN_i18n` - Internationalization and translation
+
+=== Constants ===
+
+The plugin defines several constants that can be used in your code:
+
+* `USERSPN_VERSION` - Current plugin version (1.0.27)
+* `USERSPN_DIR` - Plugin directory path
+* `USERSPN_URL` - Plugin URL
+* `USERSPN_KSES` - Allowed HTML elements and attributes for KSES filtering
+
+=== Available Hooks ===
+
+**Actions:**
+* `userspn_user_register` - Fires after user registration (includes custom meta data)
+* `userspn_user_wp_login` - Fires when user logs in via WordPress login
+* `userspn_cron_daily` - Daily scheduled task hook
+* `userspn_cron_thirty_minutes` - 30-minute scheduled task hook
+
+**Filters:**
+* `userspn_get_avatar` - Filter avatar output (priority: 10, accepts 5 args)
+* `userspn_body_classes` - Add custom body classes
+* `userspn_show_admin_bar` - Control admin bar visibility
+* `userspn_lostpassword_url` - Customize lost password URL
+* `userspn_wp_mail_content_type` - Set email content type to HTML
+
+**WordPress Standard Hooks Used:**
+* `user_register` - WordPress user registration hook
+* `profile_update` - WordPress profile update hook
+* `wp_login` - WordPress login hook
+* `get_avatar` - WordPress avatar filter
+* `wp_nav_menu_items` - Add items to navigation menus
+* `render_block` - Filter Gutenberg block rendering
+* `body_class` - Add classes to body tag
+* `show_admin_bar` - Control admin bar display
+* `login_headerurl` - Customize login page logo URL
+* `login_headertext` - Customize login page logo text
+* `wp_mail_content_type` - Email content type filter
+
+=== Extension Points ===
+
+**Adding Custom Form Fields:**
+The form builder system supports extensible field types. Fields are defined in arrays with the following structure:
+```php
+$field = [
+    'id' => 'field_id',
+    'label' => 'Field Label',
+    'type' => 'text|email|password|textarea|select|checkbox|radio|file|image|etc',
+    'required' => true|false,
+    'value' => 'default_value',
+    'placeholder' => 'Placeholder text',
+    'class' => 'custom-css-class',
+    'help' => 'Help text',
+    'conditional' => ['parent' => 'parent_field_id', 'value' => 'show_value']
+];
+```
+
+**Custom Validation:**
+Extend the `USERSPN_Validation` class or use the validation system through form field configuration. Validation rules can be added per field type.
+
+**Custom Shortcodes:**
+Shortcodes are registered through the `USERSPN_Loader` system. To add custom shortcodes, hook into the shortcode registration process or extend the `USERSPN_Shortcodes` class.
+
+**AJAX Endpoints:**
+* `wp_ajax_userspn_ajax` - Authenticated AJAX requests
+* `wp_ajax_userspn_ajax_nopriv` - Non-authenticated AJAX requests
+* `wp_ajax_nopriv_userspn_ajax_nopriv` - Alternative non-authenticated endpoint
+
+**Security Integration:**
+The `USERSPN_Security` class provides static methods for:
+* `verify_recaptcha($token, $action)` - Verify Google reCAPTCHA v3
+* `verify_akismet($data)` - Check content with Akismet
+* `check_rate_limit($ip, $action, $limit, $window)` - Rate limiting
+* `analyze_bot_patterns($user_id)` - Bot detection analysis
+
+=== Form Field Types ===
+
+The plugin supports extensive form field types:
+
+**Basic Inputs:**
+* `text`, `email`, `password`, `url`, `number`, `date`, `time`, `color`, `hidden`, `nonce`
+
+**Advanced Inputs:**
+* `range` - Slider with min/max labels
+* `rating` - Star rating system
+* `switch` - Toggle switch
+* `radio` - Radio button groups
+
+**Media Fields:**
+* `image` - Single or multiple image upload with gallery
+* `video` - Video upload and management
+* `audio` - Audio file upload
+* `file` - General file upload with preview
+
+**Rich Content:**
+* `textarea` - Multi-line text input
+* `editor` - WYSIWYG editor (Trumbowyg)
+* `html` - HTML content blocks
+* `audio_recorder` - Audio recorder with transcription
+
+**Selection Fields:**
+* `select` - Single select dropdown
+* `select_multiple` - Multiple select dropdown
+* `selector` - Custom AJAX selector component
+* `tags` - Tag input with autocomplete
+
+**Complex Fields:**
+* `html_multi` - Repeating field groups with drag-and-drop
+* `conditional` - Fields that show/hide based on parent values
+* `section` - Collapsible field sections
+
+=== Database Schema ===
+
+The plugin uses WordPress standard user meta (`wp_usermeta`) for storing custom profile fields. Field values are stored with the field ID as the meta key. For array fields (like `html_multi`), values are stored as serialized arrays.
+
+**Key Options:**
+* `userspn_recaptcha_secret_key` - reCAPTCHA secret key
+* `userspn_recaptcha_threshold` - reCAPTCHA score threshold (default: 0.5)
+* `userspn_dashboard_logo` - Enable/disable custom dashboard logo
+* `userspn_user_change_password_wp_defaults` - Use WordPress default password reset
+
+=== JavaScript API ===
+
+The plugin includes several JavaScript modules:
+
+**Core Modules:**
+* `userspn.js` - Main plugin JavaScript
+* `userspn-ajax.js` - AJAX handling
+* `userspn-forms.js` - Form functionality
+* `userspn-notifications.js` - Notification system
+* `userspn-popups.js` - Popup management
+* `userspn-selector.js` - Custom selector component
+* `userspn-profile-menu.js` - Profile menu navigation
+* `userspn-profile-progress.js` - Profile completion tracking
+* `userspn-user-register-form.js` - Registration form handling
+* `userspn-profile-fields-validation.js` - Real-time validation
+
+**External Libraries:**
+* Tooltipster v4.2.8 - Tooltips
+* Owl Carousel v2.3.4 - Image galleries
+* Trumbowyg v2.27.3 - WYSIWYG editor
+* DataTables - Admin tables
+
+=== CSS Architecture ===
+
+The plugin uses a modular CSS structure with consistent naming:
+
+**Naming Convention:**
+* Prefix: `userspn-`
+* BEM-like structure: `userspn-block__element--modifier`
+* Utility classes: `userspn-display-none`, `userspn-mb-10`, `userspn-width-100-percent`
+
+**Main Stylesheets:**
+* `userspn.css` - Core styles
+* `userspn-admin.css` - Admin-specific styles
+* `userspn-public.css` - Public-facing styles
+* `userspn-popups.css` - Popup/modal styles
+* `userspn-profile-completion.css` - Profile progress styles
+* `userspn-selector.css` - Selector component styles
+
+=== Development Guidelines ===
+
+**Coding Standards:**
+* Follow WordPress PHP Coding Standards
+* Use WordPress functions for security (sanitization, validation, nonces)
+* All output must be escaped using `esc_html()`, `esc_attr()`, `esc_url()`, etc.
+* Use KSES filtering for HTML content (see `USERSPN_KSES` constant)
+* Prefix all functions, classes, and variables with `userspn_` or `USERSPN_`
+
+**Security Best Practices:**
+* Always verify nonces for form submissions
+* Sanitize all user input
+* Validate data before database operations
+* Use prepared statements for database queries
+* Implement proper capability checks (`current_user_can()`)
+
+**Internationalization:**
+* All user-facing strings must be translatable using `__()`, `_e()`, `esc_html__()`, etc.
+* Text domain: `userspn`
+* Translation files located in `/languages/` directory
+* `.pot` file included for translators
+
+**Performance:**
+* Use WordPress transients for caching when appropriate
+* Minimize database queries
+* Enqueue scripts/styles only when needed
+* Use dependency management for scripts/styles
+* Lazy load heavy components
+
+=== Integration Examples ===
+
+**Adding Custom Profile Fields Programmatically:**
+```php
+// Get existing fields
+$fields = get_option('userspn_user_register_fields', []);
+
+// Add new field
+$fields[] = [
+    'id' => 'custom_field',
+    'label' => 'Custom Field',
+    'type' => 'text',
+    'required' => true
+];
+
+// Save fields
+update_option('userspn_user_register_fields', $fields);
+```
+
+**Customizing Avatar Output:**
+```php
+add_filter('userspn_get_avatar', function($avatar, $user_id, $size) {
+    // Custom avatar logic
+    return $avatar;
+}, 10, 3);
+```
+
+**Extending Form Validation:**
+```php
+// Hook into validation process
+add_filter('userspn_validate_field', function($valid, $field, $value) {
+    if ($field['id'] === 'custom_field') {
+        // Custom validation logic
+        return is_valid($value);
+    }
+    return $valid;
+}, 10, 3);
+```
+
+=== Testing ===
+
+The plugin is tested with:
+* WordPress 3.0.1+ (tested up to 6.8)
+* PHP 7.2+
+* Modern browsers (Chrome, Firefox, Safari, Edge)
+* Mobile responsive design
+* WooCommerce compatibility
+* Polylang multi-language support
+
+=== Support and Contribution ===
+
+For developer support, bug reports, or feature requests:
+* Email: info@padresenlanube.com
+* Website: https://padresenlanube.com/
+
+When reporting issues or requesting features, please include:
+* WordPress version
+* PHP version
+* Plugin version
+* Steps to reproduce
+* Expected vs. actual behavior
+* Relevant error messages or logs
+
+
 == Screenshots ==
 
 1. Grid Host portfolio front-end view.

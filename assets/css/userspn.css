@@ -1593,6 +1593,40 @@ textarea{
     font-size:20px;
     cursor:help;
   }
+  .userspn-section-info-block{
+    margin-bottom:20px;
+  }
+  .userspn-section-info-icon{
+    font-size:16px;
+    margin-right:3px;
+    vertical-align:middle!important;
+    color:var(--userspn-color-main);
+    display:inline-block;
+    width:30px!important;
+  }
+  .userspn-section-info-block small{
+    vertical-align:middle!important;
+  }
+  .userspn-toggle{
+    outline:none;
+    box-shadow:none;
+  }
+  .userspn-toggle:focus,
+  .userspn-toggle:active,
+  .userspn-toggle:focus-visible{
+    outline:none;
+    box-shadow:none;
+  }
+  a.userspn-toggle:focus,
+  a.userspn-toggle:active,
+  a.userspn-toggle:focus-visible{
+    outline:none !important;
+    box-shadow:none !important;
+    border:none !important;
+  }
+  .userspn-toggle label{
+    font-weight:bold;
+  }
   .userspn-images img{
     width:50px!important;
     height:auto!important;
