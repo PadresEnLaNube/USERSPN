@@ -307,31 +307,33 @@ class USERSPN_Forms {
                   </a>
                 </div>
 
-                <div id="userspn-popover-pass" class="userspn-display-none-soft">
-                  <div class="userspn-progress-bar-wrapper">
-                    <div class="userspn-password-strength-bar"></div>
-                  </div>
+                <?php if (get_option('userspn_strong_password') == 'on') { ?>
+                  <div id="userspn-popover-pass" class="userspn-display-none-soft">
+                    <div class="userspn-progress-bar-wrapper">
+                      <div class="userspn-password-strength-bar"></div>
+                    </div>
 
-                  <h3 class="userspn-mt-20"><?php esc_html_e('Password strength checker', 'userspn'); ?> <i class="material-icons-outlined userspn-cursor-pointer userspn-close-icon userspn-mt-30">close</i></h3>
-                  <ul class="userspn-list-style-none">
-                    <li class="low-upper-case">
-                      <i class="material-icons-outlined userspn-font-size-20 userspn-vertical-align-middle">radio_button_unchecked</i>
-                      <span><?php esc_html_e('Lowercase & Uppercase', 'userspn'); ?></span>
-                    </li>
-                    <li class="one-number">
-                      <i class="material-icons-outlined userspn-font-size-20 userspn-vertical-align-middle">radio_button_unchecked</i>
-                      <span><?php esc_html_e('Number (0-9)', 'userspn'); ?></span>
-                    </li>
-                    <li class="one-special-char">
-                      <i class="material-icons-outlined userspn-font-size-20 userspn-vertical-align-middle">radio_button_unchecked</i>
-                      <span><?php esc_html_e('Special Character (!@#$%^&*)', 'userspn'); ?></span>
-                    </li>
-                    <li class="eight-character">
-                      <i class="material-icons-outlined userspn-font-size-20 userspn-vertical-align-middle">radio_button_unchecked</i>
-                      <span><?php esc_html_e('Atleast 8 Character', 'userspn'); ?></span>
-                    </li>
-                  </ul>
-                </div>
+                    <h5 class="userspn-mt-20"><?php esc_html_e('Password strength checker', 'userspn'); ?> <i class="material-icons-outlined userspn-cursor-pointer userspn-close-icon userspn-mt-30">close</i></h5>
+                    <ul class="userspn-list-style-none">
+                      <li class="low-upper-case">
+                        <i class="material-icons-outlined userspn-font-size-20 userspn-vertical-align-middle">radio_button_unchecked</i>
+                        <span><?php esc_html_e('Lowercase & Uppercase', 'userspn'); ?></span>
+                      </li>
+                      <li class="one-number">
+                        <i class="material-icons-outlined userspn-font-size-20 userspn-vertical-align-middle">radio_button_unchecked</i>
+                        <span><?php esc_html_e('Number (0-9)', 'userspn'); ?></span>
+                      </li>
+                      <li class="one-special-char">
+                        <i class="material-icons-outlined userspn-font-size-20 userspn-vertical-align-middle">radio_button_unchecked</i>
+                        <span><?php esc_html_e('Special Character (!@#$%^&*)', 'userspn'); ?></span>
+                      </li>
+                      <li class="eight-character">
+                        <i class="material-icons-outlined userspn-font-size-20 userspn-vertical-align-middle">radio_button_unchecked</i>
+                        <span><?php esc_html_e('Atleast 8 Character', 'userspn'); ?></span>
+                      </li>
+                    </ul>
+                  </div>
+                <?php } ?>
               </div>
             <?php
             break;

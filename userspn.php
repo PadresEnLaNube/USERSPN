@@ -13,7 +13,7 @@
  * Plugin Name:       Users manager - PN
  * Plugin URI:        https://padresenlanube.com/plugins/userspn/
  * Description:       Streamline user management on your WordPress site with this powerful plugin. Enable custom registration forms, secure logins, and seamless profile management for your users.
- * Version:           1.0.27
+ * Version:           1.0.28
  * Requires at least: 3.0.1
  * Requires PHP:      7.2
  * Author:            Padres en la Nube
@@ -34,7 +34,7 @@ if (!defined('WPINC')) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define('USERSPN_VERSION', '1.0.27');
+define('USERSPN_VERSION', '1.0.28');
 define('USERSPN_DIR', plugin_dir_path(__FILE__));
 define('USERSPN_URL', plugin_dir_url(__FILE__));
 
@@ -65,90 +65,90 @@ define('USERSPN_KSES', [
 
 	// Links and media
 	'a' => [
-		'id' => [], 
-		'class' => [], 
-		'href' => [], 
-		'title' => [], 
+		'id' => [],
+		'class' => [],
+		'href' => [],
+		'title' => [],
 		'target' => []
 	],
 	'img' => [
-		'id' => [], 
-		'class' => [], 
-		'src' => [], 
-		'alt' => [], 
+		'id' => [],
+		'class' => [],
+		'src' => [],
+		'alt' => [],
 		'title' => []
 	],
 	'i' => ['id' => [], 'class' => [], 'title' => []],
 
 	// Forms and inputs
 	'form' => [
-		'id' => [], 
-		'class' => [], 
-		'action' => [], 
+		'id' => [],
+		'class' => [],
+		'action' => [],
 		'method' => []
 	],
 	'input' => [
-		'name' => [], 
-		'id' => [], 
-		'class' => [], 
-		'type' => [], 
-		'checked' => [], 
-		'multiple' => [], 
-		'disabled' => [], 
-		'value' => [], 
-		'placeholder' => [], 
-		'data-userspn-parent' => [], 
-		'data-userspn-parent-option' => [], 
-		'data-userspn-type' => [], 
-		'data-userspn-subtype' => [], 
-		'data-userspn-user-id' => [], 
+		'name' => [],
+		'id' => [],
+		'class' => [],
+		'type' => [],
+		'checked' => [],
+		'multiple' => [],
+		'disabled' => [],
+		'value' => [],
+		'placeholder' => [],
+		'data-userspn-parent' => [],
+		'data-userspn-parent-option' => [],
+		'data-userspn-type' => [],
+		'data-userspn-subtype' => [],
+		'data-userspn-user-id' => [],
 		'data-userspn-post-id' => []
 	],
 	'select' => [
-		'name' => [], 
-		'id' => [], 
-		'class' => [], 
-		'type' => [], 
-		'checked' => [], 
-		'multiple' => [], 
-		'disabled' => [], 
-		'value' => [], 
-		'placeholder' => [], 
-		'data-placeholder' => [], 
-		'data-userspn-parent' => [], 
+		'name' => [],
+		'id' => [],
+		'class' => [],
+		'type' => [],
+		'checked' => [],
+		'multiple' => [],
+		'disabled' => [],
+		'value' => [],
+		'placeholder' => [],
+		'data-placeholder' => [],
+		'data-userspn-parent' => [],
 		'data-userspn-parent-option' => []
 	],
 	'option' => [
-		'name' => [], 
-		'id' => [], 
-		'class' => [], 
-		'disabled' => [], 
-		'selected' => [], 
-		'value' => [], 
+		'name' => [],
+		'id' => [],
+		'class' => [],
+		'disabled' => [],
+		'selected' => [],
+		'value' => [],
 		'placeholder' => []
 	],
 	'textarea' => [
-		'name' => [], 
-		'id' => [], 
-		'class' => [], 
-		'type' => [], 
-		'multiple' => [], 
-		'disabled' => [], 
-		'value' => [], 
-		'placeholder' => [], 
-		'data-userspn-parent' => [], 
+		'name' => [],
+		'id' => [],
+		'class' => [],
+		'type' => [],
+		'multiple' => [],
+		'disabled' => [],
+		'value' => [],
+		'placeholder' => [],
+		'data-userspn-parent' => [],
 		'data-userspn-parent-option' => []
 	],
 	'label' => [
-		'id' => [], 
-		'class' => [], 
+		'id' => [],
+		'class' => [],
 		'for' => []
 	],
 
 	// Container elements
 	'div' => [
-		'id' => [], 
-		'class' => [], 
+		'id' => [],
+		'class' => [],
 		'data-userspn-section-id' => []
 	]
 ]);
@@ -157,7 +157,8 @@ define('USERSPN_KSES', [
  * The code that runs during plugin activation.
  * This action is documented in includes/class-userspn-activator.php
  */
-function userspn_activate() {
+function userspn_activate()
+{
 	require_once plugin_dir_path(__FILE__) . 'includes/class-userspn-activator.php';
 	USERSPN_Activator::userspn_activate();
 }
@@ -167,7 +168,8 @@ register_activation_hook(__FILE__, 'userspn_activate');
  * The code that runs during plugin deactivation.
  * This action is documented in includes/class-userspn-deactivator.php
  */
-function userspn_deactivate() {
+function userspn_deactivate()
+{
 	require_once plugin_dir_path(__FILE__) . 'includes/class-userspn-deactivator.php';
 	USERSPN_Deactivator::userspn_deactivate();
 }
@@ -185,7 +187,8 @@ require plugin_dir_path(__FILE__) . 'includes/class-userspn.php';
  *
  * @since    1.0.0
  */
-function userspn_run() {
+function userspn_run()
+{
 	$plugin = new USERSPN();
 	$plugin->userspn_run();
 }
