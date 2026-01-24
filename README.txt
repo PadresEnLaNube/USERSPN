@@ -3,7 +3,7 @@ Contributors: felixmartinez, hamlet237
 Donate link: https://padresenlanube.com/
 Tags: user management, users, register, login, contacts
 Tested up to: 6.8
-Stable tag: 1.0.28
+Stable tag: 1.0.29
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Streamline user management on your WordPress site with this powerful plugin. Enable custom forms, secure login, and seamless profile management.
@@ -260,7 +260,7 @@ The plugin follows WordPress coding standards and uses an object-oriented archit
 
 The plugin defines several constants that can be used in your code:
 
-* `USERSPN_VERSION` - Current plugin version (1.0.28)
+* `USERSPN_VERSION` - Current plugin version (1.0.29)
 * `USERSPN_DIR` - Plugin directory path
 * `USERSPN_URL` - Plugin URL
 * `USERSPN_KSES` - Allowed HTML elements and attributes for KSES filtering
@@ -518,7 +518,7 @@ When reporting issues or requesting features, please include:
 
 == Changelog ==
 
-= 1.0.28 =
+= 1.0.29 =
 
 WP references swapped to PN
 wordpress-heroes.com to padresenlanube.com
