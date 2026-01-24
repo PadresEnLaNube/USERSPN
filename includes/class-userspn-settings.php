@@ -987,7 +987,7 @@ class USERSPN_Settings
   public function userspn_lostpassword_url($lostpassword_url, $redirect)
   {
     $nonce = wp_create_nonce('userspn-nonce');
-    return esc_url(add_query_arg('userspn_ajax_nopriv_nonce', $nonce, lostpassword_url(home_url())));
+    return esc_url(add_query_arg('userspn_ajax_nopriv_nonce', $nonce, wp_lostpassword_url(home_url())));
   }
 
   public function userspn_add_nonce_to_lostpassword_form()
