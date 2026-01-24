@@ -1785,6 +1785,7 @@ textarea {
   bottom: 0;
   right: calc(50% - 150px);
   margin-bottom: 0;
+  z-index: 99999;
 }
 
 @media all and (max-width:768px) {
