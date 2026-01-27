@@ -111,7 +111,8 @@ class USERSPN_Ajax {
               }
             }
 
-            update_option('userspn_options_changed', true);
+            // Flush rewrite rules only here (admin context), never on frontend (avoids 503 on checkout).
+            flush_rewrite_rules();
             echo wp_json_encode(['error_key' => '']);
             exit;
           } else {

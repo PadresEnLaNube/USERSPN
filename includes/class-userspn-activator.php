@@ -20,9 +20,11 @@ class USERSPN_Activator {
 	 */
 	public static function userspn_activate() {
     add_role('userspn_newsletter_subscriber', 'Newsletter Subscriber', ['read' => true]);
-    
-    update_option('userspn_options_changed', true);
-    
+
+    // Flush rewrite rules once on activation; do not defer to footer (would run on
+    // next request and can cause 503 on checkout/heavy pages).
+    flush_rewrite_rules();
+
     // Set a flag to redirect to options page after activation
     update_option('userspn_redirect_to_options', true);
   }
