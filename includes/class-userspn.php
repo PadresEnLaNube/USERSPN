@@ -54,7 +54,7 @@ class USERSPN
 		if (defined('USERSPN_VERSION')) {
 			$this->version = USERSPN_VERSION;
 		} else {
-			$this->version = '1.0.28';
+			$this->version = '1.0.31';
 		}
 
 		$this->plugin_name = 'userspn';
@@ -350,8 +350,12 @@ class USERSPN
 			$this->loader->userspn_add_action('wp_footer', $plugin_data, 'userspn_load_plugin_data');
 		}
 
-		$this->loader->userspn_add_action('wp_footer', $plugin_data, 'userspn_flush_rewrite_rules');
-		$this->loader->userspn_add_action('admin_footer', $plugin_data, 'userspn_flush_rewrite_rules');
+		// Flush rewrite rules only when option is set, and only in admin (never on frontend
+		// to avoid 503/timeouts on e.g. WooCommerce checkout). Also done in activator,
+		// deactivator, and when saving options via AJAX.
+		if (is_admin()) {
+			$this->loader->userspn_add_action('admin_init', $plugin_data, 'userspn_flush_rewrite_rules');
+		}
 	}
 
 	/**

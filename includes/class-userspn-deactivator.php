@@ -34,6 +34,7 @@ class USERSPN_Deactivator {
 			remove_role('userspn_newsletter_subscriber');
 		}
 
-    	update_option('userspn_options_changed', true);
+		// Flush rewrite rules on deactivation so other plugins (e.g. WooCommerce) rules stay correct.
+		flush_rewrite_rules();
 	}
 }
