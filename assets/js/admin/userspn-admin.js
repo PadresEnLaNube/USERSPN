@@ -1,13 +1,6 @@
 (function($) {
 	'use strict';
 
-	// Hide bubble by default on settings page
-	$(function() {
-		if ($('.userspn-options').length) {
-			$('.userspn-profile-popup-btn').hide();
-		}
-	});
-
 	$(document).on('click', '.userspn-tab-links', function(e){
     e.preventDefault();
     var tab_link = $(this);
@@ -36,127 +29,103 @@
   });
 
   // Override bubble click in settings to add afterClose
-  $(document).on('click', '.userspn-options .userspn-profile-popup-btn, body.userspn-settings-preview .userspn-profile-popup-btn', function(e) {
+  $(document).on('click', '.userspn-profile-popup-btn', function(e) {
     if (!$('.userspn-options').length) return;
     e.preventDefault();
     e.stopImmediatePropagation();
-    USERSPN_Popups.open($('#userspn-profile-popup'), {
-      afterClose: function() {
-        $('.userspn-profile-popup-btn').hide();
-      }
-    });
-  });
-
-  // Drag-and-drop bubble positioning
-  $(document).on('change', '#userspn_bubble_custom_position', function() {
-    if ($(this).val() === 'on') {
-      var $bubble = $('.userspn-profile-popup-btn');
-      $bubble.show().css({ position: 'fixed', zIndex: 99999 });
-      if ($.fn.draggable) {
-        $bubble.draggable({ containment: 'window' });
-      }
-      if (!$('.userspn-confirm-bubble-position').length) {
-        $(this).closest('.userspn-input-wrapper').append(
-          '<a href="#" class="userspn-btn userspn-btn-mini userspn-confirm-bubble-position userspn-mt-10">' +
-          userspn_i18n.confirm_position + '</a>'
-        );
-      }
-    } else {
-      $('.userspn-profile-popup-btn').hide().css({ position: '', zIndex: '', left: '', top: '' });
-      if ($.fn.draggable && $('.userspn-profile-popup-btn').draggable('instance')) {
-        $('.userspn-profile-popup-btn').draggable('destroy');
-      }
-      $('.userspn-confirm-bubble-position').remove();
-    }
-  });
-
-  // AJAX save bubble position
-  $(document).on('click', '.userspn-confirm-bubble-position', function(e) {
-    e.preventDefault();
-    var $bubble = $('.userspn-profile-popup-btn');
-    var posX = Math.round(parseInt($bubble.css('left'), 10)) || 0;
-    var posY = Math.round(parseInt($bubble.css('top'), 10)) || 0;
-
-    $.post(userspn_ajax.ajax_url, {
-      action: 'userspn_ajax',
-      userspn_ajax_nonce: userspn_ajax.userspn_ajax_nonce,
-      userspn_ajax_type: 'userspn_options_save',
-      userspn_bubble_position_x: posX,
-      userspn_bubble_position_y: posY,
-      ajax_keys: [
-        { id: 'userspn_bubble_position_x', node: 'INPUT', type: 'hidden' },
-        { id: 'userspn_bubble_position_y', node: 'INPUT', type: 'hidden' }
-      ]
-    }, function() {
-      userspn_get_main_message(userspn_i18n.confirm_bubble_position);
-      $bubble.hide().css({ position: '', zIndex: '', left: '', top: '' });
-      if ($.fn.draggable && $bubble.draggable('instance')) {
-        $bubble.draggable('destroy');
-      }
-      $('.userspn-confirm-bubble-position').remove();
-    });
-  });
-
-  $(document).on('click', '.userspn-options-save-btn', function(e){
-    e.preventDefault();
-    var userspn_btn = $(this);
-    userspn_btn.addClass('userspn-link-disabled').siblings('.userspn-waiting').removeClass('userspn-display-none');
-
-    var ajax_url = userspn_ajax.ajax_url;
-
-    var data = {
-      action: 'userspn_ajax',
-      userspn_ajax_nonce: userspn_ajax.userspn_ajax_nonce,
-      userspn_ajax_type: 'userspn_options_save',
-      ajax_keys: [],
-    };
-
-    if (!(typeof window['userspn_window_vars'] !== 'undefined')) {
-      window['userspn_window_vars'] = [];
-    }
-
-    $('.userspn-options-fields input:not([type="submit"]), .userspn-options-fields select, .userspn-options-fields textarea').each(function(index, element) {
-      if ($(this).attr('multiple') && $(this).parents('.userspn-html-multi-group').length) {
-        if (!(typeof window['userspn_window_vars']['form_field_' + element.name] !== 'undefined')) {
-          window['userspn_window_vars']['form_field_' + element.name] = [];
+    if (typeof USERSPN_Popups !== 'undefined') {
+      USERSPN_Popups.open($('#userspn-profile-popup'), {
+        afterClose: function() {
+          $('.userspn-profile-popup-btn').hide();
         }
-
-        window['userspn_window_vars']['form_field_' + element.name].push($(element).val());
-
-        data[element.name] = window['userspn_window_vars']['form_field_' + element.name];
-      }else{
-        if ($(this).is(':checkbox')) {
-          if ($(this).is(':checked')) {
-            data[element.name] = $(element).val();
-          }else{
-            data[element.name] = '';
-          }
-        }else if ($(this).is(':radio')) {
-          if ($(this).is(':checked')) {
-            data[element.name] = $(element).val();
-          }
-        }else{
-          data[element.name] = $(element).val();
-        }
-      }
-
-      data.ajax_keys.push({
-        id: element.name,
-        node: element.nodeName,
-        type: element.type,
       });
-    });
-
-    $.post(ajax_url, data, function(response) {
-      if ($.parseJSON(response)['error_key'] != '') {
-        userspn_get_main_message(userspn_i18n.an_error_has_occurred);
-      }else {
-        userspn_get_main_message(userspn_i18n.saved_successfully);
-      }
-
-      userspn_btn.removeClass('userspn-link-disabled').siblings('.userspn-waiting').addClass('userspn-display-none')
-    });
-
-    delete window['userspn_window_vars'];
+    }
   });
+
+  // Custom bubble position — open drag editor when checkbox is checked
+  $(document).on('change', '#userspn_bubble_custom_position', function() {
+    if ($(this).is(':checked')) {
+      userspn_open_bubble_drag_editor();
+      $(this).prop('checked', false);
+    }
+  });
+
+  function userspn_open_bubble_drag_editor() {
+    var $overlay = $('<div class="userspn-bubble-drag-overlay"></div>').css({
+      position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
+      background: 'rgba(0,0,0,0.5)', zIndex: 99998
+    });
+
+    // Read saved position or default to center
+    var savedX = parseInt($('#userspn_bubble_position_x').val(), 10);
+    var savedY = parseInt($('#userspn_bubble_position_y').val(), 10);
+    var hasSaved = !isNaN(savedX) && !isNaN(savedY) && (savedX || savedY);
+
+    var $bubble = $('.userspn-profile-popup-btn').clone().removeAttr('style').css({
+      position: 'fixed',
+      top: hasSaved ? savedY + 'px' : '50%',
+      left: hasSaved ? savedX + 'px' : '50%',
+      transform: hasSaved ? 'none' : 'translate(-50%, -50%)',
+      zIndex: 99999, cursor: 'grab', display: 'block'
+    }).addClass('userspn-bubble-drag-clone');
+
+    var $topBar = $('<div class="userspn-bubble-drag-topbar"></div>').css({
+      position: 'fixed', top: 0, left: 0, width: '100%', zIndex: 99999,
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      gap: '15px', padding: '15px', background: 'rgba(0,0,0,0.7)'
+    });
+
+    var $instruction = $('<span></span>').text(userspn_i18n.drag_bubble_instruction).css({
+      color: '#fff', fontSize: '14px', fontWeight: 'bold'
+    });
+    var $confirmBtn = $('<a href="#" class="userspn-btn"></a>').text(userspn_i18n.confirm_position);
+    var $cancelBtn = $('<a href="#" class="userspn-btn userspn-btn-transparent"></a>').text(
+      userspn_i18n.cancel || 'Cancel'
+    ).css({ color: '#fff', borderColor: '#fff' });
+
+    $topBar.append($instruction, $confirmBtn, $cancelBtn);
+    $('body').append($overlay, $bubble, $topBar);
+
+    if ($.fn.draggable) {
+      $bubble.draggable({
+        containment: 'window',
+        start: function() { $(this).css({ cursor: 'grabbing', transform: 'none' }); },
+        stop: function() { $(this).css('cursor', 'grab'); }
+      });
+    }
+
+    function cleanup() {
+      $overlay.remove();
+      $bubble.remove();
+      $topBar.remove();
+    }
+
+    $confirmBtn.on('click', function(e) {
+      e.preventDefault();
+      var posX = Math.round(parseInt($bubble.css('left'), 10)) || 0;
+      var posY = Math.round(parseInt($bubble.css('top'), 10)) || 0;
+
+      // Update hidden form fields and selector
+      $('#userspn_bubble_position_x').val(posX);
+      $('#userspn_bubble_position_y').val(posY);
+      $('#userspn_bubble_position_type').val('custom').trigger('change');
+
+      cleanup();
+
+      // Trigger the form submit which is handled by userspn-ajax.js
+      $('#userspn_form').trigger('submit');
+    });
+
+    $cancelBtn.on('click', function(e) {
+      e.preventDefault();
+      cleanup();
+    });
+
+    $overlay.on('click', function(e) {
+      if (e.target === this) {
+        cleanup();
+      }
+    });
+  }
+
 })(jQuery);

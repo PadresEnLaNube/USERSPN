@@ -312,6 +312,8 @@ class USERSPN_Common {
 			'save_before_preview' => esc_html(__('Please save your settings before previewing. The preview will show the last saved configuration. Continue?', 'userspn')),
 			'confirm_bubble_position' => esc_html(__('Position saved successfully', 'userspn')),
 			'confirm_position' => esc_html(__('Confirm position', 'userspn')),
+			'cancel' => esc_html(__('Cancel', 'userspn')),
+			'drag_bubble_instruction' => esc_html(__('Drag the bubble to the desired position', 'userspn')),
 		]);
 
 		// Security settings for JavaScript

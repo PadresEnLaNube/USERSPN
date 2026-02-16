@@ -488,7 +488,19 @@ class USERSPN_Functions_User
     ob_start();
     ?>
     <?php if (!is_admin()): ?>
+      <?php
+        $userspn_profile_style = '';
+        $userspn_position_type = get_option('userspn_bubble_position_type', 'default');
+        if ($userspn_position_type === 'custom') {
+          $bx = intval(get_option('userspn_bubble_position_x', 0));
+          $by = intval(get_option('userspn_bubble_position_y', 0));
+          if ($bx || $by) {
+            $userspn_profile_style = 'left:' . $bx . 'px;top:' . $by . 'px;right:auto;';
+          }
+        }
+      ?>
       <div
+        style="<?php echo esc_attr($userspn_profile_style); ?>"
         class="userspn-profile<?php echo $is_inline ? ' userspn-profile-inline' : ''; ?> userspn-max-width-700 userspn-margin-auto">
         <?php if (is_user_logged_in()): ?>
           <?php if ($is_inline): ?>
@@ -601,18 +613,7 @@ class USERSPN_Functions_User
               </div>
             </div>
           <?php else: ?>
-            <?php
-              $bubble_style = '';
-              if (get_option('userspn_bubble_custom_position') === 'on') {
-                $x = intval(get_option('userspn_bubble_position_x', 0));
-                $y = intval(get_option('userspn_bubble_position_y', 0));
-                if ($x || $y) {
-                  $bubble_style = 'position:fixed;left:' . $x . 'px;top:' . $y . 'px;z-index:9999;';
-                }
-              }
-            ?>
             <a href="#"
-              style="<?php echo esc_attr($bubble_style); ?>"
               class="userspn-text-align-right userspn-profile-popup-btn<?php echo (get_option('userspn_disabled') == 'on') ? ' userspn-display-none-soft' : ''; ?>"><?php echo do_shortcode('[userspn-get-avatar user_id="' . $user_id . '" size="50"]'); ?></a>
 
             <div id="userspn-profile-popup" class="userspn-popup userspn-popup-size-medium userspn-display-none-soft">

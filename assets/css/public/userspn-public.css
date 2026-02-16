@@ -19,6 +19,10 @@
     vertical-align: middle;
 }
 
+#userspn-profile-menu-container .userspn-profile-icon{
+    font-size: 30px !important;
+}
+
 /* Hide original profile element when menu feature is enabled */
 body.userspn-profile-menu-enabled .userspn-profile {
     display: none !important;

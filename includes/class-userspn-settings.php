@@ -35,24 +35,57 @@ class USERSPN_Settings
       'label' => __('Disable Profile popup', 'userspn'),
       'description' => __('You can disable the popup access temporarily by checking on this checkbox.', 'userspn'),
     ];
-    $userspn_options['userspn_menu_profile_icon'] = [
-      'id' => 'userspn_menu_profile_icon',
-      'class' => 'userspn-input userspn-width-100-percent',
-      'input' => 'input',
-      'type' => 'checkbox',
+    $userspn_options['userspn_bubble_position_type'] = [
+      'id' => 'userspn_bubble_position_type',
+      'class' => 'userspn-select userspn-width-100-percent',
+      'input' => 'select',
+      'value' => get_option('userspn_bubble_position_type', 'default'),
       'parent' => 'this',
-      'label' => __('Add profile icon to menu', 'userspn'),
-      'description' => __('This option allows you to add the profile icon to a selected navigation menu.', 'userspn'),
+      'label' => __('Profile bubble position', 'userspn'),
+      'description' => __('Choose where to display the profile bubble.', 'userspn'),
+      'options' => [
+        'default' => __('Default (right side)', 'userspn'),
+        'menu' => __('In menu', 'userspn'),
+        'custom' => __('Custom position', 'userspn'),
+      ],
     ];
     $userspn_options['userspn_menu_profile_icon_location'] = [
       'id' => 'userspn_menu_profile_icon_location',
       'class' => 'userspn-select userspn-width-100-percent',
       'input' => 'select',
       'options' => $this->get_available_menus(),
-      'parent' => 'userspn_menu_profile_icon',
-      'parent_option' => 'on',
+      'parent' => 'userspn_bubble_position_type',
+      'parent_option' => 'menu',
       'label' => __('Select menu location', 'userspn'),
       'description' => __('Choose the navigation menu where you want to add the profile icon.', 'userspn'),
+    ];
+    $userspn_options['userspn_bubble_position_x'] = [
+      'id' => 'userspn_bubble_position_x',
+      'class' => 'userspn-input',
+      'input' => 'input',
+      'type' => 'hidden',
+      'value' => get_option('userspn_bubble_position_x', ''),
+      'parent' => 'userspn_bubble_position_type',
+      'parent_option' => 'custom',
+    ];
+    $userspn_options['userspn_bubble_position_y'] = [
+      'id' => 'userspn_bubble_position_y',
+      'class' => 'userspn-input',
+      'input' => 'input',
+      'type' => 'hidden',
+      'value' => get_option('userspn_bubble_position_y', ''),
+      'parent' => 'userspn_bubble_position_type',
+      'parent_option' => 'custom',
+    ];
+    $userspn_options['userspn_bubble_custom_position'] = [
+      'id' => 'userspn_bubble_custom_position',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'input',
+      'type' => 'checkbox',
+      'parent' => 'userspn_bubble_position_type',
+      'parent_option' => 'custom',
+      'label' => __('Set custom position', 'userspn'),
+      'description' => __('Check to open the position editor. Drag the bubble to the desired location and confirm.', 'userspn'),
     ];
     $userspn_options['userspn_user_name'] = [
       'id' => 'userspn_user_name',
@@ -685,16 +718,6 @@ class USERSPN_Settings
       'label' => __('Main Blue Color', 'userspn'),
       'description' => __('Main blue color used throughout the plugin interface.', 'userspn'),
     ];
-    $userspn_options['userspn_bubble_custom_position'] = [
-      'id' => 'userspn_bubble_custom_position',
-      'class' => 'userspn-input userspn-width-100-percent',
-      'input' => 'select',
-      'value' => get_option('userspn_bubble_custom_position', ''),
-      'label' => __('Custom bubble position', 'userspn'),
-      'description' => __('Enable to drag and drop the profile bubble to a custom position on screen.', 'userspn'),
-      'options' => ['' => __('Off', 'userspn'), 'on' => __('On', 'userspn')],
-    ];
-
     $userspn_options['userspn_section_design_end'] = [
       'section' => 'end',
     ];
@@ -741,6 +764,7 @@ class USERSPN_Settings
 
   public function userspn_options()
   {
+    $user_id = get_current_user_id();
     ?>
     <div class="userspn-options userspn-max-width-1000 userspn-margin-auto userspn-mt-50 userspn-mb-50">
       <img src="<?php echo esc_url(USERSPN_URL . 'assets/media/banner-1544x500.png'); ?>"
@@ -760,6 +784,115 @@ class USERSPN_Settings
         </a>
       </div>
     </div>
+
+    <?php if (is_user_logged_in()): ?>
+      <a href="#" class="userspn-profile-popup-btn" style="display:none;">
+        <?php echo do_shortcode('[userspn-get-avatar user_id="' . $user_id . '" size="50"]'); ?>
+      </a>
+
+      <?php
+        if (class_exists('USERSPN_Functions_Attachment')) {
+          $functions_attachment = new USERSPN_Functions_Attachment();
+        } else {
+          $functions_attachment = null;
+        }
+      ?>
+      <div id="userspn-profile-popup" class="userspn-popup userspn-popup-size-medium userspn-display-none-soft">
+        <div class="userspn-popup-content">
+          <div class="userspn-profile-wrapper" data-user-id="<?php echo esc_attr($user_id); ?>">
+            <div class="userspn-tabs-wrapper">
+              <div class="userspn-tabs">
+                <div class="userspn-tab-links active" data-userspn-id="userspn-tab-edit"><?php esc_html_e('Profile', 'userspn'); ?></div>
+
+                <?php if (get_option('userspn_user_image') == 'on'): ?>
+                  <div class="userspn-tab-links" data-userspn-id="userspn-tab-image"><?php esc_html_e('Image', 'userspn'); ?></div>
+                <?php endif ?>
+
+                <?php if (get_option('userspn_user_notifications') == 'on'): ?>
+                  <?php if (current_user_can('administrator') || class_exists('MAILPN')): ?>
+                    <div class="userspn-tab-links" data-userspn-id="userspn-tab-notifications"><?php esc_html_e('Notifications', 'userspn'); ?></div>
+                  <?php endif ?>
+                <?php endif ?>
+
+                <?php if ($functions_attachment && $functions_attachment->userspn_user_files_allowed($user_id)): ?>
+                  <div class="userspn-tab-links" data-userspn-id="userspn-tab-files"><?php esc_html_e('Files', 'userspn'); ?></div>
+                <?php endif ?>
+
+                <?php if (get_option('userspn_user_advanced') == 'on'): ?>
+                  <div class="userspn-tab-links" data-userspn-id="userspn-tab-advanced"><?php esc_html_e('Advanced', 'userspn'); ?></div>
+                <?php endif ?>
+              </div>
+
+              <div id="userspn-tab-edit" class="userspn-tab-content">
+                <?php echo do_shortcode('[userspn-profile-edit]'); ?>
+              </div>
+
+              <?php if (get_option('userspn_user_image') == 'on'): ?>
+                <div id="userspn-tab-image" class="userspn-tab-content userspn-display-none">
+                  <?php echo do_shortcode('[userspn-profile-image]'); ?>
+                </div>
+              <?php endif ?>
+
+              <?php if (get_option('userspn_user_notifications') == 'on'): ?>
+                <?php if (class_exists('MAILPN')): ?>
+                  <div id="userspn-tab-notifications" class="userspn-tab-content userspn-display-none">
+                    <?php echo do_shortcode('[userspn-notifications]'); ?>
+                  </div>
+                <?php elseif (current_user_can('administrator')): ?>
+                  <div id="userspn-tab-notifications" class="userspn-tab-content userspn-display-none">
+                    <div class="userspn-mt-30 userspn-p-10">
+                      <p class="userspn-alert"><?php esc_html_e('Notifications are inactive. Please install and activate Mailing Manager - PN to allow integrated notifications in your platform.', 'userspn'); ?></p>
+                      <a href="/wp-admin/plugin-install.php?s=mailpn&tab=search&type=term" class="userspn-btn userspn-btn-mini"><?php esc_html_e('Mailing Manager - PN', 'userspn'); ?></a>
+                    </div>
+                  </div>
+                <?php endif ?>
+              <?php endif ?>
+
+              <?php if ($functions_attachment && $functions_attachment->userspn_user_files_allowed($user_id)): ?>
+                <div id="userspn-tab-files" class="userspn-tab-content userspn-display-none">
+                  <?php echo do_shortcode('[userspn-user-files]'); ?>
+                </div>
+              <?php endif ?>
+
+              <?php if (get_option('userspn_user_advanced') == 'on'): ?>
+                <div id="userspn-tab-advanced" class="userspn-tab-content userspn-display-none">
+                  <div class="userspn-display-table userspn-width-100-percent userspn-mt-30 userspn-mb-30 userspn-p-10">
+                    <div class="userspn-display-inline-table userspn-width-100-percent">
+                      <div class="userspn-toggle-wrapper userspn-position-relative userspn-mb-10">
+                        <a href="#" class="userspn-toggle userspn-width-100-percent userspn-text-decoration-none">
+                          <div class="userspn-display-table userspn-width-100-percent">
+                            <div class="userspn-display-inline-table userspn-width-80-percent userspn-vertical-align-middle">
+                              <label class="userspn-display-block"><?php esc_html_e('Disconnect account', 'userspn'); ?></label>
+                            </div>
+                            <div class="userspn-display-inline-table userspn-width-10-percent userspn-vertical-align-middle userspn-text-align-right">
+                              <i class="material-icons-outlined userspn-cursor-pointer userspn-vertical-align-middle userspn-color-main-0">add</i>
+                            </div>
+                          </div>
+                        </a>
+                        <div class="userspn-toggle-content userspn-display-none-soft">
+                          <small><?php esc_html_e('Disconnect your user from the system. You will need to log in again.', 'userspn'); ?></small>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="userspn-display-inline-table userspn-width-100-percent userspn-text-align-right">
+                      <a href="<?php echo esc_url(wp_logout_url(get_permalink())); ?>" class="userspn-btn userspn-btn-transparent userspn-btn-mini"><?php esc_html_e('Log out', 'userspn'); ?></a>
+                    </div>
+                  </div>
+
+                  <?php if (get_option('userspn_user_change_password') == 'on'): ?>
+                    <?php echo do_shortcode('[userspn-user-change-password-btn]'); ?>
+                  <?php endif ?>
+
+                  <?php if (get_option('userspn_user_remove') == 'on'): ?>
+                    <?php echo do_shortcode('[userspn-user-remove-form]'); ?>
+                  <?php endif ?>
+                </div>
+              <?php endif ?>
+            </div>
+          </div>
+        </div>
+      </div>
+    <?php endif ?>
     <?php
   }
 

@@ -60,7 +60,7 @@ class USERSPN_Public {
 		wp_enqueue_script($this->plugin_name . '-public', USERSPN_URL . 'assets/js/public/userspn-public.js', ['jquery'], $this->version, false);
 		
 		// Enqueue profile menu script if feature is enabled
-		if (get_option('userspn_menu_profile_icon') === 'on') {
+		if (get_option('userspn_bubble_position_type', 'default') === 'menu') {
 			wp_enqueue_script('userspn-profile-menu', USERSPN_URL . 'assets/js/userspn-profile-menu.js', ['jquery'], $this->version, true);
 			
 			// Pass data to JavaScript
@@ -103,7 +103,7 @@ class USERSPN_Public {
 		}
 
 		// Check if the feature is enabled
-		if (get_option('userspn_menu_profile_icon') !== 'on') {
+		if (get_option('userspn_bubble_position_type', 'default') !== 'menu') {
 			return $block_content;
 		}
 
