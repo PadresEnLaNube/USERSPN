@@ -124,45 +124,74 @@ class USERSPN_Common {
 		}
 
 		if(!wp_script_is($this->plugin_name . '-selector', 'enqueued')) {
-			wp_enqueue_script($this->plugin_name . '-selector', USERSPN_URL . 'assets/js/userspn-selector.js', ['jquery'], $this->version, false, ['in_footer' => true, 'strategy' => 'defer']);
+			wp_enqueue_script($this->plugin_name . '-selector', USERSPN_URL . 'assets/js/userspn-selector.js', ['jquery'], $this->version, false);
 		}
 
 		if(!wp_script_is($this->plugin_name . '-trumbowyg', 'enqueued')) {
-			wp_enqueue_script($this->plugin_name . '-trumbowyg', USERSPN_URL . 'assets/js/trumbowyg.min.js', ['jquery'], $this->version, false, ['in_footer' => true, 'strategy' => 'defer']);
+			wp_enqueue_script($this->plugin_name . '-trumbowyg', USERSPN_URL . 'assets/js/trumbowyg.min.js', ['jquery'], $this->version, false);
 		}
 
 		if(!wp_script_is($this->plugin_name . '-popups', 'enqueued')) {
-			wp_enqueue_script($this->plugin_name . '-popups', USERSPN_URL . 'assets/js/userspn-popups.js', ['jquery'], $this->version, false, ['in_footer' => true, 'strategy' => 'defer']);
+			wp_enqueue_script($this->plugin_name . '-popups', USERSPN_URL . 'assets/js/userspn-popups.js', ['jquery'], $this->version, false);
 		}
 
 		if(!wp_script_is($this->plugin_name . '-tooltipster', 'enqueued')) {
-			wp_enqueue_script($this->plugin_name . '-tooltipster', USERSPN_URL . 'assets/js/tooltipster.min.js', ['jquery'], $this->version, false, ['in_footer' => true, 'strategy' => 'defer']);
+			wp_enqueue_script($this->plugin_name . '-tooltipster', USERSPN_URL . 'assets/js/tooltipster.min.js', ['jquery'], $this->version, false);
 		}
 
 		if(!wp_script_is($this->plugin_name . '-owl', 'enqueued')) {
-			wp_enqueue_script($this->plugin_name . '-owl', USERSPN_URL . 'assets/js/owl.min.js', ['jquery'], $this->version, false, ['in_footer' => true, 'strategy' => 'defer']);
+			wp_enqueue_script($this->plugin_name . '-owl', USERSPN_URL . 'assets/js/owl.min.js', ['jquery'], $this->version, false);
 		}
 
 		if(!wp_script_is($this->plugin_name . '-datatables', 'enqueued')) {
-			wp_enqueue_script($this->plugin_name . '-datatables', USERSPN_URL . 'assets/js/datatables.min.js', ['jquery'], $this->version, false, ['in_footer' => true, 'strategy' => 'defer']);
+			wp_enqueue_script($this->plugin_name . '-datatables', USERSPN_URL . 'assets/js/datatables.min.js', ['jquery'], $this->version, false);
 		}
 
 		// Add cache-busting for private windows and ensure proper loading
 		$script_version = $this->version;
-		
+
 		wp_enqueue_script($this->plugin_name, USERSPN_URL . 'assets/js/userspn.js', ['jquery'], $script_version, false);
-		wp_enqueue_script($this->plugin_name . '-ajax', USERSPN_URL . 'assets/js/userspn-ajax.js', ['jquery'], $this->version, false, ['in_footer' => true, 'strategy' => 'defer']);
-		wp_enqueue_script($this->plugin_name . '-aux', USERSPN_URL . 'assets/js/userspn-aux.js', ['jquery'], $this->version, false, ['in_footer' => true, 'strategy' => 'defer']);
-		wp_enqueue_script($this->plugin_name . '-forms', USERSPN_URL . 'assets/js/userspn-forms.js', ['jquery'], $this->version, false, ['in_footer' => true, 'strategy' => 'defer']);
-		wp_enqueue_script($this->plugin_name . '-input-editor-builder', USERSPN_URL . 'assets/js/userspn-input-editor-builder.js', ['jquery'], $this->version, false, ['in_footer' => true, 'strategy' => 'defer']);
-		wp_enqueue_script($this->plugin_name . '-profile-progress', USERSPN_URL . 'assets/js/userspn-profile-progress.js', ['jquery'], $this->version, false, ['in_footer' => true, 'strategy' => 'defer']);
-		
+		wp_enqueue_script($this->plugin_name . '-ajax', USERSPN_URL . 'assets/js/userspn-ajax.js', ['jquery'], $this->version, false);
+		wp_enqueue_script($this->plugin_name . '-aux', USERSPN_URL . 'assets/js/userspn-aux.js', ['jquery'], $this->version, false);
+		wp_enqueue_script($this->plugin_name . '-forms', USERSPN_URL . 'assets/js/userspn-forms.js', ['jquery'], $this->version, false);
+		wp_enqueue_script($this->plugin_name . '-input-editor-builder', USERSPN_URL . 'assets/js/userspn-input-editor-builder.js', ['jquery'], $this->version, false);
+		wp_enqueue_script($this->plugin_name . '-profile-progress', USERSPN_URL . 'assets/js/userspn-profile-progress.js', ['jquery'], $this->version, false);
+
 		// Load bot analysis script
-		wp_enqueue_script($this->plugin_name . '-bot-analysis', USERSPN_URL . 'assets/js/userspn-bot-analysis.js', ['jquery'], $this->version, false, ['in_footer' => true, 'strategy' => 'defer']);
-		
+		wp_enqueue_script($this->plugin_name . '-bot-analysis', USERSPN_URL . 'assets/js/userspn-bot-analysis.js', ['jquery'], $this->version, false);
+
 		// Load Chart.js for bot analysis charts (only in admin)
 		if (is_admin()) {
 			wp_enqueue_script('chart-js', 'https://cdn.jsdelivr.net/npm/chart.js', [], '4.4.0', true);
+		}
+
+		// Scripts previously enqueued inside shortcodes/render methods - moved here for FSE/block theme compatibility
+		if (!is_admin()) {
+			wp_enqueue_script('userspn-user-profile-image', USERSPN_URL . 'assets/js/userspn-user-profile-image.js', ['jquery'], $this->version, false);
+			wp_enqueue_script('userspn-user-register-form', USERSPN_URL . 'assets/js/userspn-user-register-form.js', ['jquery'], $this->version, false);
+			wp_enqueue_script('userspn-upload-private-files-btn', USERSPN_URL . 'assets/js/userspn-upload-private-files-btn.js', ['jquery'], $this->version, false);
+			wp_enqueue_script('userspn-notifications', USERSPN_URL . 'assets/js/userspn-notifications.js', ['jquery'], $this->version, false);
+
+			// Enqueue profile fields validation script if user is logged in and has pending required fields
+			if (is_user_logged_in()) {
+				$plugin_user = new USERSPN_Functions_User();
+				$userspn_fields = $plugin_user->userspn_user_register_get_fields([]);
+				$user_id = get_current_user_id();
+				$has_pending = false;
+
+				if (!empty($userspn_fields)) {
+					foreach ($userspn_fields as $field) {
+						if (!empty($field['required']) && $field['required'] && empty(get_user_meta($user_id, $field['id'], true))) {
+							$has_pending = true;
+							break;
+						}
+					}
+				}
+
+				if ($has_pending) {
+					wp_enqueue_script($this->plugin_name . '-profile-fields-validation', USERSPN_URL . 'assets/js/userspn-profile-fields-validation.js', ['jquery', $this->plugin_name . '-popups', $this->plugin_name], $this->version, false);
+				}
+			}
 		}
 
 		$nonce = wp_create_nonce('userspn-nonce');
@@ -280,6 +309,9 @@ class USERSPN_Common {
 			'newsletter_subscribed' => esc_html(__('Congratulations! You have been successfully subscribed to our newsletter.', 'userspn')),
 			'email_sent' => esc_html(__('We have sent you an email. Please check your inbox or spam folder.', 'userspn')),
 			'security_error' => esc_html(__('Security validation failed. Please try again.', 'userspn')),
+			'save_before_preview' => esc_html(__('Please save your settings before previewing. The preview will show the last saved configuration. Continue?', 'userspn')),
+			'confirm_bubble_position' => esc_html(__('Position saved successfully', 'userspn')),
+			'confirm_position' => esc_html(__('Confirm position', 'userspn')),
 		]);
 
 		// Security settings for JavaScript

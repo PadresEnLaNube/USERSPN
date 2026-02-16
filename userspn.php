@@ -13,7 +13,7 @@
  * Plugin Name:       Users manager - PN
  * Plugin URI:        https://padresenlanube.com/plugins/userspn/
  * Description:       Streamline user management on your WordPress site with this powerful plugin. Enable custom registration forms, secure logins, and seamless profile management for your users.
- * Version:           1.0.31
+ * Version:           1.1.5
  * Requires at least: 3.0.1
  * Requires PHP:      7.2
  * Author:            Padres en la Nube
@@ -34,7 +34,7 @@ if (!defined('WPINC')) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define('USERSPN_VERSION', '1.0.31');
+define('USERSPN_VERSION', '1.1.5');
 define('USERSPN_DIR', plugin_dir_path(__FILE__));
 define('USERSPN_URL', plugin_dir_url(__FILE__));
 
@@ -69,7 +69,10 @@ define('USERSPN_KSES', [
 		'class' => [],
 		'href' => [],
 		'title' => [],
-		'target' => []
+		'target' => [],
+		'data-userspn-meta' => [],
+		'data-userspn-popup-id' => [],
+		'data-userspn-post-id' => []
 	],
 	'img' => [
 		'id' => [],
@@ -149,7 +152,11 @@ define('USERSPN_KSES', [
 	'div' => [
 		'id' => [],
 		'class' => [],
-		'data-userspn-section-id' => []
+		'data-userspn-section-id' => [],
+		'data-userspn-form-type' => [],
+		'data-userspn-meta' => [],
+		'data-userspn-input-id' => [],
+		'data-userspn-input-type' => []
 	]
 ]);
 

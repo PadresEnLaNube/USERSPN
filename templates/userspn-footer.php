@@ -130,6 +130,8 @@
                   <?php if (get_option('userspn_user_remove') == 'on'): ?>
                     <?php echo do_shortcode('[userspn-user-remove-form]'); ?>
                   <?php endif ?>
+
+                  <?php do_action('userspn_tab_advanced_content', $user_id); ?>
                 </div>
               <?php endif ?>
             </div>

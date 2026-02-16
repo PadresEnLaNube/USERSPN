@@ -232,9 +232,9 @@ class USERSPN_Ajax_Nopriv {
 
                         update_user_meta($user_id, $userspn_key, $userspn_value);
                         
-                        // Additionally write to the original (non-prefixed) key when value is an array
-                        // This keeps legacy/unprefixed meta in sync for select-multiple and similar fields
-                        if (!empty($original_key) && strpos((string)$original_key, 'userspn_') !== 0 && is_array($userspn_value)) {
+                        // Additionally write to the original (non-prefixed) key
+                        // This keeps standard WP fields (first_name, last_name, etc.) and legacy meta in sync
+                        if (!empty($original_key) && strpos((string)$original_key, 'userspn_') !== 0) {
                           update_user_meta($user_id, $original_key, $userspn_value);
                         }
                       }

@@ -87,11 +87,6 @@ class USERSPN_Notifications {
     }
 
     ?>
-      <?php if ((!empty($userspn_login) && !is_user_logged_in()) || !empty($userspn_notice)): ?>
-        <?php if (!wp_script_is('userspn-notifications', 'enqueued')): ?>
-          <?php wp_enqueue_script('userspn-notifications', USERSPN_URL . 'assets/js/userspn-notifications.js', ['jquery'], USERSPN_VERSION, false, ['in_footer' => true, 'strategy' => 'defer']); ?>
-        <?php endif ?>
-      <?php endif ?>
 
       <?php if (!empty($userspn_notice)): ?>
         <div id="userspn-popup-notice" class="userspn-popup userspn-popup-size-small userspn-display-none-soft">

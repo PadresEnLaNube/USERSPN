@@ -13,20 +13,39 @@ jQuery(document).ready(function($) {
     }
     
     function addContainerToMenu() {
-        // Look for navigation menus
-        var $navigationMenus = $('.wp-block-navigation, .menu, .nav-menu');
-        
-        if ($navigationMenus.length > 0) {
-            // Add container to the first navigation menu found
-            var $firstMenu = $navigationMenus.first();
-            var $menuList = $firstMenu.find('ul').first();
-            
-            if ($menuList.length > 0) {
-                // Create container if it doesn't exist
-                if ($('#userspn-profile-menu-container').length === 0) {
-                    var containerHtml = '<li class="menu-item userspn-profile-container" id="userspn-profile-menu-container"></li>';
-                    $menuList.append(containerHtml);
+        // Skip if container already exists (could be added server-side by PHP)
+        if ($('#userspn-profile-menu-container').length > 0) {
+            return;
+        }
+
+        // Try block theme navigation first
+        var $blockNav = $('.wp-block-navigation');
+        if ($blockNav.length > 0) {
+            // Block themes use a different DOM structure without <ul> elements
+            var $navContainer = $blockNav.first().find('.wp-block-navigation__container').first();
+
+            if ($navContainer.length === 0) {
+                // Fallback to responsive container content (overlay/mobile mode)
+                $navContainer = $blockNav.first().find('.wp-block-navigation__responsive-container-content').first();
+            }
+
+            if ($navContainer.length > 0) {
+                if ($navContainer.is('ul')) {
+                    $navContainer.append('<li class="wp-block-navigation-item menu-item userspn-profile-container" id="userspn-profile-menu-container"></li>');
+                } else {
+                    $navContainer.append('<div class="wp-block-navigation-item menu-item userspn-profile-container" id="userspn-profile-menu-container"></div>');
                 }
+                return;
+            }
+        }
+
+        // Fallback for classic themes
+        var $classicMenus = $('.menu, .nav-menu');
+        if ($classicMenus.length > 0) {
+            var $menuList = $classicMenus.first().find('ul').first();
+
+            if ($menuList.length > 0) {
+                $menuList.append('<li class="menu-item userspn-profile-container" id="userspn-profile-menu-container"></li>');
             }
         }
     }

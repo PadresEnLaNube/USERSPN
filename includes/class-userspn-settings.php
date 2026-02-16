@@ -685,6 +685,16 @@ class USERSPN_Settings
       'label' => __('Main Blue Color', 'userspn'),
       'description' => __('Main blue color used throughout the plugin interface.', 'userspn'),
     ];
+    $userspn_options['userspn_bubble_custom_position'] = [
+      'id' => 'userspn_bubble_custom_position',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'select',
+      'value' => get_option('userspn_bubble_custom_position', ''),
+      'label' => __('Custom bubble position', 'userspn'),
+      'description' => __('Enable to drag and drop the profile bubble to a custom position on screen.', 'userspn'),
+      'options' => ['' => __('Off', 'userspn'), 'on' => __('On', 'userspn')],
+    ];
+
     $userspn_options['userspn_section_design_end'] = [
       'section' => 'end',
     ];
@@ -745,6 +755,9 @@ class USERSPN_Settings
             <?php USERSPN_Forms::userspn_input_wrapper_builder($userspn_option, 'option'); ?>
           <?php endforeach ?>
         </form>
+        <a href="#" class="userspn-btn userspn-preview-profile-btn userspn-mt-20">
+          <?php esc_html_e('Preview profile', 'userspn'); ?>
+        </a>
       </div>
     </div>
     <?php
@@ -986,8 +999,15 @@ class USERSPN_Settings
 
   public function userspn_lostpassword_url($lostpassword_url, $redirect)
   {
+    static $filtering = false;
+    if ($filtering) {
+      return $lostpassword_url;
+    }
+    $filtering = true;
     $nonce = wp_create_nonce('userspn-nonce');
-    return esc_url(add_query_arg('userspn_ajax_nopriv_nonce', $nonce, $lostpassword_url));
+    $result = add_query_arg('userspn_ajax_nopriv_nonce', $nonce, $lostpassword_url);
+    $filtering = false;
+    return $result;
   }
 
   public function userspn_add_nonce_to_lostpassword_form()

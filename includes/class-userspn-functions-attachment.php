@@ -77,10 +77,6 @@ class USERSPN_Functions_Attachment {
     ob_start();
     ?>
       <div class="userspn-private-file-upload userspn-mt-30 userspn-mb-50">
-        <?php if (!wp_script_is('userspn-upload-private-files-btn', 'enqueued')): ?>
-          <?php wp_enqueue_script('userspn-upload-private-files-btn', USERSPN_URL . 'assets/js/userspn-upload-private-files-btn.js', ['jquery'], USERSPN_VERSION, false, ['in_footer' => true, 'strategy' => 'defer']); ?>
-        <?php endif ?>
-        
         <ul class="userspn-file-private-upload-list userspn-mb-30">
           <?php $userspn_user_files = get_posts(['fields' => 'ids', 'numberposts' => -1, 'post_type' => 'attachment', 'post_status' => ['any'], 'meta_key' => 'userspn_user_files', 'orderby' => 'ID', 'order' => 'ASC', ]); ?>
 

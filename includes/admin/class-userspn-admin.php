@@ -58,6 +58,7 @@ class USERSPN_Admin {
 	 */
 	public function userspn_enqueue_scripts() {
 		wp_enqueue_media();
-		wp_enqueue_script($this->plugin_name . '-admin', USERSPN_URL . 'assets/js/admin/userspn-admin.js', ['jquery'], $this->version, false);
+		wp_enqueue_script('jquery-ui-draggable');
+		wp_enqueue_script($this->plugin_name . '-admin', USERSPN_URL . 'assets/js/admin/userspn-admin.js', ['jquery', 'jquery-ui-draggable'], $this->version, false);
 	}
 }

@@ -85,12 +85,45 @@ class USERSPN_Public {
 
 	/**
 	 * Add profile icon container to navigation block (for block themes)
-	 * This method is kept for compatibility but JavaScript handles the actual work
+	 * Injects the container server-side so JavaScript can copy the profile button into it.
 	 *
 	 * @since    1.0.0
 	 */
 	public function userspn_add_profile_icon_to_navigation_block($block_content, $block) {
-		// JavaScript handles everything now, so we just return the content unchanged
+		static $already_added = false;
+
+		// Only process the first navigation block
+		if ($already_added) {
+			return $block_content;
+		}
+
+		// Only process navigation blocks
+		if (!isset($block['blockName']) || $block['blockName'] !== 'core/navigation') {
+			return $block_content;
+		}
+
+		// Check if the feature is enabled
+		if (get_option('userspn_menu_profile_icon') !== 'on') {
+			return $block_content;
+		}
+
+		$already_added = true;
+
+		// Find the last </ul> before </nav> to inject the container as the last navigation item
+		$nav_close_pos = strrpos($block_content, '</nav>');
+		if ($nav_close_pos === false) {
+			return $block_content;
+		}
+
+		$before_nav = substr($block_content, 0, $nav_close_pos);
+		$last_ul_pos = strrpos($before_nav, '</ul>');
+
+		if ($last_ul_pos !== false) {
+			// Navigation uses <ul>/<li> structure - insert <li> before closing </ul>
+			$container = '<li class="wp-block-navigation-item menu-item userspn-profile-container" id="userspn-profile-menu-container"></li>';
+			$block_content = substr_replace($block_content, $container, $last_ul_pos, 0);
+		}
+
 		return $block_content;
 	}
 

@@ -127,7 +127,7 @@ class USERSPN_Forms {
                 <?php endforeach ?>
               </select>
 
-              <textarea class="userspn-input userspn-select-options userspn-width-100-percent" name="userspn-select-options" class="userspn-input width-100-percent"><?php echo !empty($input_array['options']) ? implode(PHP_EOL, esc_html($input_array['options'])) : esc_html(__('One option per line', 'userspn')); ?></textarea>
+              <textarea class="userspn-input userspn-select-options userspn-width-100-percent" name="userspn-select-options" class="userspn-input width-100-percent"><?php echo !empty($input_array['options']) ? implode(PHP_EOL, array_map('esc_html', $input_array['options'])) : esc_html(__('One option per line', 'userspn')); ?></textarea>
             </li>
 
             <li>
@@ -149,16 +149,18 @@ class USERSPN_Forms {
             <div class="userspn-display-table userspn-width-100-percent">
               <?php if (!in_array($input_array['id'], ['first_name', 'last_name'])): ?>
                 <div class="userspn-display-inline-table userspn-width-30-percent userspn-tablet-display-block userspn-tablet-width-100-percent">
-                  <a href="#" class="userspn-popup" data-userspn-popup-id="userspn-input-editor-builder-btn-remove-popup-<?php echo esc_attr($input_array['id']); ?>"><?php esc_html_e('Remove field', 'userspn'); ?></a>
+                  <a href="#" class="userspn-popup-open userspn-text-decoration-none" data-userspn-popup-id="userspn-input-editor-builder-btn-remove-popup-<?php echo esc_attr($input_array['id']); ?>"><?php esc_html_e('Remove field', 'userspn'); ?></a>
 
                   <div id="userspn-input-editor-builder-btn-remove-popup-<?php echo esc_attr($input_array['id']); ?>" data-userspn-input-id="<?php echo esc_attr($input_array['id']); ?>" data-userspn-input-type="<?php echo array_key_exists('form_type', $input_array) ? esc_attr($input_array['form_type']) : ''; ?>" data-userspn-meta="<?php echo array_key_exists('meta', $input_array) ? esc_attr($input_array['meta']) : ''; ?>" class="userspn-popup userspn-input-editor-builder-btn-remove-popup userspn-display-none-soft">
+                    <h3><?php esc_html_e('Remove field', 'userspn'); ?></h3>
                     <p><?php esc_html_e('The field will be removed. This action cannot be undone.', 'userspn'); ?></p>
-                    <div class="userspn-display-table userspn-width-100-percent">
-                      <div class="userspn-display-inline-table userspn-width-30-percent userspn-tablet-display-block userspn-tablet-width-100-percent userspn-text-align-center">
-                        <a href="#" class="userspn-popup-close"><?php esc_html_e('Cancel', 'userspn'); ?></a>
+                    
+                    <div class="userspn-display-table userspn-width-100-percent userspn-mb-300">
+                      <div class="userspn-display-inline-table userspn-width-50-percent userspn-tablet-display-block userspn-tablet-width-100-percent userspn-text-align-center">
+                        <a href="#" class="userspn-popup-close userspn-text-decoration-none"><?php esc_html_e('Cancel', 'userspn'); ?></a>
                       </div>
 
-                      <div class="userspn-display-inline-table userspn-width-70-percent userspn-tablet-display-block userspn-tablet-width-100-percent userspn-text-align-center">
+                      <div class="userspn-display-inline-table userspn-width-50-percent userspn-tablet-display-block userspn-tablet-width-100-percent userspn-text-align-center">
                         <a href="#" class="userspn-btn userspn-input-editor-builder-btn-remove userspn-pl-50 userspn-pr-50" data-userspn-post-id="<?php echo esc_attr($post_id); ?>"><?php esc_html_e('Remove', 'userspn'); ?></a>
                       </div>
                     </div>
@@ -573,16 +575,6 @@ class USERSPN_Forms {
         <?php
         break;
       case 'audio_recorder':
-        // Enqueue CSS and JS files for audio recorder
-        wp_enqueue_style('userspn-audio-recorder', USERSPN_URL . 'assets/css/userspn-audio-recorder.css', array(), '1.0.0');
-        wp_enqueue_script('userspn-audio-recorder', USERSPN_URL . 'assets/js/userspn-audio-recorder.js', array('jquery'), '1.0.0', true);
-        
-        // Localize script with AJAX data
-        wp_localize_script('userspn-audio-recorder', 'userspn_audio_recorder_vars', array(
-          'ajax_url' => admin_url('admin-ajax.php'),
-          'ajax_nonce' => wp_create_nonce('userspn_audio_nonce'),
-        ));
-        
         ?>
           <div class="userspn-audio-recorder-status userspn-display-none-soft">
             <p class="userspn-recording-status"><?php esc_html_e('Ready to record', 'userspn'); ?></p>

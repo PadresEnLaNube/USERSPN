@@ -4,6 +4,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     width: 100%;
+    max-width: 750px;
     z-index: 9999;
     display: none;
     max-height: 90vh; /* Maximum height of 90% of the viewport */

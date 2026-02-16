@@ -243,49 +243,8 @@ class USERSPN_Functions_User
 
   public function userspn_profile_fields_validation()
   {
-    $user_id = get_current_user_id();
-    $userspn_fields = self::userspn_user_register_get_fields([]);
-    $fields_required_pending = [];
-
-    if (!is_admin() && !empty($userspn_fields)) {
-      foreach ($userspn_fields as $field) {
-        if (!empty($field['required']) && $field['required'] && empty(get_user_meta($user_id, $field['id'], true))) {
-          $fields_required_pending[] = $field;
-        }
-      }
-    }
-
-    // Si hay campos obligatorios pendientes, cargamos el script y pasamos los datos a JS
-    if (!empty($fields_required_pending) && !is_admin()) {
-      if (!wp_script_is('userspn-profile-fields-validation', 'enqueued')) {
-        wp_enqueue_script(
-          'userspn-profile-fields-validation',
-          USERSPN_URL . 'assets/js/userspn-profile-fields-validation.js',
-          ['jquery'],
-          USERSPN_VERSION,
-          false,
-          ['in_footer' => true, 'strategy' => 'defer']
-        );
-      }
-
-      // Preparamos un array simplificado solo con la información útil para depuración
-      $debug_required_fields = array_map(
-        function ($field) {
-          return [
-            'id' => isset($field['id']) ? $field['id'] : '',
-            'label' => isset($field['label']) ? wp_strip_all_tags($field['label']) : '',
-            'type' => isset($field['input']) ? $field['input'] : '',
-          ];
-        },
-        $fields_required_pending
-      );
-
-      wp_localize_script(
-        'userspn-profile-fields-validation',
-        'userspn_profile_required_pending',
-        $debug_required_fields
-      );
-    }
+    // Validation logic is now handled by userspn-profile-fields-validation.js
+    // which is conditionally enqueued in class-userspn-common.php
   }
 
   public function userspn_user_register($user_id)
@@ -417,7 +376,7 @@ class USERSPN_Functions_User
         <div class="userspn-user-register-fields-edition userspn-mb-50">
           <?php if (!empty($userspn_user_register_fields)): ?>
             <?php foreach ($userspn_user_register_fields as $userspn_user_register_field): ?>
-              <?php USERSPN_Forms::userspn_input_builder($userspn_user_register_field, 'user'); ?>
+              <?php USERSPN_Forms::userspn_input_editor_builder($userspn_user_register_field); ?>
             <?php endforeach ?>
           <?php endif ?>
         </div>
@@ -642,7 +601,18 @@ class USERSPN_Functions_User
               </div>
             </div>
           <?php else: ?>
+            <?php
+              $bubble_style = '';
+              if (get_option('userspn_bubble_custom_position') === 'on') {
+                $x = intval(get_option('userspn_bubble_position_x', 0));
+                $y = intval(get_option('userspn_bubble_position_y', 0));
+                if ($x || $y) {
+                  $bubble_style = 'position:fixed;left:' . $x . 'px;top:' . $y . 'px;z-index:9999;';
+                }
+              }
+            ?>
             <a href="#"
+              style="<?php echo esc_attr($bubble_style); ?>"
               class="userspn-text-align-right userspn-profile-popup-btn<?php echo (get_option('userspn_disabled') == 'on') ? ' userspn-display-none-soft' : ''; ?>"><?php echo do_shortcode('[userspn-get-avatar user_id="' . $user_id . '" size="50"]'); ?></a>
 
             <div id="userspn-profile-popup" class="userspn-popup userspn-popup-size-medium userspn-display-none-soft">
@@ -1051,10 +1021,6 @@ class USERSPN_Functions_User
         <input type="file" id="userspn-user-file" class="width-100-percent border-radius-20">
 
         <div class="userspn-width-100-percent userspn-text-align-right userspn-mt-30 userspn-mb-30">
-          <?php if (!wp_script_is('userspn-user-profile-image', 'enqueued')): ?>
-            <?php wp_enqueue_script('userspn-user-profile-image', USERSPN_URL . 'assets/js/userspn-user-profile-image.js', ['jquery'], USERSPN_VERSION, false, ['in_footer' => true, 'strategy' => 'defer']); ?>
-          <?php endif ?>
-
           <?php if (!empty(get_user_meta(get_current_user_id(), 'userspn_user_image', true))): ?>
             <a href="#" class="userspn-remove-avatar-btn userspn-font-size-12 userspn-text-decoration-none userspn-mr-10"
               data-userspn-user-id="<?php echo esc_attr(get_current_user_id()); ?>"><?php esc_html_e('Remove avatar', 'userspn'); ?></a><?php echo esc_html(USERSPN_Data::userspn_loader()); ?>
@@ -1398,10 +1364,6 @@ class USERSPN_Functions_User
     ob_start();
     ?>
     <?php if (!is_user_logged_in()): ?>
-      <?php if (!wp_script_is('userspn-user-register-form', 'enqueued')): ?>
-        <?php wp_enqueue_script('userspn-user-register-form', USERSPN_URL . 'assets/js/userspn-user-register-form.js', ['jquery'], USERSPN_VERSION, false, ['in_footer' => true, 'strategy' => 'defer']); ?>
-      <?php endif ?>
-
       <form id="userspn-user-register-fields" class="userspn-mt-30">
         <?php foreach ($userspn_user_register_fields as $userspn_user_register_field): ?>
           <?php USERSPN_Forms::userspn_input_wrapper_builder($userspn_user_register_field, 'user', 0, 0, 'full'); ?>

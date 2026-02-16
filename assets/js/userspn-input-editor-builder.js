@@ -21,6 +21,7 @@
     var data = {
       action: 'userspn_ajax',
       userspn_ajax_type: 'userspn_input_editor_builder_save',
+      userspn_ajax_nonce: userspn_ajax.userspn_ajax_nonce,
       userspn_input_current_id: userspn_ul.attr('id'),
       userspn_input_name: userspn_ul.find('input.userspn-input-name').val(),
       userspn_input_class: userspn_ul.find('input.userspn-input-class').val(),
@@ -36,16 +37,17 @@
     };
 
     $.post(ajax_url, data, function(response) {
-      if ($.parseJSON(response)['error_key'] == 'userspn_input_editor_builder_save_error_empty') {
+      var parsed = $.parseJSON(response);
+      if (parsed['error_key'] && parsed['error_key'] !== 0) {
         userspn_get_main_message(userspn_i18n.field_provide);
       }else {
-        var userspn_input_id = $.parseJSON(response)['field_id'];
-        var userspn_input_type = $.parseJSON(response)['type'];
-        var userspn_meta = $.parseJSON(response)['meta'];
-        var userspn_input_name = $.parseJSON(response)['label'];
+        var userspn_input_id = parsed['field_id'];
+        var userspn_input_type = parsed['type'];
+        var userspn_meta = parsed['userspn_meta'];
+        var userspn_input_name = parsed['label'];
 
         if (!$('.userspn-user-register-field#' + userspn_input_id).length) {
-          $('.userspn-user-register-fields').append($.parseJSON(response)['html']);
+          $('.userspn-user-register-fields').append(parsed['html']);
 
           var userspn_input_name = $('input.userspn-input-name[value="' + userspn_input_name + '"]');
           var userspn_toggle_wrapper = userspn_input_name.closest('.userspn-toggle-wrapper');
@@ -56,9 +58,9 @@
           userspn_toggle_wrapper.find('.userspn-input-editor-builder-btn-remove-popup').attr('data-userspn-input-type', userspn_input_type);
           userspn_toggle_wrapper.find('.userspn-input-editor-builder-btn-remove-popup').attr('data-userspn-meta', userspn_meta);
           userspn_toggle_wrapper.find('.userspn-input-editor-builder-btn-remove-popup').attr('id', 'userspn-input-editor-builder-btn-remove-popup-' + userspn_input_id);
-          userspn_toggle_wrapper.find('a.userspn-popup').attr('data-userspn-popup-id', '#userspn-input-editor-builder-btn-remove-popup-' + userspn_input_id);
+          userspn_toggle_wrapper.find('a.userspn-popup-open').attr('data-userspn-popup-id', 'userspn-input-editor-builder-btn-remove-popup-' + userspn_input_id);
         }else{
-          $('.userspn-user-register-field#' + userspn_input_id).after($.parseJSON(response)['html']);
+          $('.userspn-user-register-field#' + userspn_input_id).after(parsed['html']);
           $('.userspn-user-register-field.' + userspn_input_id + ':first').remove();
         }
       
@@ -89,6 +91,7 @@
     var data = {
       action: 'userspn_ajax',
       userspn_ajax_type: 'userspn_input_editor_builder_remove',
+      userspn_ajax_nonce: userspn_ajax.userspn_ajax_nonce,
       userspn_form_type: userspn_btn.closest('.userspn-input-editor-builder-btn-remove-popup').attr('data-userspn-input-type'),
       userspn_input_id: userspn_input_id,
       userspn_meta: userspn_meta,
@@ -97,7 +100,7 @@
 
     $.post(ajax_url, data, function(response) {
       if (response.indexOf('userspn_input_editor_builder_remove_success') != -1) {
-        $.USERSPN_Popups.close();
+        USERSPN_Popups.close();
         $('.userspn-user-register-field.' + userspn_input_id).fadeOut('fast').remove();
         $('.userspn-toggle-wrapper.' + userspn_input_id).fadeOut('fast').remove();
         userspn_get_main_message(userspn_i18n.field_removed);

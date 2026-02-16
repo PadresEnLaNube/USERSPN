@@ -335,7 +335,7 @@
     if($('.userspn-popup-close').length){
       $(document).on('click', '.userspn-popup-close', function(e){
         e.preventDefault();
-        $.USERSPN_Popups.close();
+        USERSPN_Popups.close();
       });
     }
 
