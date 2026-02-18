@@ -1,14 +1,52 @@
 (function($) {
 	'use strict';
 
-  $(document).ready(function() {
-    // Load reCAPTCHA if enabled AND registration form is present
-    if (typeof userspn_security !== 'undefined' && userspn_security.recaptcha_enabled && userspn_security.recaptcha_site_key && $('#userspn-user-register-fields').length > 0) {
+  // Promise-based reCAPTCHA loader (shared, deduplicates script tags)
+  var recaptchaLoadPromise = null;
+
+  function loadRecaptchaScript() {
+    if (recaptchaLoadPromise) return recaptchaLoadPromise;
+
+    // Already loaded by another script (e.g. userspn-ajax.js)
+    if (typeof grecaptcha !== 'undefined') {
+      recaptchaLoadPromise = Promise.resolve();
+      return recaptchaLoadPromise;
+    }
+
+    recaptchaLoadPromise = new Promise(function(resolve, reject) {
+      // Check if the script tag already exists
+      var existing = document.querySelector('script[src*="recaptcha/api.js"]');
+      if (existing) {
+        // Script tag exists but hasn't executed yet - poll for it
+        var polls = 0;
+        var interval = setInterval(function() {
+          if (typeof grecaptcha !== 'undefined') {
+            clearInterval(interval);
+            resolve();
+          } else if (polls++ > 50) { // 5 seconds
+            clearInterval(interval);
+            reject(new Error('reCAPTCHA script timeout'));
+          }
+        }, 100);
+        return;
+      }
+
       var script = document.createElement('script');
       script.src = 'https://www.google.com/recaptcha/api.js?render=' + userspn_security.recaptcha_site_key;
-      script.async = true;
-      script.defer = true;
+      script.onload = function() { resolve(); };
+      script.onerror = function() { reject(new Error('reCAPTCHA script failed to load')); };
       document.head.appendChild(script);
+    });
+
+    return recaptchaLoadPromise;
+  }
+
+  $(document).ready(function() {
+    var recaptchaEnabled = (typeof userspn_security !== 'undefined' && userspn_security.recaptcha_enabled && userspn_security.recaptcha_site_key);
+
+    // Pre-load reCAPTCHA script if registration form is present
+    if (recaptchaEnabled && $('#userspn-user-register-fields').length > 0) {
+      loadRecaptchaScript();
     }
 
     $(document).on('submit', '#userspn-user-register-fields', function(e) {
@@ -34,7 +72,7 @@
       }
 
       $('#userspn-user-register-fields input:not([type="submit"]), #userspn-user-register-fields select, #userspn-user-register-fields textarea').each(function(index, element) {
-        
+
         if ($(this).attr('multiple') && $(this).parents('.userspn-html-multi-group').length) {
           if (!(typeof window['userspn_window_vars']['form_field_' + element.name] !== 'undefined')) {
             window['userspn_window_vars']['form_field_' + element.name] = [];
@@ -69,22 +107,54 @@
         });
       });
 
-      // Handle reCAPTCHA if enabled
-      if (typeof userspn_security !== 'undefined' && userspn_security.recaptcha_enabled && userspn_security.recaptcha_site_key && typeof grecaptcha !== 'undefined') {
-        grecaptcha.ready(function() {
-          grecaptcha.execute(userspn_security.recaptcha_site_key, {action: 'register'}).then(function(token) {
-            data['g-recaptcha-response'] = token;
+      // Get reCAPTCHA token then submit
+      function getRecaptchaTokenAndSubmit() {
+        if (!recaptchaEnabled) {
+          submitForm();
+          return;
+        }
+
+        loadRecaptchaScript().then(function() {
+          // Wait for grecaptcha.ready
+          if (typeof grecaptcha !== 'undefined') {
+            grecaptcha.ready(function() {
+              grecaptcha.execute(userspn_security.recaptcha_site_key, {action: 'register'}).then(function(token) {
+                data['g-recaptcha-response'] = token;
+                submitForm();
+              }).catch(function(err) {
+                console.error('reCAPTCHA execute error:', err);
+                // Submit without token - server will log warning but allow registration
+                submitForm();
+              });
+            });
+          } else {
+            console.error('reCAPTCHA: grecaptcha undefined after script load');
             submitForm();
-          });
+          }
+        }).catch(function(err) {
+          console.error('reCAPTCHA load error:', err);
+          // Submit without token - server will log warning but allow registration
+          submitForm();
         });
-      } else {
-        submitForm();
       }
 
       function submitForm() {
         $.post(ajax_url, data, function(response) {
-          console.log('data');console.log(data);console.log('response');console.log(response);
-          if (response == 'userspn_profile_create_error') {
+          console.log('data', data, 'response', response);
+
+          // Try to parse JSON response (security errors now return JSON)
+          var parsed = null;
+          if (typeof response === 'string') {
+            try { parsed = JSON.parse(response); } catch(e) { parsed = null; }
+          } else {
+            parsed = response;
+          }
+
+          if (parsed && parsed.error_key === 'userspn_profile_create_security_error') {
+            // Show specific security error message
+            var msg = parsed.error_message || userspn_i18n.security_error || 'Security validation failed. Please try again.';
+            userspn_get_main_message(msg);
+          } else if (response == 'userspn_profile_create_error') {
             userspn_get_main_message(userspn_i18n.an_error_has_occurred);
           }else if (response == 'userspn_profile_create_existing') {
             userspn_get_main_message(userspn_i18n.user_existing);
@@ -95,8 +165,6 @@
             }
 
             $('#userspn-login input#user_login').focus();
-          }else if (response == 'userspn_profile_create_security_error') {
-            userspn_get_main_message(userspn_i18n.security_error || 'Security validation failed. Please try again.');
           }else {
             $('.userspn-tab-links[data-userspn-id="userspn-tab-login"]').click();
 
@@ -118,6 +186,8 @@
           userspn_btn.removeClass('userspn-link-disabled').siblings('.userspn-waiting').fadeOut('fast');
         });
       }
+
+      getRecaptchaTokenAndSubmit();
 
       delete window['userspn_window_vars'];
       return false;

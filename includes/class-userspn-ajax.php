@@ -499,15 +499,34 @@ class USERSPN_Ajax {
           break;
         case 'userspn_user_remove':
           $password = !empty($_POST['password']) ? sanitize_text_field(wp_unslash($_POST['password'])) : '';
-          if (!empty($user_id) && !empty($password)) {
+          $delete_user_id = absint($user_id);
+
+          if (!empty($delete_user_id) && !empty($password)) {
             $plugin_user = new USERSPN_Functions_User();
-            if ($plugin_user->userspn_check_password($user_id, $password)) {
+            if ($plugin_user->userspn_check_password($delete_user_id, $password)) {
+              if (user_can($delete_user_id, 'administrator')) {
+                echo 'userspn_user_remove_error';
+                exit;
+              }
+              if ($delete_user_id !== get_current_user_id()) {
+                echo 'userspn_user_remove_error';
+                exit;
+              }
+
               require_once(ABSPATH . 'wp-admin/includes/user.php');
-              if (!user_can($user_id, 'administrator') && $user_id == get_current_user_id()) {
-                wp_delete_user($user_id);
+              $deleted = wp_delete_user($delete_user_id);
+
+              // Verify user is actually gone
+              if ($deleted && !get_user_by('id', $delete_user_id)) {
                 echo 'userspn_user_remove_success';
                 exit;
               } else {
+                if (class_exists('USERSPN_Security')) {
+                  USERSPN_Security::log_security_event('user_delete_failed', 'wp_delete_user returned ' . var_export($deleted, true) . ' but user may still exist', [
+                    'user_id' => $delete_user_id,
+                    'user_still_exists' => (bool) get_user_by('id', $delete_user_id),
+                  ]);
+                }
                 echo 'userspn_user_remove_error';
                 exit;
               }
@@ -695,6 +714,37 @@ class USERSPN_Ajax {
           }
           $deleted_count = USERSPN_Security::delete_confirmed_bots();
           wp_send_json_success(['deleted_count' => $deleted_count]);
+          break;
+        case 'userspn_security_log_resolve':
+          if (!current_user_can('manage_options')) {
+            echo wp_json_encode(['error_key' => 'userspn_permission_error']);
+            exit;
+          }
+          $log_id = !empty($_POST['log_id']) ? intval($_POST['log_id']) : 0;
+          if ($log_id > 0) {
+            global $wpdb;
+            $table_name = $wpdb->prefix . 'userspn_security_logs';
+            $wpdb->update($table_name, ['resolved' => 1], ['id' => $log_id], ['%d'], ['%d']);
+            echo wp_json_encode(['error_key' => '']);
+          } else {
+            echo wp_json_encode(['error_key' => 'userspn_security_log_resolve_error']);
+          }
+          exit;
+          break;
+        case 'userspn_security_log_delete_old':
+          if (!current_user_can('manage_options')) {
+            echo wp_json_encode(['error_key' => 'userspn_permission_error']);
+            exit;
+          }
+          $days = !empty($_POST['days']) ? intval($_POST['days']) : 30;
+          global $wpdb;
+          $table_name = $wpdb->prefix . 'userspn_security_logs';
+          $wpdb->query($wpdb->prepare(
+            "DELETE FROM $table_name WHERE created_at < DATE_SUB(NOW(), INTERVAL %d DAY)",
+            $days
+          ));
+          echo wp_json_encode(['error_key' => '']);
+          exit;
           break;
         case 'userspn_basecpt_view':
           if (!empty($userspn_basecpt_id)) {

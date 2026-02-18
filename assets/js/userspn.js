@@ -433,23 +433,26 @@
         var data = {
           action: 'userspn_ajax',
           userspn_ajax_type: 'userspn_user_remove',
+          userspn_ajax_nonce: userspn_ajax.userspn_ajax_nonce,
           user_id: userspn_btn.attr('data-userspn-user-id'),
           password: $('#userspn_password').val(),
         };
 
         $.post(ajax_url, data, function(response) {
-          if (response.indexOf('userspn_user_remove_error_empty') != -1) {
+          if (response.indexOf('userspn_user_remove_success') != -1) {
+            userspn_get_main_message(userspn_i18n.user_removed);
+
+            setTimeout(function() {
+              document.location.reload(true);
+            }, 2000);
+          } else if (response.indexOf('userspn_user_remove_error_empty') != -1) {
             userspn_get_main_message(userspn_i18n.include_password);
           } else if (response.indexOf('userspn_user_remove_error_invalid_password') != -1) {
             userspn_get_main_message(userspn_i18n.password_not_correct);
           } else if (response.indexOf('userspn_user_remove_error') != -1) {
             userspn_get_main_message(userspn_i18n.an_error_has_occurred);
           } else {
-            userspn_get_main_message(userspn_i18n.user_removed);
-
-            setTimeout(function() {
-              document.location.reload(true);
-            }, 2000);
+            userspn_get_main_message(userspn_i18n.an_error_has_occurred);
           }
 
           userspn_btn.removeClass('userspn-link-disabled').siblings('.userspn-waiting').addClass('userspn-display-none-soft')

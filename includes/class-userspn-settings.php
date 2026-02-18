@@ -561,6 +561,7 @@ class USERSPN_Settings
       'label' => __('Block Suspicious Scores', 'userspn'),
       'description' => __('When enabled, registrations with reCAPTCHA scores below the threshold will be blocked. When disabled, they will be logged but allowed.', 'userspn'),
     ];
+    $akismet_active = function_exists('akismet_http_post');
     $userspn_options['userspn_akismet_enabled'] = [
       'id' => 'userspn_akismet_enabled',
       'class' => 'userspn-input userspn-width-100-percent',
@@ -568,7 +569,10 @@ class USERSPN_Settings
       'type' => 'checkbox',
       'parent' => 'this',
       'label' => __('Enable Akismet Protection', 'userspn'),
-      'description' => __('Enable Akismet spam protection for user registration (requires Akismet plugin).', 'userspn'),
+      'description' => $akismet_active
+        ? __('Enable Akismet spam protection for user registration (requires Akismet plugin).', 'userspn')
+        : __('Akismet plugin is not installed or not active. Install and activate Akismet to use this feature.', 'userspn'),
+      'disabled' => !$akismet_active,
     ];
     $userspn_options['userspn_honeypot_enabled'] = [
       'id' => 'userspn_honeypot_enabled',
@@ -749,6 +753,16 @@ class USERSPN_Settings
       'administrator',
       'userspn_dashboard',
       [$this, 'userspn_dashboard_page']
+    );
+
+    // Add Security Logs submenu
+    add_submenu_page(
+      'userspn_options',
+      __('Security Logs', 'userspn'),
+      __('Security Logs', 'userspn'),
+      'administrator',
+      'userspn_security_logs',
+      [$this, 'userspn_security_logs_page']
     );
 
     if (is_admin() && !defined('DOING_AJAX') && !current_user_can('administrator') && get_option('userspn_admin_access_removal') == 'on') {
@@ -964,6 +978,357 @@ class USERSPN_Settings
           USERSPN_Popups.open('userspn-popup-' + popup);
         });
       });
+    </script>
+    <?php
+  }
+
+  public function userspn_security_logs_page()
+  {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'userspn_security_logs';
+
+    // Check if table exists
+    $table_exists = $wpdb->get_var($wpdb->prepare("SHOW TABLES LIKE %s", $table_name));
+
+    wp_enqueue_style('userspn-admin', USERSPN_URL . 'assets/css/admin/userspn-admin.css', [], USERSPN_VERSION);
+
+    // Get logs and stats
+    $logs = [];
+    $stats = ['total' => 0, 'open' => 0, 'blocked' => 0, 'success' => 0];
+    if ($table_exists) {
+      // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+      $logs = $wpdb->get_results("SELECT * FROM $table_name ORDER BY created_at DESC LIMIT 500");
+      foreach ($logs as $log) {
+        $stats['total']++;
+        if (!$log->resolved) { $stats['open']++; }
+        if (strpos($log->event, 'blocked') !== false || strpos($log->event, 'error') !== false || strpos($log->event, 'failed') !== false) { $stats['blocked']++; }
+        if (strpos($log->event, 'success') !== false) { $stats['success']++; }
+      }
+    }
+
+    // Event config: icon, color, label
+    $event_config = [
+      'registration_success'    => ['dashicons-yes-alt',    '#00a32a', __('Success', 'userspn')],
+      'registration_blocked'    => ['dashicons-shield',     '#d63638', __('Blocked', 'userspn')],
+      'registration_failed'     => ['dashicons-warning',    '#dba617', __('Failed', 'userspn')],
+      'recaptcha_token_missing' => ['dashicons-info-outline','#72aee6', __('Info', 'userspn')],
+      'recaptcha_suspicious'    => ['dashicons-visibility', '#d63638', __('Suspicious', 'userspn')],
+      'suspicious_registration' => ['dashicons-visibility', '#d63638', __('Suspicious', 'userspn')],
+      'suspicious_email_pattern'=> ['dashicons-email',      '#dba617', __('Warning', 'userspn')],
+      'wp_create_user_error'    => ['dashicons-dismiss',    '#d63638', __('Error', 'userspn')],
+      'rate_limit_exceeded'     => ['dashicons-clock',      '#dba617', __('Rate limit', 'userspn')],
+    ];
+    $default_event = ['dashicons-marker', '#787c82', __('Event', 'userspn')];
+
+    ?>
+    <style>
+      .userspn-sl-wrap { max-width: 1200px; margin: 30px auto; padding: 0 20px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+      .userspn-sl-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+      .userspn-sl-header h1 { margin: 0; font-size: 23px; font-weight: 600; color: #1d2327; }
+      .userspn-sl-header .dashicons { font-size: 28px; width: 28px; height: 28px; color: #3f51b5; }
+
+      .userspn-sl-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+      .userspn-sl-stat { border-radius: 12px; padding: 24px 20px; text-align: center; transition: all 0.3s ease; color: #fff; border: none; }
+      .userspn-sl-stat:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.18); }
+      .userspn-sl-stat-total { background: linear-gradient(135deg, #3f51b5 0%, #5c6bc0 100%); }
+      .userspn-sl-stat-open { background: linear-gradient(135deg, #c62828 0%, #e53935 100%); }
+      .userspn-sl-stat-blocked { background: linear-gradient(135deg, #e65100 0%, #f57c00 100%); }
+      .userspn-sl-stat-success { background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%); }
+      .userspn-sl-stat-value { font-size: 42px; font-weight: 800; line-height: 1; }
+      .userspn-sl-stat-label { font-size: 13px; text-transform: uppercase; letter-spacing: 0.6px; margin-top: 8px; opacity: 0.85; }
+
+      .userspn-sl-toolbar { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 12px 16px; }
+      .userspn-sl-toolbar .dashicons { color: #787c82; }
+      .userspn-sl-filter { border: 1px solid #ddd; border-radius: 4px; padding: 4px 8px; font-size: 13px; }
+
+      .userspn-sl-table-wrap { background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; }
+      .userspn-sl-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+      .userspn-sl-table thead th { background: #f6f7f7; padding: 10px 14px; text-align: left; font-weight: 600; color: #1d2327; border-bottom: 1px solid #e0e0e0; font-size: 12px; text-transform: uppercase; letter-spacing: 0.3px; white-space: nowrap; }
+      .userspn-sl-table tbody tr { border-bottom: 1px solid #f0f0f1; transition: background 0.15s; }
+      .userspn-sl-table tbody tr:last-child { border-bottom: none; }
+      .userspn-sl-table tbody tr:hover { background: #f6f7f7; }
+      .userspn-sl-table tbody td { padding: 12px 14px; vertical-align: top; color: #50575e; }
+
+      .userspn-sl-badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; white-space: nowrap; line-height: 1.5; }
+      .userspn-sl-badge .dashicons { font-size: 14px; width: 14px; height: 14px; }
+
+      .userspn-sl-event-name { display: block; font-size: 11px; color: #787c82; margin-top: 2px; font-family: monospace; }
+
+      .userspn-sl-email { font-weight: 500; color: #2271b1; }
+      .userspn-sl-ip { font-family: monospace; font-size: 12px; color: #787c82; }
+      .userspn-sl-date { white-space: nowrap; font-size: 12px; }
+      .userspn-sl-date-time { display: block; color: #787c82; font-size: 11px; }
+
+      .userspn-sl-msg { max-width: 260px; line-height: 1.4; }
+      .userspn-sl-data-toggle { background: none; border: 1px solid #ddd; border-radius: 4px; padding: 2px 8px; font-size: 11px; color: #2271b1; cursor: pointer; display: inline-flex; align-items: center; gap: 3px; }
+      .userspn-sl-data-toggle:hover { background: #f0f6fc; border-color: #2271b1; }
+      .userspn-sl-data-toggle .dashicons { font-size: 14px; width: 14px; height: 14px; transition: transform 0.2s; }
+      .userspn-sl-data-toggle.open .dashicons { transform: rotate(180deg); }
+      .userspn-sl-data-content { display: none; margin-top: 8px; background: #f6f7f7; border-radius: 4px; padding: 8px 10px; font-family: monospace; font-size: 11px; line-height: 1.6; white-space: pre-wrap; word-break: break-all; max-width: 300px; }
+      .userspn-sl-data-content.open { display: block; }
+
+      .userspn-sl-status-open { display: inline-flex; align-items: center; gap: 4px; color: #d63638; font-weight: 600; font-size: 12px; }
+      .userspn-sl-status-open::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: #d63638; display: inline-block; }
+      .userspn-sl-status-resolved { display: inline-flex; align-items: center; gap: 4px; color: #00a32a; font-weight: 600; font-size: 12px; }
+      .userspn-sl-status-resolved::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: #00a32a; display: inline-block; }
+
+      .userspn-sl-btn-resolve { background: #f6f7f7; border: 1px solid #ddd; border-radius: 4px; padding: 4px 12px; font-size: 12px; cursor: pointer; color: #2271b1; transition: all 0.15s; display: inline-flex; align-items: center; gap: 4px; }
+      .userspn-sl-btn-resolve:hover { background: #2271b1; color: #fff; border-color: #2271b1; }
+      .userspn-sl-btn-resolve .dashicons { font-size: 16px; width: 16px; height: 16px; }
+
+      .userspn-sl-btn-danger { background: #fff; border: 1px solid #d63638; border-radius: 4px; padding: 6px 14px; font-size: 13px; cursor: pointer; color: #d63638; transition: all 0.15s; display: inline-flex; align-items: center; gap: 6px; }
+      .userspn-sl-btn-danger:hover { background: #d63638; color: #fff; }
+      .userspn-sl-btn-danger .dashicons { font-size: 16px; width: 16px; height: 16px; }
+
+      .userspn-sl-empty { text-align: center; padding: 60px 20px; color: #787c82; }
+      .userspn-sl-empty .dashicons { font-size: 48px; width: 48px; height: 48px; color: #ddd; display: block; margin: 0 auto 12px; }
+
+      @media (max-width: 782px) {
+        .userspn-sl-stats { grid-template-columns: repeat(2, 1fr); }
+        .userspn-sl-toolbar { flex-wrap: wrap; }
+        .userspn-sl-toolbar .userspn-sl-filter { flex: 1 1 100%; }
+        .userspn-sl-toolbar .userspn-sl-btn-danger { flex: 1 1 100%; justify-content: center; }
+        .userspn-sl-table-wrap { overflow-x: auto; }
+      }
+    </style>
+
+    <div class="userspn-sl-wrap">
+      <div class="userspn-sl-header">
+        <span class="dashicons dashicons-shield-alt"></span>
+        <h1><?php esc_html_e('Security Logs', 'userspn'); ?></h1>
+      </div>
+
+      <?php if (!$table_exists): ?>
+        <div style="background:#fef0f0;border:1px solid #d63638;border-radius:8px;padding:16px;color:#d63638;">
+          <span class="dashicons dashicons-warning" style="margin-right:6px;"></span>
+          <?php esc_html_e('Security logs table not found. Please deactivate and reactivate the plugin to create it.', 'userspn'); ?>
+        </div>
+        <?php return; ?>
+      <?php endif; ?>
+
+      <!-- Stats widgets -->
+      <div class="userspn-sl-stats">
+        <div class="userspn-sl-stat userspn-sl-stat-total">
+          <div class="userspn-sl-stat-value"><?php echo esc_html($stats['total']); ?></div>
+          <div class="userspn-sl-stat-label"><?php esc_html_e('Total events', 'userspn'); ?></div>
+        </div>
+        <div class="userspn-sl-stat userspn-sl-stat-open">
+          <div class="userspn-sl-stat-value"><?php echo esc_html($stats['open']); ?></div>
+          <div class="userspn-sl-stat-label"><?php esc_html_e('Open', 'userspn'); ?></div>
+        </div>
+        <div class="userspn-sl-stat userspn-sl-stat-blocked">
+          <div class="userspn-sl-stat-value"><?php echo esc_html($stats['blocked']); ?></div>
+          <div class="userspn-sl-stat-label"><?php esc_html_e('Blocked / Errors', 'userspn'); ?></div>
+        </div>
+        <div class="userspn-sl-stat userspn-sl-stat-success">
+          <div class="userspn-sl-stat-value"><?php echo esc_html($stats['success']); ?></div>
+          <div class="userspn-sl-stat-label"><?php esc_html_e('Successful', 'userspn'); ?></div>
+        </div>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="userspn-sl-toolbar">
+        <select id="userspn-sl-filter-event" class="userspn-sl-filter">
+          <option value=""><?php esc_html_e('All events', 'userspn'); ?></option>
+          <?php
+          $unique_events = [];
+          foreach ($logs as $log) {
+            if (!in_array($log->event, $unique_events, true)) {
+              $unique_events[] = $log->event;
+            }
+          }
+          foreach ($unique_events as $evt): ?>
+            <option value="<?php echo esc_attr($evt); ?>"><?php echo esc_html($evt); ?></option>
+          <?php endforeach; ?>
+        </select>
+
+        <select id="userspn-sl-filter-status" class="userspn-sl-filter">
+          <option value=""><?php esc_html_e('All statuses', 'userspn'); ?></option>
+          <option value="open"><?php esc_html_e('Open', 'userspn'); ?></option>
+          <option value="resolved"><?php esc_html_e('Resolved', 'userspn'); ?></option>
+        </select>
+
+        <div style="flex:1;"></div>
+
+        <button type="button" id="userspn-logs-delete-old" class="userspn-sl-btn-danger">
+          <span class="dashicons dashicons-trash"></span>
+          <?php esc_html_e('Delete logs older than 30 days', 'userspn'); ?>
+        </button>
+      </div>
+
+      <!-- Table -->
+      <div class="userspn-sl-table-wrap">
+        <table class="userspn-sl-table" id="userspn-security-logs-table">
+          <thead>
+            <tr>
+              <th><?php esc_html_e('Date', 'userspn'); ?></th>
+              <th><?php esc_html_e('Event', 'userspn'); ?></th>
+              <th><?php esc_html_e('Email', 'userspn'); ?></th>
+              <th><?php esc_html_e('IP', 'userspn'); ?></th>
+              <th><?php esc_html_e('Message', 'userspn'); ?></th>
+              <th><?php esc_html_e('Details', 'userspn'); ?></th>
+              <th><?php esc_html_e('Status', 'userspn'); ?></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php if (!empty($logs)): ?>
+              <?php foreach ($logs as $log):
+                $evt = isset($event_config[$log->event]) ? $event_config[$log->event] : $default_event;
+                $badge_bg = $evt[1] . '15';
+              ?>
+                <tr id="userspn-log-row-<?php echo esc_attr($log->id); ?>"
+                    data-event="<?php echo esc_attr($log->event); ?>"
+                    data-status="<?php echo $log->resolved ? 'resolved' : 'open'; ?>">
+                  <td class="userspn-sl-date">
+                    <?php
+                      $dt = strtotime($log->created_at);
+                      echo esc_html(wp_date('M j, Y', $dt));
+                    ?>
+                    <span class="userspn-sl-date-time"><?php echo esc_html(wp_date('H:i:s', $dt)); ?></span>
+                  </td>
+                  <td>
+                    <span class="userspn-sl-badge" style="background:<?php echo esc_attr($badge_bg); ?>;color:<?php echo esc_attr($evt[1]); ?>;">
+                      <span class="dashicons <?php echo esc_attr($evt[0]); ?>"></span>
+                      <?php echo esc_html($evt[2]); ?>
+                    </span>
+                    <span class="userspn-sl-event-name"><?php echo esc_html($log->event); ?></span>
+                  </td>
+                  <td>
+                    <?php if (!empty($log->email)): ?>
+                      <span class="userspn-sl-email"><?php echo esc_html($log->email); ?></span>
+                    <?php else: ?>
+                      <span style="color:#ccc;">&mdash;</span>
+                    <?php endif; ?>
+                  </td>
+                  <td><span class="userspn-sl-ip"><?php echo esc_html($log->ip_address); ?></span></td>
+                  <td class="userspn-sl-msg"><?php echo esc_html($log->message); ?></td>
+                  <td>
+                    <?php
+                      $decoded = json_decode($log->data, true);
+                      if (is_array($decoded) && !empty($decoded)):
+                    ?>
+                      <button type="button" class="userspn-sl-data-toggle" data-target="userspn-sl-data-<?php echo esc_attr($log->id); ?>">
+                        <span class="dashicons dashicons-arrow-down-alt2"></span>
+                        <?php echo esc_html(count($decoded)); ?> <?php esc_html_e('fields', 'userspn'); ?>
+                      </button>
+                      <div class="userspn-sl-data-content" id="userspn-sl-data-<?php echo esc_attr($log->id); ?>"><?php
+                        foreach ($decoded as $k => $v) {
+                          $val = is_array($v) ? wp_json_encode($v) : $v;
+                          echo esc_html($k) . ': ' . esc_html($val) . "\n";
+                        }
+                      ?></div>
+                    <?php else: ?>
+                      <span style="color:#ccc;">&mdash;</span>
+                    <?php endif; ?>
+                  </td>
+                  <td>
+                    <?php if ($log->resolved): ?>
+                      <span class="userspn-sl-status-resolved"><?php esc_html_e('Resolved', 'userspn'); ?></span>
+                    <?php else: ?>
+                      <span class="userspn-sl-status-open"><?php esc_html_e('Open', 'userspn'); ?></span>
+                    <?php endif; ?>
+                  </td>
+                  <td>
+                    <?php if (!$log->resolved): ?>
+                      <button type="button" class="userspn-sl-btn-resolve userspn-log-resolve" data-id="<?php echo esc_attr($log->id); ?>">
+                        <span class="dashicons dashicons-saved"></span>
+                        <?php esc_html_e('Resolve', 'userspn'); ?>
+                      </button>
+                    <?php endif; ?>
+                  </td>
+                </tr>
+              <?php endforeach; ?>
+            <?php else: ?>
+              <tr>
+                <td colspan="8">
+                  <div class="userspn-sl-empty">
+                    <span class="dashicons dashicons-shield-alt"></span>
+                    <p><?php esc_html_e('No security logs found. All clear!', 'userspn'); ?></p>
+                  </div>
+                </td>
+              </tr>
+            <?php endif; ?>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <script>
+    jQuery(function($) {
+      // Toggle data details
+      $(document).on('click', '.userspn-sl-data-toggle', function() {
+        var target = $('#' + $(this).data('target'));
+        $(this).toggleClass('open');
+        target.toggleClass('open');
+      });
+
+      // Filter by event
+      $('#userspn-sl-filter-event, #userspn-sl-filter-status').on('change', function() {
+        var eventFilter = $('#userspn-sl-filter-event').val();
+        var statusFilter = $('#userspn-sl-filter-status').val();
+        $('#userspn-security-logs-table tbody tr').each(function() {
+          var row = $(this);
+          var showEvent = !eventFilter || row.data('event') === eventFilter;
+          var showStatus = !statusFilter || row.data('status') === statusFilter;
+          row.toggle(showEvent && showStatus);
+        });
+      });
+
+      // Resolve a log entry
+      $(document).on('click', '.userspn-log-resolve', function() {
+        var btn = $(this);
+        var logId = btn.data('id');
+        btn.prop('disabled', true).find('.dashicons').removeClass('dashicons-saved').addClass('dashicons-update');
+
+        $.post(ajaxurl, {
+          action: 'userspn_ajax',
+          userspn_ajax_type: 'userspn_security_log_resolve',
+          userspn_ajax_nonce: '<?php echo esc_js(wp_create_nonce('userspn-nonce')); ?>',
+          log_id: logId
+        }, function(response) {
+          try {
+            var data = typeof response === 'string' ? JSON.parse(response) : response;
+            if (data.error_key === '') {
+              var row = $('#userspn-log-row-' + logId);
+              row.data('status', 'resolved');
+              row.find('.userspn-sl-status-open').replaceWith('<span class="userspn-sl-status-resolved"><?php echo esc_js(__('Resolved', 'userspn')); ?></span>');
+              btn.fadeOut(200, function() { $(this).remove(); });
+            } else {
+              btn.prop('disabled', false).find('.dashicons').removeClass('dashicons-update').addClass('dashicons-saved');
+            }
+          } catch(e) {
+            btn.prop('disabled', false).find('.dashicons').removeClass('dashicons-update').addClass('dashicons-saved');
+          }
+        });
+      });
+
+      // Delete old logs
+      $('#userspn-logs-delete-old').on('click', function() {
+        if (!confirm('<?php echo esc_js(__('Are you sure you want to delete logs older than 30 days?', 'userspn')); ?>')) return;
+
+        var btn = $(this);
+        btn.prop('disabled', true);
+
+        $.post(ajaxurl, {
+          action: 'userspn_ajax',
+          userspn_ajax_type: 'userspn_security_log_delete_old',
+          userspn_ajax_nonce: '<?php echo esc_js(wp_create_nonce('userspn-nonce')); ?>',
+          days: 30
+        }, function(response) {
+          try {
+            var data = typeof response === 'string' ? JSON.parse(response) : response;
+            if (data.error_key === '') {
+              location.reload();
+            } else {
+              btn.prop('disabled', false);
+            }
+          } catch(e) {
+            btn.prop('disabled', false);
+          }
+        });
+      });
+    });
     </script>
     <?php
   }

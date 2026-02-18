@@ -1071,6 +1071,7 @@ input:checked+.userspn-slider:before {
 #userspn-login input[type="submit"]:hover,
 .userspn-btn:hover {
   background-color: var(--userspn-bg-color-main-alt);
+  transform: translateY(-2px);
 }
 
 .userspn-btn-mini {

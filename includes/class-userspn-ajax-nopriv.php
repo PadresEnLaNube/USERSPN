@@ -392,7 +392,12 @@ class USERSPN_Ajax_Nopriv {
                   'email' => $userspn_email,
                   'ip' => USERSPN_Security::get_user_ip()
                 ]);
-                echo 'userspn_profile_create_security_error';exit;
+                echo wp_json_encode([
+                  'error_key' => 'userspn_profile_create_security_error',
+                  'error_message' => $security_result->get_error_message(),
+                  'error_code' => $security_result->get_error_code(),
+                ]);
+                exit;
               }
 
               $userspn_login = sanitize_title(substr($userspn_email, 0, strpos($userspn_email, '@')) . '-' . bin2hex(openssl_random_pseudo_bytes(4)));
@@ -400,32 +405,45 @@ class USERSPN_Ajax_Nopriv {
                 ['userspn_secret_token' => bin2hex(openssl_random_pseudo_bytes(16))],
               ]);
 
-              if ($user_id) {
-                update_user_meta($user_id, 'userspn_registration_ip', USERSPN_Security::get_user_ip());
-                update_user_meta($user_id, 'userspn_registration_user_agent', $_SERVER['HTTP_USER_AGENT'] ?? '');
+              if (!$user_id) {
+                $wp_error_msg = '';
+                if (USERSPN_Functions_User::$last_insert_error && is_wp_error(USERSPN_Functions_User::$last_insert_error)) {
+                  $wp_error_msg = USERSPN_Functions_User::$last_insert_error->get_error_message();
+                }
+                USERSPN_Security::log_security_event('registration_failed', 'User creation failed: ' . ($wp_error_msg ?: 'unknown error'), [
+                  'email' => $userspn_email,
+                  'login' => $userspn_login,
+                  'password_length' => strlen($userspn_password),
+                  'ip' => USERSPN_Security::get_user_ip(),
+                  'wp_error' => $wp_error_msg,
+                ]);
+                echo 'userspn_profile_create_error';exit;
+              }
 
-                if (get_option('userspn_recaptcha_enabled') === 'on') {
-                  $recaptcha_token = $_POST['g-recaptcha-response'] ?? '';
-                  if (!empty($recaptcha_token)) {
-                    $recaptcha_result = USERSPN_Security::verify_recaptcha($recaptcha_token, 'register');
-                    if (!is_wp_error($recaptcha_result)) {
-                      update_user_meta($user_id, 'userspn_recaptcha_score', $recaptcha_result['score']);
-                      update_user_meta($user_id, 'userspn_recaptcha_threshold', $recaptcha_result['threshold']);
-                      update_user_meta($user_id, 'userspn_recaptcha_timestamp', current_time('timestamp'));
+              update_user_meta($user_id, 'userspn_registration_ip', USERSPN_Security::get_user_ip());
+              update_user_meta($user_id, 'userspn_registration_user_agent', $_SERVER['HTTP_USER_AGENT'] ?? '');
 
-                      if ($recaptcha_result['is_suspicious']) {
-                        update_user_meta($user_id, 'userspn_recaptcha_suspicious', true);
-                        USERSPN_Security::send_suspicious_registration_notification($user_id, $recaptcha_result, $user_data);
-                        USERSPN_Security::log_security_event('suspicious_registration', 'Suspicious user registration detected', [
-                          'user_id' => $user_id,
-                          'email' => $userspn_email,
-                          'score' => $recaptcha_result['score'],
-                          'threshold' => $recaptcha_result['threshold'],
-                          'ip' => USERSPN_Security::get_user_ip()
-                        ]);
-                      } else {
-                        update_user_meta($user_id, 'userspn_recaptcha_suspicious', false);
-                      }
+              if (get_option('userspn_recaptcha_enabled') === 'on') {
+                $recaptcha_token = $_POST['g-recaptcha-response'] ?? '';
+                if (!empty($recaptcha_token)) {
+                  $recaptcha_result = USERSPN_Security::verify_recaptcha($recaptcha_token, 'register');
+                  if (!is_wp_error($recaptcha_result)) {
+                    update_user_meta($user_id, 'userspn_recaptcha_score', $recaptcha_result['score']);
+                    update_user_meta($user_id, 'userspn_recaptcha_threshold', $recaptcha_result['threshold']);
+                    update_user_meta($user_id, 'userspn_recaptcha_timestamp', current_time('timestamp'));
+
+                    if ($recaptcha_result['is_suspicious']) {
+                      update_user_meta($user_id, 'userspn_recaptcha_suspicious', true);
+                      USERSPN_Security::send_suspicious_registration_notification($user_id, $recaptcha_result, $user_data);
+                      USERSPN_Security::log_security_event('suspicious_registration', 'Suspicious user registration detected', [
+                        'user_id' => $user_id,
+                        'email' => $userspn_email,
+                        'score' => $recaptcha_result['score'],
+                        'threshold' => $recaptcha_result['threshold'],
+                        'ip' => USERSPN_Security::get_user_ip()
+                      ]);
+                    } else {
+                      update_user_meta($user_id, 'userspn_recaptcha_suspicious', false);
                     }
                   }
                 }

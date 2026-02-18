@@ -12,6 +12,8 @@
  */
 class USERSPN_Functions_User
 {
+  public static $last_insert_error = null;
+
   public static function userspn_user_is_admin($user_id)
   {
     // USERSPN_Functions_User::userspn_user_is_admin($user_id)
@@ -95,6 +97,17 @@ class USERSPN_Functions_User
     if ($user_id && !is_wp_error($user_id)) {
       wp_update_user(array_merge(['ID' => $user_id], $userspn_user_array));
     } else {
+      // Store and log the actual error for debugging
+      if (is_wp_error($user_id)) {
+        self::$last_insert_error = $user_id;
+        if (class_exists('USERSPN_Security')) {
+          USERSPN_Security::log_security_event('wp_create_user_error', $user_id->get_error_message(), [
+            'login' => $userspn_user_login,
+            'email' => $userspn_user_email,
+            'error_code' => $user_id->get_error_code(),
+          ]);
+        }
+      }
       return false;
     }
 

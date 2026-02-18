@@ -54,11 +54,12 @@ class USERSPN
 		if (defined('USERSPN_VERSION')) {
 			$this->version = USERSPN_VERSION;
 		} else {
-			$this->version = '1.1.7';
+			$this->version = '1.1.9';
 		}
 
 		$this->plugin_name = 'userspn';
 
+		$this->userspn_check_db_version();
 		$this->userspn_load_dependencies();
 		$this->userspn_set_i18n();
 		$this->userspn_define_common_hooks();
@@ -73,6 +74,19 @@ class USERSPN
 		$this->userspn_load_notifications();
 		$this->userspn_load_cron();
 		$this->userspn_load_blocks();
+	}
+
+	/**
+	 * Check DB version and run upgrades if needed.
+	 */
+	private function userspn_check_db_version()
+	{
+		$current_db_version = get_option('userspn_db_version', '0');
+		if (version_compare($current_db_version, '1.1.8', '<')) {
+			require_once USERSPN_DIR . 'includes/class-userspn-activator.php';
+			USERSPN_Activator::userspn_create_security_logs_table();
+			update_option('userspn_db_version', '1.1.8');
+		}
 	}
 
 	/**

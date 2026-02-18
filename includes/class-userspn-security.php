@@ -209,27 +209,35 @@ class USERSPN_Security {
             }
         }
 
-        // Check reCAPTCHA
-        if (get_option('userspn_recaptcha_enabled') === 'on') {
+        // Check reCAPTCHA (only if both keys are configured)
+        $recaptcha_site_key = get_option('userspn_recaptcha_site_key', '');
+        $recaptcha_secret_key = get_option('userspn_recaptcha_secret_key', '');
+        if (get_option('userspn_recaptcha_enabled') === 'on' && !empty($recaptcha_site_key) && !empty($recaptcha_secret_key)) {
             $recaptcha_token = $post_data['g-recaptcha-response'] ?? '';
             if (empty($recaptcha_token)) {
-                return new WP_Error('recaptcha_missing', __('reCAPTCHA token is required.', 'userspn'));
-            }
-            $recaptcha_result = self::verify_recaptcha($recaptcha_token, 'register');
-            if (is_wp_error($recaptcha_result)) {
-                return $recaptcha_result;
-            }
-            // Block suspicious scores if enabled
-            if (isset($recaptcha_result['is_suspicious']) && $recaptcha_result['is_suspicious']) {
-                $block_suspicious = get_option('userspn_recaptcha_block_suspicious', 'on');
-                if ($block_suspicious === 'on') {
-                    return new WP_Error('recaptcha_suspicious', __('Registration blocked: Suspicious activity detected.', 'userspn'));
+                // Token missing (reCAPTCHA script may not have loaded on frontend)
+                // Log warning but allow registration - post-creation scoring handles flagging
+                self::log_security_event('recaptcha_token_missing', 'reCAPTCHA token was not provided during registration', [
+                    'email' => $user_data['email'] ?? '',
+                    'ip' => $ip_address,
+                ]);
+            } else {
+                $recaptcha_result = self::verify_recaptcha($recaptcha_token, 'register');
+                if (is_wp_error($recaptcha_result)) {
+                    return $recaptcha_result;
+                }
+                // Block suspicious scores if enabled
+                if (isset($recaptcha_result['is_suspicious']) && $recaptcha_result['is_suspicious']) {
+                    $block_suspicious = get_option('userspn_recaptcha_block_suspicious', 'on');
+                    if ($block_suspicious === 'on') {
+                        return new WP_Error('recaptcha_suspicious', __('Registration blocked: Suspicious activity detected.', 'userspn'));
+                    }
                 }
             }
         }
 
-        // Check Akismet
-        if (get_option('userspn_akismet_enabled') === 'on') {
+        // Check Akismet (only if plugin is actually active)
+        if (get_option('userspn_akismet_enabled') === 'on' && function_exists('akismet_http_post')) {
             $akismet_result = self::verify_akismet($user_data);
             if (is_wp_error($akismet_result)) {
                 return $akismet_result;
@@ -269,25 +277,31 @@ class USERSPN_Security {
      * @param array $data Additional data
      */
     public static function log_security_event($event, $message, $data = []) {
-        $log_data = [
-            'timestamp' => current_time('mysql'),
-            'ip_address' => self::get_user_ip(),
-            'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? '',
-            'event' => $event,
-            'message' => $message,
-            'data' => $data
-        ];
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'userspn_security_logs';
 
-        // Store in WordPress options (you might want to use a proper logging system)
-        $security_logs = get_option('userspn_security_logs', []);
-        $security_logs[] = $log_data;
-        
-        // Keep only last 100 entries
-        if (count($security_logs) > 100) {
-            $security_logs = array_slice($security_logs, -100);
+        // Extract email from data if available
+        $email = '';
+        if (!empty($data['email'])) {
+            $email = sanitize_email($data['email']);
+        } elseif (!empty($data['user_email'])) {
+            $email = sanitize_email($data['user_email']);
         }
-        
-        update_option('userspn_security_logs', $security_logs);
+
+        $wpdb->insert(
+            $table_name,
+            [
+                'created_at'  => current_time('mysql'),
+                'ip_address'  => self::get_user_ip(),
+                'user_agent'  => $_SERVER['HTTP_USER_AGENT'] ?? '',
+                'event'       => $event,
+                'message'     => $message,
+                'data'        => wp_json_encode($data),
+                'email'       => $email,
+                'resolved'    => 0,
+            ],
+            ['%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d']
+        );
     }
 
     /**
@@ -447,13 +461,10 @@ class USERSPN_Security {
      */
     private static function is_suspicious_email($email) {
         $suspicious_patterns = [
-            '/^[a-z]+\d+@/', // letter+number pattern
-            '/^\d+[a-z]+@/', // number+letter pattern
+            '/^\d+[a-z]+@/', // number+letter pattern (e.g. 123abc@)
             '/@(tempmail|10minutemail|guerrillamail|mailinator|temp-mail|throwaway)\./', // temp email services
-            '/^[a-z]{1,3}\d{1,3}@/', // very short patterns
+            '/^[a-z]{1,3}\d{1,3}@/', // very short patterns (e.g. ab1@)
             '/^(test|demo|example|sample|fake|dummy)\d*@/', // test patterns
-            '/^[a-z]{2,4}\d{2,4}@/', // short letter+number combinations
-            '/@(gmail|yahoo|hotmail)\.com$/', // common free email providers (lower suspicion)
         ];
 
         foreach ($suspicious_patterns as $pattern) {
@@ -620,13 +631,13 @@ class USERSPN_Security {
     private static function is_sequential_email($email) {
         $username = substr($email, 0, strpos($email, '@'));
         
-        // Check for sequential numbers
-        if (preg_match('/\d{3,}/', $username)) {
+        // Check for sequential numbers (6+ consecutive digits, e.g. user123456@)
+        if (preg_match('/\d{6,}/', $username)) {
             return true;
         }
 
-        // Check for repeated patterns
-        if (preg_match('/(.)\1{2,}/', $username)) {
+        // Check for repeated patterns (4+ same character, e.g. aaaa)
+        if (preg_match('/(.)\1{3,}/', $username)) {
             return true;
         }
 
