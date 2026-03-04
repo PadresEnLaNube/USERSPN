@@ -86,3 +86,15 @@
     max-width:500px;
     margin:auto;
 }
+
+/* USER ROLE SELECTOR */
+.userspn-users-with-role-box { background: #f0f0f1; border-radius: 4px; }
+.userspn-users-with-role-box h4 { margin-top: 0; }
+.userspn-role-badge { background: var(--userspn-bg-color-main); color: white; padding: 2px 8px; border-radius: 3px; font-size: 12px; margin-left: 5px; }
+.userspn-user-role-item { padding: 5px 0; border-bottom: 1px solid #ddd; }
+.userspn-user-role-item .material-icons-outlined { font-size: 16px; vertical-align: middle; color: var(--userspn-color-main); }
+.userspn-user-role-item span { font-size: 13px; }
+.userspn-p-15 { padding: 15px; }
+.userspn-mt-5 { margin-top: 5px; }
+.userspn-color-gray { color: #666; }
+/* END USER ROLE SELECTOR */

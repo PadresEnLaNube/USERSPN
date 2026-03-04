@@ -532,7 +532,7 @@ class USERSPN_Forms {
           <div class="userspn-field userspn-html-multi-wrapper userspn-mb-50" <?php echo wp_kses_post($userspn_parent_block); ?>>
             <?php if ($html_multi_fields_length): ?>
               <?php foreach (range(0, ($html_multi_fields_length - 1)) as $length_index): ?>
-                <div class="userspn-html-multi-group userspn-display-table userspn-width-100-percent userspn-mb-30">
+                <div class="userspn-html-multi-group userspn-display-table userspn-width-100-percent">
                   <div class="userspn-display-inline-table userspn-width-90-percent">
                     <?php foreach ($userspn_input['html_multi_fields'] as $index => $html_multi_field): ?>
                       <?php if (isset($html_multi_field['label']) && !empty($html_multi_field['label'])): ?>
@@ -711,17 +711,55 @@ class USERSPN_Forms {
         </div>
         <?php
         break;
+      case 'user_role_selector':
+        if (!current_user_can('manage_options')) {
+          ?><div class="userspn-field"><p class="userspn-color-error"><?php esc_html_e('You do not have permission to manage user roles.', 'userspn'); ?></p></div><?php
+          break;
+        }
+        $users = get_users(['orderby' => 'display_name', 'order' => 'ASC']);
+        $target_role = isset($userspn_input['role']) ? $userspn_input['role'] : 'userspn_newsletter_subscriber';
+        $role_label = isset($userspn_input['role_label']) ? $userspn_input['role_label'] : __('Newsletter Subscriber', 'userspn');
+        $users_with_role = array_filter($users, function ($user) use ($target_role) { return in_array($target_role, (array) $user->roles); });
+        ?>
+        <div class="userspn-user-role-selector-wrapper" <?php echo wp_kses_post($userspn_parent_block); ?>>
+          <?php if (!empty($users_with_role)): ?>
+            <div class="userspn-mb-20 userspn-p-15 userspn-users-with-role-box">
+              <h4 class="userspn-mb-10"><?php echo esc_html(sprintf(__('Users with %s Role', 'userspn'), $role_label)); ?> <span class="userspn-role-badge"><?php echo count($users_with_role); ?></span></h4>
+              <div class="userspn-users-with-role-list">
+                <?php foreach ($users_with_role as $user): ?>
+                  <div class="userspn-user-role-item"><i class="material-icons-outlined">person</i> <strong><?php echo esc_html($user->display_name); ?></strong> <span class="userspn-color-gray">(<?php echo esc_html($user->user_email); ?>)</span></div>
+                <?php endforeach; ?>
+              </div>
+            </div>
+          <?php else: ?>
+            <div class="userspn-mb-20 userspn-p-15 userspn-alert-warning"><p><i class="material-icons-outlined userspn-vertical-align-middle">info</i> <?php echo esc_html(sprintf(__('No users currently have the %s role.', 'userspn'), $role_label)); ?></p></div>
+          <?php endif; ?>
+          <div class="userspn-mb-20">
+            <label for="userspn_user_select_<?php echo esc_attr($userspn_input['id']); ?>" class="userspn-mb-10 userspn-display-block"><?php esc_html_e('Select Users', 'userspn'); ?></label>
+            <select id="userspn_user_select_<?php echo esc_attr($userspn_input['id']); ?>" class="userspn-select userspn-width-100-percent userspn-user-role-select" multiple size="10" data-role="<?php echo esc_attr($target_role); ?>" data-role-label="<?php echo esc_attr($role_label); ?>">
+              <?php foreach ($users as $user): $has_role = in_array($target_role, (array) $user->roles); ?>
+                <option value="<?php echo esc_attr($user->ID); ?>" <?php echo $has_role ? 'data-has-role="true"' : ''; ?>><?php echo esc_html($user->display_name . ' (' . $user->user_email . ')'); ?><?php if ($has_role): ?> ✓<?php endif; ?></option>
+              <?php endforeach; ?>
+            </select>
+            <p class="userspn-font-size-small userspn-color-gray userspn-mt-5"><?php esc_html_e('Hold Ctrl (Windows) or Cmd (Mac) to select multiple users. Users with ✓ already have this role.', 'userspn'); ?></p>
+          </div>
+          <div class="userspn-role-actions userspn-mb-20">
+            <input type="hidden" class="userspn-role-nonce" value="<?php echo esc_attr(wp_create_nonce('userspn-role-assignment')); ?>">
+            <div class="userspn-display-inline-block userspn-mr-10"><button type="button" class="userspn-btn userspn-btn-mini userspn-assign-role-btn" data-input-id="<?php echo esc_attr($userspn_input['id']); ?>"><i class="material-icons-outlined userspn-vertical-align-middle">person_add</i> <?php echo esc_html(sprintf(__('Assign %s Role', 'userspn'), $role_label)); ?></button></div>
+            <div class="userspn-display-inline-block"><button type="button" class="userspn-btn userspn-btn-mini userspn-remove-role-btn" data-input-id="<?php echo esc_attr($userspn_input['id']); ?>"><i class="material-icons-outlined userspn-vertical-align-middle">person_remove</i> <?php echo esc_html(sprintf(__('Remove %s Role', 'userspn'), $role_label)); ?></button></div>
+          </div>
+          <div class="userspn-role-message userspn-mt-20 userspn-display-none-soft"></div>
+        </div>
+        <?php
+        break;
     }
   }
 
   public static function userspn_input_wrapper_builder($input_array, $type, $userspn_id = 0, $disabled = 0, $userspn_format = 'half'){
     ?>
-      <?php if (array_key_exists('section', $input_array) && !empty($input_array['section'])): ?>      
+      <?php if (array_key_exists('section', $input_array) && !empty($input_array['section'])): ?>
         <?php if ($input_array['section'] == 'start'): ?>
-          <div class="userspn-toggle-wrapper userspn-section-wrapper userspn-position-relative userspn-mb-30 <?php echo array_key_exists('class', $input_array) ? esc_attr($input_array['class']) : ''; ?>" id="<?php echo array_key_exists('id', $input_array) ? esc_attr($input_array['id']) : ''; ?>">
-            <?php if (array_key_exists('description', $input_array) && !empty($input_array['description'])): ?>
-              <i class="material-icons-outlined userspn-section-helper userspn-color-main-0 userspn-tooltip" title="<?php echo wp_kses_post($input_array['description']); ?>">help</i>
-            <?php endif ?>
+          <div class="userspn-toggle-wrapper userspn-section-wrapper userspn-position-relative <?php echo array_key_exists('class', $input_array) ? esc_attr($input_array['class']) : ''; ?>" id="<?php echo array_key_exists('id', $input_array) ? esc_attr($input_array['id']) : ''; ?>">
 
             <a href="#" class="userspn-toggle userspn-width-100-percent userspn-text-decoration-none">
               <div class="userspn-display-table userspn-width-100-percent userspn-mb-20">
@@ -735,12 +773,18 @@ class USERSPN_Forms {
             </a>
 
             <div class="userspn-content userspn-pl-10 userspn-toggle-content userspn-mb-20 userspn-display-none-soft">
+              <?php if (array_key_exists('description', $input_array) && !empty($input_array['description'])): ?>
+                <div class="userspn-section-info-block userspn-mb-20">
+                  <i class="material-icons-outlined userspn-section-info-icon">info_outline</i>
+                  <small><?php echo wp_kses_post($input_array['description']); ?></small>
+                </div>
+              <?php endif ?>
         <?php elseif ($input_array['section'] == 'end'): ?>
             </div>
           </div>
         <?php endif ?>
       <?php else: ?>
-        <div class="userspn-input-wrapper <?php echo esc_attr($input_array['id']); ?> <?php echo !empty($input_array['tabs']) ? 'userspn-input-tabbed' : ''; ?> userspn-input-field-<?php echo esc_attr($input_array['input']); ?> <?php echo (!empty($input_array['required']) && $input_array['required'] == true) ? 'userspn-input-field-required' : ''; ?> <?php echo ($disabled) ? 'userspn-input-field-disabled' : ''; ?> userspn-mb-30">
+        <div class="userspn-input-wrapper <?php echo esc_attr($input_array['id']); ?> <?php echo !empty($input_array['tabs']) ? 'userspn-input-tabbed' : ''; ?> userspn-input-field-<?php echo esc_attr($input_array['input']); ?> <?php echo (!empty($input_array['required']) && $input_array['required'] == true) ? 'userspn-input-field-required' : ''; ?> <?php echo ($disabled) ? 'userspn-input-field-disabled' : ''; ?>">
           <?php if (array_key_exists('label', $input_array) && !empty($input_array['label'])): ?>
             <div class="userspn-display-inline-table <?php echo (($userspn_format == 'half' && !(array_key_exists('type', $input_array) && $input_array['type'] == 'submit')) ? 'userspn-width-40-percent' : 'userspn-width-100-percent'); ?> userspn-tablet-display-block userspn-tablet-width-100-percent userspn-vertical-align-top">
               <div class="userspn-p-10 <?php echo (array_key_exists('parent', $input_array) && !empty($input_array['parent']) && $input_array['parent'] != 'this') ? 'userspn-pl-30' : ''; ?>">
@@ -779,12 +823,9 @@ class USERSPN_Forms {
   public static function userspn_input_display_wrapper($input_array, $type, $userspn_id = 0, $userspn_meta_array = 0, $userspn_array_index = 0, $userspn_format = 'half') {
     ob_start();
     ?>
-    <?php if (array_key_exists('section', $input_array) && !empty($input_array['section'])): ?>      
+    <?php if (array_key_exists('section', $input_array) && !empty($input_array['section'])): ?>
       <?php if ($input_array['section'] == 'start'): ?>
-        <div class="userspn-toggle-wrapper userspn-section-wrapper userspn-position-relative userspn-mb-30 <?php echo array_key_exists('class', $input_array) ? esc_attr($input_array['class']) : ''; ?>" id="<?php echo array_key_exists('id', $input_array) ? esc_attr($input_array['id']) : ''; ?>">
-          <?php if (array_key_exists('description', $input_array) && !empty($input_array['description'])): ?>
-            <i class="material-icons-outlined userspn-section-helper userspn-color-main-0 userspn-tooltip" title="<?php echo wp_kses_post($input_array['description']); ?>">help</i>
-          <?php endif ?>
+        <div class="userspn-toggle-wrapper userspn-section-wrapper userspn-position-relative <?php echo array_key_exists('class', $input_array) ? esc_attr($input_array['class']) : ''; ?>" id="<?php echo array_key_exists('id', $input_array) ? esc_attr($input_array['id']) : ''; ?>">
 
           <a href="#" class="userspn-toggle userspn-width-100-percent userspn-text-decoration-none">
             <div class="userspn-display-table userspn-width-100-percent userspn-mb-20">
@@ -798,12 +839,18 @@ class USERSPN_Forms {
           </a>
 
           <div class="userspn-content userspn-pl-10 userspn-toggle-content userspn-mb-20 userspn-display-none-soft">
+            <?php if (array_key_exists('description', $input_array) && !empty($input_array['description'])): ?>
+              <div class="userspn-section-info-block userspn-mb-20">
+                <i class="material-icons-outlined userspn-section-info-icon">info_outline</i>
+                <small><?php echo wp_kses_post($input_array['description']); ?></small>
+              </div>
+            <?php endif ?>
       <?php elseif ($input_array['section'] == 'end'): ?>
           </div>
         </div>
       <?php endif ?>
     <?php else: ?>
-      <div class="userspn-input-wrapper <?php echo esc_attr($input_array['id']); ?> userspn-input-display-<?php echo esc_attr($input_array['input']); ?> <?php echo (!empty($input_array['required']) && $input_array['required'] == true) ? 'userspn-input-field-required' : ''; ?> userspn-mb-30">
+      <div class="userspn-input-wrapper <?php echo esc_attr($input_array['id']); ?> userspn-input-display-<?php echo esc_attr($input_array['input']); ?> <?php echo (!empty($input_array['required']) && $input_array['required'] == true) ? 'userspn-input-field-required' : ''; ?>">
         <?php if (array_key_exists('label', $input_array) && !empty($input_array['label'])): ?>
           <div class="userspn-display-inline-table <?php echo ($userspn_format == 'half' ? 'userspn-width-40-percent' : 'userspn-width-100-percent'); ?> userspn-tablet-display-block userspn-tablet-width-100-percent userspn-vertical-align-top">
             <div class="userspn-p-10 <?php echo (array_key_exists('parent', $input_array) && !empty($input_array['parent']) && $input_array['parent'] != 'this') ? 'userspn-pl-30' : ''; ?>">
@@ -993,7 +1040,7 @@ class USERSPN_Forms {
               <div class="userspn-html-multi-content">
                 <?php if ($html_multi_fields_length): ?>
                   <?php foreach (range(0, ($html_multi_fields_length - 1)) as $length_index): ?>
-                    <div class="userspn-html-multi-group userspn-display-table userspn-width-100-percent userspn-mb-30">
+                    <div class="userspn-html-multi-group userspn-display-table userspn-width-100-percent">
                       <?php foreach ($userspn_input['html_multi_fields'] as $index => $html_multi_field): ?>
                           <div class="userspn-display-inline-table userspn-width-60-percent">
                             <label><?php echo esc_html($html_multi_field['label']); ?></label>

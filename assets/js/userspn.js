@@ -413,6 +413,59 @@
     if ($('.userspn-tab-links').length) {
     }
 
+    /* WooCommerce sub-tab handler */
+    $(document).on('click', '.userspn-wc-subtab-link', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      var $link = $(this);
+      var $wrapper = $link.closest('.userspn-wc-wrapper');
+      var endpoint = $link.attr('data-userspn-wc-endpoint');
+      var $content = $wrapper.find('.userspn-wc-subtab-content');
+
+      if ($link.hasClass('active')) {
+        return;
+      }
+
+      /* Cache current content before switching */
+      var $active = $wrapper.find('.userspn-wc-subtab-link.active');
+      if ($active.length && !$active.attr('data-userspn-wc-loaded')) {
+        $active.attr('data-userspn-wc-loaded', '1');
+        $active.data('userspn-wc-cache', $content.html());
+      }
+
+      $wrapper.find('.userspn-wc-subtab-link').removeClass('active');
+      $link.addClass('active');
+
+      /* Restore from cache */
+      if ($link.attr('data-userspn-wc-loaded')) {
+        $content.html($link.data('userspn-wc-cache'));
+        return;
+      }
+
+      $content.html('<div class="userspn-text-align-center userspn-p-10"><div class="userspn-waiting"><div></div><div></div><div></div></div></div>');
+
+      $.post(userspn_ajax.ajax_url, {
+        action: 'userspn_ajax',
+        userspn_ajax_type: 'userspn_wc_endpoint',
+        userspn_ajax_nonce: userspn_ajax.userspn_ajax_nonce,
+        wc_endpoint: endpoint
+      }, function(response) {
+        try {
+          var data = typeof response === 'string' ? JSON.parse(response) : response;
+          if (data.error_key === '') {
+            $link.attr('data-userspn-wc-loaded', '1');
+            $link.data('userspn-wc-cache', data.html);
+            $content.html(data.html);
+          } else {
+            $content.html('<p class="userspn-alert">' + (data.error_content || '') + '</p>');
+          }
+        } catch (err) {
+          $content.html('<p class="userspn-alert">Error loading content.</p>');
+        }
+      });
+    });
+
     if ($('.userspn-data-table').length) {
       $('.userspn-data-table').DataTable({
         language: {url: userspn_path.assets + '/datatables-' + userspn_i18n.get_locale + '.json',}

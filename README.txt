@@ -167,41 +167,37 @@ https://github.com/Alex-D/Trumbowyg/blob/develop/src/trumbowyg.js
 
 To install the Users manager - PN plugin, you can either upload the plugin files to the /wp-content/plugins/userspn directory, or install the plugin through the WordPress plugins screen directly. After uploading, activate the plugin through the 'Plugins' screen in WordPress.
 
-= Can I customize the look and feel of my recipe listings? =
+= How do I add a registration form to my site? =
 
-Yes, you can customize the appearance of your recipe listings by modifying the CSS styles provided in the plugin. Additionally, you can enqueue your own custom styles to override the default plugin styles.
+Use the `[userspn-user-register-form]` shortcode on any page or post. The plugin will render a complete frontend registration form with all the custom fields you have configured in the plugin settings.
 
-= Where can I find the uncompressed source code for the plugin's JavaScript and CSS files? =
+= How do I add a login form? =
 
-You can find the uncompressed source code for the JavaScript and CSS files in the src directory of the plugin. You can also visit our GitHub repository for the complete source code.
+Use the `[userspn-login]` shortcode on any page or post. You can also use the `[userspn-profile]` shortcode which displays a login form for logged-out users and a profile menu for logged-in users.
 
-= How do I add a new recipe to my site? =
+= Can I customize the look and feel of the forms? =
 
-To add a new recipe, go to the 'Host' section in the WordPress dashboard and click on 'Add New'. Fill in the required details for your recipe, including the title, ingredients, steps, and any other custom fields provided by the plugin. Once you're done, click 'Publish' to make the recipe live on your site.
+Yes, you can customize the appearance of forms and profile pages by modifying the CSS styles provided in the plugin. Additionally, you can enqueue your own custom styles to override the default plugin styles.
 
 = Can I use this plugin with any WordPress theme? =
 
 Yes, the Users manager - PN plugin is designed to be compatible with any WordPress theme. However, some themes may require additional customization to ensure the plugin's styles integrate seamlessly.
 
+= Is the plugin compatible with WooCommerce? =
+
+Yes, the plugin is designed to work seamlessly with WooCommerce, avoiding conflicts during checkout processes and user account management.
+
 = Is the plugin translation-ready? =
 
-Yes, the Users manager - PN plugin is fully translation-ready. You can use translation plugins such as Loco Translate to translate the plugin into your desired language.
+Yes, the Users manager - PN plugin is fully translation-ready. It includes full Polylang integration for multi-language sites. You can also use translation plugins such as Loco Translate to translate the plugin into your desired language.
 
 = How do I update the plugin? =
 
 You can update the plugin through the WordPress plugins screen just like any other plugin. When a new version is available, you will see an update notification, and you can click 'Update Now' to install the latest version.
 
-= How do I backup my recipes before updating the plugin? =
+= How do I backup my user data before updating the plugin? =
 
-To backup your recipes, you can export your posts and custom post types from the WordPress Tools > Export menu. Choose the 'Host' post type and download the export file. You can import this file later if needed.
-
-= How do I add ratings and reviews to my recipes? =
-
-The plugin don't include a built-in ratings and reviews system yet. You can integrate third-party plugins that offer these features or customize the plugin to include them.
-
-= How do I optimize my recipes for SEO? =
-
-To optimize your recipes for SEO, ensure that you use relevant keywords in your recipe titles, descriptions, and content. You can also use SEO plugins like Yoast SEO to further enhance your recipe posts' search engine visibility.
+To backup your user data, you can export your users from the WordPress Tools > Export menu. The plugin also provides CSV export functionality to download user data including custom profile fields.
 
 = How do I get support for the Users manager - PN plugin? =
 
@@ -213,7 +209,7 @@ The Users manager - PN plugin is tested with the latest version of WordPress. Ho
 
 = How do I uninstall the plugin? =
 
-To uninstall the plugin, go to the 'Plugins' screen in WordPress, find the Users manager - PN plugin, and click 'Deactivate'. After deactivating, you can click 'Delete' to remove the plugin and its files from your site. Note that this will not delete your recipes, but you should back up your data before uninstalling any plugin.
+To uninstall the plugin, go to the 'Plugins' screen in WordPress, find the Users manager - PN plugin, and click 'Deactivate'. After deactivating, you can click 'Delete' to remove the plugin and its files from your site. Note that this will not delete your user data, but you should back up your data before uninstalling any plugin.
 
 
 == Developers ==
@@ -253,11 +249,11 @@ For developer support, bug reports, or feature requests:
 
 == Screenshots ==
 
-1. Grid Host portfolio front-end view.
-2. Recipe details front-end page. It includes the ingredients list view, steps and suggestions.
-3. Interactive view of the recipe steps with time ticking.
-4. Dashboard recipes list view.
-5. Dashboard recipe edition page including meta fields.
+1. Frontend user registration form with custom fields.
+2. User profile page with tabbed interface for profile editing, notifications, and files.
+3. Login form with password recovery link.
+4. Admin settings page for configuring registration fields and security options.
+5. User management dashboard with bot analysis tools.
 
 
 == Changelog ==

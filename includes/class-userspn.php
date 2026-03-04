@@ -54,7 +54,7 @@ class USERSPN
 		if (defined('USERSPN_VERSION')) {
 			$this->version = USERSPN_VERSION;
 		} else {
-			$this->version = '1.1.9';
+			$this->version = '1.1.15';
 		}
 
 		$this->plugin_name = 'userspn';
@@ -309,6 +309,11 @@ class USERSPN
 		$this->loader->userspn_add_action('user_register', $plugin_user, 'userspn_profile_save_fields');
 		$this->loader->userspn_add_action('profile_update', $plugin_user, 'userspn_profile_save_fields');
 		$this->loader->userspn_add_action('admin_init', $plugin_user, 'userspn_auto_login');
+
+		if (get_option('userspn_auto_login') === 'on') {
+			$this->loader->userspn_add_filter('manage_users_columns', $plugin_user, 'userspn_add_auto_login_column');
+			$this->loader->userspn_add_filter('manage_users_custom_column', $plugin_user, 'userspn_render_auto_login_column', 10, 3);
+		}
 	}
 
 	/**

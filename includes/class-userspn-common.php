@@ -78,7 +78,13 @@ class USERSPN_Common {
 
 		wp_enqueue_style($this->plugin_name, USERSPN_URL . 'assets/css/userspn.css', [], $this->version, 'all');
 		wp_enqueue_style('userspn-profile-completion', USERSPN_URL . 'assets/css/userspn-profile-completion.css', [], $this->version, 'all');
-		
+
+		if (get_option('userspn_woocommerce_tab') == 'on' && class_exists('WooCommerce')) {
+			wp_enqueue_style('woocommerce-general');
+			wp_enqueue_style('woocommerce-layout');
+			wp_enqueue_style('woocommerce-smallscreen');
+		}
+
 		// Add dynamic CSS variables for design customization
 		$this->userspn_add_dynamic_css_variables();
 	}

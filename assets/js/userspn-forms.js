@@ -893,4 +893,32 @@
 
     userspn_toggle.siblings('.userspn-toggle-content').fadeToggle();
   });
+  $(document).on('click', '.userspn-assign-role-btn, .userspn-remove-role-btn', function (e) {
+    e.preventDefault(); e.stopPropagation();
+    var $button = $(this), isAssign = $button.hasClass('userspn-assign-role-btn');
+    var inputId = $button.data('input-id'), $select = $('#userspn_user_select_' + inputId);
+    var $nonce = $button.closest('.userspn-role-actions').find('.userspn-role-nonce');
+    var selectedUsers = $select.val();
+    if (!selectedUsers || selectedUsers.length === 0) { showUserspnRoleMessage('Please select at least one user', 'error'); return; }
+    $button.prop('disabled', true);
+    $.ajax({
+      url: userspn_ajax.ajax_url, type: 'POST',
+      data: { action: 'userspn_ajax', userspn_ajax_type: 'userspn_assign_role', userspn_ajax_nonce: $('#userspn_nonce').val(), userspn_role_nonce: $nonce.val(), user_ids: selectedUsers, role: $select.data('role'), action_type: isAssign ? 'assign' : 'remove' },
+      success: function (response) {
+        try { var data = typeof response === 'string' ? JSON.parse(response) : response;
+          if (data.success) { showUserspnRoleMessage(data.message, 'success'); $select.find('option:selected').each(function () { var $option = $(this); if (isAssign) { if (!$option.text().includes('✓')) { $option.text($option.text() + ' ✓'); $option.attr('data-has-role', 'true'); } } else { $option.text($option.text().replace(' ✓', '')); $option.removeAttr('data-has-role'); } }); $select.val(null).trigger('change'); setTimeout(function () { location.reload(); }, 1500); }
+          else { showUserspnRoleMessage(data.message || data.error_content || 'An error occurred', 'error'); }
+        } catch (e) { showUserspnRoleMessage('Error parsing server response', 'error'); }
+      },
+      error: function () { showUserspnRoleMessage('Connection error. Please try again.', 'error'); },
+      complete: function () { $button.prop('disabled', false); }
+    });
+  });
+  $(document).on('mousedown', '.userspn-user-role-select', function (e) { e.stopPropagation(); });
+  function showUserspnRoleMessage(message, type) {
+    var $message = $('.userspn-role-message');
+    var className = type === 'error' ? 'userspn-color-red' : 'userspn-color-green';
+    $message.removeClass('userspn-display-none-soft').html('<p class="' + className + '">' + message + '</p>');
+    setTimeout(function () { $message.addClass('userspn-display-none-soft'); }, 5000);
+  }
 })(jQuery);

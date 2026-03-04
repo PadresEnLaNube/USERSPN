@@ -225,6 +225,16 @@ class USERSPN_Settings
       'placeholder' => __('Roles allowed to upload files', 'userspn'),
       'description' => __('This option allow only specific roles to have the option to upload files to the system. If this option is empty and "User files" field is on, all the roles will be able to upload files to the system. Administrators will be allways allowed.', 'userspn'),
     ];
+    if (class_exists('WooCommerce')) {
+      $userspn_options['userspn_woocommerce_tab'] = [
+        'id' => 'userspn_woocommerce_tab',
+        'class' => 'userspn-input userspn-width-100-percent',
+        'input' => 'input',
+        'type' => 'checkbox',
+        'label' => __('WooCommerce purchases tab', 'userspn'),
+        'description' => __('This option shows a purchases tab in the profile popup that allows users to manage their WooCommerce orders, downloads and account details.', 'userspn'),
+      ];
+    }
     $userspn_options['userspn_user_advanced'] = [
       'id' => 'userspn_user_advanced',
       'class' => 'userspn-input userspn-width-100-percent',
@@ -723,6 +733,26 @@ class USERSPN_Settings
       'description' => __('Main blue color used throughout the plugin interface.', 'userspn'),
     ];
     $userspn_options['userspn_section_design_end'] = [
+      'section' => 'end',
+    ];
+
+    $userspn_options['userspn_role_section_start'] = [
+      'id' => 'userspn_role_section_start',
+      'section' => 'start',
+      'label' => __('User Roles', 'userspn'),
+      'description' => __('Manage user role assignments for this plugin.', 'userspn'),
+    ];
+
+    $userspn_options['userspn_role_selector_subscriber'] = [
+      'id' => 'userspn_role_selector_subscriber',
+      'input' => 'user_role_selector',
+      'label' => __('Newsletter Subscriber', 'userspn'),
+      'role' => 'userspn_newsletter_subscriber',
+      'role_label' => __('Newsletter Subscriber', 'userspn'),
+    ];
+
+    $userspn_options['userspn_role_section_end'] = [
+      'id' => 'userspn_role_section_end',
       'section' => 'end',
     ];
 

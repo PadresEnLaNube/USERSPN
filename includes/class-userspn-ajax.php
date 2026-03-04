@@ -103,6 +103,69 @@ class USERSPN_Ajax {
       }
 
       switch ($userspn_ajax_type) {
+        case 'userspn_assign_role':
+          if (!current_user_can('manage_options')) {
+            echo wp_json_encode([
+              'success' => false,
+              'message' => esc_html(__('You do not have permission to manage user roles.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          $role_nonce = !empty($_POST['userspn_role_nonce']) ? sanitize_text_field(wp_unslash($_POST['userspn_role_nonce'])) : '';
+          if (!wp_verify_nonce($role_nonce, 'userspn-role-assignment')) {
+            echo wp_json_encode([
+              'success' => false,
+              'message' => esc_html(__('Security check failed for role assignment.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          $user_ids = !empty($_POST['user_ids']) ? array_map('intval', (array) $_POST['user_ids']) : [];
+          $role = !empty($_POST['role']) ? sanitize_text_field(wp_unslash($_POST['role'])) : '';
+          $action_type = !empty($_POST['action_type']) ? sanitize_text_field(wp_unslash($_POST['action_type'])) : '';
+
+          $plugin_roles = ['userspn_newsletter_subscriber'];
+          if (!in_array($role, $plugin_roles)) {
+            echo wp_json_encode([
+              'success' => false,
+              'message' => esc_html(__('Invalid role specified.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          $role_labels = ['userspn_newsletter_subscriber' => __('Newsletter Subscriber', 'userspn')];
+
+          // Ensure role exists in WordPress
+          if (!get_role($role)) {
+            add_role($role, $role_labels[$role], ['read' => true]);
+          }
+
+          $processed = 0;
+          foreach ($user_ids as $uid) {
+            $user = get_userdata($uid);
+            if (!$user) continue;
+            if ($action_type === 'assign') {
+              $user->add_role($role);
+            } else {
+              $user->remove_role($role);
+            }
+            $processed++;
+          }
+
+          $label = $role_labels[$role];
+          if ($action_type === 'assign') {
+            $message = sprintf(__('%s role assigned to %d user(s) successfully.', 'userspn'), $label, $processed);
+          } else {
+            $message = sprintf(__('%s role removed from %d user(s) successfully.', 'userspn'), $label, $processed);
+          }
+
+          echo wp_json_encode([
+            'success' => true,
+            'message' => esc_html($message),
+          ]);
+          exit;
+          break;
         case 'userspn_options_save':
           if (!empty($userspn_key_value)) {
             foreach ($userspn_key_value as $key => $value) {
@@ -421,7 +484,7 @@ class USERSPN_Ajax {
 
             ob_start();
             ?>
-              <div class="userspn-user-register-field userspn-width-100-percent userspn-mb-30 <?php echo esc_attr($userspn_input_id); ?>" id="<?php echo esc_attr($userspn_input_id); ?>">
+              <div class="userspn-user-register-field userspn-width-100-percent <?php echo esc_attr($userspn_input_id); ?>" id="<?php echo esc_attr($userspn_input_id); ?>">
                 <label class="userspn-display-block" for="<?php echo esc_attr($userspn_input_id); ?>"><?php echo esc_html($userspn_input_name); ?></label>
                 <?php USERSPN_Forms::userspn_input_builder($userspn_meta_value, 'user'); ?>
               </div>
@@ -892,12 +955,52 @@ class USERSPN_Ajax {
           $calendar_html = $plugin_calendar->userspn_calendar_render_view_content($calendar_view, $calendar_year, $calendar_month, $calendar_day);
           
           echo wp_json_encode([
-            'error_key' => '', 
+            'error_key' => '',
             'html' => $calendar_html,
             'view' => $calendar_view,
             'year' => $calendar_year,
             'month' => $calendar_month,
             'day' => $calendar_day
+          ]);
+
+          exit;
+          break;
+
+        case 'userspn_wc_endpoint':
+          if (!is_user_logged_in()) {
+            echo wp_json_encode([
+              'error_key' => 'userspn_wc_not_logged_in',
+              'error_content' => esc_html(__('You must be logged in.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          if (!class_exists('WooCommerce') || get_option('userspn_woocommerce_tab') != 'on') {
+            echo wp_json_encode([
+              'error_key' => 'userspn_wc_not_active',
+              'error_content' => esc_html(__('WooCommerce is not available.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          $wc_endpoint = !empty($_POST['wc_endpoint']) ? sanitize_text_field(wp_unslash($_POST['wc_endpoint'])) : '';
+          $allowed_endpoints = ['orders', 'downloads', 'edit-address', 'payment-methods', 'edit-account'];
+
+          if (!in_array($wc_endpoint, $allowed_endpoints, true)) {
+            echo wp_json_encode([
+              'error_key' => 'userspn_wc_invalid_endpoint',
+              'error_content' => esc_html(__('Invalid endpoint.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          ob_start();
+          USERSPN_Functions_User::userspn_render_wc_endpoint($wc_endpoint);
+          $wc_html = ob_get_clean();
+
+          echo wp_json_encode([
+            'error_key' => '',
+            'html' => $wc_html,
           ]);
 
           exit;

@@ -46,7 +46,7 @@
 
     // Pre-load reCAPTCHA script if registration form is present
     if (recaptchaEnabled && $('#userspn-user-register-fields').length > 0) {
-      loadRecaptchaScript();
+      loadRecaptchaScript().catch(function() { /* Pre-load failure handled at submit time */ });
     }
 
     $(document).on('submit', '#userspn-user-register-fields', function(e) {

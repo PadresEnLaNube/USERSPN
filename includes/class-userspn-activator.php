@@ -32,7 +32,7 @@ class USERSPN_Activator {
     update_option('userspn_redirect_to_options', true);
 
     // Store DB version for upgrade path
-    update_option('userspn_db_version', '1.1.9');
+    update_option('userspn_db_version', '1.1.15');
   }
 
   /**

@@ -103,7 +103,7 @@
     border: none;
 } 
 #userspn-profile-popup{
-    max-width:600px;
+    max-width:700px;
     /* Ensure the popup is always visible, even if it's inside a hidden container */
     position: fixed !important;
     top: 50% !important;

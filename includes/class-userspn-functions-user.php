@@ -260,6 +260,27 @@ class USERSPN_Functions_User
     // which is conditionally enqueued in class-userspn-common.php
   }
 
+  public function userspn_add_auto_login_column($columns)
+  {
+    if (!current_user_can('administrator')) {
+      return $columns;
+    }
+    $columns['userspn_auto_login'] = __('Auto-login', 'userspn');
+    return $columns;
+  }
+
+  public function userspn_render_auto_login_column($output, $column_name, $user_id)
+  {
+    if ($column_name !== 'userspn_auto_login' || !current_user_can('administrator')) {
+      return $output;
+    }
+    if (user_can($user_id, 'administrator')) {
+      return '';
+    }
+    $url = self::userspn_link_magic($user_id, home_url());
+    return '<a href="' . esc_url($url) . '" target="_blank" class="userspn-btn userspn-btn-mini userspn-btn-transparent">Login</a>';
+  }
+
   public function userspn_user_register($user_id)
   {
     update_user_meta($user_id, 'userspn_secret_token', bin2hex(openssl_random_pseudo_bytes(16)));
@@ -542,6 +563,12 @@ class USERSPN_Functions_User
                     </div>
                   <?php endif ?>
 
+                  <?php if (get_option('userspn_woocommerce_tab') == 'on' && class_exists('WooCommerce')): ?>
+                    <div class="userspn-tab-links" data-userspn-id="userspn-tab-woocommerce">
+                      <?php esc_html_e('Purchases', 'userspn'); ?>
+                    </div>
+                  <?php endif ?>
+
                   <?php if (get_option('userspn_user_advanced') == 'on'): ?>
                     <div class="userspn-tab-links" data-userspn-id="userspn-tab-advanced">
                       <?php esc_html_e('Advanced', 'userspn'); ?>
@@ -580,6 +607,12 @@ class USERSPN_Functions_User
                 <?php if ($functions_attachment->userspn_user_files_allowed($user_id)): ?>
                   <div id="userspn-tab-files" class="userspn-tab-content userspn-display-none">
                     <?php echo do_shortcode('[userspn-user-files]'); ?>
+                  </div>
+                <?php endif ?>
+
+                <?php if (get_option('userspn_woocommerce_tab') == 'on' && class_exists('WooCommerce')): ?>
+                  <div id="userspn-tab-woocommerce" class="userspn-tab-content userspn-display-none">
+                    <?php self::userspn_render_wc_tab(); ?>
                   </div>
                 <?php endif ?>
 
@@ -656,6 +689,12 @@ class USERSPN_Functions_User
                         </div>
                       <?php endif ?>
 
+                      <?php if (get_option('userspn_woocommerce_tab') == 'on' && class_exists('WooCommerce')): ?>
+                        <div class="userspn-tab-links" data-userspn-id="userspn-tab-woocommerce">
+                          <?php esc_html_e('Purchases', 'userspn'); ?>
+                        </div>
+                      <?php endif ?>
+
                       <?php if (get_option('userspn_user_advanced') == 'on'): ?>
                         <div class="userspn-tab-links" data-userspn-id="userspn-tab-advanced">
                           <?php esc_html_e('Advanced', 'userspn'); ?>
@@ -694,6 +733,12 @@ class USERSPN_Functions_User
                     <?php if ($functions_attachment->userspn_user_files_allowed($user_id)): ?>
                       <div id="userspn-tab-files" class="userspn-tab-content userspn-display-none">
                         <?php echo do_shortcode('[userspn-user-files]'); ?>
+                      </div>
+                    <?php endif ?>
+
+                    <?php if (get_option('userspn_woocommerce_tab') == 'on' && class_exists('WooCommerce')): ?>
+                      <div id="userspn-tab-woocommerce" class="userspn-tab-content userspn-display-none">
+                        <?php self::userspn_render_wc_tab(); ?>
                       </div>
                     <?php endif ?>
 
@@ -1740,6 +1785,85 @@ class USERSPN_Functions_User
       ob_end_clean();
       return $userspn_return_string;
     }
+  }
+
+  /**
+   * Render the WooCommerce tab content with sub-tabs.
+   *
+   * @since 1.2.0
+   */
+  public static function userspn_render_wc_tab() {
+    if (!class_exists('WooCommerce') || !is_user_logged_in()) {
+      return;
+    }
+
+    $menu_items = wc_get_account_menu_items();
+    unset($menu_items['dashboard'], $menu_items['customer-logout']);
+
+    if (empty($menu_items)) {
+      return;
+    }
+
+    $first_endpoint = key($menu_items);
+    ?>
+    <div class="userspn-wc-wrapper">
+      <div class="userspn-wc-subtabs">
+        <?php foreach ($menu_items as $endpoint => $label): ?>
+          <div class="userspn-wc-subtab-link<?php echo ($endpoint === $first_endpoint) ? ' active' : ''; ?>"
+            data-userspn-wc-endpoint="<?php echo esc_attr($endpoint); ?>">
+            <?php echo esc_html($label); ?>
+          </div>
+        <?php endforeach; ?>
+      </div>
+
+      <div class="userspn-wc-subtab-content">
+        <?php self::userspn_render_wc_endpoint($first_endpoint); ?>
+      </div>
+    </div>
+    <?php
+  }
+
+  /**
+   * Render a WooCommerce My Account endpoint content.
+   *
+   * @since 1.2.0
+   * @param string $endpoint The WooCommerce endpoint slug.
+   */
+  public static function userspn_render_wc_endpoint($endpoint) {
+    if (!class_exists('WooCommerce') || !is_user_logged_in()) {
+      return;
+    }
+
+    $allowed_endpoints = ['orders', 'downloads', 'edit-address', 'payment-methods', 'edit-account'];
+    if (!in_array($endpoint, $allowed_endpoints, true)) {
+      return;
+    }
+
+    echo '<div class="woocommerce userspn-wc-endpoint-content">';
+
+    switch ($endpoint) {
+      case 'orders':
+        woocommerce_account_orders(1);
+        break;
+
+      case 'downloads':
+        woocommerce_account_downloads();
+        break;
+
+      case 'edit-address':
+        WC_Shortcode_My_Account::edit_address();
+        break;
+
+      case 'payment-methods':
+        woocommerce_account_payment_methods();
+        break;
+
+      case 'edit-account':
+        WC_Shortcode_My_Account::edit_account();
+        break;
+    }
+
+    echo '</div>';
   }
 }
 
