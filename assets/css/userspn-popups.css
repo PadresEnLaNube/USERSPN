@@ -126,11 +126,42 @@
 }
 
 @media (max-width: 768px) {
-    .userspn-popup-content{
+    .userspn-popup {
+        top: 0;
+        left: 0;
+        transform: none;
+        width: 100%;
+        max-width: 100%;
+        height: 100%;
         max-height: 100%;
+        border-radius: 0;
+    }
+    .userspn-popup-content {
+        max-height: 100%;
+        border-radius: 0;
+        box-shadow: none;
+        min-height: 100%;
+    }
+    .userspn-popup.userspn-popup-size-small .userspn-popup-content,
+    .userspn-popup.userspn-popup-size-medium .userspn-popup-content,
+    .userspn-popup.userspn-popup-size-large .userspn-popup-content,
+    .userspn-popup.userspn-popup-size-full-size .userspn-popup-content {
+        max-width: 100%;
+    }
+    .userspn-popup.userspn-popup-size-small,
+    .userspn-popup.userspn-popup-size-medium,
+    .userspn-popup.userspn-popup-size-large,
+    .userspn-popup.userspn-popup-size-full-size {
+        max-width: 100%;
     }
     #userspn-profile-popup {
-        width: 95% !important;
+        top: 0 !important;
+        left: 0 !important;
+        transform: none !important;
+        width: 100% !important;
         max-width: 100% !important;
+        height: 100% !important;
+        max-height: 100% !important;
+        border-radius: 0 !important;
     }
 }

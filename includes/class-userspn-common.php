@@ -48,12 +48,12 @@ class USERSPN_Common {
 	 * @since    1.0.0
 	 */
 	public function userspn_enqueue_styles() {
-		if (!wp_style_is($this->plugin_name . '-material-icons-outlined', 'enqueued')) {
-			wp_enqueue_style($this->plugin_name . '-material-icons-outlined', USERSPN_URL . 'assets/css/material-icons-outlined.min.css', [], $this->version, 'all');
+		if (!wp_style_is('wph-material-icons-outlined', 'enqueued')) {
+			wp_enqueue_style('wph-material-icons-outlined', USERSPN_URL . 'assets/css/material-icons-outlined.min.css', [], $this->version, 'all');
 		}
 
-		if (!wp_style_is($this->plugin_name . '-trumbowyg', 'enqueued')) {
-			wp_enqueue_style($this->plugin_name . '-trumbowyg', USERSPN_URL . 'assets/css/trumbowyg.min.css', [], $this->version, 'all');
+		if (!wp_style_is('wph-trumbowyg', 'enqueued')) {
+			wp_enqueue_style('wph-trumbowyg', USERSPN_URL . 'assets/css/trumbowyg.min.css', [], $this->version, 'all');
 		}
 
 		if (!wp_style_is($this->plugin_name . '-selector', 'enqueued')) {
@@ -64,12 +64,12 @@ class USERSPN_Common {
 			wp_enqueue_style($this->plugin_name . '-popups', USERSPN_URL . 'assets/css/userspn-popups.css', [], $this->version, 'all');
 		}
 
-		if (!wp_style_is($this->plugin_name . '-tooltipster', 'enqueued')) {
-			wp_enqueue_style($this->plugin_name . '-tooltipster', USERSPN_URL . 'assets/css/tooltipster.min.css', [], $this->version, 'all');
+		if (!wp_style_is('wph-tooltipster', 'enqueued')) {
+			wp_enqueue_style('wph-tooltipster', USERSPN_URL . 'assets/css/tooltipster.min.css', [], $this->version, 'all');
 		}
 
-		if (!wp_style_is($this->plugin_name . '-owl', 'enqueued')) {
-			wp_enqueue_style($this->plugin_name . '-owl', USERSPN_URL . 'assets/css/owl.min.css', [], $this->version, 'all');
+		if (!wp_style_is('wph-owl', 'enqueued')) {
+			wp_enqueue_style('wph-owl', USERSPN_URL . 'assets/css/owl.min.css', [], $this->version, 'all');
 		}
 
 		if (!wp_style_is($this->plugin_name . '-datatables', 'enqueued')) {
@@ -133,20 +133,20 @@ class USERSPN_Common {
 			wp_enqueue_script($this->plugin_name . '-selector', USERSPN_URL . 'assets/js/userspn-selector.js', ['jquery'], $this->version, false);
 		}
 
-		if(!wp_script_is($this->plugin_name . '-trumbowyg', 'enqueued')) {
-			wp_enqueue_script($this->plugin_name . '-trumbowyg', USERSPN_URL . 'assets/js/trumbowyg.min.js', ['jquery'], $this->version, false);
+		if(!wp_script_is('wph-trumbowyg', 'enqueued')) {
+			wp_enqueue_script('wph-trumbowyg', USERSPN_URL . 'assets/js/trumbowyg.min.js', ['jquery'], $this->version, false);
 		}
 
 		if(!wp_script_is($this->plugin_name . '-popups', 'enqueued')) {
 			wp_enqueue_script($this->plugin_name . '-popups', USERSPN_URL . 'assets/js/userspn-popups.js', ['jquery'], $this->version, false);
 		}
 
-		if(!wp_script_is($this->plugin_name . '-tooltipster', 'enqueued')) {
-			wp_enqueue_script($this->plugin_name . '-tooltipster', USERSPN_URL . 'assets/js/tooltipster.min.js', ['jquery'], $this->version, false);
+		if(!wp_script_is('wph-tooltipster', 'enqueued')) {
+			wp_enqueue_script('wph-tooltipster', USERSPN_URL . 'assets/js/tooltipster.min.js', ['jquery'], $this->version, false);
 		}
 
-		if(!wp_script_is($this->plugin_name . '-owl', 'enqueued')) {
-			wp_enqueue_script($this->plugin_name . '-owl', USERSPN_URL . 'assets/js/owl.min.js', ['jquery'], $this->version, false);
+		if(!wp_script_is('wph-owl', 'enqueued')) {
+			wp_enqueue_script('wph-owl', USERSPN_URL . 'assets/js/owl.min.js', ['jquery'], $this->version, false);
 		}
 
 		if(!wp_script_is($this->plugin_name . '-datatables', 'enqueued')) {
@@ -159,7 +159,7 @@ class USERSPN_Common {
 		wp_enqueue_script($this->plugin_name, USERSPN_URL . 'assets/js/userspn.js', ['jquery'], $script_version, false);
 		wp_enqueue_script($this->plugin_name . '-ajax', USERSPN_URL . 'assets/js/userspn-ajax.js', ['jquery'], $this->version, false);
 		wp_enqueue_script($this->plugin_name . '-aux', USERSPN_URL . 'assets/js/userspn-aux.js', ['jquery'], $this->version, false);
-		wp_enqueue_script($this->plugin_name . '-forms', USERSPN_URL . 'assets/js/userspn-forms.js', ['jquery'], $this->version, false);
+		wp_enqueue_script($this->plugin_name . '-forms', USERSPN_URL . 'assets/js/userspn-forms.js', ['jquery', 'jquery-ui-sortable'], $this->version, false);
 		wp_enqueue_script($this->plugin_name . '-input-editor-builder', USERSPN_URL . 'assets/js/userspn-input-editor-builder.js', ['jquery'], $this->version, false);
 		wp_enqueue_script($this->plugin_name . '-profile-progress', USERSPN_URL . 'assets/js/userspn-profile-progress.js', ['jquery'], $this->version, false);
 
@@ -323,9 +323,11 @@ class USERSPN_Common {
 		]);
 
 		// Security settings for JavaScript
+		$recaptcha_site_key = get_option('userspn_recaptcha_site_key', '');
+		$recaptcha_enabled = (get_option('userspn_recaptcha_enabled') === 'on') && !empty($recaptcha_site_key);
 		wp_localize_script($this->plugin_name, 'userspn_security', [
-			'recaptcha_enabled' => (get_option('userspn_recaptcha_enabled') === 'on'),
-			'recaptcha_site_key' => get_option('userspn_recaptcha_site_key', ''),
+			'recaptcha_enabled' => $recaptcha_enabled,
+			'recaptcha_site_key' => $recaptcha_enabled ? $recaptcha_site_key : '',
 			'honeypot_enabled' => (get_option('userspn_honeypot_enabled') === 'on'),
 		]);
 			

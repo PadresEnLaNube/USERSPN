@@ -19,6 +19,22 @@
       }
 
       userspnRecaptchaLoaderPromise = new Promise(function(resolve, reject) {
+        // Check if script tag already exists (e.g. loaded by register form)
+        var existing = document.querySelector('script[src*="recaptcha/api.js"]');
+        if (existing) {
+          var polls = 0;
+          var interval = setInterval(function() {
+            if (typeof grecaptcha !== 'undefined') {
+              clearInterval(interval);
+              resolve();
+            } else if (polls++ > 50) {
+              clearInterval(interval);
+              reject();
+            }
+          }, 100);
+          return;
+        }
+
         var script = document.createElement('script');
         script.src = 'https://www.google.com/recaptcha/api.js?render=' + userspn_security.recaptcha_site_key;
         script.async = true;
@@ -27,16 +43,13 @@
           resolve();
         };
         script.onerror = function() {
+          userspnRecaptchaLoaderPromise = null;
           reject();
         };
         document.head.appendChild(script);
       });
 
       return userspnRecaptchaLoaderPromise;
-    }
-
-    if ($('#userspn-newsletter-form').length > 0) {
-      userspnLoadRecaptchaScript();
     }
     $(document).on('submit', '.userspn-form', function(e){
       var userspn_form = $(this);
@@ -93,12 +106,19 @@
       });
 
       $.post(ajax_url, data, function(response) {
-        console.log(data);console.log(response);
-        
+        // Parse JSON response to extract error_key
+        var responseData = response;
+        if (typeof response === 'string') {
+          try { responseData = JSON.parse(response); } catch(e) {}
+        }
+        var errorKey = (typeof responseData === 'object' && responseData !== null) ? (responseData.error_key || '') : response;
+
         if (response == 'userspn_profile_edit_success') {
           userspn_get_main_message(userspn_i18n.profile_updated);
           $(document).trigger('userspn_profile_updated');
-        }else if (response == 'userspn_form_save_error_unlogged') {
+        }else if (errorKey === 'userspn_form_save_error_unauthorized') {
+          userspn_get_main_message(responseData.error_content || userspn_i18n.an_error_has_occurred);
+        }else if (errorKey === 'userspn_form_save_error_unlogged') {
           userspn_get_main_message(userspn_i18n.user_unlogged);
 
           if (!$('.userspn-profile-wrapper .user-unlogged').length) {
@@ -107,8 +127,8 @@
 
           USERSPN_Popups.open($('#userspn-profile-popup'));
           $('#userspn-login input#user_login').focus();
-        }else if (response == 'userspn_form_save_error') {
-          userspn_get_main_message(userspn_i18n.an_error_has_occurred);
+        }else if (errorKey === 'userspn_form_save_error' || errorKey === 'userspn_nonce_ajax_nopriv_error_required' || errorKey === 'userspn_nonce_ajax_nopriv_error_invalid') {
+          userspn_get_main_message(responseData.error_content || userspn_i18n.an_error_has_occurred);
         }else {
           userspn_get_main_message(userspn_i18n.saved_successfully);
         }
@@ -174,13 +194,8 @@
 
       var recaptchaEnabled = (typeof userspn_security !== 'undefined' && userspn_security.recaptcha_enabled && userspn_security.recaptcha_site_key);
 
-      if (recaptchaEnabled) {
-        userspnLoadRecaptchaScript();
-      }
-
       function submitNewsletter() {
         $.post(ajax_url, data, function(response) {
-          console.log(data);console.log(response);
           if (response == 'userspn_newsletter_success_activation_sent') {
             userspn_get_main_message(userspn_i18n.activation_email);
             $('.userspn-newsletter').html('<div class="userspn-alert-warning"><p>' + userspn_i18n.email_sent + '</p></div>');
@@ -218,12 +233,18 @@
         }
       }
 
-      if (recaptchaEnabled && typeof grecaptcha === 'undefined' && userspnRecaptchaLoaderPromise) {
-        userspnRecaptchaLoaderPromise.then(function() {
-          executeRecaptchaAndSubmit();
-        }).catch(function() {
+      // Lazy load: only load reCAPTCHA when the user actually submits
+      if (recaptchaEnabled && typeof grecaptcha === 'undefined') {
+        var loaderPromise = userspnLoadRecaptchaScript();
+        if (loaderPromise) {
+          loaderPromise.then(function() {
+            executeRecaptchaAndSubmit();
+          }).catch(function() {
+            submitNewsletter();
+          });
+        } else {
           submitNewsletter();
-        });
+        }
       } else {
         executeRecaptchaAndSubmit();
       }

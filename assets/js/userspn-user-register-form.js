@@ -34,7 +34,7 @@
       var script = document.createElement('script');
       script.src = 'https://www.google.com/recaptcha/api.js?render=' + userspn_security.recaptcha_site_key;
       script.onload = function() { resolve(); };
-      script.onerror = function() { reject(new Error('reCAPTCHA script failed to load')); };
+      script.onerror = function() { recaptchaLoadPromise = null; reject(new Error('reCAPTCHA script failed to load')); };
       document.head.appendChild(script);
     });
 
@@ -43,11 +43,6 @@
 
   $(document).ready(function() {
     var recaptchaEnabled = (typeof userspn_security !== 'undefined' && userspn_security.recaptcha_enabled && userspn_security.recaptcha_site_key);
-
-    // Pre-load reCAPTCHA script if registration form is present
-    if (recaptchaEnabled && $('#userspn-user-register-fields').length > 0) {
-      loadRecaptchaScript().catch(function() { /* Pre-load failure handled at submit time */ });
-    }
 
     $(document).on('submit', '#userspn-user-register-fields', function(e) {
       var userspn_form = $(this);
@@ -121,18 +116,15 @@
               grecaptcha.execute(userspn_security.recaptcha_site_key, {action: 'register'}).then(function(token) {
                 data['g-recaptcha-response'] = token;
                 submitForm();
-              }).catch(function(err) {
-                console.error('reCAPTCHA execute error:', err);
+              }).catch(function() {
                 // Submit without token - server will log warning but allow registration
                 submitForm();
               });
             });
           } else {
-            console.error('reCAPTCHA: grecaptcha undefined after script load');
             submitForm();
           }
-        }).catch(function(err) {
-          console.error('reCAPTCHA load error:', err);
+        }).catch(function() {
           // Submit without token - server will log warning but allow registration
           submitForm();
         });

@@ -66,20 +66,106 @@
     font-size: 1.5em;
 }
 
-.userspn-dashboard .userspn-popup ul {
-    margin: 0;
-    padding: 0;
+/* Analytics Table */
+.userspn-analytics-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
 }
 
-.userspn-dashboard .userspn-popup ul li {
-    padding: 12px 0;
+.userspn-analytics-table th {
+    background: #f8f9fa;
+    padding: 12px 14px;
+    text-align: left;
+    font-weight: 600;
+    color: #495057;
+    border-bottom: 2px solid #e9ecef;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.userspn-analytics-table td {
+    padding: 10px 14px;
     border-bottom: 1px solid #f0f0f0;
-    font-size: 14px;
-    line-height: 1.4;
+    font-size: 13px;
+    vertical-align: middle;
 }
 
-.userspn-dashboard .userspn-popup ul li:last-child {
+.userspn-analytics-table tr:last-child td {
     border-bottom: none;
+}
+
+.userspn-analytics-table tr:hover {
+    background-color: #f8f9fa;
+}
+
+.userspn-analytics-icon {
+    font-size: 18px;
+    vertical-align: middle;
+    margin-right: 6px;
+    color: #787c82;
+}
+
+.userspn-analytics-link {
+    display: inline-flex;
+    align-items: center;
+    color: #2271b1;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.userspn-analytics-link:hover {
+    color: #135e96;
+}
+
+.userspn-analytics-link .userspn-analytics-icon {
+    color: #2271b1;
+}
+
+.userspn-analytics-link:hover .userspn-analytics-icon {
+    color: #135e96;
+}
+
+.userspn-analytics-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.userspn-analytics-actions a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    background: #f0f0f1;
+    color: #50575e;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.userspn-analytics-actions a:hover {
+    background: #2271b1;
+    color: #fff;
+}
+
+.userspn-analytics-actions a .material-icons-outlined {
+    font-size: 18px;
+}
+
+.userspn-analytics-empty {
+    padding: 20px;
+    color: #787c82;
+    text-align: center;
+    font-size: 14px;
+}
+
+.userspn-analytics-empty .userspn-analytics-icon {
+    color: #787c82;
 }
 
 .userspn-profile-block-preview{

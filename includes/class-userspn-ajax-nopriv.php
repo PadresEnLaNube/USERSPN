@@ -215,6 +215,15 @@ class USERSPN_Ajax_Nopriv {
                     }
 
                     if (!empty($user_id)) {
+                      // Authorization: only the account owner or an admin may update user meta
+                      if (!is_user_logged_in() || (intval($user_id) !== get_current_user_id() && !USERSPN_Functions_User::userspn_user_is_admin(get_current_user_id()))) {
+                        echo wp_json_encode([
+                          'error_key' => 'userspn_form_save_error_unauthorized',
+                          'error_content' => esc_html(__('You are not authorized to perform this action.', 'userspn')),
+                        ]);
+                        exit;
+                      }
+
                       foreach ($userspn_key_value as $userspn_key => $userspn_value) {
                         // Skip action and ajax type keys
                         if (in_array($userspn_key, ['action', 'userspn_ajax_nopriv_type'])) {
@@ -257,6 +266,24 @@ class USERSPN_Ajax_Nopriv {
                     }
 
                     if (!empty($post_id)) {
+                      // Authorization: only logged-in users who own the post or are admins may update post meta
+                      if (!is_user_logged_in()) {
+                        echo wp_json_encode([
+                          'error_key' => 'userspn_form_save_error_unauthorized',
+                          'error_content' => esc_html(__('You are not authorized to perform this action.', 'userspn')),
+                        ]);
+                        exit;
+                      }
+
+                      $post_author_id = intval(get_post_field('post_author', $post_id));
+                      if (get_current_user_id() !== $post_author_id && !USERSPN_Functions_User::userspn_user_is_admin(get_current_user_id())) {
+                        echo wp_json_encode([
+                          'error_key' => 'userspn_form_save_error_unauthorized',
+                          'error_content' => esc_html(__('You are not authorized to perform this action.', 'userspn')),
+                        ]);
+                        exit;
+                      }
+
                       foreach ($userspn_key_value as $userspn_key => $userspn_value) {
                         if ($userspn_key == $post_type . '_title') {
                           wp_update_post([

@@ -975,7 +975,7 @@ class USERSPN_Settings
         </div>
       </div>
       <!-- Hidden popups -->
-      <div id="userspn-popup-userspn-users-week" class="userspn-popup userspn-popup-size-medium userspn-display-none-soft">
+      <div id="userspn-popup-userspn-users-week" class="userspn-popup userspn-popup-size-large userspn-display-none-soft">
         <div class="userspn-popup-content">
           <div class="userspn-p-30">
             <h2><?php esc_html_e('Usuarios nuevos en la última semana', 'userspn'); ?></h2>
@@ -984,7 +984,7 @@ class USERSPN_Settings
         </div>
       </div>
       <div id="userspn-popup-userspn-newsletter-week"
-        class="userspn-popup userspn-popup-size-medium userspn-display-none-soft">
+        class="userspn-popup userspn-popup-size-large userspn-display-none-soft">
         <div class="userspn-popup-content">
           <div class="userspn-p-30">
             <h2><?php esc_html_e('Altas en newsletter en la última semana', 'userspn'); ?></h2>
@@ -992,7 +992,7 @@ class USERSPN_Settings
           </div>
         </div>
       </div>
-      <div id="userspn-popup-userspn-last-logins" class="userspn-popup userspn-popup-size-medium userspn-display-none-soft">
+      <div id="userspn-popup-userspn-last-logins" class="userspn-popup userspn-popup-size-large userspn-display-none-soft">
         <div class="userspn-popup-content">
           <div class="userspn-p-30">
             <h2><?php esc_html_e('Últimos accesos', 'userspn'); ?></h2>
@@ -1374,15 +1374,41 @@ class USERSPN_Settings
       'fields' => ['ID', 'user_login', 'user_email', 'user_registered'],
     ];
     $users = get_users($args);
-    $html = '<ul style="list-style:none;padding:0;">';
+    $html = '';
     if (!empty($users)) {
+      $html .= '<table class="userspn-analytics-table">';
+      $html .= '<thead><tr>';
+      $html .= '<th>' . esc_html__('Usuario', 'userspn') . '</th>';
+      $html .= '<th>' . esc_html__('Email', 'userspn') . '</th>';
+      $html .= '<th>' . esc_html__('Fecha de registro', 'userspn') . '</th>';
+      $html .= '<th>' . esc_html__('Acciones', 'userspn') . '</th>';
+      $html .= '</tr></thead><tbody>';
       foreach ($users as $user) {
-        $html .= '<li style="padding:10px;border-bottom:1px solid #eee;">' . esc_html($user->user_login) . ' (' . esc_html($user->user_email) . ') - ' . esc_html(date('Y-m-d H:i', strtotime($user->user_registered))) . '</li>';
+        $edit_url = admin_url('user-edit.php?user_id=' . $user->ID);
+        $html .= '<tr>';
+        $html .= '<td><a href="' . esc_url($edit_url) . '" target="_blank" class="userspn-analytics-link">';
+        $html .= '<i class="material-icons-outlined userspn-analytics-icon">person</i>';
+        $html .= esc_html($user->user_login);
+        $html .= '</a></td>';
+        $html .= '<td><a href="mailto:' . esc_attr($user->user_email) . '" class="userspn-analytics-link">';
+        $html .= '<i class="material-icons-outlined userspn-analytics-icon">alternate_email</i>';
+        $html .= esc_html($user->user_email);
+        $html .= '</a></td>';
+        $html .= '<td><i class="material-icons-outlined userspn-analytics-icon">calendar_today</i>';
+        $html .= esc_html(date_i18n(get_option('date_format') . ' H:i', strtotime($user->user_registered)));
+        $html .= '</td>';
+        $html .= '<td class="userspn-analytics-actions">';
+        $html .= '<a href="' . esc_url($edit_url) . '" target="_blank" title="' . esc_attr__('Editar perfil', 'userspn') . '">';
+        $html .= '<i class="material-icons-outlined">edit</i></a>';
+        $html .= '<a href="mailto:' . esc_attr($user->user_email) . '" title="' . esc_attr__('Enviar email', 'userspn') . '">';
+        $html .= '<i class="material-icons-outlined">mail</i></a>';
+        $html .= '</td>';
+        $html .= '</tr>';
       }
+      $html .= '</tbody></table>';
     } else {
-      $html .= '<li style="padding:10px;color:#666;">' . esc_html__('No hay usuarios nuevos en la última semana', 'userspn') . '</li>';
+      $html .= '<p class="userspn-analytics-empty"><i class="material-icons-outlined userspn-analytics-icon">info</i>' . esc_html__('No hay usuarios nuevos en la última semana', 'userspn') . '</p>';
     }
-    $html .= '</ul>';
     return [
       'count' => count($users),
       'html' => $html,
@@ -1405,15 +1431,41 @@ class USERSPN_Settings
       'role__in' => ['userspn_newsletter_subscriber'],
     ];
     $users = get_users($args);
-    $html = '<ul style="list-style:none;padding:0;">';
+    $html = '';
     if (!empty($users)) {
+      $html .= '<table class="userspn-analytics-table">';
+      $html .= '<thead><tr>';
+      $html .= '<th>' . esc_html__('Usuario', 'userspn') . '</th>';
+      $html .= '<th>' . esc_html__('Email', 'userspn') . '</th>';
+      $html .= '<th>' . esc_html__('Fecha de alta', 'userspn') . '</th>';
+      $html .= '<th>' . esc_html__('Acciones', 'userspn') . '</th>';
+      $html .= '</tr></thead><tbody>';
       foreach ($users as $user) {
-        $html .= '<li style="padding:10px;border-bottom:1px solid #eee;">' . esc_html($user->user_login) . ' (' . esc_html($user->user_email) . ') - ' . esc_html(date('Y-m-d H:i', strtotime($user->user_registered))) . '</li>';
+        $edit_url = admin_url('user-edit.php?user_id=' . $user->ID);
+        $html .= '<tr>';
+        $html .= '<td><a href="' . esc_url($edit_url) . '" target="_blank" class="userspn-analytics-link">';
+        $html .= '<i class="material-icons-outlined userspn-analytics-icon">person</i>';
+        $html .= esc_html($user->user_login);
+        $html .= '</a></td>';
+        $html .= '<td><a href="mailto:' . esc_attr($user->user_email) . '" class="userspn-analytics-link">';
+        $html .= '<i class="material-icons-outlined userspn-analytics-icon">alternate_email</i>';
+        $html .= esc_html($user->user_email);
+        $html .= '</a></td>';
+        $html .= '<td><i class="material-icons-outlined userspn-analytics-icon">calendar_today</i>';
+        $html .= esc_html(date_i18n(get_option('date_format') . ' H:i', strtotime($user->user_registered)));
+        $html .= '</td>';
+        $html .= '<td class="userspn-analytics-actions">';
+        $html .= '<a href="' . esc_url($edit_url) . '" target="_blank" title="' . esc_attr__('Editar perfil', 'userspn') . '">';
+        $html .= '<i class="material-icons-outlined">edit</i></a>';
+        $html .= '<a href="mailto:' . esc_attr($user->user_email) . '" title="' . esc_attr__('Enviar email', 'userspn') . '">';
+        $html .= '<i class="material-icons-outlined">mail</i></a>';
+        $html .= '</td>';
+        $html .= '</tr>';
       }
+      $html .= '</tbody></table>';
     } else {
-      $html .= '<li style="padding:10px;color:#666;">' . esc_html__('No hay altas en newsletter en la última semana', 'userspn') . '</li>';
+      $html .= '<p class="userspn-analytics-empty"><i class="material-icons-outlined userspn-analytics-icon">info</i>' . esc_html__('No hay altas en newsletter en la última semana', 'userspn') . '</p>';
     }
-    $html .= '</ul>';
     return [
       'count' => count($users),
       'html' => $html,
@@ -1430,20 +1482,48 @@ class USERSPN_Settings
       'fields' => ['ID', 'user_login', 'user_email'],
     ];
     $users = get_users($args);
-    $html = '<ul style="list-style:none;padding:0;">';
+    $html = '';
+    $login_count = 0;
     if (!empty($users)) {
+      $html .= '<table class="userspn-analytics-table">';
+      $html .= '<thead><tr>';
+      $html .= '<th>' . esc_html__('Usuario', 'userspn') . '</th>';
+      $html .= '<th>' . esc_html__('Email', 'userspn') . '</th>';
+      $html .= '<th>' . esc_html__('Último acceso', 'userspn') . '</th>';
+      $html .= '<th>' . esc_html__('Acciones', 'userspn') . '</th>';
+      $html .= '</tr></thead><tbody>';
       foreach ($users as $user) {
         $last_login = get_user_meta($user->ID, 'userspn_user_last_login', true);
         if (!empty($last_login)) {
-          $html .= '<li style="padding:10px;border-bottom:1px solid #eee;">' . esc_html($user->user_login) . ' (' . esc_html($user->user_email) . ') - ' . date('Y-m-d H:i', intval($last_login)) . '</li>';
+          $login_count++;
+          $edit_url = admin_url('user-edit.php?user_id=' . $user->ID);
+          $html .= '<tr>';
+          $html .= '<td><a href="' . esc_url($edit_url) . '" target="_blank" class="userspn-analytics-link">';
+          $html .= '<i class="material-icons-outlined userspn-analytics-icon">person</i>';
+          $html .= esc_html($user->user_login);
+          $html .= '</a></td>';
+          $html .= '<td><a href="mailto:' . esc_attr($user->user_email) . '" class="userspn-analytics-link">';
+          $html .= '<i class="material-icons-outlined userspn-analytics-icon">alternate_email</i>';
+          $html .= esc_html($user->user_email);
+          $html .= '</a></td>';
+          $html .= '<td><i class="material-icons-outlined userspn-analytics-icon">login</i>';
+          $html .= esc_html(date_i18n(get_option('date_format') . ' H:i', intval($last_login)));
+          $html .= '</td>';
+          $html .= '<td class="userspn-analytics-actions">';
+          $html .= '<a href="' . esc_url($edit_url) . '" target="_blank" title="' . esc_attr__('Editar perfil', 'userspn') . '">';
+          $html .= '<i class="material-icons-outlined">edit</i></a>';
+          $html .= '<a href="mailto:' . esc_attr($user->user_email) . '" title="' . esc_attr__('Enviar email', 'userspn') . '">';
+          $html .= '<i class="material-icons-outlined">mail</i></a>';
+          $html .= '</td>';
+          $html .= '</tr>';
         }
       }
+      $html .= '</tbody></table>';
     } else {
-      $html .= '<li style="padding:10px;color:#666;">' . esc_html__('No hay registros de últimos accesos', 'userspn') . '</li>';
+      $html .= '<p class="userspn-analytics-empty"><i class="material-icons-outlined userspn-analytics-icon">info</i>' . esc_html__('No hay registros de últimos accesos', 'userspn') . '</p>';
     }
-    $html .= '</ul>';
     return [
-      'count' => count($users),
+      'count' => $login_count ?: count($users),
       'html' => $html,
     ];
   }

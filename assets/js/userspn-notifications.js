@@ -10,7 +10,7 @@
       if (userspn_get.userspn_login) {
         /* https://domain.com/?userspn_login=register */
         
-        userspn_tab = userspn_get.userspn_login;
+        var userspn_tab = userspn_get.userspn_login;
         USERSPN_Popups.open($('#userspn-profile-popup'));
 
         if (typeof userspn_tab !== 'undefined') {
