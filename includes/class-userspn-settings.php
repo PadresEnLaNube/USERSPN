@@ -950,6 +950,7 @@ class USERSPN_Settings
     $users_last_week = $this->get_userspn_users_last_week();
     $newsletter_last_week = $this->get_userspn_newsletter_last_week();
     $last_logins = $this->get_userspn_last_logins();
+    $charts_data = $this->get_userspn_charts_data();
 
     ?>
     <div class="userspn-dashboard userspn-max-width-1000 userspn-margin-auto userspn-mt-50 userspn-mb-50">
@@ -974,6 +975,24 @@ class USERSPN_Settings
             <?php echo esc_html($last_logins['count']); ?></div>
         </div>
       </div>
+      <!-- Charts -->
+      <div class="userspn-charts-section">
+        <div class="userspn-charts-grid">
+          <div class="userspn-chart-card userspn-chart-card-wide">
+            <h3><i class="material-icons-outlined userspn-vertical-align-middle">show_chart</i> <?php esc_html_e('Evolución últimos 30 días', 'userspn'); ?></h3>
+            <div class="userspn-chart-canvas-wrap"><canvas id="userspn-chart-combined"></canvas></div>
+          </div>
+          <div class="userspn-chart-card">
+            <h3><i class="material-icons-outlined userspn-vertical-align-middle">person_add</i> <?php esc_html_e('Usuarios nuevos', 'userspn'); ?></h3>
+            <div class="userspn-chart-canvas-wrap"><canvas id="userspn-chart-users"></canvas></div>
+          </div>
+          <div class="userspn-chart-card">
+            <h3><i class="material-icons-outlined userspn-vertical-align-middle">mark_email_read</i> <?php esc_html_e('Newsletter', 'userspn'); ?></h3>
+            <div class="userspn-chart-canvas-wrap"><canvas id="userspn-chart-newsletter"></canvas></div>
+          </div>
+        </div>
+      </div>
+
       <!-- Hidden popups -->
       <div id="userspn-popup-userspn-users-week" class="userspn-popup userspn-popup-size-large userspn-display-none-soft">
         <div class="userspn-popup-content">
@@ -1006,6 +1025,121 @@ class USERSPN_Settings
         $('.userspn-dashboard-widget').on('click', function () {
           var popup = $(this).data('popup');
           USERSPN_Popups.open('userspn-popup-' + popup);
+        });
+
+        // Charts
+        var chartsData = <?php echo wp_json_encode($charts_data); ?>;
+        var chartDefaults = {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: 'rgba(0,0,0,0.8)',
+              cornerRadius: 8,
+              padding: 10,
+              titleFont: { size: 13 },
+              bodyFont: { size: 12 }
+            }
+          },
+          scales: {
+            x: {
+              grid: { display: false },
+              ticks: { font: { size: 11 }, maxRotation: 45, maxTicksLimit: 10 }
+            },
+            y: {
+              beginAtZero: true,
+              grid: { color: 'rgba(0,0,0,0.04)' },
+              ticks: { font: { size: 11 }, stepSize: 1 }
+            }
+          }
+        };
+
+        // Combined line chart
+        new Chart(document.getElementById('userspn-chart-combined'), {
+          type: 'line',
+          data: {
+            labels: chartsData.labels,
+            datasets: [
+              {
+                label: '<?php echo esc_js(__('Usuarios nuevos', 'userspn')); ?>',
+                data: chartsData.users,
+                borderColor: '#5c6bc0',
+                backgroundColor: 'rgba(92,107,192,0.1)',
+                fill: true,
+                tension: 0.4,
+                borderWidth: 2,
+                pointRadius: 3,
+                pointHoverRadius: 6
+              },
+              {
+                label: '<?php echo esc_js(__('Newsletter', 'userspn')); ?>',
+                data: chartsData.newsletter,
+                borderColor: '#26a69a',
+                backgroundColor: 'rgba(38,166,154,0.1)',
+                fill: true,
+                tension: 0.4,
+                borderWidth: 2,
+                pointRadius: 3,
+                pointHoverRadius: 6
+              },
+              {
+                label: '<?php echo esc_js(__('Accesos', 'userspn')); ?>',
+                data: chartsData.logins,
+                borderColor: '#ffb74d',
+                backgroundColor: 'rgba(255,183,77,0.1)',
+                fill: true,
+                tension: 0.4,
+                borderWidth: 2,
+                pointRadius: 3,
+                pointHoverRadius: 6
+              }
+            ]
+          },
+          options: Object.assign({}, chartDefaults, {
+            plugins: {
+              legend: {
+                display: true,
+                position: 'top',
+                labels: { usePointStyle: true, padding: 20, font: { size: 13 } }
+              },
+              tooltip: chartDefaults.plugins.tooltip
+            }
+          })
+        });
+
+        // Users bar chart
+        new Chart(document.getElementById('userspn-chart-users'), {
+          type: 'bar',
+          data: {
+            labels: chartsData.labels,
+            datasets: [{
+              label: '<?php echo esc_js(__('Usuarios nuevos', 'userspn')); ?>',
+              data: chartsData.users,
+              backgroundColor: 'rgba(92,107,192,0.7)',
+              borderColor: '#5c6bc0',
+              borderWidth: 1,
+              borderRadius: 4
+            }]
+          },
+          options: chartDefaults
+        });
+
+        // Newsletter bar chart
+        new Chart(document.getElementById('userspn-chart-newsletter'), {
+          type: 'bar',
+          data: {
+            labels: chartsData.labels,
+            datasets: [{
+              label: '<?php echo esc_js(__('Newsletter', 'userspn')); ?>',
+              data: chartsData.newsletter,
+              backgroundColor: 'rgba(38,166,154,0.7)',
+              borderColor: '#26a69a',
+              borderWidth: 1,
+              borderRadius: 4
+            }]
+          },
+          options: chartDefaults
         });
       });
     </script>
@@ -1525,6 +1659,84 @@ class USERSPN_Settings
     return [
       'count' => $login_count ?: count($users),
       'html' => $html,
+    ];
+  }
+
+  public function get_userspn_charts_data()
+  {
+    global $wpdb;
+
+    $days = 30;
+    $labels = [];
+    $users_data = [];
+    $newsletter_data = [];
+    $logins_data = [];
+
+    // Generate labels for the last N days
+    for ($i = $days - 1; $i >= 0; $i--) {
+      $date = date('Y-m-d', strtotime("-$i days"));
+      $labels[] = date_i18n('d M', strtotime($date));
+      $users_data[$date] = 0;
+      $newsletter_data[$date] = 0;
+      $logins_data[$date] = 0;
+    }
+
+    $date_from = date('Y-m-d', strtotime("-$days days"));
+
+    // New users per day
+    $results = $wpdb->get_results($wpdb->prepare(
+      "SELECT DATE(user_registered) as reg_date, COUNT(*) as total
+       FROM {$wpdb->users}
+       WHERE user_registered >= %s
+       GROUP BY DATE(user_registered)",
+      $date_from
+    ));
+    foreach ($results as $row) {
+      if (isset($users_data[$row->reg_date])) {
+        $users_data[$row->reg_date] = (int) $row->total;
+      }
+    }
+
+    // Newsletter subscribers per day
+    $results = $wpdb->get_results($wpdb->prepare(
+      "SELECT DATE(u.user_registered) as reg_date, COUNT(*) as total
+       FROM {$wpdb->users} u
+       INNER JOIN {$wpdb->usermeta} um ON u.ID = um.user_id
+       WHERE um.meta_key = %s
+         AND um.meta_value LIKE %s
+         AND u.user_registered >= %s
+       GROUP BY DATE(u.user_registered)",
+      $wpdb->prefix . 'capabilities',
+      '%userspn_newsletter_subscriber%',
+      $date_from
+    ));
+    foreach ($results as $row) {
+      if (isset($newsletter_data[$row->reg_date])) {
+        $newsletter_data[$row->reg_date] = (int) $row->total;
+      }
+    }
+
+    // Logins per day (based on last login timestamp)
+    $timestamp_from = strtotime($date_from);
+    $results = $wpdb->get_results($wpdb->prepare(
+      "SELECT DATE(FROM_UNIXTIME(CAST(meta_value AS UNSIGNED))) as login_date, COUNT(*) as total
+       FROM {$wpdb->usermeta}
+       WHERE meta_key = 'userspn_user_last_login'
+         AND CAST(meta_value AS UNSIGNED) >= %d
+       GROUP BY login_date",
+      $timestamp_from
+    ));
+    foreach ($results as $row) {
+      if (isset($logins_data[$row->login_date])) {
+        $logins_data[$row->login_date] = (int) $row->total;
+      }
+    }
+
+    return [
+      'labels' => array_values($labels),
+      'users' => array_values($users_data),
+      'newsletter' => array_values($newsletter_data),
+      'logins' => array_values($logins_data),
     ];
   }
 

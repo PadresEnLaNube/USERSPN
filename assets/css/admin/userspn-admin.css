@@ -168,6 +168,68 @@
     color: #787c82;
 }
 
+/* Charts Section */
+.userspn-charts-section {
+    margin-bottom: 30px;
+}
+
+.userspn-charts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.userspn-chart-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    position: relative;
+}
+
+.userspn-chart-card-wide {
+    grid-column: 1 / -1;
+}
+
+.userspn-chart-card h3 {
+    margin: 0 0 16px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.userspn-chart-card h3 .material-icons-outlined {
+    font-size: 20px;
+    color: #787c82;
+}
+
+.userspn-chart-canvas-wrap {
+    position: relative;
+    height: 260px;
+}
+
+.userspn-chart-card-wide .userspn-chart-canvas-wrap {
+    height: 300px;
+}
+
+@media (max-width: 768px) {
+    .userspn-charts-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .userspn-chart-canvas-wrap,
+    .userspn-chart-card-wide .userspn-chart-canvas-wrap {
+        height: 220px;
+    }
+
+    .userspn-chart-card-wide {
+        min-height: 260px;
+    }
+}
+
 .userspn-profile-block-preview{
     max-width:500px;
     margin:auto;
