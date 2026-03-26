@@ -2,8 +2,9 @@
 Contributors: felixmartinez, hamlet237
 Donate link: https://padresenlanube.com/
 Tags: user management, users, register, login, contacts
+Requires at least: 3.0.1
 Tested up to: 6.9.1
-Stable tag: 1.1.20
+Stable tag: 1.1.22
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Streamline user management on your WordPress site with this powerful plugin. Enable custom forms, secure login, and seamless profile management.

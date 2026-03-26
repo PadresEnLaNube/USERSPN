@@ -3,7 +3,18 @@
     "allow": [
       "Bash(powershell:*)",
       "Bash(python3:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "WebFetch(domain:plugins.trac.wordpress.org)",
+      "Bash(svn status:*)",
+      "Bash(where:*)",
+      "WebFetch(domain:api.wordpress.org)",
+      "WebFetch(domain:plugins.svn.wordpress.org)",
+      "WebFetch(domain:downloads.wordpress.org)",
+      "Bash(\"C:/Program Files/TortoiseSVN/bin/SubWCRev.exe\" \"C:/Users/Fili/Desktop/WPH/SVN/WPH/WPH PLUGINS/userspn\")",
+      "Bash(\"C:/Program Files/TortoiseSVN/bin/SubWCRev.exe\":*)",
+      "Bash(\"C:/Program Files/TortoiseSVN/bin/SubWCRev.exe\" \"C:/Users/Fili/Desktop/WPH/SVN/WPH/WPH PLUGINS/userspn/trunk\")",
+      "WebSearch",
+      "Bash(grep:*)"
     ]
   }
 }

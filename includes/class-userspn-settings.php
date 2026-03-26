@@ -946,31 +946,97 @@ class USERSPN_Settings
     wp_enqueue_style('userspn-admin', USERSPN_URL . 'assets/css/admin/userspn-admin.css', [], USERSPN_VERSION);
     wp_enqueue_script('userspn-popups', USERSPN_URL . 'assets/js/userspn-popups.js', ['jquery'], USERSPN_VERSION, true);
 
+    // Period selector
+    $allowed_periods = ['day', 'week', 'month', 'year', 'all'];
+    $period = isset($_GET['period']) ? sanitize_text_field(wp_unslash($_GET['period'])) : 'week';
+    if (!in_array($period, $allowed_periods, true)) {
+      $period = 'week';
+    }
+
+    $period_labels = [
+      'day'   => __('24h', 'userspn'),
+      'week'  => __('7 días', 'userspn'),
+      'month' => __('30 días', 'userspn'),
+      'year'  => __('1 año', 'userspn'),
+      'all'   => __('total', 'userspn'),
+    ];
+    $period_label = $period_labels[$period];
+
+    $period_select_labels = [
+      'day'   => __('Último día', 'userspn'),
+      'week'  => __('Última semana', 'userspn'),
+      'month' => __('Último mes', 'userspn'),
+      'year'  => __('Último año', 'userspn'),
+      'all'   => __('Desde siempre', 'userspn'),
+    ];
+
+    $period_chart_titles = [
+      'day'   => __('Evolución últimas 24 horas', 'userspn'),
+      'week'  => __('Evolución últimos 7 días', 'userspn'),
+      'month' => __('Evolución últimos 30 días', 'userspn'),
+      'year'  => __('Evolución último año', 'userspn'),
+      'all'   => __('Evolución histórica', 'userspn'),
+    ];
+
+    $period_popup_titles = [
+      'users' => [
+        'day'   => __('Usuarios nuevos en las últimas 24h', 'userspn'),
+        'week'  => __('Usuarios nuevos en la última semana', 'userspn'),
+        'month' => __('Usuarios nuevos en el último mes', 'userspn'),
+        'year'  => __('Usuarios nuevos en el último año', 'userspn'),
+        'all'   => __('Todos los usuarios', 'userspn'),
+      ],
+      'newsletter' => [
+        'day'   => __('Altas en newsletter en las últimas 24h', 'userspn'),
+        'week'  => __('Altas en newsletter en la última semana', 'userspn'),
+        'month' => __('Altas en newsletter en el último mes', 'userspn'),
+        'year'  => __('Altas en newsletter en el último año', 'userspn'),
+        'all'   => __('Todas las altas en newsletter', 'userspn'),
+      ],
+      'logins' => [
+        'day'   => __('Accesos en las últimas 24h', 'userspn'),
+        'week'  => __('Accesos en la última semana', 'userspn'),
+        'month' => __('Accesos en el último mes', 'userspn'),
+        'year'  => __('Accesos en el último año', 'userspn'),
+        'all'   => __('Todos los accesos', 'userspn'),
+      ],
+    ];
+
     // Get analytics data
-    $users_last_week = $this->get_userspn_users_last_week();
-    $newsletter_last_week = $this->get_userspn_newsletter_last_week();
-    $last_logins = $this->get_userspn_last_logins();
-    $charts_data = $this->get_userspn_charts_data();
+    $users_last_week = $this->get_userspn_users_last_week($period);
+    $newsletter_last_week = $this->get_userspn_newsletter_last_week($period);
+    $last_logins = $this->get_userspn_last_logins($period);
+    $charts_data = $this->get_userspn_charts_data($period);
 
     ?>
     <div class="userspn-dashboard userspn-max-width-1000 userspn-margin-auto userspn-mt-50 userspn-mb-50">
-      <h1 class="userspn-mb-30"><?php esc_html_e('Dashboard de Analíticas', 'userspn'); ?></h1>
+      <div class="userspn-dashboard-header">
+        <h1><?php esc_html_e('Dashboard de Analíticas', 'userspn'); ?></h1>
+        <div class="userspn-period-selector">
+          <label for="userspn-period-select"><i class="material-icons-outlined userspn-vertical-align-middle">date_range</i> <?php esc_html_e('Periodo:', 'userspn'); ?></label>
+          <select id="userspn-period-select">
+            <?php foreach ($period_select_labels as $value => $label): ?>
+              <option value="<?php echo esc_attr($value); ?>" <?php selected($period, $value); ?>><?php echo esc_html($label); ?></option>
+            <?php endforeach; ?>
+          </select>
+        </div>
+      </div>
       <div class="userspn-dashboard-widgets" style="display:flex;gap:30px;margin-bottom:30px;">
-        <div class="userspn-dashboard-widget userspn-bg-primary" data-popup="userspn-users-week"
+        <div class="userspn-dashboard-widget userspn-bg-primary" data-popup="userspn-users-week" data-widget="users"
           style="flex:1;cursor:pointer;">
-          <div class="userspn-dashboard-widget-title"><?php esc_html_e('Usuarios nuevos (7 días)', 'userspn'); ?></div>
+          <div class="userspn-dashboard-widget-title"><?php printf(esc_html__('Usuarios nuevos (%s)', 'userspn'), esc_html($period_label)); ?></div>
           <div class="userspn-dashboard-widget-value" style="font-size:2em;font-weight:bold;">
             <?php echo esc_html($users_last_week['count']); ?></div>
         </div>
-        <div class="userspn-dashboard-widget userspn-bg-secondary" data-popup="userspn-newsletter-week"
+        <div class="userspn-dashboard-widget userspn-bg-secondary" data-popup="userspn-newsletter-week" data-widget="newsletter"
           style="flex:1;cursor:pointer;">
-          <div class="userspn-dashboard-widget-title"><?php esc_html_e('Newsletter (7 días)', 'userspn'); ?></div>
+          <div class="userspn-dashboard-widget-title"><?php printf(esc_html__('Newsletter (%s)', 'userspn'), esc_html($period_label)); ?></div>
           <div class="userspn-dashboard-widget-value" style="font-size:2em;font-weight:bold;">
             <?php echo esc_html($newsletter_last_week['count']); ?></div>
         </div>
-        <div class="userspn-dashboard-widget userspn-bg-accent" data-popup="userspn-last-logins"
+        <div class="userspn-dashboard-widget userspn-bg-accent" data-popup="userspn-last-logins" data-widget="logins"
           style="flex:1;cursor:pointer;">
-          <div class="userspn-dashboard-widget-title"><?php esc_html_e('Últimos accesos', 'userspn'); ?></div>
+          <div class="userspn-dashboard-widget-title"><?php printf(esc_html__('Accesos (%s)', 'userspn'), esc_html($period_label)); ?></div>
           <div class="userspn-dashboard-widget-value" style="font-size:2em;font-weight:bold;">
             <?php echo esc_html($last_logins['count']); ?></div>
         </div>
@@ -979,7 +1045,7 @@ class USERSPN_Settings
       <div class="userspn-charts-section">
         <div class="userspn-charts-grid">
           <div class="userspn-chart-card userspn-chart-card-wide">
-            <h3><i class="material-icons-outlined userspn-vertical-align-middle">show_chart</i> <?php esc_html_e('Evolución últimos 30 días', 'userspn'); ?></h3>
+            <h3 id="userspn-chart-combined-title"><i class="material-icons-outlined userspn-vertical-align-middle">show_chart</i> <span><?php echo esc_html($period_chart_titles[$period]); ?></span></h3>
             <div class="userspn-chart-canvas-wrap"><canvas id="userspn-chart-combined"></canvas></div>
           </div>
           <div class="userspn-chart-card">
@@ -994,28 +1060,28 @@ class USERSPN_Settings
       </div>
 
       <!-- Hidden popups -->
-      <div id="userspn-popup-userspn-users-week" class="userspn-popup userspn-popup-size-large userspn-display-none-soft">
+      <div id="userspn-popup-userspn-users-week" class="userspn-popup userspn-popup-size-large userspn-display-none-soft" data-popup-type="users">
         <div class="userspn-popup-content">
           <div class="userspn-p-30">
-            <h2><?php esc_html_e('Usuarios nuevos en la última semana', 'userspn'); ?></h2>
-            <?php echo $users_last_week['html']; ?>
+            <h2><?php echo esc_html($period_popup_titles['users'][$period]); ?></h2>
+            <div class="userspn-popup-body"><?php echo $users_last_week['html']; ?></div>
           </div>
         </div>
       </div>
       <div id="userspn-popup-userspn-newsletter-week"
-        class="userspn-popup userspn-popup-size-large userspn-display-none-soft">
+        class="userspn-popup userspn-popup-size-large userspn-display-none-soft" data-popup-type="newsletter">
         <div class="userspn-popup-content">
           <div class="userspn-p-30">
-            <h2><?php esc_html_e('Altas en newsletter en la última semana', 'userspn'); ?></h2>
-            <?php echo $newsletter_last_week['html']; ?>
+            <h2><?php echo esc_html($period_popup_titles['newsletter'][$period]); ?></h2>
+            <div class="userspn-popup-body"><?php echo $newsletter_last_week['html']; ?></div>
           </div>
         </div>
       </div>
-      <div id="userspn-popup-userspn-last-logins" class="userspn-popup userspn-popup-size-large userspn-display-none-soft">
+      <div id="userspn-popup-userspn-last-logins" class="userspn-popup userspn-popup-size-large userspn-display-none-soft" data-popup-type="logins">
         <div class="userspn-popup-content">
           <div class="userspn-p-30">
-            <h2><?php esc_html_e('Últimos accesos', 'userspn'); ?></h2>
-            <?php echo $last_logins['html']; ?>
+            <h2><?php echo esc_html($period_popup_titles['logins'][$period]); ?></h2>
+            <div class="userspn-popup-body"><?php echo $last_logins['html']; ?></div>
           </div>
         </div>
       </div>
@@ -1027,8 +1093,7 @@ class USERSPN_Settings
           USERSPN_Popups.open('userspn-popup-' + popup);
         });
 
-        // Charts
-        var chartsData = <?php echo wp_json_encode($charts_data); ?>;
+        // Chart defaults
         var chartDefaults = {
           responsive: true,
           maintainAspectRatio: false,
@@ -1055,91 +1120,169 @@ class USERSPN_Settings
           }
         };
 
-        // Combined line chart
-        new Chart(document.getElementById('userspn-chart-combined'), {
-          type: 'line',
-          data: {
-            labels: chartsData.labels,
-            datasets: [
-              {
-                label: '<?php echo esc_js(__('Usuarios nuevos', 'userspn')); ?>',
-                data: chartsData.users,
-                borderColor: '#5c6bc0',
-                backgroundColor: 'rgba(92,107,192,0.1)',
-                fill: true,
-                tension: 0.4,
-                borderWidth: 2,
-                pointRadius: 3,
-                pointHoverRadius: 6
-              },
-              {
-                label: '<?php echo esc_js(__('Newsletter', 'userspn')); ?>',
-                data: chartsData.newsletter,
-                borderColor: '#26a69a',
-                backgroundColor: 'rgba(38,166,154,0.1)',
-                fill: true,
-                tension: 0.4,
-                borderWidth: 2,
-                pointRadius: 3,
-                pointHoverRadius: 6
-              },
-              {
-                label: '<?php echo esc_js(__('Accesos', 'userspn')); ?>',
-                data: chartsData.logins,
-                borderColor: '#ffb74d',
-                backgroundColor: 'rgba(255,183,77,0.1)',
-                fill: true,
-                tension: 0.4,
-                borderWidth: 2,
-                pointRadius: 3,
-                pointHoverRadius: 6
+        // Chart labels
+        var chartLabelUsers = '<?php echo esc_js(__('Usuarios nuevos', 'userspn')); ?>';
+        var chartLabelNewsletter = '<?php echo esc_js(__('Newsletter', 'userspn')); ?>';
+        var chartLabelLogins = '<?php echo esc_js(__('Accesos', 'userspn')); ?>';
+
+        // Widget label templates
+        var widgetLabelUsers = '<?php echo esc_js(__('Usuarios nuevos (%s)', 'userspn')); ?>';
+        var widgetLabelNewsletter = '<?php echo esc_js(__('Newsletter (%s)', 'userspn')); ?>';
+        var widgetLabelLogins = '<?php echo esc_js(__('Accesos (%s)', 'userspn')); ?>';
+
+        // Chart creation functions
+        function createCombinedChart(chartsData) {
+          return new Chart(document.getElementById('userspn-chart-combined'), {
+            type: 'line',
+            data: {
+              labels: chartsData.labels,
+              datasets: [
+                {
+                  label: chartLabelUsers,
+                  data: chartsData.users,
+                  borderColor: '#5c6bc0',
+                  backgroundColor: 'rgba(92,107,192,0.1)',
+                  fill: true,
+                  tension: 0.4,
+                  borderWidth: 2,
+                  pointRadius: 3,
+                  pointHoverRadius: 6
+                },
+                {
+                  label: chartLabelNewsletter,
+                  data: chartsData.newsletter,
+                  borderColor: '#26a69a',
+                  backgroundColor: 'rgba(38,166,154,0.1)',
+                  fill: true,
+                  tension: 0.4,
+                  borderWidth: 2,
+                  pointRadius: 3,
+                  pointHoverRadius: 6
+                },
+                {
+                  label: chartLabelLogins,
+                  data: chartsData.logins,
+                  borderColor: '#ffb74d',
+                  backgroundColor: 'rgba(255,183,77,0.1)',
+                  fill: true,
+                  tension: 0.4,
+                  borderWidth: 2,
+                  pointRadius: 3,
+                  pointHoverRadius: 6
+                }
+              ]
+            },
+            options: Object.assign({}, chartDefaults, {
+              plugins: {
+                legend: {
+                  display: true,
+                  position: 'top',
+                  labels: { usePointStyle: true, padding: 20, font: { size: 13 } }
+                },
+                tooltip: chartDefaults.plugins.tooltip
               }
-            ]
-          },
-          options: Object.assign({}, chartDefaults, {
-            plugins: {
-              legend: {
-                display: true,
-                position: 'top',
-                labels: { usePointStyle: true, padding: 20, font: { size: 13 } }
-              },
-              tooltip: chartDefaults.plugins.tooltip
+            })
+          });
+        }
+
+        function createUsersChart(chartsData) {
+          return new Chart(document.getElementById('userspn-chart-users'), {
+            type: 'bar',
+            data: {
+              labels: chartsData.labels,
+              datasets: [{
+                label: chartLabelUsers,
+                data: chartsData.users,
+                backgroundColor: 'rgba(92,107,192,0.7)',
+                borderColor: '#5c6bc0',
+                borderWidth: 1,
+                borderRadius: 4
+              }]
+            },
+            options: chartDefaults
+          });
+        }
+
+        function createNewsletterChart(chartsData) {
+          return new Chart(document.getElementById('userspn-chart-newsletter'), {
+            type: 'bar',
+            data: {
+              labels: chartsData.labels,
+              datasets: [{
+                label: chartLabelNewsletter,
+                data: chartsData.newsletter,
+                backgroundColor: 'rgba(38,166,154,0.7)',
+                borderColor: '#26a69a',
+                borderWidth: 1,
+                borderRadius: 4
+              }]
+            },
+            options: chartDefaults
+          });
+        }
+
+        // Initial chart rendering
+        var chartsData = <?php echo wp_json_encode($charts_data); ?>;
+        var chartCombined = createCombinedChart(chartsData);
+        var chartUsers = createUsersChart(chartsData);
+        var chartNewsletter = createNewsletterChart(chartsData);
+
+        // Period selector via AJAX
+        $('#userspn-period-select').on('change', function () {
+          var period = this.value;
+          var $dashboard = $('.userspn-dashboard');
+          $dashboard.addClass('userspn-loading');
+
+          $.post(ajaxurl, {
+            action: 'userspn_ajax',
+            userspn_ajax_type: 'userspn_dashboard_period',
+            userspn_ajax_nonce: '<?php echo esc_js(wp_create_nonce('userspn-nonce')); ?>',
+            period: period
+          }, function (raw) {
+            var res = typeof raw === 'string' ? JSON.parse(raw) : raw;
+            if (res.error_key !== '') {
+              $dashboard.removeClass('userspn-loading');
+              return;
             }
-          })
-        });
 
-        // Users bar chart
-        new Chart(document.getElementById('userspn-chart-users'), {
-          type: 'bar',
-          data: {
-            labels: chartsData.labels,
-            datasets: [{
-              label: '<?php echo esc_js(__('Usuarios nuevos', 'userspn')); ?>',
-              data: chartsData.users,
-              backgroundColor: 'rgba(92,107,192,0.7)',
-              borderColor: '#5c6bc0',
-              borderWidth: 1,
-              borderRadius: 4
-            }]
-          },
-          options: chartDefaults
-        });
+            // Update widget counts
+            $('[data-widget="users"] .userspn-dashboard-widget-value').text(res.widgets.users.count);
+            $('[data-widget="newsletter"] .userspn-dashboard-widget-value').text(res.widgets.newsletter.count);
+            $('[data-widget="logins"] .userspn-dashboard-widget-value').text(res.widgets.logins.count);
 
-        // Newsletter bar chart
-        new Chart(document.getElementById('userspn-chart-newsletter'), {
-          type: 'bar',
-          data: {
-            labels: chartsData.labels,
-            datasets: [{
-              label: '<?php echo esc_js(__('Newsletter', 'userspn')); ?>',
-              data: chartsData.newsletter,
-              backgroundColor: 'rgba(38,166,154,0.7)',
-              borderColor: '#26a69a',
-              borderWidth: 1,
-              borderRadius: 4
-            }]
-          },
-          options: chartDefaults
+            // Update widget titles
+            $('[data-widget="users"] .userspn-dashboard-widget-title').text(widgetLabelUsers.replace('%s', res.labels.widget_period));
+            $('[data-widget="newsletter"] .userspn-dashboard-widget-title').text(widgetLabelNewsletter.replace('%s', res.labels.widget_period));
+            $('[data-widget="logins"] .userspn-dashboard-widget-title').text(widgetLabelLogins.replace('%s', res.labels.widget_period));
+
+            // Update popup titles and content
+            $('[data-popup-type="users"] h2').text(res.popups.users.title);
+            $('[data-popup-type="users"] .userspn-popup-body').html(res.popups.users.html);
+            $('[data-popup-type="newsletter"] h2').text(res.popups.newsletter.title);
+            $('[data-popup-type="newsletter"] .userspn-popup-body').html(res.popups.newsletter.html);
+            $('[data-popup-type="logins"] h2').text(res.popups.logins.title);
+            $('[data-popup-type="logins"] .userspn-popup-body').html(res.popups.logins.html);
+
+            // Update combined chart title
+            $('#userspn-chart-combined-title span').text(res.labels.chart_title);
+
+            // Destroy and recreate charts
+            chartCombined.destroy();
+            chartUsers.destroy();
+            chartNewsletter.destroy();
+            chartCombined = createCombinedChart(res.charts);
+            chartUsers = createUsersChart(res.charts);
+            chartNewsletter = createNewsletterChart(res.charts);
+
+            // Update browser URL without reload
+            var url = new URL(window.location.href);
+            url.searchParams.set('period', period);
+            history.replaceState(null, '', url.toString());
+
+            $dashboard.removeClass('userspn-loading');
+          }).fail(function () {
+            $dashboard.removeClass('userspn-loading');
+          });
         });
       });
     </script>
@@ -1497,16 +1640,25 @@ class USERSPN_Settings
     <?php
   }
 
-  public function get_userspn_users_last_week()
+  public function get_userspn_users_last_week($period = 'week')
   {
+    $period_after = [
+      'day'   => '1 day ago',
+      'week'  => '1 week ago',
+      'month' => '1 month ago',
+      'year'  => '1 year ago',
+    ];
+
     $args = [
-      'date_query' => [
-        [
-          'after' => '1 week ago',
-        ],
-      ],
       'fields' => ['ID', 'user_login', 'user_email', 'user_registered'],
     ];
+    if ($period !== 'all' && isset($period_after[$period])) {
+      $args['date_query'] = [
+        [
+          'after' => $period_after[$period],
+        ],
+      ];
+    }
     $users = get_users($args);
     $html = '';
     if (!empty($users)) {
@@ -1541,7 +1693,7 @@ class USERSPN_Settings
       }
       $html .= '</tbody></table>';
     } else {
-      $html .= '<p class="userspn-analytics-empty"><i class="material-icons-outlined userspn-analytics-icon">info</i>' . esc_html__('No hay usuarios nuevos en la última semana', 'userspn') . '</p>';
+      $html .= '<p class="userspn-analytics-empty"><i class="material-icons-outlined userspn-analytics-icon">info</i>' . esc_html__('No hay usuarios nuevos en este periodo', 'userspn') . '</p>';
     }
     return [
       'count' => count($users),
@@ -1549,21 +1701,30 @@ class USERSPN_Settings
     ];
   }
 
-  public function get_userspn_newsletter_last_week()
+  public function get_userspn_newsletter_last_week($period = 'week')
   {
+    $period_after = [
+      'day'   => '1 day ago',
+      'week'  => '1 week ago',
+      'month' => '1 month ago',
+      'year'  => '1 year ago',
+    ];
+
     $args = [
       'meta_key' => 'userspn_newsletter_active',
       'meta_value' => '',
       'meta_compare' => '!=',
-      'date_query' => [
-        [
-          'after' => '1 week ago',
-          'column' => 'user_registered',
-        ],
-      ],
       'fields' => ['ID', 'user_login', 'user_email', 'user_registered'],
       'role__in' => ['userspn_newsletter_subscriber'],
     ];
+    if ($period !== 'all' && isset($period_after[$period])) {
+      $args['date_query'] = [
+        [
+          'after' => $period_after[$period],
+          'column' => 'user_registered',
+        ],
+      ];
+    }
     $users = get_users($args);
     $html = '';
     if (!empty($users)) {
@@ -1598,7 +1759,7 @@ class USERSPN_Settings
       }
       $html .= '</tbody></table>';
     } else {
-      $html .= '<p class="userspn-analytics-empty"><i class="material-icons-outlined userspn-analytics-icon">info</i>' . esc_html__('No hay altas en newsletter en la última semana', 'userspn') . '</p>';
+      $html .= '<p class="userspn-analytics-empty"><i class="material-icons-outlined userspn-analytics-icon">info</i>' . esc_html__('No hay altas en newsletter en este periodo', 'userspn') . '</p>';
     }
     return [
       'count' => count($users),
@@ -1606,15 +1767,32 @@ class USERSPN_Settings
     ];
   }
 
-  public function get_userspn_last_logins()
+  public function get_userspn_last_logins($period = 'week')
   {
+    $period_seconds = [
+      'day'   => DAY_IN_SECONDS,
+      'week'  => WEEK_IN_SECONDS,
+      'month' => 30 * DAY_IN_SECONDS,
+      'year'  => YEAR_IN_SECONDS,
+    ];
+
     $args = [
       'meta_key' => 'userspn_user_last_login',
       'orderby' => 'meta_value_num',
       'order' => 'DESC',
-      'number' => 10,
       'fields' => ['ID', 'user_login', 'user_email'],
     ];
+    if ($period !== 'all' && isset($period_seconds[$period])) {
+      $timestamp_from = time() - $period_seconds[$period];
+      $args['meta_query'] = [
+        [
+          'key' => 'userspn_user_last_login',
+          'value' => $timestamp_from,
+          'compare' => '>=',
+          'type' => 'NUMERIC',
+        ],
+      ];
+    }
     $users = get_users($args);
     $html = '';
     $login_count = 0;
@@ -1654,7 +1832,7 @@ class USERSPN_Settings
       }
       $html .= '</tbody></table>';
     } else {
-      $html .= '<p class="userspn-analytics-empty"><i class="material-icons-outlined userspn-analytics-icon">info</i>' . esc_html__('No hay registros de últimos accesos', 'userspn') . '</p>';
+      $html .= '<p class="userspn-analytics-empty"><i class="material-icons-outlined userspn-analytics-icon">info</i>' . esc_html__('No hay registros de accesos en este periodo', 'userspn') . '</p>';
     }
     return [
       'count' => $login_count ?: count($users),
@@ -1662,73 +1840,206 @@ class USERSPN_Settings
     ];
   }
 
-  public function get_userspn_charts_data()
+  public function get_userspn_charts_data($period = 'month')
   {
     global $wpdb;
 
-    $days = 30;
     $labels = [];
     $users_data = [];
     $newsletter_data = [];
     $logins_data = [];
 
-    // Generate labels for the last N days
-    for ($i = $days - 1; $i >= 0; $i--) {
-      $date = date('Y-m-d', strtotime("-$i days"));
-      $labels[] = date_i18n('d M', strtotime($date));
-      $users_data[$date] = 0;
-      $newsletter_data[$date] = 0;
-      $logins_data[$date] = 0;
-    }
-
-    $date_from = date('Y-m-d', strtotime("-$days days"));
-
-    // New users per day
-    $results = $wpdb->get_results($wpdb->prepare(
-      "SELECT DATE(user_registered) as reg_date, COUNT(*) as total
-       FROM {$wpdb->users}
-       WHERE user_registered >= %s
-       GROUP BY DATE(user_registered)",
-      $date_from
-    ));
-    foreach ($results as $row) {
-      if (isset($users_data[$row->reg_date])) {
-        $users_data[$row->reg_date] = (int) $row->total;
+    if ($period === 'day') {
+      // Hourly grouping for 24 hours
+      for ($i = 23; $i >= 0; $i--) {
+        $hour_key = date('Y-m-d H', strtotime("-$i hours"));
+        $labels[] = date_i18n('H:i', strtotime("-$i hours"));
+        $users_data[$hour_key] = 0;
+        $newsletter_data[$hour_key] = 0;
+        $logins_data[$hour_key] = 0;
       }
-    }
 
-    // Newsletter subscribers per day
-    $results = $wpdb->get_results($wpdb->prepare(
-      "SELECT DATE(u.user_registered) as reg_date, COUNT(*) as total
-       FROM {$wpdb->users} u
-       INNER JOIN {$wpdb->usermeta} um ON u.ID = um.user_id
-       WHERE um.meta_key = %s
-         AND um.meta_value LIKE %s
-         AND u.user_registered >= %s
-       GROUP BY DATE(u.user_registered)",
-      $wpdb->prefix . 'capabilities',
-      '%userspn_newsletter_subscriber%',
-      $date_from
-    ));
-    foreach ($results as $row) {
-      if (isset($newsletter_data[$row->reg_date])) {
-        $newsletter_data[$row->reg_date] = (int) $row->total;
+      $date_from = date('Y-m-d H:i:s', strtotime('-1 day'));
+
+      // Users per hour
+      $results = $wpdb->get_results($wpdb->prepare(
+        "SELECT DATE_FORMAT(user_registered, '%%Y-%%m-%%d %%H') as reg_hour, COUNT(*) as total
+         FROM {$wpdb->users}
+         WHERE user_registered >= %s
+         GROUP BY reg_hour",
+        $date_from
+      ));
+      foreach ($results as $row) {
+        if (isset($users_data[$row->reg_hour])) {
+          $users_data[$row->reg_hour] = (int) $row->total;
+        }
       }
-    }
 
-    // Logins per day (based on last login timestamp)
-    $timestamp_from = strtotime($date_from);
-    $results = $wpdb->get_results($wpdb->prepare(
-      "SELECT DATE(FROM_UNIXTIME(CAST(meta_value AS UNSIGNED))) as login_date, COUNT(*) as total
-       FROM {$wpdb->usermeta}
-       WHERE meta_key = 'userspn_user_last_login'
-         AND CAST(meta_value AS UNSIGNED) >= %d
-       GROUP BY login_date",
-      $timestamp_from
-    ));
-    foreach ($results as $row) {
-      if (isset($logins_data[$row->login_date])) {
-        $logins_data[$row->login_date] = (int) $row->total;
+      // Newsletter per hour
+      $results = $wpdb->get_results($wpdb->prepare(
+        "SELECT DATE_FORMAT(u.user_registered, '%%Y-%%m-%%d %%H') as reg_hour, COUNT(*) as total
+         FROM {$wpdb->users} u
+         INNER JOIN {$wpdb->usermeta} um ON u.ID = um.user_id
+         WHERE um.meta_key = %s
+           AND um.meta_value LIKE %s
+           AND u.user_registered >= %s
+         GROUP BY reg_hour",
+        $wpdb->prefix . 'capabilities',
+        '%userspn_newsletter_subscriber%',
+        $date_from
+      ));
+      foreach ($results as $row) {
+        if (isset($newsletter_data[$row->reg_hour])) {
+          $newsletter_data[$row->reg_hour] = (int) $row->total;
+        }
+      }
+
+      // Logins per hour
+      $timestamp_from = strtotime($date_from);
+      $results = $wpdb->get_results($wpdb->prepare(
+        "SELECT DATE_FORMAT(FROM_UNIXTIME(CAST(meta_value AS UNSIGNED)), '%%Y-%%m-%%d %%H') as login_hour, COUNT(*) as total
+         FROM {$wpdb->usermeta}
+         WHERE meta_key = 'userspn_user_last_login'
+           AND CAST(meta_value AS UNSIGNED) >= %d
+         GROUP BY login_hour",
+        $timestamp_from
+      ));
+      foreach ($results as $row) {
+        if (isset($logins_data[$row->login_hour])) {
+          $logins_data[$row->login_hour] = (int) $row->total;
+        }
+      }
+
+    } elseif ($period === 'year' || $period === 'all') {
+      // Monthly grouping
+      if ($period === 'all') {
+        $oldest_user = $wpdb->get_var("SELECT MIN(user_registered) FROM {$wpdb->users}");
+        $start_date = $oldest_user ? date('Y-m-01', strtotime($oldest_user)) : date('Y-m-01', strtotime('-1 year'));
+      } else {
+        $start_date = date('Y-m-01', strtotime('-1 year'));
+      }
+
+      $current = strtotime($start_date);
+      $now = time();
+      while ($current <= $now) {
+        $month_key = date('Y-m', $current);
+        $labels[] = date_i18n('M Y', $current);
+        $users_data[$month_key] = 0;
+        $newsletter_data[$month_key] = 0;
+        $logins_data[$month_key] = 0;
+        $current = strtotime('+1 month', $current);
+      }
+
+      // Users per month
+      $results = $wpdb->get_results($wpdb->prepare(
+        "SELECT DATE_FORMAT(user_registered, '%%Y-%%m') as reg_month, COUNT(*) as total
+         FROM {$wpdb->users}
+         WHERE user_registered >= %s
+         GROUP BY reg_month",
+        $start_date
+      ));
+      foreach ($results as $row) {
+        if (isset($users_data[$row->reg_month])) {
+          $users_data[$row->reg_month] = (int) $row->total;
+        }
+      }
+
+      // Newsletter per month
+      $results = $wpdb->get_results($wpdb->prepare(
+        "SELECT DATE_FORMAT(u.user_registered, '%%Y-%%m') as reg_month, COUNT(*) as total
+         FROM {$wpdb->users} u
+         INNER JOIN {$wpdb->usermeta} um ON u.ID = um.user_id
+         WHERE um.meta_key = %s
+           AND um.meta_value LIKE %s
+           AND u.user_registered >= %s
+         GROUP BY reg_month",
+        $wpdb->prefix . 'capabilities',
+        '%userspn_newsletter_subscriber%',
+        $start_date
+      ));
+      foreach ($results as $row) {
+        if (isset($newsletter_data[$row->reg_month])) {
+          $newsletter_data[$row->reg_month] = (int) $row->total;
+        }
+      }
+
+      // Logins per month
+      $timestamp_from = strtotime($start_date);
+      $results = $wpdb->get_results($wpdb->prepare(
+        "SELECT DATE_FORMAT(FROM_UNIXTIME(CAST(meta_value AS UNSIGNED)), '%%Y-%%m') as login_month, COUNT(*) as total
+         FROM {$wpdb->usermeta}
+         WHERE meta_key = 'userspn_user_last_login'
+           AND CAST(meta_value AS UNSIGNED) >= %d
+         GROUP BY login_month",
+        $timestamp_from
+      ));
+      foreach ($results as $row) {
+        if (isset($logins_data[$row->login_month])) {
+          $logins_data[$row->login_month] = (int) $row->total;
+        }
+      }
+
+    } else {
+      // Daily grouping for week/month
+      $days = ($period === 'week') ? 7 : 30;
+
+      for ($i = $days - 1; $i >= 0; $i--) {
+        $date = date('Y-m-d', strtotime("-$i days"));
+        $labels[] = date_i18n('d M', strtotime($date));
+        $users_data[$date] = 0;
+        $newsletter_data[$date] = 0;
+        $logins_data[$date] = 0;
+      }
+
+      $date_from = date('Y-m-d', strtotime("-$days days"));
+
+      // New users per day
+      $results = $wpdb->get_results($wpdb->prepare(
+        "SELECT DATE(user_registered) as reg_date, COUNT(*) as total
+         FROM {$wpdb->users}
+         WHERE user_registered >= %s
+         GROUP BY DATE(user_registered)",
+        $date_from
+      ));
+      foreach ($results as $row) {
+        if (isset($users_data[$row->reg_date])) {
+          $users_data[$row->reg_date] = (int) $row->total;
+        }
+      }
+
+      // Newsletter subscribers per day
+      $results = $wpdb->get_results($wpdb->prepare(
+        "SELECT DATE(u.user_registered) as reg_date, COUNT(*) as total
+         FROM {$wpdb->users} u
+         INNER JOIN {$wpdb->usermeta} um ON u.ID = um.user_id
+         WHERE um.meta_key = %s
+           AND um.meta_value LIKE %s
+           AND u.user_registered >= %s
+         GROUP BY DATE(u.user_registered)",
+        $wpdb->prefix . 'capabilities',
+        '%userspn_newsletter_subscriber%',
+        $date_from
+      ));
+      foreach ($results as $row) {
+        if (isset($newsletter_data[$row->reg_date])) {
+          $newsletter_data[$row->reg_date] = (int) $row->total;
+        }
+      }
+
+      // Logins per day
+      $timestamp_from = strtotime($date_from);
+      $results = $wpdb->get_results($wpdb->prepare(
+        "SELECT DATE(FROM_UNIXTIME(CAST(meta_value AS UNSIGNED))) as login_date, COUNT(*) as total
+         FROM {$wpdb->usermeta}
+         WHERE meta_key = 'userspn_user_last_login'
+           AND CAST(meta_value AS UNSIGNED) >= %d
+         GROUP BY login_date",
+        $timestamp_from
+      ));
+      foreach ($results as $row) {
+        if (isset($logins_data[$row->login_date])) {
+          $logins_data[$row->login_date] = (int) $row->total;
+        }
       }
     }
 

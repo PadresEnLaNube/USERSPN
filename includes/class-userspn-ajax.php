@@ -809,6 +809,96 @@ class USERSPN_Ajax {
           echo wp_json_encode(['error_key' => '']);
           exit;
           break;
+        case 'userspn_dashboard_period':
+          if (!current_user_can('manage_options')) {
+            echo wp_json_encode([
+              'error_key' => 'userspn_permission_error',
+              'error_content' => esc_html(__('You do not have permission to view this data.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          $allowed_periods = ['day', 'week', 'month', 'year', 'all'];
+          $period = !empty($_POST['period']) ? sanitize_text_field(wp_unslash($_POST['period'])) : 'week';
+          if (!in_array($period, $allowed_periods, true)) {
+            $period = 'week';
+          }
+
+          $settings = new USERSPN_Settings();
+          $users_data = $settings->get_userspn_users_last_week($period);
+          $newsletter_data = $settings->get_userspn_newsletter_last_week($period);
+          $logins_data = $settings->get_userspn_last_logins($period);
+          $charts_data = $settings->get_userspn_charts_data($period);
+
+          $period_labels = [
+            'day'   => __('24h', 'userspn'),
+            'week'  => __('7 días', 'userspn'),
+            'month' => __('30 días', 'userspn'),
+            'year'  => __('1 año', 'userspn'),
+            'all'   => __('total', 'userspn'),
+          ];
+
+          $period_chart_titles = [
+            'day'   => __('Evolución últimas 24 horas', 'userspn'),
+            'week'  => __('Evolución últimos 7 días', 'userspn'),
+            'month' => __('Evolución últimos 30 días', 'userspn'),
+            'year'  => __('Evolución último año', 'userspn'),
+            'all'   => __('Evolución histórica', 'userspn'),
+          ];
+
+          $period_popup_titles = [
+            'users' => [
+              'day'   => __('Usuarios nuevos en las últimas 24h', 'userspn'),
+              'week'  => __('Usuarios nuevos en la última semana', 'userspn'),
+              'month' => __('Usuarios nuevos en el último mes', 'userspn'),
+              'year'  => __('Usuarios nuevos en el último año', 'userspn'),
+              'all'   => __('Todos los usuarios', 'userspn'),
+            ],
+            'newsletter' => [
+              'day'   => __('Altas en newsletter en las últimas 24h', 'userspn'),
+              'week'  => __('Altas en newsletter en la última semana', 'userspn'),
+              'month' => __('Altas en newsletter en el último mes', 'userspn'),
+              'year'  => __('Altas en newsletter en el último año', 'userspn'),
+              'all'   => __('Todas las altas en newsletter', 'userspn'),
+            ],
+            'logins' => [
+              'day'   => __('Accesos en las últimas 24h', 'userspn'),
+              'week'  => __('Accesos en la última semana', 'userspn'),
+              'month' => __('Accesos en el último mes', 'userspn'),
+              'year'  => __('Accesos en el último año', 'userspn'),
+              'all'   => __('Todos los accesos', 'userspn'),
+            ],
+          ];
+
+          echo wp_json_encode([
+            'error_key' => '',
+            'widgets' => [
+              'users'      => ['count' => $users_data['count']],
+              'newsletter' => ['count' => $newsletter_data['count']],
+              'logins'     => ['count' => $logins_data['count']],
+            ],
+            'popups' => [
+              'users'      => [
+                'title' => $period_popup_titles['users'][$period],
+                'html'  => $users_data['html'],
+              ],
+              'newsletter' => [
+                'title' => $period_popup_titles['newsletter'][$period],
+                'html'  => $newsletter_data['html'],
+              ],
+              'logins'     => [
+                'title' => $period_popup_titles['logins'][$period],
+                'html'  => $logins_data['html'],
+              ],
+            ],
+            'charts' => $charts_data,
+            'labels' => [
+              'widget_period' => $period_labels[$period],
+              'chart_title'   => $period_chart_titles[$period],
+            ],
+          ]);
+          exit;
+          break;
         case 'userspn_basecpt_view':
           if (!empty($userspn_basecpt_id)) {
             try {
