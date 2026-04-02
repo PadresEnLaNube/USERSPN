@@ -186,6 +186,11 @@
     $('.userspn-field[data-userspn-parent~="this"]').each(function(index_parent, element_parent) {
       var parent_this = $(this);
 
+      // Skip hidden parents so children stay hidden too
+      if (parent_this.closest('.userspn-input-wrapper').hasClass('userspn-display-none')) {
+        return;
+      }
+
       $('.userspn-field[data-userspn-parent~=' + parent_this.attr('id') + ']').each(function(index, element) {
         if (parent_this.hasClass('userspn-checkbox')) {
           if (parent_this.is(':checked') && $(this).attr('data-userspn-parent-option') == 'on') {

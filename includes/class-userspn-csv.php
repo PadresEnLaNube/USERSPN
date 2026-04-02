@@ -40,7 +40,7 @@ class USERSPN_CSV {
           if (!empty($row[0])) {
             $userspn_email = $row[0];
             $userspn_role = !empty($row[1]) ? $row[1] : 'subscriber';
-            $userspn_login = sanitize_title(substr($userspn_email, 0, strpos($userspn_email, '@')) . '-' . bin2hex(openssl_random_pseudo_bytes(4)));
+            $userspn_login = USERSPN_Functions_User::generate_unique_login($userspn_email);
             $userspn_password = bin2hex(openssl_random_pseudo_bytes(12));
 
             $user_id = USERSPN_Functions_User::userspn_user_insert($userspn_login, $userspn_password, $userspn_email, '', '', $userspn_login, $userspn_login, $userspn_login, '', [$userspn_role]);

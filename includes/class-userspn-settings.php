@@ -27,6 +27,13 @@ class USERSPN_Settings
       'section' => 'start',
       'label' => __('Profile popup', 'userspn'),
     ];
+    $userspn_options['userspn_preview_profile'] = [
+      'id' => 'userspn_preview_profile',
+      'input' => 'html',
+      'html_content' => '<a href="#" class="userspn-btn userspn-btn-mini userspn-btn-transparent userspn-preview-profile-btn">' . esc_html(__('Preview profile', 'userspn')) . '</a>',
+      'label' => __('Preview profile popup', 'userspn'),
+      'description' => __('Opens your site in a new tab showing the profile popup as it appears to your visitors. Please save your settings before previewing.', 'userspn'),
+    ];
     $userspn_options['userspn_disabled'] = [
       'id' => 'userspn_disabled',
       'class' => 'userspn-input userspn-width-100-percent',
@@ -87,12 +94,22 @@ class USERSPN_Settings
       'label' => __('Set custom position', 'userspn'),
       'description' => __('Check to open the position editor. Drag the bubble to the desired location and confirm.', 'userspn'),
     ];
+    $userspn_options['userspn_extended_registration'] = [
+      'id' => 'userspn_extended_registration',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'input',
+      'type' => 'checkbox',
+      'parent' => 'this',
+      'label' => __('Extended registration', 'userspn'),
+      'description' => __('If enabled, users must provide password and optional name/extra fields during registration. If disabled, only email is required and the user receives a password reset link by email.', 'userspn'),
+    ];
     $userspn_options['userspn_user_name'] = [
       'id' => 'userspn_user_name',
       'class' => 'userspn-input userspn-width-100-percent',
       'input' => 'input',
       'type' => 'checkbox',
-      'parent' => 'this',
+      'parent' => 'this userspn_extended_registration',
+      'parent_option' => 'on',
       'label' => __('Name and surname in profile', 'userspn'),
       'description' => __('If you check this option, the system will ask for the name and surname of the contact based on the WordPress custom database structure.', 'userspn'),
     ];
@@ -118,6 +135,8 @@ class USERSPN_Settings
       'id' => 'userspn_user_register_fields',
       'input' => 'html',
       'html_content' => '[userspn-user-register-fields]',
+      'parent' => 'userspn_extended_registration',
+      'parent_option' => 'on',
       'label' => __('Extra fields in the user profile', 'userspn'),
       'description' => __('You can include the fields that will be asked in the profile popup. The base login or registration will include email and password. The fields that you add here will be included below the two base email and password fields.', 'userspn'),
     ];
@@ -756,13 +775,6 @@ class USERSPN_Settings
       'section' => 'end',
     ];
 
-    $userspn_options['userspn_submit'] = [
-      'id' => 'userspn_submit',
-      'input' => 'input',
-      'type' => 'submit',
-      'value' => __('Save options', 'userspn'),
-    ];
-
     return $userspn_options;
   }
 
@@ -817,17 +829,59 @@ class USERSPN_Settings
         class="userspn-width-100-percent userspn-border-radius-20 userspn-mb-30">
 
       <h1 class="userspn-mb-30"><?php esc_html_e('Users manager - PN Settings', 'userspn'); ?></h1>
-      <div class="userspn-options-fields userspn-mb-30">
+      <div class="userspn-options-fields userspn-mb-30 pn-cm-settings-pb-80">
         <form action="" method="post" id="userspn_form" class="userspn-form">
           <?php foreach ($this->get_options() as $userspn_option): ?>
             <?php USERSPN_Forms::userspn_input_wrapper_builder($userspn_option, 'option'); ?>
           <?php endforeach ?>
+          <input type="submit" name="userspn_submit" id="userspn_submit" class="pn-cm-settings-hidden-submit" data-userspn-type="option" value="<?php esc_attr_e('Save options', 'userspn'); ?>">
         </form>
-        <a href="#" class="userspn-btn userspn-preview-profile-btn userspn-mt-20">
-          <?php esc_html_e('Preview profile', 'userspn'); ?>
-        </a>
       </div>
     </div>
+
+    <!-- Sticky settings footer bar -->
+    <div id="pn-cm-settings-footer" class="pn-cm-settings-footer">
+      <div class="pn-cm-settings-footer-inner">
+        <div class="pn-cm-settings-footer-left">
+          <span class="pn-cm-settings-footer-plugin-name">Users Manager - PN</span>
+          <span class="pn-cm-settings-footer-version">v<?php echo esc_html(USERSPN_VERSION); ?></span>
+        </div>
+        <div class="pn-cm-settings-footer-right">
+          <input type="file" id="pn-cm-settings-import-file" class="pn-cm-settings-hidden-input" accept=".json">
+          <button type="button" id="pn-cm-settings-import" class="pn-cm-settings-footer-icon-btn" title="<?php esc_attr_e('Import settings', 'userspn'); ?>">
+            <span class="material-icons-outlined">file_upload</span>
+          </button>
+          <button type="button" id="pn-cm-settings-export" class="pn-cm-settings-footer-icon-btn" title="<?php esc_attr_e('Export settings', 'userspn'); ?>">
+            <span class="material-icons-outlined">file_download</span>
+          </button>
+          <button type="button" id="pn-cm-settings-save" class="userspn-btn userspn-btn-mini">
+            <?php esc_html_e('Save options', 'userspn'); ?>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <?php
+    wp_enqueue_script(
+      'userspn-settings-footer',
+      USERSPN_URL . 'assets/js/admin/userspn-settings-footer.js',
+      [],
+      USERSPN_VERSION,
+      true
+    );
+
+    wp_localize_script('userspn-settings-footer', 'pnCmSettingsFooter', [
+      'ajaxUrl' => admin_url('admin-ajax.php'),
+      'nonce'   => wp_create_nonce('userspn-nonce'),
+      'i18n'    => [
+        'confirmImport'  => __('This will overwrite your current settings. Continue?', 'userspn'),
+        'importSuccess'  => __('Settings imported successfully. Reloading...', 'userspn'),
+        'importError'    => __('Error importing settings.', 'userspn'),
+        'invalidFile'    => __('Invalid JSON file.', 'userspn'),
+        'exportError'    => __('Error exporting settings.', 'userspn'),
+      ],
+    ]);
+    ?>
 
     <?php if (is_user_logged_in()): ?>
       <a href="#" class="userspn-profile-popup-btn" style="display:none;">

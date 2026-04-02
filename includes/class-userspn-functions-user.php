@@ -63,6 +63,77 @@ class USERSPN_Functions_User
     return false;
   }
 
+  /**
+   * Generate a unique user login from an email, using memorable word combinations.
+   * Result: prefix-adjective-noun (e.g. martinez-bright-oak / martinez-gran-roble)
+   * Uses Spanish words when the site locale is es_*.
+   * Falls back to adding a numeric suffix if collisions occur.
+   */
+  public static function generate_unique_login($email)
+  {
+    $locale = get_locale();
+    $is_spanish = (strpos($locale, 'es_') === 0);
+
+    if ($is_spanish) {
+      $adjectives = [
+        'gran', 'alto', 'buen', 'claro', 'vivo', 'noble', 'firme', 'veloz',
+        'libre', 'feliz', 'gentil', 'bravo', 'sabio', 'justo', 'fiel', 'dulce',
+        'puro', 'leal', 'sereno', 'audaz', 'calido', 'fuerte', 'agil', 'suave',
+        'diestro', 'amable', 'lucido', 'alegre', 'dorado', 'celeste', 'austral',
+        'boreal', 'polar', 'lunar', 'solar', 'coral', 'breve', 'amplio',
+        'fino', 'manso', 'habil', 'astuto', 'tenaz', 'pleno',
+      ];
+
+      $nouns = [
+        'roble', 'olmo', 'pino', 'cedro', 'arce', 'rio', 'lago', 'monte',
+        'cielo', 'sol', 'luna', 'mar', 'ola', 'alba', 'viento', 'nube',
+        'halcon', 'lobo', 'oso', 'zorro', 'buho', 'garza', 'ciervo', 'lince',
+        'jade', 'rubi', 'ambar', 'perla', 'coral', 'musgo', 'helecho', 'sauce',
+        'valle', 'cumbre', 'bahia', 'isla', 'costa', 'bosque', 'selva', 'prado',
+        'duna', 'roca', 'piedra', 'fuente', 'sendero', 'puerto',
+      ];
+    } else {
+      $adjectives = [
+        'bright', 'calm', 'cool', 'bold', 'fair', 'keen', 'warm', 'swift',
+        'kind', 'wise', 'glad', 'fine', 'pure', 'soft', 'deep', 'clear',
+        'fresh', 'light', 'noble', 'vivid', 'gentle', 'golden', 'silver',
+        'coral', 'amber', 'ivory', 'azure', 'lunar', 'solar', 'polar',
+        'rapid', 'quiet', 'brave', 'lively', 'happy', 'lucky', 'merry',
+        'steady', 'strong', 'clever', 'sharp', 'smooth', 'grand', 'agile',
+      ];
+
+      $nouns = [
+        'oak', 'elm', 'fox', 'owl', 'bay', 'sky', 'sun', 'star',
+        'lake', 'hill', 'reef', 'pine', 'wolf', 'bear', 'hawk', 'dove',
+        'jade', 'ruby', 'iris', 'sage', 'fern', 'moss', 'wave', 'wind',
+        'peak', 'dale', 'glen', 'cove', 'dune', 'brook', 'cliff', 'crane',
+        'robin', 'maple', 'cedar', 'aspen', 'river', 'stone', 'coast',
+        'meadow', 'forest', 'island', 'harbor', 'garden', 'summit',
+      ];
+    }
+
+    $prefix = sanitize_title(substr($email, 0, strpos($email, '@')));
+    $adj = $adjectives[array_rand($adjectives)];
+    $noun = $nouns[array_rand($nouns)];
+    $login = sanitize_title($prefix . '-' . $adj . '-' . $noun);
+
+    // Ensure uniqueness
+    if (!username_exists($login)) {
+      return $login;
+    }
+
+    // Add numeric suffix on collision
+    for ($i = 2; $i <= 99; $i++) {
+      $candidate = $login . '-' . $i;
+      if (!username_exists($candidate)) {
+        return $candidate;
+      }
+    }
+
+    // Ultimate fallback
+    return sanitize_title($prefix . '-' . wp_generate_password(8, false));
+  }
+
   public static function userspn_user_insert($userspn_user_login, $userspn_user_password, $userspn_user_email = '', $userspn_first_name = '', $userspn_last_name = '', $userspn_display_name = '', $userspn_user_nicename = '', $userspn_user_nickname = '', $userspn_user_description = '', $userspn_user_role = [], $userspn_array_usermeta = [/*['userspn_key' => 'userspn_value'], */])
   {
     /* $this->userspn_user_insert($userspn_user_login, $userspn_user_password, $userspn_user_email = '', $userspn_first_name = '', $userspn_last_name = '', $userspn_display_name = '', $userspn_user_nicename = '', $userspn_user_nickname = '', $userspn_user_description = '', $userspn_user_role = [], $userspn_array_usermeta = [['userspn_key' => 'userspn_value'], ],); */
@@ -1382,6 +1453,8 @@ class USERSPN_Functions_User
 
   public function userspn_user_register_form()
   {
+    $extended = get_option('userspn_extended_registration', 'on');
+
     $userspn_user_register_base_fields = [];
     $userspn_user_register_base_fields['userspn_email'] = [
       'id' => 'userspn_email',
@@ -1392,16 +1465,19 @@ class USERSPN_Functions_User
       'label' => __('Email', 'userspn'),
       'placeholder' => __('Email', 'userspn'),
     ];
-    $userspn_user_register_base_fields['userspn_password'] = [
-      'id' => 'userspn_password',
-      'class' => 'userspn-input userspn-width-100-percent',
-      'input' => 'input',
-      'type' => 'password',
-      'required' => 'true',
-      'label' => __('Password', 'userspn'),
-      'placeholder' => __('Password', 'userspn'),
-      'description' => __('Only letters, numbers and these symbols: !@#$%^&*()_+-=[]{}|;:,.<>?', 'userspn'),
-    ];
+
+    if ($extended === 'on') {
+      $userspn_user_register_base_fields['userspn_password'] = [
+        'id' => 'userspn_password',
+        'class' => 'userspn-input userspn-width-100-percent',
+        'input' => 'input',
+        'type' => 'password',
+        'required' => 'true',
+        'label' => __('Password', 'userspn'),
+        'placeholder' => __('Password', 'userspn'),
+        'description' => __('Only letters, numbers and these symbols: !@#$%^&*()_+-=[]{}|;:,.<>?', 'userspn'),
+      ];
+    }
 
     // Add honeypot field if enabled
     if (get_option('userspn_honeypot_enabled') === 'on') {
@@ -1418,7 +1494,13 @@ class USERSPN_Functions_User
       ];
     }
 
-    $userspn_user_register_fields = self::userspn_user_register_get_fields($userspn_user_register_base_fields);
+    if ($extended === 'on') {
+      $userspn_user_register_fields = self::userspn_user_register_get_fields($userspn_user_register_base_fields);
+    } else {
+      $userspn_user_register_fields = $userspn_user_register_base_fields;
+    }
+
+    $submit_label = ($extended === 'on') ? __('Create user', 'userspn') : __('Register', 'userspn');
 
     ob_start();
     ?>
@@ -1429,7 +1511,7 @@ class USERSPN_Functions_User
         <?php endforeach ?>
 
         <div class="userspn-text-align-right userspn-mt-30 userspn-mb-30">
-          <input type="submit" value="<?php esc_html_e('Create user', 'userspn'); ?>" name="userspn-user-registration-btn"
+          <input type="submit" value="<?php echo esc_attr($submit_label); ?>" name="userspn-user-registration-btn"
             id="userspn-user-registration-btn"
             class="userspn-btn userspn-btn" /><?php echo esc_html(USERSPN_Data::userspn_loader()); ?>
         </div>

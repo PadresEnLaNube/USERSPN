@@ -19,27 +19,14 @@
     tab_wrapper.find('#' + tab_link.attr('data-userspn-id')).removeClass('userspn-display-none');
   });
 
-  // Preview profile in settings
+  // Preview profile in settings — opens front-end with popup auto-open
   $(document).on('click', '.userspn-preview-profile-btn', function(e) {
     e.preventDefault();
     if (!confirm(userspn_i18n.save_before_preview)) {
       return;
     }
-    $('.userspn-profile-popup-btn').show();
-  });
-
-  // Override bubble click in settings to add afterClose
-  $(document).on('click', '.userspn-profile-popup-btn', function(e) {
-    if (!$('.userspn-options').length) return;
-    e.preventDefault();
-    e.stopImmediatePropagation();
-    if (typeof USERSPN_Popups !== 'undefined') {
-      USERSPN_Popups.open($('#userspn-profile-popup'), {
-        afterClose: function() {
-          $('.userspn-profile-popup-btn').hide();
-        }
-      });
-    }
+    var homeUrl = (typeof userspn_ajax !== 'undefined' && userspn_ajax.home_url) ? userspn_ajax.home_url : '/';
+    window.open(homeUrl + '?userspn_login=login', '_blank');
   });
 
   // Custom bubble position — open drag editor when checkbox is checked

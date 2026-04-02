@@ -64,8 +64,8 @@ class USERSPN_Common {
 			wp_enqueue_style($this->plugin_name . '-popups', USERSPN_URL . 'assets/css/userspn-popups.css', [], $this->version, 'all');
 		}
 
-		if (!wp_style_is('wph-tooltipster', 'enqueued')) {
-			wp_enqueue_style('wph-tooltipster', USERSPN_URL . 'assets/css/tooltipster.min.css', [], $this->version, 'all');
+		if (!wp_style_is('userspn-tooltips', 'enqueued')) {
+			wp_enqueue_style('userspn-tooltips', USERSPN_URL . 'assets/css/userspn-tooltips.css', [], $this->version, 'all');
 		}
 
 		if (!wp_style_is('wph-owl', 'enqueued')) {
@@ -141,8 +141,8 @@ class USERSPN_Common {
 			wp_enqueue_script($this->plugin_name . '-popups', USERSPN_URL . 'assets/js/userspn-popups.js', ['jquery'], $this->version, false);
 		}
 
-		if(!wp_script_is('wph-tooltipster', 'enqueued')) {
-			wp_enqueue_script('wph-tooltipster', USERSPN_URL . 'assets/js/tooltipster.min.js', ['jquery'], $this->version, false);
+		if(!wp_script_is('userspn-tooltips', 'enqueued')) {
+			wp_enqueue_script('userspn-tooltips', USERSPN_URL . 'assets/js/userspn-tooltips.js', ['jquery'], $this->version, false);
 		}
 
 		if(!wp_script_is('wph-owl', 'enqueued')) {
@@ -204,6 +204,7 @@ class USERSPN_Common {
 		wp_localize_script($this->plugin_name, 'userspn_ajax', [
 			'ajax_url' => admin_url('admin-ajax.php'),
 			'userspn_ajax_nonce' => $nonce,
+			'home_url' => home_url('/'),
 		]);
 
 		// Add CPTs data to JavaScript
@@ -303,6 +304,7 @@ class USERSPN_Common {
 			'user_removed' => esc_html(__('The user has been successfully removed from the system. Reloading...', 'userspn')),
 			'user_existing' => esc_html(__('Existing user. Please login.', 'userspn')),
 			'user_created' => esc_html(__('User created. Please login.', 'userspn')),
+			'user_created_check_email' => esc_html(__('Your account has been created. Please check your email to set your password.', 'userspn')),
 			'file_uploaded' => esc_html(__('The file has been uploaded successfully.', 'userspn')),
 			'file_removed' => esc_html(__('The file has been removed.', 'userspn')),
 			'confirm_remove_avatar' => esc_html(__('Are you sure you want to remove your avatar?', 'userspn')),

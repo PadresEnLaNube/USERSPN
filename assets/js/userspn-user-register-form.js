@@ -157,6 +157,17 @@
             }
 
             $('#userspn-login input#user_login').focus();
+          }else if (response == 'userspn_profile_create_simple_success') {
+            userspn_form.trigger('reset');
+            userspn_get_main_message(userspn_i18n.user_created_check_email);
+
+            if (!$('.userspn-profile-wrapper .user-created-check-email').length) {
+              if ($('.userspn-profile-wrapper .user-unlogged').length) {
+                $('.userspn-profile-wrapper .user-unlogged').fadeOut('slow');
+              }
+
+              $('.userspn-profile-wrapper').prepend('<div class="userspn-alert userspn-alert-warning user-created-check-email">' + userspn_i18n.user_created_check_email + '</div>');
+            }
           }else {
             $('.userspn-tab-links[data-userspn-id="userspn-tab-login"]').click();
 

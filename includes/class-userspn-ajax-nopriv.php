@@ -250,7 +250,7 @@ class USERSPN_Ajax_Nopriv {
                     }
                   }
 
-                  do_action('userspn_form_save', $user_id, $userspn_key_value, $userspn_form_type, $userspn_form_subtype);
+                  do_action('userspn_form_save', $user_id, $userspn_key_value, $userspn_form_type, $userspn_form_subtype, '');
                   break;
                 case 'post':
                   if (empty($userspn_form_subtype) || in_array($userspn_form_subtype, ['post_new', 'post_edit'])) {
@@ -369,7 +369,7 @@ class USERSPN_Ajax_Nopriv {
                     }
                   }
 
-                  do_action('userspn_form_save', 0, $userspn_key_value, $userspn_form_type, $userspn_form_subtype);
+                  do_action('userspn_form_save', 0, $userspn_key_value, $userspn_form_type, $userspn_form_subtype, '');
                   break;
               }
 
@@ -398,8 +398,104 @@ class USERSPN_Ajax_Nopriv {
         case 'userspn_profile_create':
           $userspn_email = !empty($_POST['userspn_email']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_email'])) : '';
           $userspn_password = !empty($_POST['userspn_password']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_password'])) : '';
+          $extended = get_option('userspn_extended_registration', 'on');
           $plugin_user = new USERSPN_Functions_User();
 
+          // Simple registration: only email required
+          if ($extended !== 'on') {
+            if (empty($userspn_email)) {
+              echo 'userspn_profile_create_error';exit;
+            }
+
+            if (email_exists($userspn_email)) {
+              echo 'userspn_profile_create_existing';exit;
+            }
+
+            $user_data = [
+              'email' => $userspn_email,
+              'first_name' => '',
+              'last_name' => '',
+              'description' => '',
+              'ip' => USERSPN_Security::get_user_ip(),
+              'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? ''
+            ];
+
+            $security_result = USERSPN_Security::validate_registration_security($_POST, $user_data);
+            if (is_wp_error($security_result)) {
+              USERSPN_Security::log_security_event('registration_blocked', $security_result->get_error_message(), [
+                'email' => $userspn_email,
+                'ip' => USERSPN_Security::get_user_ip()
+              ]);
+              echo wp_json_encode([
+                'error_key' => 'userspn_profile_create_security_error',
+                'error_message' => $security_result->get_error_message(),
+                'error_code' => $security_result->get_error_code(),
+              ]);
+              exit;
+            }
+
+            $userspn_generated_password = wp_generate_password(24, true, true);
+            $userspn_login = USERSPN_Functions_User::generate_unique_login($userspn_email);
+            $user_id = USERSPN_Functions_User::userspn_user_insert($userspn_login, $userspn_generated_password, $userspn_email, '', '', $userspn_login, $userspn_login, $userspn_login, '', ['subscriber'], [
+              ['userspn_secret_token' => bin2hex(openssl_random_pseudo_bytes(16))],
+            ]);
+
+            if (!$user_id) {
+              $wp_error_msg = '';
+              if (USERSPN_Functions_User::$last_insert_error && is_wp_error(USERSPN_Functions_User::$last_insert_error)) {
+                $wp_error_msg = USERSPN_Functions_User::$last_insert_error->get_error_message();
+              }
+              USERSPN_Security::log_security_event('registration_failed', 'User creation failed: ' . ($wp_error_msg ?: 'unknown error'), [
+                'email' => $userspn_email,
+                'login' => $userspn_login,
+                'ip' => USERSPN_Security::get_user_ip(),
+                'wp_error' => $wp_error_msg,
+              ]);
+              echo 'userspn_profile_create_error';exit;
+            }
+
+            update_user_meta($user_id, 'userspn_registration_ip', USERSPN_Security::get_user_ip());
+            update_user_meta($user_id, 'userspn_registration_user_agent', $_SERVER['HTTP_USER_AGENT'] ?? '');
+
+            if (get_option('userspn_recaptcha_enabled') === 'on') {
+              $recaptcha_token = $_POST['g-recaptcha-response'] ?? '';
+              if (!empty($recaptcha_token)) {
+                $recaptcha_result = USERSPN_Security::verify_recaptcha($recaptcha_token, 'register');
+                if (!is_wp_error($recaptcha_result)) {
+                  update_user_meta($user_id, 'userspn_recaptcha_score', $recaptcha_result['score']);
+                  update_user_meta($user_id, 'userspn_recaptcha_threshold', $recaptcha_result['threshold']);
+                  update_user_meta($user_id, 'userspn_recaptcha_timestamp', current_time('timestamp'));
+
+                  if ($recaptcha_result['is_suspicious']) {
+                    update_user_meta($user_id, 'userspn_recaptcha_suspicious', true);
+                    USERSPN_Security::send_suspicious_registration_notification($user_id, $recaptcha_result, $user_data);
+                    USERSPN_Security::log_security_event('suspicious_registration', 'Suspicious user registration detected', [
+                      'user_id' => $user_id,
+                      'email' => $userspn_email,
+                      'score' => $recaptcha_result['score'],
+                      'threshold' => $recaptcha_result['threshold'],
+                      'ip' => USERSPN_Security::get_user_ip()
+                    ]);
+                  } else {
+                    update_user_meta($user_id, 'userspn_recaptcha_suspicious', false);
+                  }
+                }
+              }
+            }
+
+            wp_new_user_notification($user_id, null, 'user');
+
+            USERSPN_Security::log_security_event('registration_success', 'Simple registration completed successfully', [
+              'user_id' => $user_id,
+              'email' => $userspn_email,
+              'ip' => USERSPN_Security::get_user_ip()
+            ]);
+
+            do_action('userspn_profile_create', $user_id, $userspn_key_value);
+            echo 'userspn_profile_create_simple_success';exit;
+          }
+
+          // Extended registration: email + password + optional fields
           if (!empty($userspn_email) && !empty($userspn_password)) {
             if (email_exists($userspn_email)) {
               echo 'userspn_profile_create_existing';exit;
@@ -427,7 +523,7 @@ class USERSPN_Ajax_Nopriv {
                 exit;
               }
 
-              $userspn_login = sanitize_title(substr($userspn_email, 0, strpos($userspn_email, '@')) . '-' . bin2hex(openssl_random_pseudo_bytes(4)));
+              $userspn_login = USERSPN_Functions_User::generate_unique_login($userspn_email);
               $user_id = USERSPN_Functions_User::userspn_user_insert($userspn_login, $userspn_password, $userspn_email, '', '', $userspn_login, $userspn_login, $userspn_login, '', ['subscriber'], [
                 ['userspn_secret_token' => bin2hex(openssl_random_pseudo_bytes(16))],
               ]);
@@ -604,7 +700,7 @@ class USERSPN_Ajax_Nopriv {
             if (email_exists($userspn_email)) {
               $user_id = get_user_by('email', $userspn_email)->ID;
             } else {
-              $userspn_login = sanitize_title(substr($userspn_email, 0, strpos($userspn_email, '@')) . '-' . bin2hex(openssl_random_pseudo_bytes(4)));
+              $userspn_login = USERSPN_Functions_User::generate_unique_login($userspn_email);
               $userspn_password = bin2hex(openssl_random_pseudo_bytes(12));
               $user_id = USERSPN_Functions_User::userspn_user_insert($userspn_login, $userspn_password, $userspn_email, '', '', $userspn_login, $userspn_login, $userspn_login, '', ['userspn_newsletter_subscriber'], []);
             }

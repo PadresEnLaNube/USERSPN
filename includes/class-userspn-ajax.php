@@ -1095,10 +1095,64 @@ class USERSPN_Ajax {
 
           exit;
           break;
+        case 'userspn_settings_export':
+          if (!current_user_can('manage_options')) {
+            echo wp_json_encode(['error_key' => 'permission_denied']);
+            exit;
+          }
+
+          $settings  = new USERSPN_Settings();
+          $options   = $settings->get_options();
+          $export    = [];
+
+          foreach ($options as $key => $config) {
+            if (!isset($config['input']) || in_array($config['input'], ['html_multi'])) continue;
+            if (isset($config['type']) && in_array($config['type'], ['nonce', 'submit'])) continue;
+            if (isset($config['section'])) continue;
+
+            $value = get_option($key, '');
+            if ($value !== '') {
+              $export[$key] = $value;
+            }
+          }
+
+          echo wp_json_encode(['error_key' => '', 'settings' => $export]);
+          exit;
+          break;
+
+        case 'userspn_settings_import':
+          if (!current_user_can('manage_options')) {
+            echo wp_json_encode(['error_key' => 'permission_denied']);
+            exit;
+          }
+
+          $raw = isset($_POST['settings']) ? wp_unslash($_POST['settings']) : '';
+          $import = json_decode($raw, true);
+
+          if (!is_array($import) || empty($import)) {
+            echo wp_json_encode(['error_key' => 'invalid_data', 'error_content' => 'Invalid settings data.']);
+            exit;
+          }
+
+          $settings  = new USERSPN_Settings();
+          $options   = $settings->get_options();
+          $allowed   = array_keys($options);
+          $count     = 0;
+
+          foreach ($import as $key => $value) {
+            if (in_array($key, $allowed)) {
+              update_option($key, sanitize_text_field($value));
+              $count++;
+            }
+          }
+
+          echo wp_json_encode(['error_key' => '', 'count' => $count]);
+          exit;
+          break;
       }
 
       echo wp_json_encode([
-        'error_key' => 'userspn_save_error', 
+        'error_key' => 'userspn_save_error',
       ]);
 
       exit;

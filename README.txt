@@ -4,7 +4,7 @@ Donate link: https://padresenlanube.com/
 Tags: user management, users, register, login, contacts
 Requires at least: 3.0.1
 Tested up to: 6.9.1
-Stable tag: 1.1.22
+Stable tag: 1.1.23
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Streamline user management on your WordPress site with this powerful plugin. Enable custom forms, secure login, and seamless profile management.
@@ -135,13 +135,6 @@ This plugin transforms WordPress user management from a backend-only task into a
 
 == Credits ==
 This plugin stands on the shoulders of giants
-
-Tooltipster v4.2.8 - A rockin' custom tooltip jQuery plugin
-Developed by Caleb Jacob and Louis Ameline
-MIT license
-https://calebjacob.github.io/tooltipster/
-https://github.com/calebjacob/tooltipster/blob/master/dist/js/tooltipster.main.js
-https://github.com/calebjacob/tooltipster/blob/master/dist/css/tooltipster.main.css
 
 Owl Carousel v2.3.4
 Licensed under: SEE LICENSE IN https://github.com/OwlCarousel2/OwlCarousel2/blob/master/LICENSE

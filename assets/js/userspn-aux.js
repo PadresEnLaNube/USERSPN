@@ -2,9 +2,7 @@
 	'use strict';
 
   $(document).ready(function() {
-    if($('.userspn-tooltip').length && $.fn.tooltipster) {
-      $('.userspn-tooltip').tooltipster({maxWidth: 300, delayTouch:[0, 4000], customClass: 'userspn-tooltip'});
-    }
+    if (window.USERSPN_Tooltips) { USERSPN_Tooltips.init(); }
 
     if ($('.userspn-select').length && $.fn.USERSPN_Selector) {
       $('.userspn-select').each(function(index) {

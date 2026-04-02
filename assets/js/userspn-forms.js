@@ -210,7 +210,7 @@
       });
     }
 
-    if ($('.userspn-image-btn').length) {
+    {
       var image_frame;
 
       $(document).on('click', '.userspn-image-btn', function(e){
@@ -272,7 +272,7 @@
       });
     }
 
-    if ($('.userspn-audio-btn').length) {
+    {
       var audio_frame;
 
       $(document).on('click', '.userspn-audio-btn', function(e){
@@ -328,14 +328,13 @@
             userspn_audios_block.append('<div class="userspn-audio userspn-tooltip" title="' + $(this)[0].title + '"><i class="dashicons dashicons-media-audio"></i></div>');
           });
 
-          $('.userspn-tooltip').tooltipster({maxWidth: 300,delayTouch:[0, 4000], customClass: 'userspn-tooltip'});
           userspn_input_btn.text((userspn_audios_block.attr('data-userspn-multiple') == 'true') ? userspn_i18n.select_audios : userspn_i18n.select_audio);
           userspn_audios_input.val(ids);
         });
       });
     }
 
-    if ($('.userspn-video-btn').length) {
+    {
       var video_frame;
 
       $(document).on('click', '.userspn-video-btn', function(e){
@@ -391,14 +390,13 @@
             userspn_videos_block.append('<div class="userspn-video userspn-tooltip" title="' + $(this)[0].title + '"><i class="dashicons dashicons-media-video"></i></div>');
           });
 
-          $('.userspn-tooltip').tooltipster({maxWidth: 300,delayTouch:[0, 4000], customClass: 'userspn-tooltip'});
           userspn_input_btn.text((userspn_videos_block.attr('data-userspn-multiple') == 'true') ? userspn_i18n.select_videos : userspn_i18n.select_video);
           userspn_videos_input.val(ids);
         });
       });
     }
 
-    if ($('.userspn-file-btn').length) {
+    {
       var file_frame;
 
       $(document).on('click', '.userspn-file-btn', function(e){
