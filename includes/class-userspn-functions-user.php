@@ -1882,6 +1882,18 @@ class USERSPN_Functions_User
     $menu_items = wc_get_account_menu_items();
     unset($menu_items['dashboard'], $menu_items['customer-logout']);
 
+    $wc_endpoint_options = [
+      'downloads'       => 'userspn_wc_downloads',
+      'edit-address'    => 'userspn_wc_edit_address',
+      'payment-methods' => 'userspn_wc_payment_methods',
+      'edit-account'    => 'userspn_wc_edit_account',
+    ];
+    foreach ($wc_endpoint_options as $endpoint => $option_key) {
+      if (get_option($option_key) !== 'on') {
+        unset($menu_items[$endpoint]);
+      }
+    }
+
     if (empty($menu_items)) {
       return;
     }
@@ -1916,7 +1928,18 @@ class USERSPN_Functions_User
       return;
     }
 
-    $allowed_endpoints = ['orders', 'downloads', 'edit-address', 'payment-methods', 'edit-account'];
+    $allowed_endpoints = ['orders'];
+    $wc_endpoint_options = [
+      'downloads'       => 'userspn_wc_downloads',
+      'edit-address'    => 'userspn_wc_edit_address',
+      'payment-methods' => 'userspn_wc_payment_methods',
+      'edit-account'    => 'userspn_wc_edit_account',
+    ];
+    foreach ($wc_endpoint_options as $ep => $option_key) {
+      if (get_option($option_key) === 'on') {
+        $allowed_endpoints[] = $ep;
+      }
+    }
     if (!in_array($endpoint, $allowed_endpoints, true)) {
       return;
     }

@@ -14,7 +14,14 @@
       "Bash(\"C:/Program Files/TortoiseSVN/bin/SubWCRev.exe\":*)",
       "Bash(\"C:/Program Files/TortoiseSVN/bin/SubWCRev.exe\" \"C:/Users/Fili/Desktop/WPH/SVN/WPH/WPH PLUGINS/userspn/trunk\")",
       "WebSearch",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(while read hash)",
+      "Bash(do echo \"=== $hash ===\")",
+      "Bash(git diff-tree:*)",
+      "Bash(done)",
+      "Bash(find:*)",
+      "Bash(while read:*)",
+      "Bash(do cp /tmp/material-icons-old.css \"$f\")"
     ]
   }
 }

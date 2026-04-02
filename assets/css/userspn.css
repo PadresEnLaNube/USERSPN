@@ -1541,9 +1541,15 @@ textarea {
   flex-wrap: nowrap;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   border-bottom: 2px solid rgba(128, 128, 128, 0.3);
   margin-bottom: 15px;
   gap: 0;
+}
+
+.userspn-wc-subtabs::-webkit-scrollbar {
+  display: none;
 }
 
 .userspn-wc-subtab-link {
@@ -1584,15 +1590,6 @@ textarea {
 }
 
 @media (max-width: 600px) {
-  .userspn-wc-subtabs {
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-
-  .userspn-wc-subtabs::-webkit-scrollbar {
-    display: none;
-  }
-
   .userspn-wc-subtab-link {
     padding: 6px 12px;
     font-size: 12px;

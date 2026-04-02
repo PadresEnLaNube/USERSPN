@@ -1074,7 +1074,18 @@ class USERSPN_Ajax {
           }
 
           $wc_endpoint = !empty($_POST['wc_endpoint']) ? sanitize_text_field(wp_unslash($_POST['wc_endpoint'])) : '';
-          $allowed_endpoints = ['orders', 'downloads', 'edit-address', 'payment-methods', 'edit-account'];
+          $allowed_endpoints = ['orders'];
+          $wc_endpoint_options = [
+            'downloads'       => 'userspn_wc_downloads',
+            'edit-address'    => 'userspn_wc_edit_address',
+            'payment-methods' => 'userspn_wc_payment_methods',
+            'edit-account'    => 'userspn_wc_edit_account',
+          ];
+          foreach ($wc_endpoint_options as $ep => $option_key) {
+            if (get_option($option_key) === 'on') {
+              $allowed_endpoints[] = $ep;
+            }
+          }
 
           if (!in_array($wc_endpoint, $allowed_endpoints, true)) {
             echo wp_json_encode([

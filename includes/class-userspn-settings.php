@@ -250,8 +250,56 @@ class USERSPN_Settings
         'class' => 'userspn-input userspn-width-100-percent',
         'input' => 'input',
         'type' => 'checkbox',
+        'parent' => 'this',
         'label' => __('WooCommerce purchases tab', 'userspn'),
         'description' => __('This option shows a purchases tab in the profile popup that allows users to manage their WooCommerce orders, downloads and account details.', 'userspn'),
+      ];
+      $userspn_options['userspn_wc_orders'] = [
+        'id' => 'userspn_wc_orders',
+        'class' => 'userspn-input userspn-width-100-percent',
+        'input' => 'input',
+        'type' => 'checkbox',
+        'parent' => 'userspn_woocommerce_tab',
+        'parent_option' => 'on',
+        'disabled' => 'true',
+        'checked' => true,
+        'label' => __('Orders', 'userspn'),
+      ];
+      $userspn_options['userspn_wc_downloads'] = [
+        'id' => 'userspn_wc_downloads',
+        'class' => 'userspn-input userspn-width-100-percent',
+        'input' => 'input',
+        'type' => 'checkbox',
+        'parent' => 'userspn_woocommerce_tab',
+        'parent_option' => 'on',
+        'label' => __('Downloads', 'userspn'),
+      ];
+      $userspn_options['userspn_wc_edit_address'] = [
+        'id' => 'userspn_wc_edit_address',
+        'class' => 'userspn-input userspn-width-100-percent',
+        'input' => 'input',
+        'type' => 'checkbox',
+        'parent' => 'userspn_woocommerce_tab',
+        'parent_option' => 'on',
+        'label' => __('Addresses', 'userspn'),
+      ];
+      $userspn_options['userspn_wc_payment_methods'] = [
+        'id' => 'userspn_wc_payment_methods',
+        'class' => 'userspn-input userspn-width-100-percent',
+        'input' => 'input',
+        'type' => 'checkbox',
+        'parent' => 'userspn_woocommerce_tab',
+        'parent_option' => 'on',
+        'label' => __('Payment methods', 'userspn'),
+      ];
+      $userspn_options['userspn_wc_edit_account'] = [
+        'id' => 'userspn_wc_edit_account',
+        'class' => 'userspn-input userspn-width-100-percent',
+        'input' => 'input',
+        'type' => 'checkbox',
+        'parent' => 'userspn_woocommerce_tab',
+        'parent_option' => 'on',
+        'label' => __('Account details', 'userspn'),
       ];
     }
     $userspn_options['userspn_user_advanced'] = [
