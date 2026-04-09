@@ -775,7 +775,7 @@ class USERSPN_Forms {
             <div class="userspn-content userspn-pl-10 userspn-toggle-content userspn-mb-20 userspn-display-none-soft">
               <?php if (array_key_exists('description', $input_array) && !empty($input_array['description'])): ?>
                 <div class="userspn-section-info-block userspn-mb-20">
-                  <i class="material-icons-outlined userspn-section-info-icon">info_outline</i>
+                  <i class="material-icons-outlined userspn-section-info-icon">info</i>
                   <small><?php echo wp_kses_post($input_array['description']); ?></small>
                 </div>
               <?php endif ?>
@@ -841,7 +841,7 @@ class USERSPN_Forms {
           <div class="userspn-content userspn-pl-10 userspn-toggle-content userspn-mb-20 userspn-display-none-soft">
             <?php if (array_key_exists('description', $input_array) && !empty($input_array['description'])): ?>
               <div class="userspn-section-info-block userspn-mb-20">
-                <i class="material-icons-outlined userspn-section-info-icon">info_outline</i>
+                <i class="material-icons-outlined userspn-section-info-icon">info</i>
                 <small><?php echo wp_kses_post($input_array['description']); ?></small>
               </div>
             <?php endif ?>

@@ -877,32 +877,32 @@ class USERSPN_Settings
         class="userspn-width-100-percent userspn-border-radius-20 userspn-mb-30">
 
       <h1 class="userspn-mb-30"><?php esc_html_e('Users manager - PN Settings', 'userspn'); ?></h1>
-      <div class="userspn-options-fields userspn-mb-30 pn-cm-settings-pb-80">
+      <div class="userspn-options-fields userspn-mb-30 userspn-settings-pb-80">
         <form action="" method="post" id="userspn_form" class="userspn-form">
           <?php foreach ($this->get_options() as $userspn_option): ?>
             <?php USERSPN_Forms::userspn_input_wrapper_builder($userspn_option, 'option'); ?>
           <?php endforeach ?>
-          <input type="submit" name="userspn_submit" id="userspn_submit" class="pn-cm-settings-hidden-submit" data-userspn-type="option" value="<?php esc_attr_e('Save options', 'userspn'); ?>">
+          <input type="submit" name="userspn_submit" id="userspn_submit" class="userspn-settings-hidden-submit" data-userspn-type="option" value="<?php esc_attr_e('Save options', 'userspn'); ?>">
         </form>
       </div>
     </div>
 
     <!-- Sticky settings footer bar -->
-    <div id="pn-cm-settings-footer" class="pn-cm-settings-footer">
-      <div class="pn-cm-settings-footer-inner">
-        <div class="pn-cm-settings-footer-left">
-          <span class="pn-cm-settings-footer-plugin-name">Users Manager - PN</span>
-          <span class="pn-cm-settings-footer-version">v<?php echo esc_html(USERSPN_VERSION); ?></span>
+    <div id="userspn-settings-footer" class="userspn-settings-footer">
+      <div class="userspn-settings-footer-inner">
+        <div class="userspn-settings-footer-left">
+          <span class="userspn-settings-footer-plugin-name">Users Manager - PN</span>
+          <span class="userspn-settings-footer-version">v<?php echo esc_html(USERSPN_VERSION); ?></span>
         </div>
-        <div class="pn-cm-settings-footer-right">
-          <input type="file" id="pn-cm-settings-import-file" class="pn-cm-settings-hidden-input" accept=".json">
-          <button type="button" id="pn-cm-settings-import" class="pn-cm-settings-footer-icon-btn" title="<?php esc_attr_e('Import settings', 'userspn'); ?>">
+        <div class="userspn-settings-footer-right">
+          <input type="file" id="userspn-settings-import-file" class="userspn-settings-hidden-input" accept=".json">
+          <button type="button" id="userspn-settings-import" class="userspn-settings-footer-icon-btn" title="<?php esc_attr_e('Import settings', 'userspn'); ?>">
             <span class="material-icons-outlined">file_upload</span>
           </button>
-          <button type="button" id="pn-cm-settings-export" class="pn-cm-settings-footer-icon-btn" title="<?php esc_attr_e('Export settings', 'userspn'); ?>">
+          <button type="button" id="userspn-settings-export" class="userspn-settings-footer-icon-btn" title="<?php esc_attr_e('Export settings', 'userspn'); ?>">
             <span class="material-icons-outlined">file_download</span>
           </button>
-          <button type="button" id="pn-cm-settings-save" class="userspn-btn userspn-btn-mini">
+          <button type="button" id="userspn-settings-save" class="userspn-btn userspn-btn-mini">
             <?php esc_html_e('Save options', 'userspn'); ?>
           </button>
         </div>
@@ -918,7 +918,7 @@ class USERSPN_Settings
       true
     );
 
-    wp_localize_script('userspn-settings-footer', 'pnCmSettingsFooter', [
+    wp_localize_script('userspn-settings-footer', 'userspnSettingsFooter', [
       'ajaxUrl' => admin_url('admin-ajax.php'),
       'nonce'   => wp_create_nonce('userspn-nonce'),
       'i18n'    => [
