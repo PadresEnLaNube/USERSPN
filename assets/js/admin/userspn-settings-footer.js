@@ -74,8 +74,8 @@
 
   if (rpBtn && rpPopup) {
     rpBtn.addEventListener('click', function () {
-      if (window.userspn_Popups) {
-        userspn_Popups.open('userspn-recommended-plugins');
+      if (window.USERSPN_Popups) {
+        USERSPN_Popups.open('userspn-recommended-plugins');
       }
     });
 

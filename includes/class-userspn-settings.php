@@ -940,17 +940,17 @@ class USERSPN_Settings
           <span class="userspn-settings-footer-version">v<?php echo esc_html(USERSPN_VERSION); ?></span>
         </div>
         <div class="userspn-settings-footer-right">
-          <button type="button" id="userspn-settings-recommended" class="userspn-settings-footer-icon-btn pn-cm-rp-btn" title="<?php esc_attr_e('Recommended plugins', 'userspn'); ?>">
+          <button type="button" id="userspn-settings-recommended" class="userspn-settings-footer-icon-btn pn-cm-rp-btn userspn-tooltip" title="<?php esc_attr_e('Recommended plugins', 'userspn'); ?>">
             <span class="material-icons-outlined">add</span>
             <?php if ($pn_rp_badge > 0) : ?>
               <span class="pn-cm-rp-badge"><?php echo (int) $pn_rp_badge; ?></span>
             <?php endif; ?>
           </button>
           <input type="file" id="userspn-settings-import-file" class="userspn-settings-hidden-input" accept=".json">
-          <button type="button" id="userspn-settings-import" class="userspn-settings-footer-icon-btn" title="<?php esc_attr_e('Import settings', 'userspn'); ?>">
+          <button type="button" id="userspn-settings-import" class="userspn-settings-footer-icon-btn userspn-tooltip" title="<?php esc_attr_e('Import settings', 'userspn'); ?>">
             <span class="material-icons-outlined">file_upload</span>
           </button>
-          <button type="button" id="userspn-settings-export" class="userspn-settings-footer-icon-btn" title="<?php esc_attr_e('Export settings', 'userspn'); ?>">
+          <button type="button" id="userspn-settings-export" class="userspn-settings-footer-icon-btn userspn-tooltip" title="<?php esc_attr_e('Export settings', 'userspn'); ?>">
             <span class="material-icons-outlined">file_download</span>
           </button>
           <button type="button" id="userspn-settings-save" class="userspn-btn userspn-btn-mini">
@@ -999,10 +999,13 @@ class USERSPN_Settings
     </div>
 
     <?php
+    wp_enqueue_style('userspn-tooltips', USERSPN_URL . 'assets/css/userspn-tooltips.css', [], USERSPN_VERSION);
+    wp_enqueue_script('userspn-popups', USERSPN_URL . 'assets/js/userspn-popups.js', ['jquery'], USERSPN_VERSION, true);
+    wp_enqueue_script('userspn-tooltips', USERSPN_URL . 'assets/js/userspn-tooltips.js', ['jquery'], USERSPN_VERSION, true);
     wp_enqueue_script(
       'userspn-settings-footer',
       USERSPN_URL . 'assets/js/admin/userspn-settings-footer.js',
-      [],
+      ['userspn-popups'],
       USERSPN_VERSION,
       true
     );
