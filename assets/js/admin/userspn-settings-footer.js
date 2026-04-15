@@ -66,4 +66,115 @@
     };
     reader.readAsText(file);
   });
+
+  // ── Recommended plugins ──────────────────────────────────────
+
+  var rpBtn   = document.getElementById('userspn-settings-recommended');
+  var rpPopup = document.getElementById('userspn-recommended-plugins');
+
+  if (rpBtn && rpPopup) {
+    rpBtn.addEventListener('click', function () {
+      if (window.userspn_Popups) {
+        userspn_Popups.open('userspn-recommended-plugins');
+      }
+    });
+
+    rpPopup.addEventListener('click', function (e) {
+      var installBtn  = e.target.closest('.pn-cm-rp-install');
+      var activateBtn = e.target.closest('.pn-cm-rp-activate');
+
+      if (installBtn)  handleRpInstall(installBtn);
+      if (activateBtn) handleRpActivate(activateBtn);
+    });
+  }
+
+  function handleRpInstall(btn) {
+    var slug      = btn.getAttribute('data-slug');
+    var card      = btn.closest('.pn-cm-rp-card');
+    var actionDiv = card.querySelector('.pn-cm-rp-action');
+    var i18n      = userspnSettingsFooter.i18n;
+
+    btn.disabled    = true;
+    btn.textContent = i18n.installing;
+
+    var fd = new FormData();
+    fd.append('action', 'userspn_ajax');
+    fd.append('userspn_ajax_type', 'userspn_install_plugin');
+    fd.append('userspn_ajax_nonce', userspnSettingsFooter.nonce);
+    fd.append('slug', slug);
+
+    fetch(userspnSettingsFooter.ajaxUrl, { method: 'POST', body: fd })
+      .then(function (r) { return r.json(); })
+      .then(function (res) {
+        if (res.error_key) {
+          btn.disabled    = false;
+          btn.textContent = 'Install';
+          if (typeof userspn_get_main_message === 'function') {
+            userspn_get_main_message(res.error_content || i18n.installError, 'red');
+          }
+          return;
+        }
+        actionDiv.innerHTML = '<button type="button" class="userspn-btn userspn-btn-mini userspn-btn-transparent pn-cm-rp-activate" data-slug="' + slug + '">' + i18n.activate + '</button>';
+        updateRpBadge(-1);
+      })
+      .catch(function () {
+        btn.disabled    = false;
+        btn.textContent = 'Install';
+        if (typeof userspn_get_main_message === 'function') {
+          userspn_get_main_message(i18n.installError, 'red');
+        }
+      });
+  }
+
+  function handleRpActivate(btn) {
+    var slug      = btn.getAttribute('data-slug');
+    var card      = btn.closest('.pn-cm-rp-card');
+    var actionDiv = card.querySelector('.pn-cm-rp-action');
+    var i18n      = userspnSettingsFooter.i18n;
+
+    btn.disabled    = true;
+    btn.textContent = i18n.activating;
+
+    var fd = new FormData();
+    fd.append('action', 'userspn_ajax');
+    fd.append('userspn_ajax_type', 'userspn_activate_plugin');
+    fd.append('userspn_ajax_nonce', userspnSettingsFooter.nonce);
+    fd.append('slug', slug);
+
+    fetch(userspnSettingsFooter.ajaxUrl, { method: 'POST', body: fd })
+      .then(function (r) { return r.json(); })
+      .then(function (res) {
+        if (res.error_key) {
+          btn.disabled    = false;
+          btn.textContent = i18n.activate;
+          if (typeof userspn_get_main_message === 'function') {
+            userspn_get_main_message(res.error_content || i18n.activateError, 'red');
+          }
+          return;
+        }
+        actionDiv.innerHTML = '<span class="pn-cm-rp-active-badge">' + i18n.active + '</span>';
+        var settingsUrl = (userspnSettingsFooter.settingsPages || {})[slug];
+        if (settingsUrl) {
+          window.open(settingsUrl, '_blank');
+        }
+      })
+      .catch(function () {
+        btn.disabled    = false;
+        btn.textContent = i18n.activate;
+        if (typeof userspn_get_main_message === 'function') {
+          userspn_get_main_message(i18n.activateError, 'red');
+        }
+      });
+  }
+
+  function updateRpBadge(delta) {
+    var badge = document.querySelector('.pn-cm-rp-badge');
+    if (!badge) return;
+    var count = parseInt(badge.textContent, 10) + delta;
+    if (count <= 0) {
+      badge.remove();
+    } else {
+      badge.textContent = count;
+    }
+  }
 })();

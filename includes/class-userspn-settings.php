@@ -887,6 +887,51 @@ class USERSPN_Settings
       </div>
     </div>
 
+    <?php
+    // --- Recommended plugins ---
+    $pn_family = [
+      'pn-customers-manager' => [
+        'name' => 'PN Customers Manager',
+        'file' => 'pn-customers-manager/pn-customers-manager.php',
+        'icon' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 800 720"><path d="m 360,-240 v -80 H 680 V -604 Q 680,-721 598.5,-802.5 517,-884 400,-884 283,-884 201.5,-802.5 120,-721 120,-604 v 244 H 80 Q 47,-360 23.5,-383.5 0,-407 0,-440 v -80 Q 0,-541 10.5,-559.5 21,-578 40,-589 l 3,-53 q 8,-68 39.5,-126 31.5,-58 79,-101 47.5,-43 109,-67 61.5,-24 129.5,-24 68,0 129,24 61,24 109,66.5 48,42.5 79,100.5 31,58 40,126 l 3,52 q 19,9 29.5,27 10.5,18 10.5,38 v 92 q 0,20 -10.5,38 -10.5,18 -29.5,27 v 49 q 0,33 -23.5,56.5 Q 713,-240 680,-240 Z m -80,-280 q -17,0 -28.5,-11.5 Q 240,-543 240,-560 q 0,-17 11.5,-28.5 11.5,-11.5 28.5,-11.5 17,0 28.5,11.5 11.5,11.5 11.5,28.5 0,17 -11.5,28.5 Q 297,-520 280,-520 Z m 240,0 q -17,0 -28.5,-11.5 Q 480,-543 480,-560 q 0,-17 11.5,-28.5 11.5,-11.5 28.5,-11.5 17,0 28.5,11.5 11.5,11.5 11.5,28.5 0,17 -11.5,28.5 Q 537,-520 520,-520 Z m -359,-62 q -7,-106 64,-182 71,-76 177,-76 89,0 156.5,56.5 Q 626,-727 640,-639 549,-640 472.5,-688 396,-736 355,-818 339,-738 287.5,-675.5 236,-613 161,-582 Z" fill="#0000aa"/></svg>',
+        'settings_page' => 'pn_customers_manager_options',
+        'desc' => __('CRM with AI-powered WhatsApp and Instagram chat.', 'userspn'),
+      ],
+      'mailpn' => [
+        'name' => 'MailPN',
+        'file' => 'mailpn/mailpn.php',
+        'icon' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 840 720"><path d="m558-240-170-170 56-56 114 114 226-226 56 56zM400-680 720-880H80zm0 80-320-200v400h206l80 80H80Q47-320 23.5-343.5 0-367 0-400V-880Q0-913 23.5-936.5 47-960 80-960h640q33 0 56.5 23.5 23.5 23.5 23.5 56.5v174l-80 80v-174zm0 0zm0-80zm0 80z" fill="#ffcc00"/></svg>',
+        'settings_page' => 'mailpn_options',
+        'desc' => __('Email marketing and newsletter campaigns.', 'userspn'),
+      ],
+      'pn-tasks-manager' => [
+        'name' => 'PN Tasks Manager',
+        'file' => 'pn-tasks-manager/pn-tasks-manager.php',
+        'icon' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="m438-240 226-226-58-58-169 169-84-84-57 57 142 142ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520v-200H240v640h480v-440H520ZM240-800v200-200 640-640Z" fill="#552200"/></svg>',
+        'settings_page' => 'pn_tasks_manager_options',
+        'desc' => __('Task and project management.', 'userspn'),
+      ],
+      'pn-cookies-manager' => [
+        'name' => 'PN Cookies Manager',
+        'file' => 'pn-cookies-manager/pn-cookies-manager.php',
+        'icon' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M480-80Q397-80 324-111.5 251-143 197-197 143-251 111.5-324 80-397 80-480q0-75 29-147 29-72 81-128.5 52-56.5 125-91 73-34.5 160-34.5 21 0 43 2 22 2 45 7-9 45 6 85 15 40 45 66.5 30 26.5 71.5 36.5 41.5 10 85.5-5-26 59 7.5 113 33.5 54 99.5 56 1 11 1.5 20.5.5 9.5.5 20.5 0 82-31.5 154.5-31.5 72.5-85.5 127-54 54.5-127 86Q563-80 480-80Zm-60-480q25 0 42.5-17.5Q480-595 480-620q0-25-17.5-42.5T420-680q-25 0-42.5 17.5T360-620q0 25 17.5 42.5T420-560Zm-80 200q25 0 42.5-17.5Q400-395 400-420q0-25-17.5-42.5T340-480q-25 0-42.5 17.5T280-420q0 25 17.5 42.5T340-360Zm260 40q17 0 28.5-11.5Q640-343 640-360q0-17-11.5-28.5T600-400q-17 0-28.5 11.5T560-360q0 17 11.5 28.5T600-320ZM480-160q122 0 216.5-84 94.5-84 103.5-214-50-22-78.5-60-28.5-38-38.5-85-77-11-132-66-55-55-68-132-80-2-140.5 29-60.5 31-101 79.5-40.5 48.5-61 105.5-20.5 57-20.5 107 0 133 93.5 226.5T480-160Zm0-324Z" fill="#803300"/></svg>',
+        'settings_page' => 'pn_cookies_manager_options',
+        'desc' => __('Cookie consent and GDPR compliance.', 'userspn'),
+      ],
+    ];
+    $pn_recommended = ['mailpn'];
+    if (!function_exists('get_plugins')) {
+      require_once ABSPATH . 'wp-admin/includes/plugin.php';
+    }
+    $pn_installed = get_plugins();
+    $pn_rp_badge = 0;
+    foreach ($pn_recommended as $pn_s) {
+      if (isset($pn_family[$pn_s]) && !isset($pn_installed[$pn_family[$pn_s]['file']])) {
+        $pn_rp_badge++;
+      }
+    }
+    ?>
+
     <!-- Sticky settings footer bar -->
     <div id="userspn-settings-footer" class="userspn-settings-footer">
       <div class="userspn-settings-footer-inner">
@@ -895,6 +940,12 @@ class USERSPN_Settings
           <span class="userspn-settings-footer-version">v<?php echo esc_html(USERSPN_VERSION); ?></span>
         </div>
         <div class="userspn-settings-footer-right">
+          <button type="button" id="userspn-settings-recommended" class="userspn-settings-footer-icon-btn pn-cm-rp-btn" title="<?php esc_attr_e('Recommended plugins', 'userspn'); ?>">
+            <span class="material-icons-outlined">add</span>
+            <?php if ($pn_rp_badge > 0) : ?>
+              <span class="pn-cm-rp-badge"><?php echo (int) $pn_rp_badge; ?></span>
+            <?php endif; ?>
+          </button>
           <input type="file" id="userspn-settings-import-file" class="userspn-settings-hidden-input" accept=".json">
           <button type="button" id="userspn-settings-import" class="userspn-settings-footer-icon-btn" title="<?php esc_attr_e('Import settings', 'userspn'); ?>">
             <span class="material-icons-outlined">file_upload</span>
@@ -909,6 +960,44 @@ class USERSPN_Settings
       </div>
     </div>
 
+    <!-- Recommended plugins popup -->
+    <div class="userspn-popup-overlay userspn-display-none-soft" style="z-index:1000000;"></div>
+    <div id="userspn-recommended-plugins" class="userspn-popup userspn-popup-size-medium userspn-display-none-soft" style="z-index:1000001;">
+      <div class="userspn-popup-content" style="padding:30px;">
+        <h3 style="margin:0 0 8px;"><?php esc_html_e('Recommended Plugins', 'userspn'); ?></h3>
+        <p style="color:#787c82;margin:0 0 20px;"><?php esc_html_e('Enhance your workflow with these companion plugins.', 'userspn'); ?></p>
+        <div class="pn-cm-rp-list">
+          <?php foreach ($pn_family as $pn_slug => $pn_pl) :
+            $pn_is_installed = isset($pn_installed[$pn_pl['file']]);
+            $pn_is_active    = $pn_is_installed && is_plugin_active($pn_pl['file']);
+            $pn_is_rec       = in_array($pn_slug, $pn_recommended, true);
+          ?>
+          <div class="pn-cm-rp-card" data-slug="<?php echo esc_attr($pn_slug); ?>">
+            <div class="pn-cm-rp-icon"><?php echo $pn_pl['icon']; ?></div>
+            <div class="pn-cm-rp-info">
+              <div class="pn-cm-rp-name">
+                <?php echo esc_html($pn_pl['name']); ?>
+                <?php if ($pn_is_rec) : ?>
+                  <span class="pn-cm-rp-recommended"><?php esc_html_e('Recommended', 'userspn'); ?></span>
+                <?php endif; ?>
+              </div>
+              <div class="pn-cm-rp-desc"><?php echo esc_html($pn_pl['desc']); ?></div>
+            </div>
+            <div class="pn-cm-rp-action">
+              <?php if ($pn_is_active) : ?>
+                <span class="pn-cm-rp-active-badge"><?php esc_html_e('Active', 'userspn'); ?></span>
+              <?php elseif ($pn_is_installed) : ?>
+                <button type="button" class="userspn-btn userspn-btn-mini userspn-btn-transparent pn-cm-rp-activate" data-slug="<?php echo esc_attr($pn_slug); ?>"><?php esc_html_e('Activate', 'userspn'); ?></button>
+              <?php else : ?>
+                <button type="button" class="userspn-btn userspn-btn-mini userspn-btn-transparent pn-cm-rp-install" data-slug="<?php echo esc_attr($pn_slug); ?>"><?php esc_html_e('Install', 'userspn'); ?></button>
+              <?php endif; ?>
+            </div>
+          </div>
+          <?php endforeach; ?>
+        </div>
+      </div>
+    </div>
+
     <?php
     wp_enqueue_script(
       'userspn-settings-footer',
@@ -918,15 +1007,27 @@ class USERSPN_Settings
       true
     );
 
+    $pn_rp_settings = [];
+    foreach ($pn_family as $pn_slug => $pn_pl) {
+      $pn_rp_settings[$pn_slug] = admin_url('admin.php?page=' . $pn_pl['settings_page']);
+    }
+
     wp_localize_script('userspn-settings-footer', 'userspnSettingsFooter', [
-      'ajaxUrl' => admin_url('admin-ajax.php'),
-      'nonce'   => wp_create_nonce('userspn-nonce'),
-      'i18n'    => [
+      'ajaxUrl'       => admin_url('admin-ajax.php'),
+      'nonce'         => wp_create_nonce('userspn-nonce'),
+      'settingsPages' => $pn_rp_settings,
+      'i18n'          => [
         'confirmImport'  => __('This will overwrite your current settings. Continue?', 'userspn'),
         'importSuccess'  => __('Settings imported successfully. Reloading...', 'userspn'),
         'importError'    => __('Error importing settings.', 'userspn'),
         'invalidFile'    => __('Invalid JSON file.', 'userspn'),
         'exportError'    => __('Error exporting settings.', 'userspn'),
+        'installing'     => __('Installing...', 'userspn'),
+        'activating'     => __('Activating...', 'userspn'),
+        'installError'   => __('Error installing plugin.', 'userspn'),
+        'activateError'  => __('Error activating plugin.', 'userspn'),
+        'active'         => __('Active', 'userspn'),
+        'activate'       => __('Activate', 'userspn'),
       ],
     ]);
     ?>

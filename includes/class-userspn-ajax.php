@@ -1160,6 +1160,82 @@ class USERSPN_Ajax {
           echo wp_json_encode(['error_key' => '', 'count' => $count]);
           exit;
           break;
+
+        case 'userspn_install_plugin':
+          if (!current_user_can('install_plugins')) {
+            echo wp_json_encode(['error_key' => 'permission_denied']);
+            exit;
+          }
+
+          $slug = isset($_POST['slug']) ? sanitize_text_field($_POST['slug']) : '';
+          $allowed_slugs = ['pn-customers-manager', 'mailpn', 'pn-tasks-manager', 'pn-cookies-manager'];
+
+          if (!in_array($slug, $allowed_slugs, true)) {
+            echo wp_json_encode(['error_key' => 'invalid_slug']);
+            exit;
+          }
+
+          include_once ABSPATH . 'wp-admin/includes/plugin-install.php';
+          include_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+          include_once ABSPATH . 'wp-admin/includes/plugin.php';
+
+          $api = plugins_api('plugin_information', [
+            'slug'   => $slug,
+            'fields' => ['sections' => false],
+          ]);
+
+          if (is_wp_error($api)) {
+            echo wp_json_encode(['error_key' => 'api_error', 'error_content' => $api->get_error_message()]);
+            exit;
+          }
+
+          $upgrader = new Plugin_Upgrader(new WP_Ajax_Upgrader_Skin());
+          $result   = $upgrader->install($api->download_link);
+
+          if (is_wp_error($result)) {
+            echo wp_json_encode(['error_key' => 'install_error', 'error_content' => $result->get_error_message()]);
+            exit;
+          }
+
+          if ($result === false) {
+            echo wp_json_encode(['error_key' => 'install_failed', 'error_content' => 'Installation failed.']);
+            exit;
+          }
+
+          echo wp_json_encode(['error_key' => '']);
+          exit;
+          break;
+
+        case 'userspn_activate_plugin':
+          if (!current_user_can('activate_plugins')) {
+            echo wp_json_encode(['error_key' => 'permission_denied']);
+            exit;
+          }
+
+          $slug = isset($_POST['slug']) ? sanitize_text_field($_POST['slug']) : '';
+          $plugin_files = [
+            'pn-customers-manager' => 'pn-customers-manager/pn-customers-manager.php',
+            'mailpn'               => 'mailpn/mailpn.php',
+            'pn-tasks-manager'     => 'pn-tasks-manager/pn-tasks-manager.php',
+            'pn-cookies-manager'   => 'pn-cookies-manager/pn-cookies-manager.php',
+          ];
+
+          if (!isset($plugin_files[$slug])) {
+            echo wp_json_encode(['error_key' => 'invalid_slug']);
+            exit;
+          }
+
+          $plugin_file = $plugin_files[$slug];
+          $result = activate_plugin($plugin_file);
+
+          if (is_wp_error($result)) {
+            echo wp_json_encode(['error_key' => 'activate_error', 'error_content' => $result->get_error_message()]);
+            exit;
+          }
+
+          echo wp_json_encode(['error_key' => '']);
+          exit;
+          break;
       }
 
       echo wp_json_encode([
