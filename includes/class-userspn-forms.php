@@ -741,7 +741,6 @@ class USERSPN_Forms {
                 <option value="<?php echo esc_attr($user->ID); ?>" <?php echo $has_role ? 'data-has-role="true"' : ''; ?>><?php echo esc_html($user->display_name . ' (' . $user->user_email . ')'); ?><?php if ($has_role): ?> ✓<?php endif; ?></option>
               <?php endforeach; ?>
             </select>
-            <p class="userspn-font-size-small userspn-color-gray userspn-mt-5"><?php esc_html_e('Hold Ctrl (Windows) or Cmd (Mac) to select multiple users. Users with ✓ already have this role.', 'userspn'); ?></p>
           </div>
           <div class="userspn-role-actions userspn-mb-20">
             <input type="hidden" class="userspn-role-nonce" value="<?php echo esc_attr(wp_create_nonce('userspn-role-assignment')); ?>">

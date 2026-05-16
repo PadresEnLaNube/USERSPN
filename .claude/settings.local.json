@@ -22,7 +22,9 @@
       "Bash(find:*)",
       "Bash(while read:*)",
       "Bash(do cp /tmp/material-icons-old.css \"$f\")",
-      "Bash(git log:*)"
+      "Bash(git log:*)",
+      "Bash(dir:*)",
+      "Bash(findstr:*)"
     ]
   }
 }

@@ -215,6 +215,9 @@ class USERSPN_Functions_User
       update_user_meta($user_id, 'userspn_user_current_login', current_time('timestamp'));
       update_user_meta($user_id, 'userspn_user_last_login', current_time('timestamp'));
     }
+
+    // Reset inactive warning flag on login so it can be sent again in a future inactivity period
+    delete_user_meta($user_id, 'userspn_inactive_warning_sent');
   }
 
   public function userspn_profile_fields($user)
@@ -1288,14 +1291,37 @@ class USERSPN_Functions_User
     }
 
     if (!empty($user) && $user && is_object($user)) {
-      if ($user->data->ID == '1') {
-        if (!empty(get_user_meta($user->ID, 'userspn_user_image', true))) {
-          $avatar = wp_get_attachment_image(get_user_meta($user->ID, 'userspn_user_image', true), [$size, $size], false, ['class' => 'userspn-border-radius-50-percent userspn-m-10 userspn-display-block']);
-        }
+      if (!empty(get_user_meta($user->ID, 'userspn_user_image', true))) {
+        $avatar = wp_get_attachment_image(get_user_meta($user->ID, 'userspn_user_image', true), [$size, $size], false, ['class' => 'avatar avatar-' . $size . ' photo userspn-border-radius-50-percent']);
       }
     }
 
     return $avatar;
+  }
+
+  public function userspn_get_avatar_url_hook($url, $id_or_email, $args)
+  {
+    if (is_numeric($id_or_email)) {
+      $user = get_user_by('id', (int) $id_or_email);
+    } elseif (is_object($id_or_email)) {
+      if (!empty($id_or_email->user_id)) {
+        $user = get_user_by('id', (int) $id_or_email->user_id);
+      }
+    } else {
+      $user = get_user_by('email', $id_or_email);
+    }
+
+    if (!empty($user) && is_object($user)) {
+      $image_id = get_user_meta($user->ID, 'userspn_user_image', true);
+      if (!empty($image_id)) {
+        $image_url = wp_get_attachment_image_url($image_id, [$args['size'], $args['size']]);
+        if ($image_url) {
+          $url = $image_url;
+        }
+      }
+    }
+
+    return $url;
   }
 
   public function userspn_user_remove_form()

@@ -340,6 +340,7 @@ class USERSPN
 		$this->loader->userspn_add_action('user_register', $plugin_user, 'userspn_user_register');
 
 		$this->loader->userspn_add_filter('get_avatar', $plugin_user, 'userspn_get_avatar_hook', 10, 5);
+		$this->loader->userspn_add_filter('get_avatar_url', $plugin_user, 'userspn_get_avatar_url_hook', 10, 3);
 
 		$this->loader->userspn_add_shortcode('userspn-get-avatar', $plugin_user, 'userspn_get_avatar');
 		$this->loader->userspn_add_shortcode('userspn-profile-edit', $plugin_user, 'userspn_profile_edit');

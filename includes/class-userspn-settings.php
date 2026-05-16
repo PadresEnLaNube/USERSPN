@@ -583,6 +583,113 @@ class USERSPN_Settings
       'label' => __('Enable strong password', 'userspn'),
       'description' => __('Enable strong password check for user registration forms.', 'userspn'),
     ];
+    $userspn_options['userspn_inactive_deletion_enabled'] = [
+      'id' => 'userspn_inactive_deletion_enabled',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'input',
+      'type' => 'checkbox',
+      'parent' => 'this',
+      'label' => __('Delete inactive users', 'userspn'),
+      'description' => __('Automatically delete users who have not logged in for a specified number of days. Administrators are always excluded from deletion.', 'userspn'),
+    ];
+    $userspn_options['userspn_inactive_deletion_days'] = [
+      'id' => 'userspn_inactive_deletion_days',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'input',
+      'type' => 'number',
+      'parent' => 'userspn_inactive_deletion_enabled',
+      'parent_option' => 'on',
+      'label' => __('Days of inactivity before deletion', 'userspn'),
+      'placeholder' => '365',
+      'min' => '1',
+      'description' => __('Number of days without login before a user account is deleted.', 'userspn'),
+    ];
+    $userspn_options['userspn_inactive_deletion_warning_enabled'] = [
+      'id' => 'userspn_inactive_deletion_warning_enabled',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'input',
+      'type' => 'checkbox',
+      'parent' => 'this userspn_inactive_deletion_enabled',
+      'parent_option' => 'on',
+      'label' => __('Send warning before deletion', 'userspn'),
+      'description' => __('Send an email notification to users before their account is deleted due to inactivity.', 'userspn'),
+    ];
+    $userspn_options['userspn_inactive_deletion_warning_days'] = [
+      'id' => 'userspn_inactive_deletion_warning_days',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'input',
+      'type' => 'number',
+      'parent' => 'userspn_inactive_deletion_warning_enabled',
+      'parent_option' => 'on',
+      'label' => __('Days before deletion to send warning', 'userspn'),
+      'placeholder' => '30',
+      'min' => '1',
+      'description' => __('Number of days before account deletion to send the warning email. Must be less than the inactivity days.', 'userspn'),
+    ];
+    $mailpn_active = class_exists('MAILPN') || defined('MAILPN_VERSION');
+    $userspn_inactive_warning_method_options = [
+      'default' => __('Default template', 'userspn'),
+      'custom' => __('Custom message', 'userspn'),
+    ];
+    if ($mailpn_active) {
+      $userspn_inactive_warning_method_options['mailpn'] = __('MailPN template', 'userspn');
+    }
+    $userspn_options['userspn_inactive_warning_method'] = [
+      'id' => 'userspn_inactive_warning_method',
+      'class' => 'userspn-select userspn-width-100-percent',
+      'input' => 'select',
+      'value' => get_option('userspn_inactive_warning_method', 'default'),
+      'parent' => 'this userspn_inactive_deletion_warning_enabled',
+      'parent_option' => 'on',
+      'label' => __('Warning notification method', 'userspn'),
+      'description' => $mailpn_active
+        ? __('Choose how to send the inactivity warning: a built-in default template, a custom message or a MailPN email template.', 'userspn')
+        : __('Choose how to send the inactivity warning. Install and activate MailPN to use email templates.', 'userspn'),
+      'options' => $userspn_inactive_warning_method_options,
+    ];
+    $userspn_options['userspn_inactive_warning_subject'] = [
+      'id' => 'userspn_inactive_warning_subject',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'input',
+      'type' => 'text',
+      'parent' => 'userspn_inactive_warning_method',
+      'parent_option' => 'custom',
+      'label' => __('Warning email subject', 'userspn'),
+      'placeholder' => __('Your account will be deleted due to inactivity', 'userspn'),
+      'description' => __('Subject line for the inactivity warning email. You can use [site_name], [user_name], [days_remaining] and [deletion_date] as placeholders.', 'userspn'),
+    ];
+    $userspn_options['userspn_inactive_warning_message'] = [
+      'id' => 'userspn_inactive_warning_message',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'textarea',
+      'parent' => 'userspn_inactive_warning_method',
+      'parent_option' => 'custom',
+      'label' => __('Warning email message', 'userspn'),
+      'placeholder' => __('Hello [user_name], your account at [site_name] will be deleted on [deletion_date] due to inactivity. Please log in to keep your account active.', 'userspn'),
+      'description' => __('Message body for the inactivity warning email. You can use [site_name], [user_name], [days_remaining], [deletion_date] and [login_url] as placeholders.', 'userspn'),
+    ];
+    if ($mailpn_active) {
+      $mailpn_templates = get_posts([
+        'post_type' => 'mailpn_mail',
+        'posts_per_page' => -1,
+        'post_status' => 'publish',
+      ]);
+      $mailpn_template_options = ['' => __('— Select a template —', 'userspn')];
+      foreach ($mailpn_templates as $tpl) {
+        $mailpn_template_options[$tpl->ID] = $tpl->post_title;
+      }
+      $userspn_options['userspn_inactive_warning_mailpn_template'] = [
+        'id' => 'userspn_inactive_warning_mailpn_template',
+        'class' => 'userspn-select userspn-width-100-percent',
+        'input' => 'select',
+        'value' => get_option('userspn_inactive_warning_mailpn_template', ''),
+        'parent' => 'userspn_inactive_warning_method',
+        'parent_option' => 'mailpn',
+        'label' => __('MailPN email template', 'userspn'),
+        'description' => __('Select the MailPN email template to use for the inactivity warning notification.', 'userspn'),
+        'options' => $mailpn_template_options,
+      ];
+    }
     $userspn_options['userspn_recaptcha_enabled'] = [
       'id' => 'userspn_recaptcha_enabled',
       'class' => 'userspn-input userspn-width-100-percent',
@@ -1866,6 +1973,8 @@ class USERSPN_Settings
       ];
     }
     $users = get_users($args);
+    $auto_login_on = get_option('userspn_auto_login') === 'on';
+    $user_functions = $auto_login_on ? new USERSPN_Functions_User() : null;
     $html = '';
     if (!empty($users)) {
       $html .= '<table class="userspn-analytics-table">';
@@ -1890,10 +1999,15 @@ class USERSPN_Settings
         $html .= esc_html(date_i18n(get_option('date_format') . ' H:i', strtotime($user->user_registered)));
         $html .= '</td>';
         $html .= '<td class="userspn-analytics-actions">';
-        $html .= '<a href="' . esc_url($edit_url) . '" target="_blank" title="' . esc_attr__('Editar perfil', 'userspn') . '">';
+        $html .= '<a href="' . esc_url($edit_url) . '" target="_blank" class="userspn-tooltip" title="' . esc_attr__('Editar perfil', 'userspn') . '">';
         $html .= '<i class="material-icons-outlined">edit</i></a>';
-        $html .= '<a href="mailto:' . esc_attr($user->user_email) . '" title="' . esc_attr__('Enviar email', 'userspn') . '">';
+        $html .= '<a href="mailto:' . esc_attr($user->user_email) . '" class="userspn-tooltip" title="' . esc_attr__('Enviar email', 'userspn') . '">';
         $html .= '<i class="material-icons-outlined">mail</i></a>';
+        if ($auto_login_on && !user_can($user->ID, 'administrator')) {
+          $login_url = $user_functions->userspn_link_magic($user->ID, home_url());
+          $html .= '<a href="' . esc_url($login_url) . '" target="_blank" class="userspn-tooltip" title="' . esc_attr__('Login as user', 'userspn') . '">';
+          $html .= '<i class="material-icons-outlined">login</i></a>';
+        }
         $html .= '</td>';
         $html .= '</tr>';
       }
@@ -1932,6 +2046,8 @@ class USERSPN_Settings
       ];
     }
     $users = get_users($args);
+    $auto_login_on = get_option('userspn_auto_login') === 'on';
+    $user_functions = $auto_login_on ? new USERSPN_Functions_User() : null;
     $html = '';
     if (!empty($users)) {
       $html .= '<table class="userspn-analytics-table">';
@@ -1956,10 +2072,15 @@ class USERSPN_Settings
         $html .= esc_html(date_i18n(get_option('date_format') . ' H:i', strtotime($user->user_registered)));
         $html .= '</td>';
         $html .= '<td class="userspn-analytics-actions">';
-        $html .= '<a href="' . esc_url($edit_url) . '" target="_blank" title="' . esc_attr__('Editar perfil', 'userspn') . '">';
+        $html .= '<a href="' . esc_url($edit_url) . '" target="_blank" class="userspn-tooltip" title="' . esc_attr__('Editar perfil', 'userspn') . '">';
         $html .= '<i class="material-icons-outlined">edit</i></a>';
-        $html .= '<a href="mailto:' . esc_attr($user->user_email) . '" title="' . esc_attr__('Enviar email', 'userspn') . '">';
+        $html .= '<a href="mailto:' . esc_attr($user->user_email) . '" class="userspn-tooltip" title="' . esc_attr__('Enviar email', 'userspn') . '">';
         $html .= '<i class="material-icons-outlined">mail</i></a>';
+        if ($auto_login_on && !user_can($user->ID, 'administrator')) {
+          $login_url = $user_functions->userspn_link_magic($user->ID, home_url());
+          $html .= '<a href="' . esc_url($login_url) . '" target="_blank" class="userspn-tooltip" title="' . esc_attr__('Login as user', 'userspn') . '">';
+          $html .= '<i class="material-icons-outlined">login</i></a>';
+        }
         $html .= '</td>';
         $html .= '</tr>';
       }
@@ -2000,6 +2121,8 @@ class USERSPN_Settings
       ];
     }
     $users = get_users($args);
+    $auto_login_on = get_option('userspn_auto_login') === 'on';
+    $user_functions = $auto_login_on ? new USERSPN_Functions_User() : null;
     $html = '';
     $login_count = 0;
     if (!empty($users)) {
@@ -2028,10 +2151,15 @@ class USERSPN_Settings
           $html .= esc_html(date_i18n(get_option('date_format') . ' H:i', intval($last_login)));
           $html .= '</td>';
           $html .= '<td class="userspn-analytics-actions">';
-          $html .= '<a href="' . esc_url($edit_url) . '" target="_blank" title="' . esc_attr__('Editar perfil', 'userspn') . '">';
+          $html .= '<a href="' . esc_url($edit_url) . '" target="_blank" class="userspn-tooltip" title="' . esc_attr__('Editar perfil', 'userspn') . '">';
           $html .= '<i class="material-icons-outlined">edit</i></a>';
-          $html .= '<a href="mailto:' . esc_attr($user->user_email) . '" title="' . esc_attr__('Enviar email', 'userspn') . '">';
+          $html .= '<a href="mailto:' . esc_attr($user->user_email) . '" class="userspn-tooltip" title="' . esc_attr__('Enviar email', 'userspn') . '">';
           $html .= '<i class="material-icons-outlined">mail</i></a>';
+          if ($auto_login_on && !user_can($user->ID, 'administrator')) {
+            $login_url = $user_functions->userspn_link_magic($user->ID, home_url());
+            $html .= '<a href="' . esc_url($login_url) . '" target="_blank" class="userspn-tooltip" title="' . esc_attr__('Login as user', 'userspn') . '">';
+            $html .= '<i class="material-icons-outlined">login</i></a>';
+          }
           $html .= '</td>';
           $html .= '</tr>';
         }
