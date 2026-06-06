@@ -41,6 +41,14 @@ The plugin includes a sophisticated form builder that allows you to create custo
 
 All form fields support: custom CSS classes, required field validation, placeholder text, help descriptions, default values, conditional display logic, and custom validation rules.
 
+**Authentication & Login Features:**
+
+* **Social Login Integration**: Allow users to register and login using their social media accounts. Supports Google, Facebook, GitHub, and Apple Sign In. Each provider includes automatic user creation, profile data synchronization, and secure OAuth 2.0 authentication with both REST API and admin-ajax.php fallback endpoints for maximum compatibility.
+
+* **Email Code Login**: Passwordless authentication option that sends a 6-digit verification code to the user's email. Features include 15-minute code expiration, rate limiting (1 code per minute), brute force protection (maximum 5 attempts), auto-focus navigation between digit inputs, paste support for quick entry, and resend functionality with countdown timer. Integrates with MailPN for customizable email templates.
+
+* **Registration Source Tracking**: Automatically tracks which page users registered from, storing the URL in user metadata. Includes admin column with filtering capabilities to analyze user acquisition sources and registration patterns.
+
 **Security Features:**
 
 * **Google reCAPTCHA v3 Integration**: Invisible bot protection with score-based verification. Configurable threshold settings and automatic suspicious registration detection with email notifications to administrators.
@@ -88,8 +96,8 @@ All form fields support: custom CSS classes, required field validation, placehol
 The plugin provides numerous shortcodes for easy integration:
 
 * `[userspn-profile]` - Complete user profile interface (popup or inline)
-* `[userspn-login]` - Login form
-* `[userspn-user-register-form]` - Registration form
+* `[userspn-login]` - Login form with social login options (Google, Facebook, GitHub, Apple) and email code login
+* `[userspn-user-register-form]` - Registration form with social login options
 * `[userspn-profile-edit]` - Profile editing form
 * `[userspn-profile-image]` - Avatar/image management
 * `[userspn-get-avatar]` - Display user avatar
@@ -251,6 +259,34 @@ For developer support, bug reports, or feature requests:
 
 
 == Changelog ==
+
+= 1.1.40 =
+
+- Add Facebook OAuth authentication handler with token exchange and user profile retrieval
+- Add GitHub OAuth authentication handler with separate email endpoint handling
+- Add Apple Sign In authentication handler with JWT client secret generation
+- Implement REST API and admin-ajax.php callback endpoints for all social login providers
+- Update social login settings to display both primary and fallback redirect URIs for each provider
+- Add redirect URI validation helpers for Google, Facebook, GitHub, and Apple in admin settings
+- Configure OAuth callback handlers with automatic user creation and login functionality
+- Add user meta storage for social provider IDs and last login timestamps
+- Implement email code login feature with 6-digit verification codes
+- Add rate limiting for email code requests (1 code per minute per user)
+- Add brute force protection with maximum 5 verification attempts
+- Implement 15-minute expiration for email verification codes
+- Add MailPN integration for email code delivery with wp_mail fallback
+- Create unified social login UI with circular provider icons
+- Add social login icons to both login and registration forms
+- Implement auto-focus navigation between verification code digit inputs
+- Add paste support for 6-digit code entry
+- Include resend button with 60-second countdown timer for email codes
+- Add registration page tracking in user metadata
+- Create admin column for viewing user registration source with filtering capabilities
+- Update social login icon borders to use theme main color
+- Fix Apple OAuth field name from client_id to service_id for consistency
+- Add nonce validation for all AJAX endpoints
+- Implement automatic cleanup of verification code metadata after successful login
+- Add inactive user warning flag reset on social login
 
 = 1.1.5 =
 
