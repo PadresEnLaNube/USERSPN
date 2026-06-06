@@ -17,7 +17,7 @@ This WordPress plugin simplifies user management by providing customizable regis
 
 * **Frontend User Registration**: Complete user registration system accessible directly from your website's frontend. Users can create accounts without accessing the WordPress admin area, with customizable registration forms that include email, password, and unlimited custom fields.
 
-* **Custom Login System**: Beautiful, responsive login forms that integrate seamlessly with your site design. Includes "Remember Me" functionality and password recovery links, all accessible via shortcodes.
+* **Custom Login System**: Beautiful, responsive login forms with multiple authentication options including traditional username/password, social login (Google, Facebook, GitHub, Apple), and passwordless email code verification. Includes "Remember Me" functionality, password recovery links, and seamless integration with your site design via shortcodes.
 
 * **Advanced Profile Management**: Comprehensive user profile system with tabbed interface including Profile editing, Image/avatar management, Notifications preferences, Private file management, and Advanced options (password change, account deletion). Users can edit their profiles directly from the frontend with real-time validation.
 
