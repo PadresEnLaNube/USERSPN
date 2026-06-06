@@ -767,6 +767,554 @@ class USERSPN_Ajax_Nopriv {
             echo 'userspn_newsletter_error';exit;
           }
           break;
+
+        case 'userspn_email_code_request':
+          // Verificar que la funcionalidad esté habilitada
+          if (get_option('userspn_email_code_login_enabled') != 'on') {
+            echo wp_json_encode([
+              'error_key' => 'userspn_code_disabled',
+              'error_content' => esc_html(__('This login method is not available.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          // Obtener y validar email
+          $userspn_email = isset($_POST['userspn_email']) ? sanitize_email(wp_unslash($_POST['userspn_email'])) : '';
+
+          if (empty($userspn_email) || !is_email($userspn_email)) {
+            echo wp_json_encode([
+              'error_key' => 'userspn_code_invalid_email',
+              'error_content' => esc_html(__('Please enter a valid email address.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          // Verificar que el usuario exista (sin revelar si existe o no)
+          $user = get_user_by('email', $userspn_email);
+
+          if (!$user) {
+            // Mensaje genérico para no revelar si el usuario existe
+            echo wp_json_encode([
+              'success' => true,
+              'message' => esc_html(__('If the email exists, a verification code has been sent.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          $user_id = $user->ID;
+
+          // Rate limiting: verificar último envío
+          $last_sent = get_user_meta($user_id, 'userspn_login_code_last_sent', true);
+          $current_time = current_time('timestamp');
+
+          if ($last_sent && ($current_time - $last_sent) < 60) {
+            $wait_time = 60 - ($current_time - $last_sent);
+            echo wp_json_encode([
+              'error_key' => 'userspn_code_rate_limit',
+              'error_content' => sprintf(
+                esc_html(__('Please wait %d seconds before requesting a new code.', 'userspn')),
+                $wait_time
+              ),
+            ]);
+            exit;
+          }
+
+          // Generar código de 6 dígitos
+          $code = sprintf('%06d', mt_rand(0, 999999));
+          $expiry = $current_time + 900; // 15 minutos
+
+          // Guardar en user meta
+          update_user_meta($user_id, 'userspn_login_code', $code);
+          update_user_meta($user_id, 'userspn_login_code_expiry', $expiry);
+          update_user_meta($user_id, 'userspn_login_code_attempts', 0);
+          update_user_meta($user_id, 'userspn_login_code_last_sent', $current_time);
+
+          // Enviar email con código
+          $userspn_mailing = new USERSPN_Mailing();
+          $userspn_mailing->userspn_send_login_code_email($user_id, $code);
+
+          echo wp_json_encode([
+            'success' => true,
+            'message' => esc_html(__('A verification code has been sent to your email.', 'userspn')),
+          ]);
+          exit;
+
+        case 'userspn_email_code_verify':
+          // Verificar que la funcionalidad esté habilitada
+          if (get_option('userspn_email_code_login_enabled') != 'on') {
+            echo wp_json_encode([
+              'error_key' => 'userspn_code_disabled',
+              'error_content' => esc_html(__('This login method is not available.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          // Obtener y validar datos
+          $userspn_email = isset($_POST['userspn_email']) ? sanitize_email(wp_unslash($_POST['userspn_email'])) : '';
+          $userspn_code = isset($_POST['userspn_code']) ? sanitize_text_field(wp_unslash($_POST['userspn_code'])) : '';
+
+          if (empty($userspn_email) || !is_email($userspn_email)) {
+            echo wp_json_encode([
+              'error_key' => 'userspn_code_invalid_email',
+              'error_content' => esc_html(__('Invalid email address.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          if (empty($userspn_code) || strlen($userspn_code) != 6 || !ctype_digit($userspn_code)) {
+            echo wp_json_encode([
+              'error_key' => 'userspn_code_invalid_format',
+              'error_content' => esc_html(__('Invalid code format.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          // Verificar que el usuario exista
+          $user = get_user_by('email', $userspn_email);
+
+          if (!$user) {
+            echo wp_json_encode([
+              'error_key' => 'userspn_code_invalid',
+              'error_content' => esc_html(__('Invalid verification code.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          $user_id = $user->ID;
+
+          // Obtener datos del código
+          $stored_code = get_user_meta($user_id, 'userspn_login_code', true);
+          $expiry = get_user_meta($user_id, 'userspn_login_code_expiry', true);
+          $attempts = (int) get_user_meta($user_id, 'userspn_login_code_attempts', true);
+
+          // Verificar intentos máximos
+          if ($attempts >= 5) {
+            // Limpiar código por seguridad
+            delete_user_meta($user_id, 'userspn_login_code');
+            delete_user_meta($user_id, 'userspn_login_code_expiry');
+            delete_user_meta($user_id, 'userspn_login_code_attempts');
+            delete_user_meta($user_id, 'userspn_login_code_last_sent');
+
+            echo wp_json_encode([
+              'error_key' => 'userspn_code_max_attempts',
+              'error_content' => esc_html(__('Too many failed attempts. Please request a new code.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          // Verificar que el código exista
+          if (empty($stored_code)) {
+            echo wp_json_encode([
+              'error_key' => 'userspn_code_not_found',
+              'error_content' => esc_html(__('No verification code found. Please request a new one.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          // Verificar expiración
+          $current_time = current_time('timestamp');
+          if ($current_time > $expiry) {
+            // Limpiar código expirado
+            delete_user_meta($user_id, 'userspn_login_code');
+            delete_user_meta($user_id, 'userspn_login_code_expiry');
+            delete_user_meta($user_id, 'userspn_login_code_attempts');
+
+            echo wp_json_encode([
+              'error_key' => 'userspn_code_expired',
+              'error_content' => esc_html(__('The verification code has expired. Please request a new one.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          // Verificar que el código coincida
+          if ($userspn_code !== $stored_code) {
+            // Incrementar intentos fallidos
+            update_user_meta($user_id, 'userspn_login_code_attempts', $attempts + 1);
+
+            echo wp_json_encode([
+              'error_key' => 'userspn_code_incorrect',
+              'error_content' => esc_html(__('Incorrect verification code.', 'userspn')),
+              'attempts_remaining' => 5 - ($attempts + 1),
+            ]);
+            exit;
+          }
+
+          // Código correcto - hacer login
+          wp_set_current_user($user_id);
+          wp_set_auth_cookie($user_id, true);
+          do_action('wp_login', $user->user_login, $user);
+
+          // Limpiar todas las user meta relacionadas con el código
+          delete_user_meta($user_id, 'userspn_login_code');
+          delete_user_meta($user_id, 'userspn_login_code_expiry');
+          delete_user_meta($user_id, 'userspn_login_code_attempts');
+          delete_user_meta($user_id, 'userspn_login_code_last_sent');
+
+          // Resetear flag de advertencia de inactividad si existe
+          update_user_meta($user_id, 'userspn_inactive_warning_sent', 'off');
+
+          // Determinar URL de redirección
+          $redirect_url = home_url();
+          if (isset($_POST['redirect_to']) && !empty($_POST['redirect_to'])) {
+            $redirect_url = esc_url_raw(wp_unslash($_POST['redirect_to']));
+          }
+
+          echo wp_json_encode([
+            'success' => true,
+            'message' => esc_html(__('Login successful!', 'userspn')),
+            'redirect_url' => $redirect_url,
+          ]);
+          exit;
+
+        case 'userspn_google_auth_url':
+          // Verificar que Google Login esté habilitado
+          if (get_option('userspn_google_login_enabled') != 'on') {
+            echo wp_json_encode([
+              'error_key' => 'userspn_google_disabled',
+              'error_content' => esc_html(__('Google login is not available.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          $client_id = get_option('userspn_google_client_id');
+          $client_secret = get_option('userspn_google_client_secret');
+
+          if (empty($client_id) || empty($client_secret)) {
+            echo wp_json_encode([
+              'error_key' => 'userspn_google_not_configured',
+              'error_content' => esc_html(__('Google login is not properly configured.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          // Generar URL de autorización de Google
+          // Usar admin-ajax.php como redirect URI (más compatible que REST API)
+          $redirect_uri = admin_url('admin-ajax.php?action=userspn_google_callback');
+          $state = 'userspn_google_login';
+          $scope = 'email profile';
+
+          $auth_url = add_query_arg([
+            'client_id' => $client_id,
+            'redirect_uri' => $redirect_uri,
+            'response_type' => 'code',
+            'scope' => $scope,
+            'state' => $state,
+            'access_type' => 'online',
+            'prompt' => 'select_account',
+          ], 'https://accounts.google.com/o/oauth2/v2/auth');
+
+          echo wp_json_encode([
+            'success' => true,
+            'auth_url' => $auth_url,
+          ]);
+          exit;
+
+        case 'userspn_facebook_auth_url':
+          // Verificar que Facebook Login esté habilitado
+          if (get_option('userspn_facebook_login_enabled') != 'on') {
+            echo wp_json_encode([
+              'error_key' => 'userspn_facebook_disabled',
+              'error_content' => esc_html(__('Facebook login is not available.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          $app_id = get_option('userspn_facebook_app_id');
+          $app_secret = get_option('userspn_facebook_app_secret');
+
+          if (empty($app_id) || empty($app_secret)) {
+            echo wp_json_encode([
+              'error_key' => 'userspn_facebook_not_configured',
+              'error_content' => esc_html(__('Facebook login is not properly configured.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          // Generar URL de autorización de Facebook
+          $redirect_uri = admin_url('admin-ajax.php?action=userspn_facebook_callback');
+          $state = 'userspn_facebook_login';
+          $scope = 'email,public_profile';
+
+          $auth_url = add_query_arg([
+            'client_id' => $app_id,
+            'redirect_uri' => $redirect_uri,
+            'state' => $state,
+            'scope' => $scope,
+            'response_type' => 'code',
+          ], 'https://www.facebook.com/v18.0/dialog/oauth');
+
+          echo wp_json_encode([
+            'success' => true,
+            'auth_url' => $auth_url,
+          ]);
+          exit;
+
+        case 'userspn_github_auth_url':
+          // Verificar que GitHub Login esté habilitado
+          if (get_option('userspn_github_login_enabled') != 'on') {
+            echo wp_json_encode([
+              'error_key' => 'userspn_github_disabled',
+              'error_content' => esc_html(__('GitHub login is not available.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          $client_id = get_option('userspn_github_client_id');
+          $client_secret = get_option('userspn_github_client_secret');
+
+          if (empty($client_id) || empty($client_secret)) {
+            echo wp_json_encode([
+              'error_key' => 'userspn_github_not_configured',
+              'error_content' => esc_html(__('GitHub login is not properly configured.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          // Generar URL de autorización de GitHub
+          $redirect_uri = admin_url('admin-ajax.php?action=userspn_github_callback');
+          $state = 'userspn_github_login';
+          $scope = 'user:email';
+
+          $auth_url = add_query_arg([
+            'client_id' => $client_id,
+            'redirect_uri' => $redirect_uri,
+            'state' => $state,
+            'scope' => $scope,
+          ], 'https://github.com/login/oauth/authorize');
+
+          echo wp_json_encode([
+            'success' => true,
+            'auth_url' => $auth_url,
+          ]);
+          exit;
+
+        case 'userspn_apple_auth_url':
+          // Verificar que Apple Login esté habilitado
+          if (get_option('userspn_apple_login_enabled') != 'on') {
+            echo wp_json_encode([
+              'error_key' => 'userspn_apple_disabled',
+              'error_content' => esc_html(__('Apple login is not available.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          $service_id = get_option('userspn_apple_service_id');
+          $team_id = get_option('userspn_apple_team_id');
+          $key_id = get_option('userspn_apple_key_id');
+          $private_key = get_option('userspn_apple_private_key');
+
+          if (empty($service_id) || empty($team_id) || empty($key_id) || empty($private_key)) {
+            echo wp_json_encode([
+              'error_key' => 'userspn_apple_not_configured',
+              'error_content' => esc_html(__('Apple login is not properly configured.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          // Generar URL de autorización de Apple
+          $redirect_uri = admin_url('admin-ajax.php?action=userspn_apple_callback');
+          $state = 'userspn_apple_login';
+          $scope = 'email name';
+
+          $auth_url = add_query_arg([
+            'client_id' => $service_id,
+            'redirect_uri' => $redirect_uri,
+            'response_type' => 'code',
+            'state' => $state,
+            'scope' => $scope,
+            'response_mode' => 'form_post',
+          ], 'https://appleid.apple.com/auth/authorize');
+
+          echo wp_json_encode([
+            'success' => true,
+            'auth_url' => $auth_url,
+          ]);
+          exit;
+
+        case 'userspn_google_callback':
+          // Verificar que Google Login esté habilitado
+          if (get_option('userspn_google_login_enabled') != 'on') {
+            echo wp_json_encode([
+              'error_key' => 'userspn_google_disabled',
+              'error_content' => esc_html(__('Google login is not available.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          $client_id = get_option('userspn_google_client_id');
+          $client_secret = get_option('userspn_google_client_secret');
+
+          if (empty($client_id) || empty($client_secret)) {
+            echo wp_json_encode([
+              'error_key' => 'userspn_google_not_configured',
+              'error_content' => esc_html(__('Google login is not properly configured.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          // Obtener código de autorización
+          $code = isset($_POST['code']) ? sanitize_text_field(wp_unslash($_POST['code'])) : '';
+
+          if (empty($code)) {
+            echo wp_json_encode([
+              'error_key' => 'userspn_google_no_code',
+              'error_content' => esc_html(__('No authorization code received.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          // Intercambiar código por token de acceso
+          $redirect_uri = home_url('/wp-json/userspn/v1/google-callback');
+
+          $token_response = wp_remote_post('https://oauth2.googleapis.com/token', [
+            'body' => [
+              'code' => $code,
+              'client_id' => $client_id,
+              'client_secret' => $client_secret,
+              'redirect_uri' => $redirect_uri,
+              'grant_type' => 'authorization_code',
+            ],
+            'timeout' => 30,
+          ]);
+
+          if (is_wp_error($token_response)) {
+            echo wp_json_encode([
+              'error_key' => 'userspn_google_token_error',
+              'error_content' => esc_html(__('Error connecting to Google.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          $token_data = json_decode(wp_remote_retrieve_body($token_response), true);
+
+          if (empty($token_data['access_token'])) {
+            echo wp_json_encode([
+              'error_key' => 'userspn_google_no_token',
+              'error_content' => esc_html(__('Error obtaining access token.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          // Obtener información del usuario de Google
+          $user_info_response = wp_remote_get('https://www.googleapis.com/oauth2/v2/userinfo', [
+            'headers' => [
+              'Authorization' => 'Bearer ' . $token_data['access_token'],
+            ],
+            'timeout' => 30,
+          ]);
+
+          if (is_wp_error($user_info_response)) {
+            echo wp_json_encode([
+              'error_key' => 'userspn_google_userinfo_error',
+              'error_content' => esc_html(__('Error getting user information.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          $user_info = json_decode(wp_remote_retrieve_body($user_info_response), true);
+
+          if (empty($user_info['email'])) {
+            echo wp_json_encode([
+              'error_key' => 'userspn_google_no_email',
+              'error_content' => esc_html(__('No email address received from Google.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          $google_email = sanitize_email($user_info['email']);
+          $google_id = isset($user_info['id']) ? sanitize_text_field($user_info['id']) : '';
+          $google_name = isset($user_info['name']) ? sanitize_text_field($user_info['name']) : '';
+          $google_picture = isset($user_info['picture']) ? esc_url_raw($user_info['picture']) : '';
+
+          // Verificar si el usuario ya existe por email
+          $user = get_user_by('email', $google_email);
+
+          if ($user) {
+            // Usuario existe - hacer login
+            // Guardar/actualizar Google ID si no existe
+            if (empty(get_user_meta($user->ID, 'userspn_google_id', true))) {
+              update_user_meta($user->ID, 'userspn_google_id', $google_id);
+            }
+
+            // Actualizar última conexión con Google
+            update_user_meta($user->ID, 'userspn_google_last_login', current_time('timestamp'));
+
+            // Login
+            wp_set_current_user($user->ID);
+            wp_set_auth_cookie($user->ID, true);
+            do_action('wp_login', $user->user_login, $user);
+
+            // Resetear flag de advertencia de inactividad
+            update_user_meta($user->ID, 'userspn_inactive_warning_sent', 'off');
+
+            echo wp_json_encode([
+              'success' => true,
+              'message' => esc_html(__('Login successful!', 'userspn')),
+              'redirect_url' => home_url(),
+            ]);
+            exit;
+          } else {
+            // Usuario no existe - crear nuevo usuario
+            $username = sanitize_user(str_replace('@', '_', $google_email));
+
+            // Asegurar que el username sea único
+            $base_username = $username;
+            $counter = 1;
+            while (username_exists($username)) {
+              $username = $base_username . '_' . $counter;
+              $counter++;
+            }
+
+            // Generar password aleatorio
+            $password = wp_generate_password(16, true, true);
+
+            // Crear usuario
+            $user_id = wp_create_user($username, $password, $google_email);
+
+            if (is_wp_error($user_id)) {
+              echo wp_json_encode([
+                'error_key' => 'userspn_user_creation_error',
+                'error_content' => esc_html(__('Error creating user account.', 'userspn')),
+              ]);
+              exit;
+            }
+
+            // Actualizar datos del usuario
+            if (!empty($google_name)) {
+              $name_parts = explode(' ', $google_name, 2);
+              wp_update_user([
+                'ID' => $user_id,
+                'first_name' => $name_parts[0],
+                'last_name' => isset($name_parts[1]) ? $name_parts[1] : '',
+                'display_name' => $google_name,
+              ]);
+            }
+
+            // Guardar Google ID y metadatos
+            update_user_meta($user_id, 'userspn_google_id', $google_id);
+            update_user_meta($user_id, 'userspn_google_last_login', current_time('timestamp'));
+            update_user_meta($user_id, 'userspn_registration_method', 'google');
+
+            // Guardar foto de perfil de Google si está disponible
+            if (!empty($google_picture)) {
+              update_user_meta($user_id, 'userspn_google_picture', $google_picture);
+            }
+
+            // Ejecutar hook de registro (esto ejecutará userspn_user_register)
+            do_action('user_register', $user_id);
+
+            // Login automático
+            wp_set_current_user($user_id);
+            wp_set_auth_cookie($user_id, true);
+            do_action('wp_login', $username, get_user_by('id', $user_id));
+
+            echo wp_json_encode([
+              'success' => true,
+              'message' => esc_html(__('Account created successfully!', 'userspn')),
+              'redirect_url' => home_url(),
+            ]);
+            exit;
+          }
       }
 
       echo wp_json_encode(['error_key' => '', ]);exit;

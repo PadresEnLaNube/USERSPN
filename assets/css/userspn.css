@@ -2720,3 +2720,136 @@ input:checked+.userspn-slider:before {
 .userspn-input-wrapper .userspn-p-10:has(> label) {
   padding-bottom: 0;
 }
+
+/* Email Code Login Styles */
+.userspn-code-inputs-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.userspn-code-digit {
+  width: 50px;
+  height: 60px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  border: 2px solid var(--userspn-border-color-main, #ddd);
+  border-radius: 8px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  background: #fff;
+  color: #333;
+}
+
+.userspn-code-digit:focus {
+  border-color: var(--userspn-color-main, #2271b1);
+  box-shadow: 0 0 8px rgba(34, 113, 177, 0.4);
+  outline: 0;
+}
+
+.userspn-code-digit:disabled {
+  background: #f5f5f5;
+  cursor: not-allowed;
+}
+
+.userspn-resend-code-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+#userspn-email-code-request-form,
+#userspn-email-code-verify-form {
+  padding: 20px;
+  animation: userspnFadeIn 0.3s ease;
+}
+
+@keyframes userspnFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.userspn-code-message {
+  animation: userspnSlideIn 0.3s ease;
+}
+
+@keyframes userspnSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 480px) {
+  .userspn-code-digit {
+    width: 40px;
+    height: 50px;
+    font-size: 20px;
+  }
+
+  .userspn-code-inputs-wrapper {
+    gap: 6px;
+  }
+}
+
+/* Social Login Styles */
+.userspn-social-login-section {
+  border-top: 1px solid #e0e0e0;
+  padding-top: 20px;
+}
+
+.userspn-social-icons-container {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.userspn-social-icon-btn {
+  cursor: pointer;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--userspn-color-main, #2271b1);
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.userspn-social-icon-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background: #f8f9fa;
+  border-color: var(--userspn-color-main, #2271b1);
+}
+
+.userspn-social-icon-btn:active {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+.userspn-social-message {
+  animation: userspnSlideIn 0.3s ease;
+}
+
+.userspn-google-message,
+.userspn-facebook-message,
+.userspn-github-message,
+.userspn-apple-message {
+  animation: userspnSlideIn 0.3s ease;
+}

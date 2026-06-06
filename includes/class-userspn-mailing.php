@@ -208,4 +208,89 @@ class USERSPN_Mailing {
             return 'userspn_newsletter_error_exceeded';
         }
     }
+
+    /**
+     * Send login code email to user
+     *
+     * @param int $user_id User ID
+     * @param string $code Verification code
+     * @return void
+     */
+    public function userspn_send_login_code_email($user_id, $code)
+    {
+        $user = get_userdata($user_id);
+        if (!$user) {
+            return;
+        }
+
+        $userspn_email = $user->user_email;
+        $userspn_name = $user->display_name;
+
+        // Intentar usar MailPN si está disponible
+        if (class_exists('MAILPN')) {
+            $login_code_emails = $this->userspn_get_email_login_code($user_id);
+
+            if (!empty($login_code_emails)) {
+                // Usar template personalizado de MailPN
+                foreach ($login_code_emails as $mail_id) {
+                    do_shortcode('[mailpn-sender mailpn_type="email_login_code" mailpn_user_to="' . $user_id . '" mailpn_subject="' . get_the_title($mail_id) . '" mailpn_id="' . $mail_id . '"]');
+                }
+            } else {
+                // Usar template por defecto con contenido simple
+                $subject = '🔐 ' . __('Login Verification Code', 'userspn');
+                $message = __('You requested to login using a verification code.', 'userspn') . '<br><br>';
+                $message .= __('Your verification code is:', 'userspn') . '<br><br>';
+                $message .= '<div style="text-align: center; padding: 20px; background: #f0f0f0; margin: 20px 0; border-radius: 8px;">';
+                $message .= '<span style="font-size: 36px; font-weight: bold; letter-spacing: 10px; color: #2271b1;">' . esc_html($code) . '</span>';
+                $message .= '</div>';
+                $message .= '<strong style="color: #d63638;">' . __('This code will expire in 15 minutes.', 'userspn') . '</strong><br><br>';
+                $message .= '<small>' . __('If you did not request this code, please ignore this email.', 'userspn') . '</small>';
+
+                do_shortcode('[mailpn-sender mailpn_type="email_login_code" mailpn_user_to="' . $user_id . '" mailpn_subject="' . $subject . '"]' . $message . '[/mailpn-sender]');
+            }
+            return;
+        }
+
+        // Fallback a wp_mail si MailPN no está disponible
+        add_filter('wp_mail_content_type', [$this, 'userspn_wp_mail_content_type']);
+
+        $subject = __('Your login verification code', 'userspn');
+
+        $body = '<html><body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">';
+        $body .= '<div style="max-width: 600px; margin: 0 auto; padding: 20px;">';
+        $body .= '<h2 style="color: #444;">' . esc_html__('Login Verification Code', 'userspn') . '</h2>';
+        $body .= '<p>' . sprintf(esc_html__('Hello %s,', 'userspn'), esc_html($userspn_name)) . '</p>';
+        $body .= '<p>' . esc_html__('You requested to login using a verification code. Here is your code:', 'userspn') . '</p>';
+        $body .= '<div style="background: #f5f5f5; padding: 20px; text-align: center; margin: 20px 0; border-radius: 8px;">';
+        $body .= '<span style="font-size: 32px; font-weight: bold; letter-spacing: 8px; color: #2271b1;">' . esc_html($code) . '</span>';
+        $body .= '</div>';
+        $body .= '<p style="color: #d63638; font-weight: bold;">' . esc_html__('This code will expire in 15 minutes.', 'userspn') . '</p>';
+        $body .= '<p style="font-size: 12px; color: #666;">' . esc_html__('If you did not request this code, please ignore this email.', 'userspn') . '</p>';
+        $body .= '</div>';
+        $body .= '</body></html>';
+
+        wp_mail($userspn_email, $subject, $body);
+
+        remove_filter('wp_mail_content_type', [$this, 'userspn_wp_mail_content_type']);
+    }
+
+    /**
+     * Get email login code templates from MailPN
+     *
+     * @param int $user_id User ID
+     * @return array Array of post IDs
+     */
+    public function userspn_get_email_login_code($user_id)
+    {
+        $login_code_atts = [
+            'fields' => 'ids',
+            'numberposts' => -1,
+            'post_type' => 'mailpn_mail',
+            'post_status' => 'publish',
+            'meta_key' => 'mailpn_type',
+            'meta_value' => 'email_login_code',
+        ];
+
+        return get_posts($login_code_atts);
+    }
 }

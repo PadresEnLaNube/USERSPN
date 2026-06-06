@@ -54,7 +54,7 @@ class USERSPN
 		if (defined('USERSPN_VERSION')) {
 			$this->version = USERSPN_VERSION;
 		} else {
-			$this->version = '1.1.30';
+			$this->version = '1.1.40';
 		}
 
 		$this->plugin_name = 'userspn';
@@ -237,6 +237,26 @@ class USERSPN
 		require_once USERSPN_DIR . 'includes/class-userspn-security.php';
 
 		/**
+		 * The class responsible for Google OAuth functionality.
+		 */
+		require_once USERSPN_DIR . 'includes/class-userspn-google-oauth.php';
+
+		/**
+		 * The class responsible for Facebook OAuth functionality.
+		 */
+		require_once USERSPN_DIR . 'includes/class-userspn-facebook-oauth.php';
+
+		/**
+		 * The class responsible for GitHub OAuth functionality.
+		 */
+		require_once USERSPN_DIR . 'includes/class-userspn-github-oauth.php';
+
+		/**
+		 * The class responsible for Apple OAuth functionality.
+		 */
+		require_once USERSPN_DIR . 'includes/class-userspn-apple-oauth.php';
+
+		/**
 		 * The class responsible for Gutenberg blocks.
 		 */
 		require_once USERSPN_DIR . 'includes/class-userspn-blocks.php';
@@ -286,6 +306,26 @@ class USERSPN
 		$plugin_mailing = new USERSPN_Mailing();
 		$this->loader->userspn_add_filter('wp_mail_content_type', $plugin_mailing, 'userspn_wp_mail_content_type');
 
+		// Register Google OAuth REST API routes and AJAX handlers
+		$plugin_google_oauth = new USERSPN_Google_OAuth();
+		$this->loader->userspn_add_action('rest_api_init', $plugin_google_oauth, 'register_routes');
+		$plugin_google_oauth->register_ajax_callback();
+
+		// Register Facebook OAuth REST API routes and AJAX handlers
+		$plugin_facebook_oauth = new USERSPN_Facebook_OAuth();
+		$this->loader->userspn_add_action('rest_api_init', $plugin_facebook_oauth, 'register_routes');
+		$plugin_facebook_oauth->register_ajax_callback();
+
+		// Register GitHub OAuth REST API routes and AJAX handlers
+		$plugin_github_oauth = new USERSPN_GitHub_OAuth();
+		$this->loader->userspn_add_action('rest_api_init', $plugin_github_oauth, 'register_routes');
+		$plugin_github_oauth->register_ajax_callback();
+
+		// Register Apple OAuth REST API routes and AJAX handlers
+		$plugin_apple_oauth = new USERSPN_Apple_OAuth();
+		$this->loader->userspn_add_action('rest_api_init', $plugin_apple_oauth, 'register_routes');
+		$plugin_apple_oauth->register_ajax_callback();
+
 		// Add redirect hook for plugin activation
 		$this->loader->userspn_add_action('admin_init', $this, 'userspn_redirect_to_options');
 	}
@@ -314,6 +354,14 @@ class USERSPN
 			$this->loader->userspn_add_filter('manage_users_columns', $plugin_user, 'userspn_add_auto_login_column');
 			$this->loader->userspn_add_filter('manage_users_custom_column', $plugin_user, 'userspn_render_auto_login_column', 10, 3);
 		}
+
+		// Registration page tracking columns and filters
+		$this->loader->userspn_add_filter('manage_users_columns', $plugin_user, 'userspn_add_registration_page_column');
+		$this->loader->userspn_add_filter('manage_users_custom_column', $plugin_user, 'userspn_render_registration_page_column', 10, 3);
+		$this->loader->userspn_add_filter('manage_users_sortable_columns', $plugin_user, 'userspn_make_registration_page_sortable');
+		$this->loader->userspn_add_action('pre_get_users', $plugin_user, 'userspn_sort_by_registration_page');
+		$this->loader->userspn_add_action('restrict_manage_users', $plugin_user, 'userspn_add_registration_page_filter');
+		$this->loader->userspn_add_action('pre_get_users', $plugin_user, 'userspn_filter_users_by_registration_page');
 	}
 
 	/**
@@ -327,6 +375,20 @@ class USERSPN
 		$plugin_public = new USERSPN_Public($this->userspn_get_plugin_name(), $this->userspn_get_version());
 		$this->loader->userspn_add_action('wp_enqueue_scripts', $plugin_public, 'userspn_enqueue_styles');
 		$this->loader->userspn_add_action('wp_enqueue_scripts', $plugin_public, 'userspn_enqueue_scripts');
+
+		// Enqueue email code login scripts if enabled
+		if (get_option('userspn_email_code_login_enabled') == 'on') {
+			$this->loader->userspn_add_action('wp_enqueue_scripts', $plugin_public, 'userspn_enqueue_email_code_login_scripts');
+		}
+
+		// Enqueue social login scripts if any provider is enabled
+		if (get_option('userspn_google_login_enabled') == 'on' ||
+		    get_option('userspn_facebook_login_enabled') == 'on' ||
+		    get_option('userspn_github_login_enabled') == 'on' ||
+		    get_option('userspn_apple_login_enabled') == 'on') {
+			$this->loader->userspn_add_action('wp_enqueue_scripts', $plugin_public, 'userspn_enqueue_social_login_scripts');
+		}
+
 		$this->loader->userspn_add_filter('wp_nav_menu_items', $plugin_public, 'userspn_add_profile_icon_to_menu', 10, 2);
 
 		// Only register the render_block filter if the method exists

@@ -355,6 +355,142 @@ class USERSPN_Functions_User
     return '<a href="' . esc_url($url) . '" target="_blank" class="userspn-btn userspn-btn-mini userspn-btn-transparent">Login</a>';
   }
 
+  /**
+   * Add registration page column to users table
+   */
+  public function userspn_add_registration_page_column($columns)
+  {
+    if (!current_user_can('administrator')) {
+      return $columns;
+    }
+    $columns['userspn_registration_page'] = __('Registration Page', 'userspn');
+    return $columns;
+  }
+
+  /**
+   * Render registration page column content
+   */
+  public function userspn_render_registration_page_column($output, $column_name, $user_id)
+  {
+    if ($column_name !== 'userspn_registration_page' || !current_user_can('administrator')) {
+      return $output;
+    }
+
+    $registration_page = get_user_meta($user_id, 'userspn_registration_page', true);
+
+    if (empty($registration_page)) {
+      return '<span style="color: #999;">—</span>';
+    }
+
+    // Mostrar solo el path de la URL para ahorrar espacio
+    $parsed_url = wp_parse_url($registration_page);
+    $display_url = isset($parsed_url['path']) ? $parsed_url['path'] : '/';
+
+    if (isset($parsed_url['query'])) {
+      $display_url .= '?' . $parsed_url['query'];
+    }
+
+    return '<a href="' . esc_url($registration_page) . '" target="_blank" title="' . esc_attr($registration_page) . '" style="font-size: 12px;">' . esc_html($display_url) . '</a>';
+  }
+
+  /**
+   * Make registration page column sortable
+   */
+  public function userspn_make_registration_page_sortable($columns)
+  {
+    $columns['userspn_registration_page'] = 'userspn_registration_page';
+    return $columns;
+  }
+
+  /**
+   * Handle sorting by registration page
+   */
+  public function userspn_sort_by_registration_page($query)
+  {
+    if (!is_admin() || !$query->is_main_query()) {
+      return;
+    }
+
+    $orderby = $query->get('orderby');
+
+    if ('userspn_registration_page' === $orderby) {
+      $query->set('meta_key', 'userspn_registration_page');
+      $query->set('orderby', 'meta_value');
+    }
+  }
+
+  /**
+   * Add filter dropdown for registration page in users list
+   */
+  public function userspn_add_registration_page_filter()
+  {
+    if (!is_admin() || !function_exists('get_current_screen')) {
+      return;
+    }
+
+    $screen = get_current_screen();
+    if (!$screen || $screen->id !== 'users') {
+      return;
+    }
+
+    global $wpdb;
+
+    // Obtener todas las páginas de registro únicas
+    $registration_pages = $wpdb->get_col(
+      "SELECT DISTINCT meta_value
+       FROM {$wpdb->usermeta}
+       WHERE meta_key = 'userspn_registration_page'
+       AND meta_value != ''
+       ORDER BY meta_value ASC"
+    );
+
+    if (empty($registration_pages)) {
+      return;
+    }
+
+    $current_filter = isset($_GET['userspn_registration_page_filter']) ? sanitize_text_field(wp_unslash($_GET['userspn_registration_page_filter'])) : '';
+
+    echo '<select name="userspn_registration_page_filter" style="float: none; margin: 0 5px 0 0;">';
+    echo '<option value="">' . esc_html__('All registration pages', 'userspn') . '</option>';
+
+    foreach ($registration_pages as $page) {
+      $parsed_url = wp_parse_url($page);
+      $display_url = isset($parsed_url['path']) ? $parsed_url['path'] : $page;
+
+      if (isset($parsed_url['query'])) {
+        $display_url .= '?' . $parsed_url['query'];
+      }
+
+      $selected = selected($current_filter, $page, false);
+      echo '<option value="' . esc_attr($page) . '" ' . $selected . '>' . esc_html($display_url) . '</option>';
+    }
+
+    echo '</select>';
+  }
+
+  /**
+   * Filter users by registration page
+   */
+  public function userspn_filter_users_by_registration_page($query)
+  {
+    if (!is_admin() || !function_exists('get_current_screen')) {
+      return;
+    }
+
+    $screen = get_current_screen();
+    if (!$screen || $screen->id !== 'users') {
+      return;
+    }
+
+    if (isset($_GET['userspn_registration_page_filter']) && !empty($_GET['userspn_registration_page_filter'])) {
+      $registration_page = sanitize_text_field(wp_unslash($_GET['userspn_registration_page_filter']));
+
+      $query->set('meta_key', 'userspn_registration_page');
+      $query->set('meta_value', $registration_page);
+      $query->set('meta_compare', '=');
+    }
+  }
+
   public function userspn_user_register($user_id)
   {
     update_user_meta($user_id, 'userspn_secret_token', bin2hex(openssl_random_pseudo_bytes(16)));
@@ -363,6 +499,19 @@ class USERSPN_Functions_User
     if (class_exists('Polylang')) {
       update_user_meta($user_id, 'userspn_lang', pll_current_language());
     }
+
+    // Guardar la URL de la página de registro
+    if (isset($_POST['userspn_registration_page']) && !empty($_POST['userspn_registration_page'])) {
+      $registration_page = esc_url_raw(wp_unslash($_POST['userspn_registration_page']));
+      update_user_meta($user_id, 'userspn_registration_page', $registration_page);
+    } elseif (isset($_SERVER['HTTP_REFERER']) && !empty($_SERVER['HTTP_REFERER'])) {
+      // Fallback: usar HTTP_REFERER si no viene el campo del formulario
+      $registration_page = esc_url_raw(wp_unslash($_SERVER['HTTP_REFERER']));
+      update_user_meta($user_id, 'userspn_registration_page', $registration_page);
+    }
+
+    // Guardar timestamp del registro
+    update_user_meta($user_id, 'userspn_registration_date', current_time('timestamp'));
   }
 
   /**
@@ -1450,6 +1599,99 @@ class USERSPN_Functions_User
     return $userspn_return_string;
   }
 
+  /**
+   * Render social login icons
+   * Private helper function to display social login options
+   */
+  private function userspn_render_social_login_icons()
+  {
+    // Check which social login providers are enabled and configured
+    $social_providers = [];
+
+    // Google
+    if (get_option('userspn_google_login_enabled') == 'on' &&
+        !empty(get_option('userspn_google_client_id')) &&
+        !empty(get_option('userspn_google_client_secret'))) {
+      $social_providers[] = 'google';
+    }
+
+    // Facebook
+    if (get_option('userspn_facebook_login_enabled') == 'on' &&
+        !empty(get_option('userspn_facebook_app_id')) &&
+        !empty(get_option('userspn_facebook_app_secret'))) {
+      $social_providers[] = 'facebook';
+    }
+
+    // GitHub
+    if (get_option('userspn_github_login_enabled') == 'on' &&
+        !empty(get_option('userspn_github_client_id')) &&
+        !empty(get_option('userspn_github_client_secret'))) {
+      $social_providers[] = 'github';
+    }
+
+    // Apple
+    if (get_option('userspn_apple_login_enabled') == 'on' &&
+        !empty(get_option('userspn_apple_client_id')) &&
+        !empty(get_option('userspn_apple_team_id')) &&
+        !empty(get_option('userspn_apple_key_id')) &&
+        !empty(get_option('userspn_apple_private_key'))) {
+      $social_providers[] = 'apple';
+    }
+
+    if (empty($social_providers)) {
+      return;
+    }
+
+    ?>
+    <!-- Social Login Section -->
+    <div class="userspn-social-login-section userspn-mt-20 userspn-mb-20">
+      <h5 class="userspn-text-align-center userspn-mb-15" style="font-size: 14px; font-weight: 600; color: #666; margin: 0 0 15px 0;">
+        <?php esc_html_e('Social Login', 'userspn'); ?>
+      </h5>
+
+      <!-- Social Icons Container -->
+      <div class="userspn-social-icons-container" style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+
+        <?php if (in_array('google', $social_providers)): ?>
+          <button type="button" class="userspn-social-icon-btn userspn-google-login-btn" data-provider="google" title="<?php esc_attr_e('Continue with Google', 'userspn'); ?>">
+            <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+              <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+              <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+              <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+              <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+            </svg>
+          </button>
+        <?php endif; ?>
+
+        <?php if (in_array('facebook', $social_providers)): ?>
+          <button type="button" class="userspn-social-icon-btn userspn-facebook-login-btn" data-provider="facebook" title="<?php esc_attr_e('Continue with Facebook', 'userspn'); ?>">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="#1877F2">
+              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+            </svg>
+          </button>
+        <?php endif; ?>
+
+        <?php if (in_array('github', $social_providers)): ?>
+          <button type="button" class="userspn-social-icon-btn userspn-github-login-btn" data-provider="github" title="<?php esc_attr_e('Continue with GitHub', 'userspn'); ?>">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="#24292e">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+          </button>
+        <?php endif; ?>
+
+        <?php if (in_array('apple', $social_providers)): ?>
+          <button type="button" class="userspn-social-icon-btn userspn-apple-login-btn" data-provider="apple" title="<?php esc_attr_e('Continue with Apple', 'userspn'); ?>">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="#000">
+              <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
+            </svg>
+          </button>
+        <?php endif; ?>
+
+      </div>
+    </div>
+    <?php
+  }
+
   public function userspn_login($atts)
   {
     /* echo do_shortcode('[userspn-login]'); */
@@ -1468,6 +1710,75 @@ class USERSPN_Functions_User
             <p class="font-weight-bold"><?php esc_html_e('Forgot your password?', 'userspn'); ?></p>
           </a>
         </div>
+
+        <?php if (get_option('userspn_email_code_login_enabled') == 'on'): ?>
+          <!-- Botón principal para login con código -->
+          <div class="userspn-text-align-center userspn-mt-10">
+            <button type="button" class="userspn-btn userspn-btn-transparent userspn-btn-mini userspn-email-code-login-btn">
+              <?php esc_html_e('Login with email code', 'userspn'); ?>
+            </button>
+          </div>
+
+          <!-- Formulario de solicitud de código -->
+          <div id="userspn-email-code-request-form" class="userspn-display-none">
+            <div class="userspn-mb-20">
+              <label for="userspn-email-code-email" class="userspn-label">
+                <?php esc_html_e('Email address', 'userspn'); ?>
+              </label>
+              <input
+                type="email"
+                id="userspn-email-code-email"
+                class="userspn-input userspn-width-100-percent"
+                placeholder="<?php esc_attr_e('Enter your email', 'userspn'); ?>"
+                required
+              />
+            </div>
+            <div class="userspn-text-align-center">
+              <button type="button" class="userspn-btn userspn-btn-main userspn-width-100-percent userspn-send-code-btn">
+                <?php esc_html_e('Send verification code', 'userspn'); ?>
+              </button>
+            </div>
+            <div class="userspn-text-align-center userspn-mt-10">
+              <button type="button" class="userspn-btn userspn-btn-transparent userspn-btn-mini userspn-back-to-login-btn">
+                <?php esc_html_e('Back to login', 'userspn'); ?>
+              </button>
+            </div>
+          </div>
+
+          <!-- Formulario de verificación de código -->
+          <div id="userspn-email-code-verify-form" class="userspn-display-none">
+            <div class="userspn-mb-20">
+              <label class="userspn-label userspn-text-align-center userspn-display-block">
+                <?php esc_html_e('Enter the 6-digit code sent to your email', 'userspn'); ?>
+              </label>
+              <div class="userspn-code-inputs-wrapper">
+                <input type="text" maxlength="1" class="userspn-code-digit" data-index="0" autocomplete="off" />
+                <input type="text" maxlength="1" class="userspn-code-digit" data-index="1" autocomplete="off" />
+                <input type="text" maxlength="1" class="userspn-code-digit" data-index="2" autocomplete="off" />
+                <input type="text" maxlength="1" class="userspn-code-digit" data-index="3" autocomplete="off" />
+                <input type="text" maxlength="1" class="userspn-code-digit" data-index="4" autocomplete="off" />
+                <input type="text" maxlength="1" class="userspn-code-digit" data-index="5" autocomplete="off" />
+              </div>
+            </div>
+            <div class="userspn-text-align-center">
+              <button type="button" class="userspn-btn userspn-btn-main userspn-width-100-percent userspn-verify-code-btn">
+                <?php esc_html_e('Verify code', 'userspn'); ?>
+              </button>
+            </div>
+            <div class="userspn-text-align-center userspn-mt-10">
+              <button type="button" class="userspn-btn userspn-btn-transparent userspn-btn-mini userspn-resend-code-btn">
+                <?php esc_html_e('Resend code', 'userspn'); ?>
+              </button>
+            </div>
+            <div class="userspn-text-align-center userspn-mt-10">
+              <button type="button" class="userspn-btn userspn-btn-transparent userspn-btn-mini userspn-back-to-login-btn">
+                <?php esc_html_e('Back to login', 'userspn'); ?>
+              </button>
+            </div>
+          </div>
+        <?php endif; ?>
+
+        <?php $this->userspn_render_social_login_icons(); ?>
       </div>
       <?php
     }
@@ -1536,11 +1847,16 @@ class USERSPN_Functions_User
           <?php USERSPN_Forms::userspn_input_wrapper_builder($userspn_user_register_field, 'user', 0, 0, 'full'); ?>
         <?php endforeach ?>
 
+        <!-- Campo oculto para capturar URL de registro -->
+        <input type="hidden" name="userspn_registration_page" id="userspn_registration_page" value="<?php echo esc_url(home_url(add_query_arg(null, null))); ?>" />
+
         <div class="userspn-text-align-right userspn-mt-30 userspn-mb-30">
           <input type="submit" value="<?php echo esc_attr($submit_label); ?>" name="userspn-user-registration-btn"
             id="userspn-user-registration-btn"
             class="userspn-btn userspn-btn" /><?php echo esc_html(USERSPN_Data::userspn_loader()); ?>
         </div>
+
+        <?php $this->userspn_render_social_login_icons(); ?>
       </form>
     <?php else: ?>
       <?php echo do_shortcode('[userspn-call-to-action userspn_call_to_action_icon="emoji_people" userspn_call_to_action_title="' . esc_html(__('You are registered', 'userspn')) . '" userspn_call_to_action_content="' . esc_html(__('You are already registered and logged in the system. So you cannot create a new user. Please close your session to register a new account.', 'userspn')) . '"]'); ?>

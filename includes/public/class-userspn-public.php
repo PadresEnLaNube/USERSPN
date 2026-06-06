@@ -73,6 +73,36 @@ class USERSPN_Public {
 	}
 
 	/**
+	 * Enqueue email code login scripts
+	 *
+	 * @since    1.1.31
+	 */
+	public function userspn_enqueue_email_code_login_scripts() {
+		wp_enqueue_script(
+			$this->plugin_name . '-email-code-login',
+			USERSPN_URL . 'assets/js/userspn-email-code-login.js',
+			array('jquery'),
+			$this->version,
+			false
+		);
+	}
+
+	/**
+	 * Enqueue social login scripts
+	 *
+	 * @since    1.1.33
+	 */
+	public function userspn_enqueue_social_login_scripts() {
+		wp_enqueue_script(
+			$this->plugin_name . '-social-login',
+			USERSPN_URL . 'assets/js/userspn-social-login.js',
+			array('jquery'),
+			$this->version,
+			false
+		);
+	}
+
+	/**
 	 * Add profile icon container to navigation menu
 	 * This method is kept for compatibility but JavaScript handles the actual work
 	 *

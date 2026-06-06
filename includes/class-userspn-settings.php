@@ -23,10 +23,7 @@ class USERSPN_Settings
     }
 
     $userspn_options = [];
-    $userspn_options['userspn_section_user_popup_start'] = [
-      'section' => 'start',
-      'label' => __('Profile popup', 'userspn'),
-    ];
+
     $userspn_options['userspn_preview_profile'] = [
       'id' => 'userspn_preview_profile',
       'input' => 'html',
@@ -34,6 +31,12 @@ class USERSPN_Settings
       'label' => __('Preview profile popup', 'userspn'),
       'description' => __('Opens your site in a new tab showing the profile popup as it appears to your visitors. Please save your settings before previewing.', 'userspn'),
     ];
+    
+    $userspn_options['userspn_section_user_popup_start'] = [
+      'section' => 'start',
+      'label' => __('Profile popup', 'userspn'),
+    ];
+    
     $userspn_options['userspn_disabled'] = [
       'id' => 'userspn_disabled',
       'class' => 'userspn-input userspn-width-100-percent',
@@ -187,6 +190,15 @@ class USERSPN_Settings
       'label' => __('Front-end users registration', 'userspn'),
       'description' => __('This option allows users to create their account from the front-end profile popup.', 'userspn'),
     ];
+
+    $userspn_options['userspn_tabs_section_start'] = [
+      'id' => 'userspn_tabs_section_start',
+      'input' => 'section',
+      'section' => 'start',
+      'label' => __('Tabs', 'userspn'),
+      'description' => __('Manage tabs for the profile popup.', 'userspn'),
+    ];
+
     $userspn_options['userspn_user_image'] = [
       'id' => 'userspn_user_image',
       'class' => 'userspn-input userspn-width-100-percent',
@@ -341,6 +353,215 @@ class USERSPN_Settings
       'label' => __('Front-end users removal', 'userspn'),
       'description' => __('This option allows users to remove their account from the advanced option in the profile popup.', 'userspn'),
     ];
+    $userspn_options['userspn_tabs_section_end'] = [
+      'id' => 'userspn_tabs_section_end',
+      'input' => 'section',
+      'section' => 'end',
+    ];
+
+    // Social Login subsection
+    $userspn_options['userspn_subsection_social_login'] = [
+      'id' => 'userspn_subsection_social_login',
+      'input' => 'section',
+      'section' => 'start',
+      'label' => __('Social Login', 'userspn'),
+      'description' => __('Allow users to register and login using their social accounts.', 'userspn'),
+    ];
+    
+    $userspn_options['userspn_google_login_enabled'] = [
+      'id' => 'userspn_google_login_enabled',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'input',
+      'type' => 'checkbox',
+      'parent' => 'this',
+      'label' => __('Enable Google Login', 'userspn'),
+      'description' => __('Allow users to register and login using their Google account.', 'userspn'),
+    ];
+    $userspn_options['userspn_google_client_id'] = [
+      'id' => 'userspn_google_client_id',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'input',
+      'type' => 'text',
+      'parent' => 'userspn_google_login_enabled',
+      'parent_option' => 'on',
+      'label' => __('Google Client ID', 'userspn'),
+      'placeholder' => __('Enter your Google Client ID', 'userspn'),
+      'description' => __('Get your credentials from the <a href="https://console.cloud.google.com/apis/credentials" target="_blank">Google Cloud Console</a>.', 'userspn'),
+    ];
+    $userspn_options['userspn_google_client_secret'] = [
+      'id' => 'userspn_google_client_secret',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'input',
+      'type' => 'password',
+      'parent' => 'userspn_google_login_enabled',
+      'parent_option' => 'on',
+      'label' => __('Google Client Secret', 'userspn'),
+      'placeholder' => __('Enter your Google Client Secret', 'userspn'),
+      'description' => __('This is your application secret key from Google Cloud Console.', 'userspn'),
+    ];
+    $userspn_options['userspn_google_redirect_uri_info'] = [
+      'id' => 'userspn_google_redirect_uri_info',
+      'input' => 'html',
+      'parent' => 'userspn_google_login_enabled',
+      'parent_option' => 'on',
+      'html_content' => '<div style="background: #f0f6fc; padding: 15px; border-left: 4px solid #0073aa; margin: 10px 0;"><strong>' . esc_html__('Authorized Redirect URIs (add BOTH):', 'userspn') . '</strong><br><br><strong style="font-size: 11px; color: #2271b1;">Primary:</strong><br><code style="background: #fff; padding: 5px 10px; display: inline-block; margin: 5px 0; word-break: break-all;">' . esc_url(rest_url('userspn/v1/google-callback')) . '</code><br><br><strong style="font-size: 11px; color: #666;">Fallback:</strong><br><code style="background: #fff; padding: 5px 10px; display: inline-block; margin: 5px 0; word-break: break-all;">' . esc_url(admin_url('admin-ajax.php?action=userspn_google_callback')) . '</code><br><br><small style="color: #d63638;">' . esc_html__('⚠️ Add BOTH URLs to Google Cloud Console. The system will try the primary URL first and use the fallback if needed.', 'userspn') . '</small></div>',
+      'label' => __('Setup Instructions', 'userspn'),
+      'description' => __('Copy both Redirect URIs above and add them to your Google Cloud Console in the "Authorized redirect URIs" section. This ensures compatibility with different server configurations.', 'userspn'),
+    ];
+
+    // Facebook Login
+    $userspn_options['userspn_facebook_login_enabled'] = [
+      'id' => 'userspn_facebook_login_enabled',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'input',
+      'type' => 'checkbox',
+      'parent' => 'this',
+      'label' => __('Enable Facebook Login', 'userspn'),
+      'description' => __('Allow users to register and login using their Facebook account.', 'userspn'),
+    ];
+    $userspn_options['userspn_facebook_app_id'] = [
+      'id' => 'userspn_facebook_app_id',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'input',
+      'type' => 'text',
+      'parent' => 'userspn_facebook_login_enabled',
+      'parent_option' => 'on',
+      'label' => __('Facebook App ID', 'userspn'),
+      'placeholder' => __('Enter your Facebook App ID', 'userspn'),
+      'description' => __('Get your credentials from <a href="https://developers.facebook.com/apps" target="_blank">Facebook Developers</a>.', 'userspn'),
+    ];
+    $userspn_options['userspn_facebook_app_secret'] = [
+      'id' => 'userspn_facebook_app_secret',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'input',
+      'type' => 'password',
+      'parent' => 'userspn_facebook_login_enabled',
+      'parent_option' => 'on',
+      'label' => __('Facebook App Secret', 'userspn'),
+      'placeholder' => __('Enter your Facebook App Secret', 'userspn'),
+      'description' => __('This is your application secret key from Facebook Developers.', 'userspn'),
+    ];
+    $userspn_options['userspn_facebook_redirect_uri_info'] = [
+      'id' => 'userspn_facebook_redirect_uri_info',
+      'input' => 'html',
+      'parent' => 'userspn_facebook_login_enabled',
+      'parent_option' => 'on',
+      'html_content' => '<div style="background: #f0f6fc; padding: 15px; border-left: 4px solid #1877f2; margin: 10px 0;"><strong>' . esc_html__('Valid OAuth Redirect URIs (add BOTH):', 'userspn') . '</strong><br><br><strong style="font-size: 11px; color: #1877f2;">Primary:</strong><br><code style="background: #fff; padding: 5px 10px; display: inline-block; margin: 5px 0; word-break: break-all;">' . esc_url(rest_url('userspn/v1/facebook-callback')) . '</code><br><br><strong style="font-size: 11px; color: #666;">Fallback:</strong><br><code style="background: #fff; padding: 5px 10px; display: inline-block; margin: 5px 0; word-break: break-all;">' . esc_url(admin_url('admin-ajax.php?action=userspn_facebook_callback')) . '</code><br><br><small style="color: #d63638;">' . esc_html__('⚠️ Add BOTH URLs to Facebook App Dashboard → Products → Facebook Login → Settings. The system will try the primary URL first and use the fallback if needed.', 'userspn') . '</small></div>',
+      'label' => __('Setup Instructions', 'userspn'),
+      'description' => __('Copy both Redirect URIs above and add them to your Facebook App in the "Valid OAuth Redirect URIs" field. This ensures compatibility with different server configurations.', 'userspn'),
+    ];
+
+    // GitHub Login
+    $userspn_options['userspn_github_login_enabled'] = [
+      'id' => 'userspn_github_login_enabled',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'input',
+      'type' => 'checkbox',
+      'parent' => 'this',
+      'label' => __('Enable GitHub Login', 'userspn'),
+      'description' => __('Allow users to register and login using their GitHub account.', 'userspn'),
+    ];
+    $userspn_options['userspn_github_client_id'] = [
+      'id' => 'userspn_github_client_id',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'input',
+      'type' => 'text',
+      'parent' => 'userspn_github_login_enabled',
+      'parent_option' => 'on',
+      'label' => __('GitHub Client ID', 'userspn'),
+      'placeholder' => __('Enter your GitHub Client ID', 'userspn'),
+      'description' => __('Get your credentials from <a href="https://github.com/settings/developers" target="_blank">GitHub Developer Settings</a>.', 'userspn'),
+    ];
+    $userspn_options['userspn_github_client_secret'] = [
+      'id' => 'userspn_github_client_secret',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'input',
+      'type' => 'password',
+      'parent' => 'userspn_github_login_enabled',
+      'parent_option' => 'on',
+      'label' => __('GitHub Client Secret', 'userspn'),
+      'placeholder' => __('Enter your GitHub Client Secret', 'userspn'),
+      'description' => __('This is your application secret from GitHub Developer Settings.', 'userspn'),
+    ];
+    $userspn_options['userspn_github_redirect_uri_info'] = [
+      'id' => 'userspn_github_redirect_uri_info',
+      'input' => 'html',
+      'parent' => 'userspn_github_login_enabled',
+      'parent_option' => 'on',
+      'html_content' => '<div style="background: #f0f6fc; padding: 15px; border-left: 4px solid #24292e; margin: 10px 0;"><strong>' . esc_html__('Authorization Callback URLs (add BOTH):', 'userspn') . '</strong><br><br><strong style="font-size: 11px; color: #24292e;">Primary:</strong><br><code style="background: #fff; padding: 5px 10px; display: inline-block; margin: 5px 0; word-break: break-all;">' . esc_url(rest_url('userspn/v1/github-callback')) . '</code><br><br><strong style="font-size: 11px; color: #666;">Fallback:</strong><br><code style="background: #fff; padding: 5px 10px; display: inline-block; margin: 5px 0; word-break: break-all;">' . esc_url(admin_url('admin-ajax.php?action=userspn_github_callback')) . '</code><br><br><small style="color: #d63638;">' . esc_html__('⚠️ Add BOTH URLs when creating your GitHub OAuth App. The system will try the primary URL first and use the fallback if needed.', 'userspn') . '</small></div>',
+      'label' => __('Setup Instructions', 'userspn'),
+      'description' => __('Copy both Callback URLs above and add them to your GitHub OAuth App configuration. This ensures compatibility with different server configurations.', 'userspn'),
+    ];
+
+    // Apple Sign In
+    $userspn_options['userspn_apple_login_enabled'] = [
+      'id' => 'userspn_apple_login_enabled',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'input',
+      'type' => 'checkbox',
+      'parent' => 'this',
+      'label' => __('Enable Apple Sign In', 'userspn'),
+      'description' => __('Allow users to register and login using their Apple ID.', 'userspn'),
+    ];
+    $userspn_options['userspn_apple_service_id'] = [
+      'id' => 'userspn_apple_service_id',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'input',
+      'type' => 'text',
+      'parent' => 'userspn_apple_login_enabled',
+      'parent_option' => 'on',
+      'label' => __('Apple Service ID', 'userspn'),
+      'placeholder' => __('Enter your Apple Service ID (Client ID)', 'userspn'),
+      'description' => __('Get your credentials from <a href="https://developer.apple.com/account/resources/identifiers/list/serviceId" target="_blank">Apple Developer</a>.', 'userspn'),
+    ];
+    $userspn_options['userspn_apple_team_id'] = [
+      'id' => 'userspn_apple_team_id',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'input',
+      'type' => 'text',
+      'parent' => 'userspn_apple_login_enabled',
+      'parent_option' => 'on',
+      'label' => __('Apple Team ID', 'userspn'),
+      'placeholder' => __('Enter your Apple Team ID', 'userspn'),
+      'description' => __('Find this in your Apple Developer account.', 'userspn'),
+    ];
+    $userspn_options['userspn_apple_key_id'] = [
+      'id' => 'userspn_apple_key_id',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'input',
+      'type' => 'text',
+      'parent' => 'userspn_apple_login_enabled',
+      'parent_option' => 'on',
+      'label' => __('Apple Key ID', 'userspn'),
+      'placeholder' => __('Enter your Apple Key ID', 'userspn'),
+      'description' => __('The ID of your Sign In with Apple private key.', 'userspn'),
+    ];
+    $userspn_options['userspn_apple_private_key'] = [
+      'id' => 'userspn_apple_private_key',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'textarea',
+      'parent' => 'userspn_apple_login_enabled',
+      'parent_option' => 'on',
+      'label' => __('Apple Private Key', 'userspn'),
+      'placeholder' => __('Paste the content of your .p8 private key file', 'userspn'),
+      'description' => __('The private key from your Sign In with Apple key (.p8 file). Keep this secure!', 'userspn'),
+    ];
+    $userspn_options['userspn_apple_redirect_uri_info'] = [
+      'id' => 'userspn_apple_redirect_uri_info',
+      'input' => 'html',
+      'parent' => 'userspn_apple_login_enabled',
+      'parent_option' => 'on',
+      'html_content' => '<div style="background: #f0f6fc; padding: 15px; border-left: 4px solid #000; margin: 10px 0;"><strong>' . esc_html__('Return URLs (add BOTH):', 'userspn') . '</strong><br><br><strong style="font-size: 11px; color: #000;">Primary:</strong><br><code style="background: #fff; padding: 5px 10px; display: inline-block; margin: 5px 0; word-break: break-all;">' . esc_url(rest_url('userspn/v1/apple-callback')) . '</code><br><br><strong style="font-size: 11px; color: #666;">Fallback:</strong><br><code style="background: #fff; padding: 5px 10px; display: inline-block; margin: 5px 0; word-break: break-all;">' . esc_url(admin_url('admin-ajax.php?action=userspn_apple_callback')) . '</code><br><br><small style="color: #d63638;">' . esc_html__('⚠️ Add BOTH URLs when configuring your Apple Service ID. The system will try the primary URL first and use the fallback if needed.', 'userspn') . '</small></div>',
+      'label' => __('Setup Instructions', 'userspn'),
+      'description' => __('Copy both Return URLs above and add them to your Apple Service ID configuration. This ensures compatibility with different server configurations.', 'userspn'),
+    ];
+
+    $userspn_options['userspn_subsection_social_login_end'] = [
+      'id' => 'userspn_subsection_social_login_end',
+      'input' => 'section',
+      'section' => 'end',
+    ];
+
     $userspn_options['userspn_section_user_popup_end'] = [
       'section' => 'end',
     ];
@@ -573,6 +794,14 @@ class USERSPN_Settings
     $userspn_options['userspn_section_security_start'] = [
       'section' => 'start',
       'label' => __('Security Settings', 'userspn'),
+    ];
+    $userspn_options['userspn_email_code_login_enabled'] = [
+      'id' => 'userspn_email_code_login_enabled',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'input',
+      'type' => 'checkbox',
+      'label' => __('Enable email code login', 'userspn'),
+      'description' => __('Allow users to login using a verification code sent to their email address.', 'userspn'),
     ];
     $userspn_options['userspn_strong_password'] = [
       'id' => 'userspn_strong_password',
@@ -1981,7 +2210,7 @@ class USERSPN_Settings
       $html .= '<thead><tr>';
       $html .= '<th>' . esc_html__('Usuario', 'userspn') . '</th>';
       $html .= '<th>' . esc_html__('Email', 'userspn') . '</th>';
-      $html .= '<th>' . esc_html__('Fecha de registro', 'userspn') . '</th>';
+      $html .= '<th>' . esc_html__('Datos del registro', 'userspn') . '</th>';
       $html .= '<th>' . esc_html__('Acciones', 'userspn') . '</th>';
       $html .= '</tr></thead><tbody>';
       foreach ($users as $user) {
@@ -1995,8 +2224,35 @@ class USERSPN_Settings
         $html .= '<i class="material-icons-outlined userspn-analytics-icon">alternate_email</i>';
         $html .= esc_html($user->user_email);
         $html .= '</a></td>';
-        $html .= '<td><i class="material-icons-outlined userspn-analytics-icon">calendar_today</i>';
+        $html .= '<td>';
+
+        // Obtener página de registro
+        $registration_page = get_user_meta($user->ID, 'userspn_registration_page', true);
+
+        if (!empty($registration_page)) {
+          $parsed_url = wp_parse_url($registration_page);
+          $display_url = isset($parsed_url['path']) ? $parsed_url['path'] : '/';
+
+          if (isset($parsed_url['query'])) {
+            $display_url .= '?' . $parsed_url['query'];
+          }
+
+          $html .= '<div style="margin-bottom: 4px;">';
+          $html .= '<i class="material-icons-outlined userspn-analytics-icon" style="font-size: 14px; vertical-align: middle;">link</i>';
+          $html .= '<span style="font-size: 11px; color: #666;" title="' . esc_attr($registration_page) . '">';
+          $html .= esc_html($display_url);
+          $html .= '</span>';
+          $html .= '</div>';
+        }
+
+        // Fecha de registro
+        $html .= '<div>';
+        $html .= '<i class="material-icons-outlined userspn-analytics-icon" style="font-size: 14px; vertical-align: middle;">calendar_today</i>';
+        $html .= '<span style="font-size: 11px;">';
         $html .= esc_html(date_i18n(get_option('date_format') . ' H:i', strtotime($user->user_registered)));
+        $html .= '</span>';
+        $html .= '</div>';
+
         $html .= '</td>';
         $html .= '<td class="userspn-analytics-actions">';
         $html .= '<a href="' . esc_url($edit_url) . '" target="_blank" class="userspn-tooltip" title="' . esc_attr__('Editar perfil', 'userspn') . '">';
