@@ -293,4 +293,308 @@ class USERSPN_Mailing {
 
         return get_posts($login_code_atts);
     }
+
+    /**
+     * Send 2FA enabled notification email
+     *
+     * @param int $user_id User ID
+     * @param string $method 2FA method ('app' or 'email')
+     * @return void
+     */
+    public function userspn_send_2fa_enabled_email($user_id, $method = 'app')
+    {
+        $user = get_userdata($user_id);
+        if (!$user) {
+            return;
+        }
+
+        $userspn_email = $user->user_email;
+        $userspn_name = $user->display_name;
+        $method_name = $method === 'app' ? __('Authenticator App', 'userspn') : __('Email', 'userspn');
+
+        // Intentar usar MailPN si está disponible
+        if (class_exists('MAILPN')) {
+            $templates = $this->userspn_get_email_2fa_enabled($user_id);
+
+            if (!empty($templates)) {
+                // Usar template personalizado de MailPN
+                foreach ($templates as $mail_id) {
+                    do_shortcode('[mailpn-sender mailpn_type="email_2fa_enabled" mailpn_user_to="' . $user_id . '" mailpn_subject="' . get_the_title($mail_id) . '" mailpn_id="' . $mail_id . '"]');
+                }
+            } else {
+                // Usar template por defecto con contenido simple
+                $subject = '🔒 ' . __('Two-Factor Authentication Enabled', 'userspn');
+                $message = sprintf(__('Hello %s,', 'userspn'), esc_html($userspn_name)) . '<br><br>';
+                $message .= __('Two-factor authentication has been successfully enabled on your account.', 'userspn') . '<br><br>';
+                $message .= '<strong>' . __('Method:', 'userspn') . '</strong> ' . esc_html($method_name) . '<br><br>';
+                $message .= __('This adds an extra layer of security to your account by requiring a verification code when you log in.', 'userspn') . '<br><br>';
+
+                if ($method === 'app') {
+                    $message .= '📱 ' . __('You will need to use your authenticator app to generate verification codes when logging in.', 'userspn') . '<br><br>';
+                } else {
+                    $message .= '📧 ' . __('You will receive verification codes by email when logging in.', 'userspn') . '<br><br>';
+                }
+
+                $message .= '<strong>' . __('Important:', 'userspn') . '</strong> ' . __('Make sure to save your backup codes in a secure location. You can use them if you lose access to your primary 2FA method.', 'userspn') . '<br><br>';
+                $message .= '<small style="color: #666;">' . __('If you did not enable 2FA on your account, please contact support immediately.', 'userspn') . '</small>';
+
+                do_shortcode('[mailpn-sender mailpn_type="email_2fa_enabled" mailpn_user_to="' . $user_id . '" mailpn_subject="' . $subject . '"]' . $message . '[/mailpn-sender]');
+            }
+            return;
+        }
+
+        // Fallback a wp_mail si MailPN no está disponible
+        add_filter('wp_mail_content_type', [$this, 'userspn_wp_mail_content_type']);
+
+        $subject = __('Two-Factor Authentication Enabled', 'userspn');
+
+        $body = '<html><body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">';
+        $body .= '<div style="max-width: 600px; margin: 0 auto; padding: 20px;">';
+        $body .= '<h2 style="color: #28a745;">🔒 ' . esc_html__('Two-Factor Authentication Enabled', 'userspn') . '</h2>';
+        $body .= '<p>' . sprintf(esc_html__('Hello %s,', 'userspn'), esc_html($userspn_name)) . '</p>';
+        $body .= '<p>' . esc_html__('Two-factor authentication has been successfully enabled on your account.', 'userspn') . '</p>';
+        $body .= '<div style="background: #f0f9ff; padding: 15px; border-left: 4px solid #2271b1; margin: 20px 0;">';
+        $body .= '<strong>' . esc_html__('Method:', 'userspn') . '</strong> ' . esc_html($method_name);
+        $body .= '</div>';
+        $body .= '<p>' . esc_html__('This adds an extra layer of security to your account by requiring a verification code when you log in.', 'userspn') . '</p>';
+
+        if ($method === 'app') {
+            $body .= '<p>📱 ' . esc_html__('You will need to use your authenticator app to generate verification codes when logging in.', 'userspn') . '</p>';
+        } else {
+            $body .= '<p>📧 ' . esc_html__('You will receive verification codes by email when logging in.', 'userspn') . '</p>';
+        }
+
+        $body .= '<div style="background: #fff3cd; padding: 15px; border-left: 4px solid #ffc107; margin: 20px 0;">';
+        $body .= '<strong>' . esc_html__('Important:', 'userspn') . '</strong><br>';
+        $body .= esc_html__('Make sure to save your backup codes in a secure location. You can use them if you lose access to your primary 2FA method.', 'userspn');
+        $body .= '</div>';
+        $body .= '<p style="font-size: 12px; color: #666;">' . esc_html__('If you did not enable 2FA on your account, please contact support immediately.', 'userspn') . '</p>';
+        $body .= '</div>';
+        $body .= '</body></html>';
+
+        wp_mail($userspn_email, $subject, $body);
+
+        remove_filter('wp_mail_content_type', [$this, 'userspn_wp_mail_content_type']);
+    }
+
+    /**
+     * Get email 2FA enabled templates from MailPN
+     *
+     * @param int $user_id User ID
+     * @return array Array of post IDs
+     */
+    public function userspn_get_email_2fa_enabled($user_id)
+    {
+        $templates = [
+            'fields' => 'ids',
+            'numberposts' => -1,
+            'post_type' => 'mailpn_mail',
+            'post_status' => 'publish',
+            'meta_key' => 'mailpn_type',
+            'meta_value' => 'email_2fa_enabled',
+        ];
+
+        if (class_exists('Polylang')) {
+            $templates['lang'] = get_user_meta($user_id, 'userspn_lang', true) ?: pll_current_language('slug');
+        }
+
+        return get_posts($templates);
+    }
+
+    /**
+     * Send 2FA disabled notification email
+     *
+     * @param int $user_id User ID
+     * @return void
+     */
+    public function userspn_send_2fa_disabled_email($user_id)
+    {
+        $user = get_userdata($user_id);
+        if (!$user) {
+            return;
+        }
+
+        $userspn_email = $user->user_email;
+        $userspn_name = $user->display_name;
+
+        // Intentar usar MailPN si está disponible
+        if (class_exists('MAILPN')) {
+            $templates = $this->userspn_get_email_2fa_disabled($user_id);
+
+            if (!empty($templates)) {
+                // Usar template personalizado de MailPN
+                foreach ($templates as $mail_id) {
+                    do_shortcode('[mailpn-sender mailpn_type="email_2fa_disabled" mailpn_user_to="' . $user_id . '" mailpn_subject="' . get_the_title($mail_id) . '" mailpn_id="' . $mail_id . '"]');
+                }
+            } else {
+                // Usar template por defecto con contenido simple
+                $subject = '⚠️ ' . __('Two-Factor Authentication Disabled', 'userspn');
+                $message = sprintf(__('Hello %s,', 'userspn'), esc_html($userspn_name)) . '<br><br>';
+                $message .= __('Two-factor authentication has been disabled on your account.', 'userspn') . '<br><br>';
+                $message .= __('Your account is now protected only by your password. We recommend keeping 2FA enabled for better security.', 'userspn') . '<br><br>';
+                $message .= __('You can re-enable two-factor authentication at any time from your profile settings.', 'userspn') . '<br><br>';
+                $message .= '<strong style="color: #d63638;">' . __('Security Alert:', 'userspn') . '</strong> ' . __('If you did not disable 2FA on your account, please contact support immediately and change your password.', 'userspn');
+
+                do_shortcode('[mailpn-sender mailpn_type="email_2fa_disabled" mailpn_user_to="' . $user_id . '" mailpn_subject="' . $subject . '"]' . $message . '[/mailpn-sender]');
+            }
+            return;
+        }
+
+        // Fallback a wp_mail si MailPN no está disponible
+        add_filter('wp_mail_content_type', [$this, 'userspn_wp_mail_content_type']);
+
+        $subject = __('Two-Factor Authentication Disabled', 'userspn');
+
+        $body = '<html><body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">';
+        $body .= '<div style="max-width: 600px; margin: 0 auto; padding: 20px;">';
+        $body .= '<h2 style="color: #d63638;">⚠️ ' . esc_html__('Two-Factor Authentication Disabled', 'userspn') . '</h2>';
+        $body .= '<p>' . sprintf(esc_html__('Hello %s,', 'userspn'), esc_html($userspn_name)) . '</p>';
+        $body .= '<p>' . esc_html__('Two-factor authentication has been disabled on your account.', 'userspn') . '</p>';
+        $body .= '<div style="background: #fff3cd; padding: 15px; border-left: 4px solid #ffc107; margin: 20px 0;">';
+        $body .= esc_html__('Your account is now protected only by your password. We recommend keeping 2FA enabled for better security.', 'userspn');
+        $body .= '</div>';
+        $body .= '<p>' . esc_html__('You can re-enable two-factor authentication at any time from your profile settings.', 'userspn') . '</p>';
+        $body .= '<div style="background: #f8d7da; padding: 15px; border-left: 4px solid #d63638; margin: 20px 0;">';
+        $body .= '<strong>' . esc_html__('Security Alert:', 'userspn') . '</strong><br>';
+        $body .= esc_html__('If you did not disable 2FA on your account, please contact support immediately and change your password.', 'userspn');
+        $body .= '</div>';
+        $body .= '</div>';
+        $body .= '</body></html>';
+
+        wp_mail($userspn_email, $subject, $body);
+
+        remove_filter('wp_mail_content_type', [$this, 'userspn_wp_mail_content_type']);
+    }
+
+    /**
+     * Get email 2FA disabled templates from MailPN
+     *
+     * @param int $user_id User ID
+     * @return array Array of post IDs
+     */
+    public function userspn_get_email_2fa_disabled($user_id)
+    {
+        $templates = [
+            'fields' => 'ids',
+            'numberposts' => -1,
+            'post_type' => 'mailpn_mail',
+            'post_status' => 'publish',
+            'meta_key' => 'mailpn_type',
+            'meta_value' => 'email_2fa_disabled',
+        ];
+
+        if (class_exists('Polylang')) {
+            $templates['lang'] = get_user_meta($user_id, 'userspn_lang', true) ?: pll_current_language('slug');
+        }
+
+        return get_posts($templates);
+    }
+
+    /**
+     * Send backup code used notification email
+     *
+     * @param int $user_id User ID
+     * @param int $remaining_codes Number of remaining backup codes
+     * @return void
+     */
+    public function userspn_send_2fa_backup_code_used_email($user_id, $remaining_codes)
+    {
+        $user = get_userdata($user_id);
+        if (!$user) {
+            return;
+        }
+
+        $userspn_email = $user->user_email;
+        $userspn_name = $user->display_name;
+        $current_time = current_time('mysql');
+
+        // Intentar usar MailPN si está disponible
+        if (class_exists('MAILPN')) {
+            $templates = $this->userspn_get_email_2fa_backup_used($user_id);
+
+            if (!empty($templates)) {
+                // Usar template personalizado de MailPN
+                foreach ($templates as $mail_id) {
+                    do_shortcode('[mailpn-sender mailpn_type="email_2fa_backup_used" mailpn_user_to="' . $user_id . '" mailpn_subject="' . get_the_title($mail_id) . '" mailpn_id="' . $mail_id . '"]');
+                }
+            } else {
+                // Usar template por defecto con contenido simple
+                $subject = '🔑 ' . __('Backup Code Used for Two-Factor Authentication', 'userspn');
+                $message = sprintf(__('Hello %s,', 'userspn'), esc_html($userspn_name)) . '<br><br>';
+                $message .= __('A backup code was used to log into your account.', 'userspn') . '<br><br>';
+                $message .= '<strong>' . __('Date and time:', 'userspn') . '</strong> ' . esc_html($current_time) . '<br>';
+                $message .= '<strong>' . __('Remaining backup codes:', 'userspn') . '</strong> ' . esc_html($remaining_codes) . '<br><br>';
+
+                if ($remaining_codes <= 2) {
+                    $message .= '<div style="background: #f8d7da; padding: 15px; border-left: 4px solid #d63638; margin: 20px 0;">';
+                    $message .= '<strong style="color: #d63638;">⚠️ ' . __('Warning:', 'userspn') . '</strong><br>';
+                    $message .= __('You are running low on backup codes. Please generate new backup codes from your profile settings.', 'userspn');
+                    $message .= '</div>';
+                } else {
+                    $message .= __('You can generate new backup codes at any time from your profile settings.', 'userspn') . '<br><br>';
+                }
+
+                $message .= '<small style="color: #666;">' . __('If this was not you, please contact support immediately and change your password.', 'userspn') . '</small>';
+
+                do_shortcode('[mailpn-sender mailpn_type="email_2fa_backup_used" mailpn_user_to="' . $user_id . '" mailpn_subject="' . $subject . '"]' . $message . '[/mailpn-sender]');
+            }
+            return;
+        }
+
+        // Fallback a wp_mail si MailPN no está disponible
+        add_filter('wp_mail_content_type', [$this, 'userspn_wp_mail_content_type']);
+
+        $subject = __('Backup Code Used for Two-Factor Authentication', 'userspn');
+
+        $body = '<html><body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">';
+        $body .= '<div style="max-width: 600px; margin: 0 auto; padding: 20px;">';
+        $body .= '<h2 style="color: #2271b1;">🔑 ' . esc_html__('Backup Code Used', 'userspn') . '</h2>';
+        $body .= '<p>' . sprintf(esc_html__('Hello %s,', 'userspn'), esc_html($userspn_name)) . '</p>';
+        $body .= '<p>' . esc_html__('A backup code was used to log into your account.', 'userspn') . '</p>';
+        $body .= '<div style="background: #f0f9ff; padding: 15px; border-left: 4px solid #2271b1; margin: 20px 0;">';
+        $body .= '<strong>' . esc_html__('Date and time:', 'userspn') . '</strong> ' . esc_html($current_time) . '<br>';
+        $body .= '<strong>' . esc_html__('Remaining backup codes:', 'userspn') . '</strong> ' . esc_html($remaining_codes);
+        $body .= '</div>';
+
+        if ($remaining_codes <= 2) {
+            $body .= '<div style="background: #f8d7da; padding: 15px; border-left: 4px solid #d63638; margin: 20px 0;">';
+            $body .= '<strong style="color: #d63638;">⚠️ ' . esc_html__('Warning:', 'userspn') . '</strong><br>';
+            $body .= esc_html__('You are running low on backup codes. Please generate new backup codes from your profile settings.', 'userspn');
+            $body .= '</div>';
+        } else {
+            $body .= '<p>' . esc_html__('You can generate new backup codes at any time from your profile settings.', 'userspn') . '</p>';
+        }
+
+        $body .= '<p style="font-size: 12px; color: #666;">' . esc_html__('If this was not you, please contact support immediately and change your password.', 'userspn') . '</p>';
+        $body .= '</div>';
+        $body .= '</body></html>';
+
+        wp_mail($userspn_email, $subject, $body);
+
+        remove_filter('wp_mail_content_type', [$this, 'userspn_wp_mail_content_type']);
+    }
+
+    /**
+     * Get email 2FA backup used templates from MailPN
+     *
+     * @param int $user_id User ID
+     * @return array Array of post IDs
+     */
+    public function userspn_get_email_2fa_backup_used($user_id)
+    {
+        $templates = [
+            'fields' => 'ids',
+            'numberposts' => -1,
+            'post_type' => 'mailpn_mail',
+            'post_status' => 'publish',
+            'meta_key' => 'mailpn_type',
+            'meta_value' => 'email_2fa_backup_used',
+        ];
+
+        if (class_exists('Polylang')) {
+            $templates['lang'] = get_user_meta($user_id, 'userspn_lang', true) ?: pll_current_language('slug');
+        }
+
+        return get_posts($templates);
+    }
 }

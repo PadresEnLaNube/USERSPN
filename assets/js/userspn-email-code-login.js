@@ -1,6 +1,6 @@
 /**
- * Email Code Login functionality
- * Handles the UI and AJAX for email verification code login
+ * Funcionalidad de Login con Código por Email
+ * Maneja la interfaz y AJAX para el login con código de verificación por email
  */
 
 (function ($) {
@@ -10,12 +10,40 @@
   let resendTimer = null;
   let resendCountdown = 60;
 
+  /**
+   * Limpiar parámetros de URL antes de redireccionar
+   */
+  function cleanUrlParams(url) {
+    try {
+      var urlObj = new URL(url);
+      var paramsToRemove = [
+        'hostpn_action',
+        'hostpn_popup',
+        'hostpn_tab',
+        'userspn_action',
+        'userspn_popup',
+        'userspn_tab',
+        'hostpn_btn_id',
+        'userspn_btn_id'
+      ];
+
+      paramsToRemove.forEach(function(param) {
+        urlObj.searchParams.delete(param);
+      });
+
+      return urlObj.toString();
+    } catch (error) {
+      console.error('[USERSPN] Error al limpiar URL:', error);
+      return url;
+    }
+  }
+
   $(document).ready(function () {
     initEmailCodeLogin();
   });
 
   /**
-   * Initialize all event handlers
+   * Inicializar todos los manejadores de eventos
    */
   function initEmailCodeLogin() {
     // Botón principal para mostrar formulario de email
@@ -48,7 +76,7 @@
     // Manejo de inputs de código
     setupCodeInputs();
 
-    // Enter key en email input
+    // Tecla Enter en input de email
     $('#userspn-email-code-email').on('keypress', function (e) {
       if (e.which === 13) {
         e.preventDefault();
@@ -58,12 +86,12 @@
   }
 
   /**
-   * Setup code digit inputs behavior
+   * Configurar comportamiento de los inputs de dígitos del código
    */
   function setupCodeInputs() {
     const $codeInputs = $('.userspn-code-digit');
 
-    // Auto-focus siguiente input
+    // Auto-enfocar siguiente input
     $codeInputs.on('input', function () {
       const $this = $(this);
       let value = $this.val();
@@ -96,7 +124,7 @@
       }
     });
 
-    // Paste support
+    // Soporte para pegar código
     $codeInputs.on('paste', function (e) {
       e.preventDefault();
       const pasteData = e.originalEvent.clipboardData.getData('text');
@@ -110,14 +138,14 @@
       }
     });
 
-    // Select all on focus
+    // Seleccionar todo al enfocar
     $codeInputs.on('focus', function () {
       $(this).select();
     });
   }
 
   /**
-   * Show email request form
+   * Mostrar formulario de solicitud de email
    */
   function showEmailRequestForm() {
     $('#userspn-login').find('form').hide();
@@ -129,7 +157,7 @@
   }
 
   /**
-   * Show verify code form
+   * Mostrar formulario de verificación de código
    */
   function showVerifyForm() {
     $('#userspn-email-code-request-form').hide();
@@ -140,7 +168,7 @@
   }
 
   /**
-   * Show login form
+   * Mostrar formulario de login
    */
   function showLoginForm() {
     $('#userspn-email-code-request-form').hide();
@@ -155,7 +183,7 @@
   }
 
   /**
-   * Send code request
+   * Enviar solicitud de código
    */
   function sendCodeRequest() {
     const email = $('#userspn-email-code-email').val().trim();
@@ -215,7 +243,7 @@
   }
 
   /**
-   * Verify code
+   * Verificar código
    */
   function verifyCode() {
     const code = getCodeFromInputs();
@@ -237,7 +265,7 @@
         userspn_ajax_nopriv_nonce: userspn_ajax.userspn_ajax_nonce,
         userspn_email: currentEmail,
         userspn_code: code,
-        redirect_to: window.location.href,
+        redirect_to: cleanUrlParams(window.location.href),
       },
       success: function (response) {
         $btn.prop('disabled', false).removeClass('userspn-loading');
@@ -279,11 +307,11 @@
   }
 
   /**
-   * Resend code
+   * Reenviar código
    */
   function resendCode() {
     if (!currentEmail) {
-      showMessage('error', 'Email not found. Please start over.');
+      showMessage('error', 'Email no encontrado. Por favor, comience de nuevo.');
       return;
     }
 
@@ -332,7 +360,7 @@
   }
 
   /**
-   * Start resend countdown timer
+   * Iniciar temporizador de cuenta regresiva para reenvío
    */
   function startResendTimer() {
     resendCountdown = 60;
@@ -354,7 +382,7 @@
   }
 
   /**
-   * Update resend button text with countdown
+   * Actualizar texto del botón de reenvío con cuenta regresiva
    */
   function updateResendButtonText() {
     const $btn = $('.userspn-resend-code-btn');
@@ -365,7 +393,7 @@
   }
 
   /**
-   * Stop resend timer
+   * Detener temporizador de reenvío
    */
   function stopResendTimer() {
     if (resendTimer) {
@@ -375,7 +403,7 @@
   }
 
   /**
-   * Get code from all inputs
+   * Obtener código de todos los inputs
    */
   function getCodeFromInputs() {
     let code = '';
@@ -386,14 +414,14 @@
   }
 
   /**
-   * Clear all code inputs
+   * Limpiar todos los inputs de código
    */
   function clearCodeInputs() {
     $('.userspn-code-digit').val('');
   }
 
   /**
-   * Validate email format
+   * Validar formato de email
    */
   function isValidEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -401,7 +429,7 @@
   }
 
   /**
-   * Show message to user
+   * Mostrar mensaje al usuario
    */
   function showMessage(type, message) {
     // Remover mensajes anteriores
@@ -419,7 +447,7 @@
       $('#userspn-login').prepend(messageHtml);
     }
 
-    // Auto-remover después de 5 segundos
+    // Auto-eliminar después de 5 segundos
     setTimeout(function () {
       $('.userspn-code-message').fadeOut(function () {
         $(this).remove();

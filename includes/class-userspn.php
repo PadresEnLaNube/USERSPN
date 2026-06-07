@@ -54,7 +54,7 @@ class USERSPN
 		if (defined('USERSPN_VERSION')) {
 			$this->version = USERSPN_VERSION;
 		} else {
-			$this->version = '1.1.40';
+			$this->version = '1.1.49';
 		}
 
 		$this->plugin_name = 'userspn';
@@ -235,6 +235,21 @@ class USERSPN
 		 * The class responsible for security functions.
 		 */
 		require_once USERSPN_DIR . 'includes/class-userspn-security.php';
+
+		/**
+		 * The class responsible for two-factor authentication.
+		 */
+		require_once USERSPN_DIR . 'includes/class-userspn-2fa.php';
+
+		/**
+		 * The class responsible for two-factor authentication profile interface.
+		 */
+		require_once USERSPN_DIR . 'includes/class-userspn-2fa-profile.php';
+
+		/**
+		 * The class responsible for two-factor authentication login integration.
+		 */
+		require_once USERSPN_DIR . 'includes/class-userspn-2fa-login.php';
 
 		/**
 		 * The class responsible for Google OAuth functionality.

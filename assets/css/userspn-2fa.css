@@ -1,0 +1,274 @@
+/**
+ * USERSPN Two-Factor Authentication (2FA) Styles
+ *
+ * @package USERSPN
+ * @since 1.1.50
+ */
+
+/* 2FA Section */
+.userspn-2fa-section {
+    border-top: 1px solid #e0e0e0;
+    padding-top: 15px;
+}
+
+/* QR Code */
+.userspn-2fa-qr-image {
+    max-width: 200px;
+    height: auto;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 10px;
+    background: #fff;
+}
+
+.userspn-2fa-qr-section {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+#userspn-2fa-secret-code {
+    background: #f5f5f5;
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    letter-spacing: 2px;
+    color: #333;
+    display: inline-block;
+    margin-top: 5px;
+}
+
+/* Backup Codes */
+.userspn-2fa-backup-codes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.userspn-2fa-backup-code {
+    background: #f5f5f5;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-align: center;
+    display: block;
+    color: #333;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+#userspn-2fa-backup-codes-display {
+    background: #fff9e6;
+    border: 1px solid #ffd700;
+}
+
+/* Status indicators */
+.userspn-text-success {
+    color: #28a745;
+}
+
+.userspn-text-warning {
+    color: #ffc107;
+}
+
+.userspn-text-muted {
+    color: #6c757d;
+}
+
+.userspn-text-danger {
+    color: #dc3545;
+}
+
+/* Alerts */
+.userspn-alert {
+    padding: 12px 15px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    border: 1px solid transparent;
+}
+
+.userspn-alert-success {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    color: #155724;
+}
+
+.userspn-alert-danger {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+}
+
+.userspn-alert-warning {
+    background-color: #fff3cd;
+    border-color: #ffeaa7;
+    color: #856404;
+}
+
+.userspn-alert-info {
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+    color: #0c5460;
+}
+
+/* Radio labels */
+.userspn-radio-label {
+    cursor: pointer;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #f9f9f9;
+    transition: all 0.3s ease;
+}
+
+.userspn-radio-label:hover {
+    background: #f0f0f0;
+    border-color: #ccc;
+}
+
+.userspn-radio-label input[type="radio"] {
+    margin-right: 8px;
+}
+
+.userspn-radio-label input[type="radio"]:checked + span {
+    font-weight: 600;
+    color: #333;
+}
+
+/* Verification code input */
+#userspn-2fa-verify-code-app {
+    text-align: center;
+    font-size: 18px;
+    letter-spacing: 3px;
+    font-weight: 600;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+/* Disable confirmation section */
+#userspn-2fa-disable-confirm {
+    background: #fff5f5;
+    padding: 15px;
+    border-radius: 4px;
+    border: 1px solid #ffcccb;
+}
+
+/* Utility classes */
+.userspn-mt-5 {
+    margin-top: 5px;
+}
+
+.userspn-mt-10 {
+    margin-top: 10px;
+}
+
+.userspn-mt-15 {
+    margin-top: 15px;
+}
+
+.userspn-mt-20 {
+    margin-top: 20px;
+}
+
+.userspn-mb-5 {
+    margin-bottom: 5px;
+}
+
+.userspn-mb-10 {
+    margin-bottom: 10px;
+}
+
+.userspn-mb-15 {
+    margin-bottom: 15px;
+}
+
+.userspn-ml-10 {
+    margin-left: 10px;
+}
+
+.userspn-mr-5 {
+    margin-right: 5px;
+}
+
+.userspn-p-10 {
+    padding: 10px;
+}
+
+.userspn-p-15 {
+    padding: 15px;
+}
+
+.userspn-bg-light {
+    background-color: #f8f9fa;
+}
+
+.userspn-border-radius-5 {
+    border-radius: 5px;
+}
+
+.userspn-font-weight-bold {
+    font-weight: 600;
+}
+
+.userspn-font-size-16 {
+    font-size: 16px;
+}
+
+.userspn-vertical-align-middle {
+    vertical-align: middle;
+}
+
+.userspn-text-align-center {
+    text-align: center;
+}
+
+.userspn-text-align-right {
+    text-align: right;
+}
+
+.userspn-width-100-percent {
+    width: 100%;
+}
+
+.userspn-display-block {
+    display: block;
+}
+
+.userspn-display-inline-block {
+    display: inline-block;
+}
+
+.userspn-display-none {
+    display: none !important;
+}
+
+.userspn-display-none-soft {
+    display: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .userspn-2fa-backup-codes-grid {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 8px;
+    }
+
+    .userspn-2fa-backup-code {
+        padding: 8px;
+        font-size: 12px;
+    }
+
+    .userspn-2fa-qr-image {
+        max-width: 160px;
+    }
+}
+
+@media (max-width: 480px) {
+    .userspn-2fa-backup-codes-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}

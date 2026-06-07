@@ -771,8 +771,8 @@ class USERSPN_Settings
       'type' => 'checkbox',
       'parent' => 'this userspn_newsletter',
       'parent_option' => 'on',
-      'label' => __('Eliminar cuentas no activadas', 'userspn'),
-      'description' => __('Cuando esta opción está activa, el sistema eliminará automáticamente las cuentas de usuarios que se hayan registrado en la newsletter pero no hayan activado su cuenta después de un número determinado de días.', 'userspn'),
+      'label' => __('Delete unactivated accounts', 'userspn'),
+      'description' => __('When this option is active, the system will automatically delete user accounts that have registered for the newsletter but have not activated their account after a specified number of days.', 'userspn'),
     ];
     $userspn_options['userspn_newsletter_activation_delete_days'] = [
       'id' => 'userspn_newsletter_activation_delete_days',
@@ -781,11 +781,11 @@ class USERSPN_Settings
       'type' => 'number',
       'parent' => 'userspn_newsletter_activation_delete_inactive',
       'parent_option' => 'on',
-      'label' => __('Días para eliminar cuenta no activada', 'userspn'),
+      'label' => __('Days to delete unactivated account', 'userspn'),
       'placeholder' => '5',
       'value' => '5',
       'min' => '1',
-      'description' => __('Número de días que deben pasar desde el registro para que se elimine la cuenta si no ha sido activada. Por defecto: 5 días.', 'userspn'),
+      'description' => __('Number of days that must pass since registration for the account to be deleted if it has not been activated. Default: 5 days.', 'userspn'),
     ];
     $userspn_options['userspn_section_newsletter_end'] = [
       'section' => 'end',
@@ -795,6 +795,83 @@ class USERSPN_Settings
       'section' => 'start',
       'label' => __('Security Settings', 'userspn'),
     ];
+
+    // 2FA Settings
+    $userspn_options['userspn_2fa_enabled'] = [
+      'id' => 'userspn_2fa_enabled',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'input',
+      'type' => 'checkbox',
+      'parent' => 'this',
+      'label' => __('Enable Two-Factor Authentication (2FA)', 'userspn'),
+      'description' => __('Enable two-factor authentication to add an extra layer of security to user accounts.', 'userspn'),
+    ];
+
+    $userspn_options['userspn_2fa_method'] = [
+      'id' => 'userspn_2fa_method',
+      'class' => 'userspn-select userspn-width-100-percent',
+      'input' => 'select',
+      'value' => get_option('userspn_2fa_method', 'app'),
+      'parent' => 'userspn_2fa_enabled',
+      'parent_option' => 'on',
+      'label' => __('2FA Method', 'userspn'),
+      'description' => __('Choose the two-factor authentication method.', 'userspn'),
+      'options' => [
+        'app' => __('Authenticator App (Google Authenticator, Authy, etc.)', 'userspn'),
+        'email' => __('Email verification code', 'userspn'),
+      ],
+    ];
+
+    $userspn_options['userspn_2fa_force_roles'] = [
+      'id' => 'userspn_2fa_force_roles',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'input',
+      'type' => 'checkbox',
+      'parent' => 'this userspn_2fa_enabled',
+      'parent_option' => 'on',
+      'label' => __('Specify roles to which 2FA will apply', 'userspn'),
+      'description' => __('When enabled, you can select specific user roles that will be required to use 2FA.', 'userspn'),
+    ];
+
+    // Get WordPress roles
+    global $wp_roles;
+    if (!isset($wp_roles)) {
+      $wp_roles = new WP_Roles();
+    }
+    $all_roles = $wp_roles->get_names();
+    $role_options = [];
+    foreach ($all_roles as $role_key => $role_name) {
+      $role_options[$role_key] = translate_user_role($role_name);
+    }
+
+    $userspn_options['userspn_2fa_roles'] = [
+      'id' => 'userspn_2fa_roles',
+      'class' => 'userspn-select userspn-width-100-percent',
+      'input' => 'select',
+      'type' => 'multiselect',
+      'parent' => 'userspn_2fa_force_roles',
+      'parent_option' => 'on',
+      'label' => __('Select roles for 2FA', 'userspn'),
+      'description' => __('Select the user roles that will be required to use two-factor authentication. Hold Ctrl (Windows) or Cmd (Mac) to select multiple roles.', 'userspn'),
+      'options' => $role_options,
+      'multiple' => true,
+      'size' => min(count($role_options), 6),
+    ];
+
+    $userspn_options['userspn_2fa_grace_period'] = [
+      'id' => 'userspn_2fa_grace_period',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'input',
+      'type' => 'number',
+      'parent' => 'userspn_2fa_enabled',
+      'parent_option' => 'on',
+      'label' => __('2FA Setup Grace Period (days)', 'userspn'),
+      'placeholder' => '7',
+      'min' => '0',
+      'max' => '30',
+      'description' => __('Number of days users have to set up 2FA after it becomes required. Set to 0 to require immediate setup.', 'userspn'),
+    ];
+
     $userspn_options['userspn_email_code_login_enabled'] = [
       'id' => 'userspn_email_code_login_enabled',
       'class' => 'userspn-input userspn-width-100-percent',
@@ -1497,50 +1574,50 @@ class USERSPN_Settings
 
     $period_labels = [
       'day'   => __('24h', 'userspn'),
-      'week'  => __('7 días', 'userspn'),
-      'month' => __('30 días', 'userspn'),
-      'year'  => __('1 año', 'userspn'),
+      'week'  => __('7 days', 'userspn'),
+      'month' => __('30 days', 'userspn'),
+      'year'  => __('1 year', 'userspn'),
       'all'   => __('total', 'userspn'),
     ];
     $period_label = $period_labels[$period];
 
     $period_select_labels = [
-      'day'   => __('Último día', 'userspn'),
-      'week'  => __('Última semana', 'userspn'),
-      'month' => __('Último mes', 'userspn'),
-      'year'  => __('Último año', 'userspn'),
+      'day'   => __('Last day', 'userspn'),
+      'week'  => __('Last week', 'userspn'),
+      'month' => __('Last month', 'userspn'),
+      'year'  => __('Last year', 'userspn'),
       'all'   => __('Desde siempre', 'userspn'),
     ];
 
     $period_chart_titles = [
-      'day'   => __('Evolución últimas 24 horas', 'userspn'),
-      'week'  => __('Evolución últimos 7 días', 'userspn'),
-      'month' => __('Evolución últimos 30 días', 'userspn'),
-      'year'  => __('Evolución último año', 'userspn'),
-      'all'   => __('Evolución histórica', 'userspn'),
+      'day'   => __('Evolution last 24 hours', 'userspn'),
+      'week'  => __('Evolution last 7 days', 'userspn'),
+      'month' => __('Evolution last 30 days', 'userspn'),
+      'year'  => __('Evolution last year', 'userspn'),
+      'all'   => __('Historical evolution', 'userspn'),
     ];
 
     $period_popup_titles = [
       'users' => [
-        'day'   => __('Usuarios nuevos en las últimas 24h', 'userspn'),
-        'week'  => __('Usuarios nuevos en la última semana', 'userspn'),
-        'month' => __('Usuarios nuevos en el último mes', 'userspn'),
-        'year'  => __('Usuarios nuevos en el último año', 'userspn'),
-        'all'   => __('Todos los usuarios', 'userspn'),
+        'day'   => __('New users in the last 24h', 'userspn'),
+        'week'  => __('New users in the last week', 'userspn'),
+        'month' => __('New users in the last month', 'userspn'),
+        'year'  => __('New users in the last year', 'userspn'),
+        'all'   => __('All users', 'userspn'),
       ],
       'newsletter' => [
-        'day'   => __('Altas en newsletter en las últimas 24h', 'userspn'),
-        'week'  => __('Altas en newsletter en la última semana', 'userspn'),
-        'month' => __('Altas en newsletter en el último mes', 'userspn'),
-        'year'  => __('Altas en newsletter en el último año', 'userspn'),
-        'all'   => __('Todas las altas en newsletter', 'userspn'),
+        'day'   => __('Newsletter registrations in the last 24 hours', 'userspn'),
+        'week'  => __('Newsletter registrations in the last week', 'userspn'),
+        'month' => __('Newsletter registrations in the last month', 'userspn'),
+        'year'  => __('Newsletter registrations in the last year', 'userspn'),
+        'all'   => __('All Newsletter registrations', 'userspn'),
       ],
       'logins' => [
-        'day'   => __('Accesos en las últimas 24h', 'userspn'),
-        'week'  => __('Accesos en la última semana', 'userspn'),
-        'month' => __('Accesos en el último mes', 'userspn'),
-        'year'  => __('Accesos en el último año', 'userspn'),
-        'all'   => __('Todos los accesos', 'userspn'),
+        'day'   => __('Logins in the last 24h', 'userspn'),
+        'week'  => __('Logins in the last week', 'userspn'),
+        'month' => __('Logins in the last month', 'userspn'),
+        'year'  => __('Logins in the last year', 'userspn'),
+        'all'   => __('All logins', 'userspn'),
       ],
     ];
 
@@ -1553,9 +1630,9 @@ class USERSPN_Settings
     ?>
     <div class="userspn-dashboard userspn-max-width-1000 userspn-margin-auto userspn-mt-50 userspn-mb-50">
       <div class="userspn-dashboard-header">
-        <h1><?php esc_html_e('Dashboard de Analíticas', 'userspn'); ?></h1>
+        <h1><?php esc_html_e('Analytics Dashboard', 'userspn'); ?></h1>
         <div class="userspn-period-selector">
-          <label for="userspn-period-select"><i class="material-icons-outlined userspn-vertical-align-middle">date_range</i> <?php esc_html_e('Periodo:', 'userspn'); ?></label>
+          <label for="userspn-period-select"><i class="material-icons-outlined userspn-vertical-align-middle">date_range</i> <?php esc_html_e('Period:', 'userspn'); ?></label>
           <select id="userspn-period-select">
             <?php foreach ($period_select_labels as $value => $label): ?>
               <option value="<?php echo esc_attr($value); ?>" <?php selected($period, $value); ?>><?php echo esc_html($label); ?></option>
@@ -1566,7 +1643,7 @@ class USERSPN_Settings
       <div class="userspn-dashboard-widgets" style="display:flex;gap:30px;margin-bottom:30px;">
         <div class="userspn-dashboard-widget userspn-bg-primary" data-popup="userspn-users-week" data-widget="users"
           style="flex:1;cursor:pointer;">
-          <div class="userspn-dashboard-widget-title"><?php printf(esc_html__('Usuarios nuevos (%s)', 'userspn'), esc_html($period_label)); ?></div>
+          <div class="userspn-dashboard-widget-title"><?php printf(esc_html__('New users (%s)', 'userspn'), esc_html($period_label)); ?></div>
           <div class="userspn-dashboard-widget-value" style="font-size:2em;font-weight:bold;">
             <?php echo esc_html($users_last_week['count']); ?></div>
         </div>
@@ -1578,7 +1655,7 @@ class USERSPN_Settings
         </div>
         <div class="userspn-dashboard-widget userspn-bg-accent" data-popup="userspn-last-logins" data-widget="logins"
           style="flex:1;cursor:pointer;">
-          <div class="userspn-dashboard-widget-title"><?php printf(esc_html__('Accesos (%s)', 'userspn'), esc_html($period_label)); ?></div>
+          <div class="userspn-dashboard-widget-title"><?php printf(esc_html__('Logins (%s)', 'userspn'), esc_html($period_label)); ?></div>
           <div class="userspn-dashboard-widget-value" style="font-size:2em;font-weight:bold;">
             <?php echo esc_html($last_logins['count']); ?></div>
         </div>
@@ -1591,7 +1668,7 @@ class USERSPN_Settings
             <div class="userspn-chart-canvas-wrap"><canvas id="userspn-chart-combined"></canvas></div>
           </div>
           <div class="userspn-chart-card">
-            <h3><i class="material-icons-outlined userspn-vertical-align-middle">person_add</i> <?php esc_html_e('Usuarios nuevos', 'userspn'); ?></h3>
+            <h3><i class="material-icons-outlined userspn-vertical-align-middle">person_add</i> <?php esc_html_e('New users', 'userspn'); ?></h3>
             <div class="userspn-chart-canvas-wrap"><canvas id="userspn-chart-users"></canvas></div>
           </div>
           <div class="userspn-chart-card">
@@ -1663,14 +1740,14 @@ class USERSPN_Settings
         };
 
         // Chart labels
-        var chartLabelUsers = '<?php echo esc_js(__('Usuarios nuevos', 'userspn')); ?>';
+        var chartLabelUsers = '<?php echo esc_js(__('New users', 'userspn')); ?>';
         var chartLabelNewsletter = '<?php echo esc_js(__('Newsletter', 'userspn')); ?>';
-        var chartLabelLogins = '<?php echo esc_js(__('Accesos', 'userspn')); ?>';
+        var chartLabelLogins = '<?php echo esc_js(__('Logins', 'userspn')); ?>';
 
         // Widget label templates
-        var widgetLabelUsers = '<?php echo esc_js(__('Usuarios nuevos (%s)', 'userspn')); ?>';
+        var widgetLabelUsers = '<?php echo esc_js(__('New users (%s)', 'userspn')); ?>';
         var widgetLabelNewsletter = '<?php echo esc_js(__('Newsletter (%s)', 'userspn')); ?>';
-        var widgetLabelLogins = '<?php echo esc_js(__('Accesos (%s)', 'userspn')); ?>';
+        var widgetLabelLogins = '<?php echo esc_js(__('Logins (%s)', 'userspn')); ?>';
 
         // Chart creation functions
         function createCombinedChart(chartsData) {
@@ -2208,10 +2285,10 @@ class USERSPN_Settings
     if (!empty($users)) {
       $html .= '<table class="userspn-analytics-table">';
       $html .= '<thead><tr>';
-      $html .= '<th>' . esc_html__('Usuario', 'userspn') . '</th>';
+      $html .= '<th>' . esc_html__('User', 'userspn') . '</th>';
       $html .= '<th>' . esc_html__('Email', 'userspn') . '</th>';
-      $html .= '<th>' . esc_html__('Datos del registro', 'userspn') . '</th>';
-      $html .= '<th>' . esc_html__('Acciones', 'userspn') . '</th>';
+      $html .= '<th>' . esc_html__('Registration data', 'userspn') . '</th>';
+      $html .= '<th>' . esc_html__('Actions', 'userspn') . '</th>';
       $html .= '</tr></thead><tbody>';
       foreach ($users as $user) {
         $edit_url = admin_url('user-edit.php?user_id=' . $user->ID);
@@ -2226,7 +2303,7 @@ class USERSPN_Settings
         $html .= '</a></td>';
         $html .= '<td>';
 
-        // Obtener página de registro
+        // Get registration page
         $registration_page = get_user_meta($user->ID, 'userspn_registration_page', true);
 
         if (!empty($registration_page)) {
@@ -2245,7 +2322,7 @@ class USERSPN_Settings
           $html .= '</div>';
         }
 
-        // Fecha de registro
+        // Registration date
         $html .= '<div>';
         $html .= '<i class="material-icons-outlined userspn-analytics-icon" style="font-size: 14px; vertical-align: middle;">calendar_today</i>';
         $html .= '<span style="font-size: 11px;">';
@@ -2255,7 +2332,7 @@ class USERSPN_Settings
 
         $html .= '</td>';
         $html .= '<td class="userspn-analytics-actions">';
-        $html .= '<a href="' . esc_url($edit_url) . '" target="_blank" class="userspn-tooltip" title="' . esc_attr__('Editar perfil', 'userspn') . '">';
+        $html .= '<a href="' . esc_url($edit_url) . '" target="_blank" class="userspn-tooltip" title="' . esc_attr__('Edit profile', 'userspn') . '">';
         $html .= '<i class="material-icons-outlined">edit</i></a>';
         $html .= '<a href="mailto:' . esc_attr($user->user_email) . '" class="userspn-tooltip" title="' . esc_attr__('Enviar email', 'userspn') . '">';
         $html .= '<i class="material-icons-outlined">mail</i></a>';
@@ -2269,7 +2346,7 @@ class USERSPN_Settings
       }
       $html .= '</tbody></table>';
     } else {
-      $html .= '<p class="userspn-analytics-empty"><i class="material-icons-outlined userspn-analytics-icon">info</i>' . esc_html__('No hay usuarios nuevos en este periodo', 'userspn') . '</p>';
+      $html .= '<p class="userspn-analytics-empty"><i class="material-icons-outlined userspn-analytics-icon">info</i>' . esc_html__('There are no new users during this period', 'userspn') . '</p>';
     }
     return [
       'count' => count($users),
@@ -2308,10 +2385,10 @@ class USERSPN_Settings
     if (!empty($users)) {
       $html .= '<table class="userspn-analytics-table">';
       $html .= '<thead><tr>';
-      $html .= '<th>' . esc_html__('Usuario', 'userspn') . '</th>';
+      $html .= '<th>' . esc_html__('User', 'userspn') . '</th>';
       $html .= '<th>' . esc_html__('Email', 'userspn') . '</th>';
-      $html .= '<th>' . esc_html__('Fecha de alta', 'userspn') . '</th>';
-      $html .= '<th>' . esc_html__('Acciones', 'userspn') . '</th>';
+      $html .= '<th>' . esc_html__('Registration date', 'userspn') . '</th>';
+      $html .= '<th>' . esc_html__('Actions', 'userspn') . '</th>';
       $html .= '</tr></thead><tbody>';
       foreach ($users as $user) {
         $edit_url = admin_url('user-edit.php?user_id=' . $user->ID);
@@ -2328,9 +2405,9 @@ class USERSPN_Settings
         $html .= esc_html(date_i18n(get_option('date_format') . ' H:i', strtotime($user->user_registered)));
         $html .= '</td>';
         $html .= '<td class="userspn-analytics-actions">';
-        $html .= '<a href="' . esc_url($edit_url) . '" target="_blank" class="userspn-tooltip" title="' . esc_attr__('Editar perfil', 'userspn') . '">';
+        $html .= '<a href="' . esc_url($edit_url) . '" target="_blank" class="userspn-tooltip" title="' . esc_attr__('Edit profile', 'userspn') . '">';
         $html .= '<i class="material-icons-outlined">edit</i></a>';
-        $html .= '<a href="mailto:' . esc_attr($user->user_email) . '" class="userspn-tooltip" title="' . esc_attr__('Enviar email', 'userspn') . '">';
+        $html .= '<a href="mailto:' . esc_attr($user->user_email) . '" class="userspn-tooltip" title="' . esc_attr__('Send email', 'userspn') . '">';
         $html .= '<i class="material-icons-outlined">mail</i></a>';
         if ($auto_login_on && !user_can($user->ID, 'administrator')) {
           $login_url = $user_functions->userspn_link_magic($user->ID, home_url());
@@ -2342,7 +2419,7 @@ class USERSPN_Settings
       }
       $html .= '</tbody></table>';
     } else {
-      $html .= '<p class="userspn-analytics-empty"><i class="material-icons-outlined userspn-analytics-icon">info</i>' . esc_html__('No hay altas en newsletter en este periodo', 'userspn') . '</p>';
+      $html .= '<p class="userspn-analytics-empty"><i class="material-icons-outlined userspn-analytics-icon">info</i>' . esc_html__('There were no newsletter sign-ups during this period.', 'userspn') . '</p>';
     }
     return [
       'count' => count($users),
@@ -2384,10 +2461,10 @@ class USERSPN_Settings
     if (!empty($users)) {
       $html .= '<table class="userspn-analytics-table">';
       $html .= '<thead><tr>';
-      $html .= '<th>' . esc_html__('Usuario', 'userspn') . '</th>';
+      $html .= '<th>' . esc_html__('User', 'userspn') . '</th>';
       $html .= '<th>' . esc_html__('Email', 'userspn') . '</th>';
-      $html .= '<th>' . esc_html__('Último acceso', 'userspn') . '</th>';
-      $html .= '<th>' . esc_html__('Acciones', 'userspn') . '</th>';
+      $html .= '<th>' . esc_html__('Last login', 'userspn') . '</th>';
+      $html .= '<th>' . esc_html__('Actions', 'userspn') . '</th>';
       $html .= '</tr></thead><tbody>';
       foreach ($users as $user) {
         $last_login = get_user_meta($user->ID, 'userspn_user_last_login', true);
@@ -2407,9 +2484,9 @@ class USERSPN_Settings
           $html .= esc_html(date_i18n(get_option('date_format') . ' H:i', intval($last_login)));
           $html .= '</td>';
           $html .= '<td class="userspn-analytics-actions">';
-          $html .= '<a href="' . esc_url($edit_url) . '" target="_blank" class="userspn-tooltip" title="' . esc_attr__('Editar perfil', 'userspn') . '">';
+          $html .= '<a href="' . esc_url($edit_url) . '" target="_blank" class="userspn-tooltip" title="' . esc_attr__('Edit profile', 'userspn') . '">';
           $html .= '<i class="material-icons-outlined">edit</i></a>';
-          $html .= '<a href="mailto:' . esc_attr($user->user_email) . '" class="userspn-tooltip" title="' . esc_attr__('Enviar email', 'userspn') . '">';
+          $html .= '<a href="mailto:' . esc_attr($user->user_email) . '" class="userspn-tooltip" title="' . esc_attr__('Send email', 'userspn') . '">';
           $html .= '<i class="material-icons-outlined">mail</i></a>';
           if ($auto_login_on && !user_can($user->ID, 'administrator')) {
             $login_url = $user_functions->userspn_link_magic($user->ID, home_url());
@@ -2422,7 +2499,7 @@ class USERSPN_Settings
       }
       $html .= '</tbody></table>';
     } else {
-      $html .= '<p class="userspn-analytics-empty"><i class="material-icons-outlined userspn-analytics-icon">info</i>' . esc_html__('No hay registros de accesos en este periodo', 'userspn') . '</p>';
+      $html .= '<p class="userspn-analytics-empty"><i class="material-icons-outlined userspn-analytics-icon">info</i>' . esc_html__('There are no access records for this period', 'userspn') . '</p>';
     }
     return [
       'count' => $login_count ?: count($users),

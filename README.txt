@@ -4,7 +4,7 @@ Donate link: https://padresenlanube.com/
 Tags: user management, users, register, login, contacts
 Requires at least: 3.0.1
 Tested up to: 7.0
-Stable tag: 1.1.40
+Stable tag: 1.1.49
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Streamline user management on your WordPress site with this powerful plugin. Enable custom forms, secure login, and seamless profile management.
@@ -50,6 +50,17 @@ All form fields support: custom CSS classes, required field validation, placehol
 * **Registration Source Tracking**: Automatically tracks which page users registered from, storing the URL in user metadata. Includes admin column with filtering capabilities to analyze user acquisition sources and registration patterns.
 
 **Security Features:**
+
+* **Two-Factor Authentication (2FA)**: Complete two-factor authentication system that adds an extra layer of security to user accounts. Supports multiple authentication methods including Authenticator Apps (Google Authenticator, Authy, Microsoft Authenticator, etc.) via TOTP (Time-based One-Time Password) and email-based verification codes. Features include:
+  - Role-based enforcement with customizable role selection for mandatory 2FA
+  - Configurable grace period allowing users time to set up 2FA before it becomes mandatory
+  - QR code generation for easy app configuration with automatic secret key generation
+  - Emergency backup codes (10 single-use codes with XXXX-XXXX format) for account recovery
+  - Seamless WordPress login integration with dedicated verification screen
+  - Email notifications for security events (2FA enabled, disabled, backup code used)
+  - MailPN integration for customizable notification templates with fallback to wp_mail
+  - Complete user interface in profile Advanced tab for easy 2FA management
+  - Support for resending verification codes and using backup codes during login
 
 * **Google reCAPTCHA v3 Integration**: Invisible bot protection with score-based verification. Configurable threshold settings and automatic suspicious registration detection with email notifications to administrators.
 
@@ -260,7 +271,7 @@ For developer support, bug reports, or feature requests:
 
 == Changelog ==
 
-= 1.1.40 =
+= 1.1.42 =
 
 - Add Facebook OAuth authentication handler with token exchange and user profile retrieval
 - Add GitHub OAuth authentication handler with separate email endpoint handling

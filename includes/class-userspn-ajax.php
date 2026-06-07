@@ -687,11 +687,11 @@ class USERSPN_Ajax {
               echo wp_json_encode(['success' => true, 'message' => 'Avatar removed successfully']);
               exit;
             } else {
-              echo wp_json_encode(['success' => false, 'message' => 'No avatar to remove']);
+              echo wp_json_encode(['success' => false, 'message' => __('No avatar to remove', 'userspn')]);
               exit;
             }
           } else {
-            echo wp_json_encode(['success' => false, 'message' => 'Invalid user ID']);
+            echo wp_json_encode(['success' => false, 'message' => __('Invalid user ID', 'userspn')]);
             exit;
           }
           break;
@@ -754,21 +754,21 @@ class USERSPN_Ajax {
           $user_id = !empty($_POST['user_id']) ? intval($_POST['user_id']) : 0;
           if ($user_id) {
             USERSPN_Security::mark_user_as_bot($user_id);
-            wp_send_json_success('User marked as bot');
+            wp_send_json_success(__('User marked as bot', 'userspn'));
           } else {
-            wp_send_json_error('Invalid user ID');
+            wp_send_json_error(__('Invalid user ID', 'userspn'));
           }
           break;
         case 'userspn_mark_user_as_human':
           if (!current_user_can('manage_options')) {
-            wp_send_json_error('Insufficient permissions');
+            wp_send_json_error(__('Insufficient permissions', 'userspn'));
           }
           $user_id = !empty($_POST['user_id']) ? intval($_POST['user_id']) : 0;
           if ($user_id) {
             USERSPN_Security::mark_user_as_human($user_id);
-            wp_send_json_success('User marked as human');
+            wp_send_json_success(__('User marked as human', 'userspn'));
           } else {
-            wp_send_json_error('Invalid user ID');
+            wp_send_json_error(__('Invalid user ID', 'userspn'));
           }
           break;
         case 'userspn_delete_confirmed_bots':
@@ -1141,7 +1141,7 @@ class USERSPN_Ajax {
           $import = json_decode($raw, true);
 
           if (!is_array($import) || empty($import)) {
-            echo wp_json_encode(['error_key' => 'invalid_data', 'error_content' => 'Invalid settings data.']);
+            echo wp_json_encode(['error_key' => 'invalid_data', 'error_content' => __('Invalid settings data.', 'userspn')]);
             exit;
           }
 
@@ -1234,6 +1234,183 @@ class USERSPN_Ajax {
           }
 
           echo wp_json_encode(['error_key' => '']);
+          exit;
+          break;
+
+        // 2FA Cases
+        case 'userspn_2fa_generate_secret':
+          if (!is_user_logged_in()) {
+            echo wp_json_encode(['error' => __('You must be logged in.', 'userspn')]);
+            exit;
+          }
+
+          $user_id = get_current_user_id();
+          $secret = USERSPN_2FA::generate_secret();
+          $qr_code_url = USERSPN_2FA::get_qr_code_url($user_id, $secret);
+
+          // Temporarily store secret (not enabled yet)
+          update_user_meta($user_id, 'userspn_2fa_temp_secret', $secret);
+
+          echo wp_json_encode([
+            'success' => true,
+            'secret' => $secret,
+            'qr_code_url' => $qr_code_url,
+          ]);
+          exit;
+          break;
+
+        case 'userspn_2fa_enable_totp':
+          if (!is_user_logged_in()) {
+            echo wp_json_encode(['error' => __('You must be logged in.', 'userspn')]);
+            exit;
+          }
+
+          $user_id = get_current_user_id();
+          $code = isset($_POST['code']) ? sanitize_text_field($_POST['code']) : '';
+
+          // Get temporary secret
+          $secret = get_user_meta($user_id, 'userspn_2fa_temp_secret', true);
+
+          if (empty($secret)) {
+            echo wp_json_encode(['error' => __('No secret found. Please generate a new QR code.', 'userspn')]);
+            exit;
+          }
+
+          // Verify the code
+          if (!USERSPN_2FA::verify_totp($secret, $code)) {
+            echo wp_json_encode(['error' => __('Invalid verification code. Please try again.', 'userspn')]);
+            exit;
+          }
+
+          // Enable 2FA
+          USERSPN_2FA::enable_totp_for_user($user_id, $secret);
+
+          // Clean up temp secret
+          delete_user_meta($user_id, 'userspn_2fa_temp_secret');
+
+          // Get backup codes to show to user
+          $backup_codes = get_user_meta($user_id, 'userspn_2fa_backup_codes', true);
+          $plain_backup_codes = USERSPN_2FA::generate_backup_codes();
+
+          // Send notification email
+          $userspn_mailing = new USERSPN_Mailing();
+          $userspn_mailing->userspn_send_2fa_enabled_email($user_id, 'app');
+
+          echo wp_json_encode([
+            'success' => true,
+            'message' => __('Two-factor authentication has been enabled successfully.', 'userspn'),
+            'backup_codes' => $plain_backup_codes,
+          ]);
+          exit;
+          break;
+
+        case 'userspn_2fa_enable_email':
+          if (!is_user_logged_in()) {
+            echo wp_json_encode(['error' => __('You must be logged in.', 'userspn')]);
+            exit;
+          }
+
+          $user_id = get_current_user_id();
+          USERSPN_2FA::enable_email_2fa_for_user($user_id);
+
+          // Get backup codes to show to user
+          $plain_backup_codes = USERSPN_2FA::generate_backup_codes();
+
+          // Send notification email
+          $userspn_mailing = new USERSPN_Mailing();
+          $userspn_mailing->userspn_send_2fa_enabled_email($user_id, 'email');
+
+          echo wp_json_encode([
+            'success' => true,
+            'message' => __('Two-factor authentication via email has been enabled successfully.', 'userspn'),
+            'backup_codes' => $plain_backup_codes,
+          ]);
+          exit;
+          break;
+
+        case 'userspn_2fa_disable':
+          if (!is_user_logged_in()) {
+            echo wp_json_encode(['error' => __('You must be logged in.', 'userspn')]);
+            exit;
+          }
+
+          $user_id = get_current_user_id();
+          $password = isset($_POST['password']) ? $_POST['password'] : '';
+
+          // Verify password before disabling
+          $user = wp_get_current_user();
+          if (!wp_check_password($password, $user->user_pass, $user_id)) {
+            echo wp_json_encode(['error' => __('Invalid password. Please try again.', 'userspn')]);
+            exit;
+          }
+
+          // Check if 2FA is required for this user
+          if (USERSPN_2FA::is_2fa_required_for_user($user_id)) {
+            echo wp_json_encode(['error' => __('Two-factor authentication is required for your role and cannot be disabled.', 'userspn')]);
+            exit;
+          }
+
+          USERSPN_2FA::disable_2fa_for_user($user_id);
+
+          // Send notification email
+          $userspn_mailing = new USERSPN_Mailing();
+          $userspn_mailing->userspn_send_2fa_disabled_email($user_id);
+
+          echo wp_json_encode([
+            'success' => true,
+            'message' => __('Two-factor authentication has been disabled.', 'userspn'),
+          ]);
+          exit;
+          break;
+
+        case 'userspn_2fa_generate_backup_codes':
+          if (!is_user_logged_in()) {
+            echo wp_json_encode(['error' => __('You must be logged in.', 'userspn')]);
+            exit;
+          }
+
+          $user_id = get_current_user_id();
+
+          if (!USERSPN_2FA::user_has_2fa_enabled($user_id)) {
+            echo wp_json_encode(['error' => __('Two-factor authentication is not enabled.', 'userspn')]);
+            exit;
+          }
+
+          // Generate new backup codes
+          $backup_codes = USERSPN_2FA::generate_backup_codes();
+          USERSPN_2FA::save_backup_codes($user_id, $backup_codes);
+
+          echo wp_json_encode([
+            'success' => true,
+            'backup_codes' => $backup_codes,
+            'message' => __('New backup codes have been generated. Previous codes are no longer valid.', 'userspn'),
+          ]);
+          exit;
+          break;
+
+        case 'userspn_2fa_get_status':
+          if (!is_user_logged_in()) {
+            echo wp_json_encode(['error' => __('You must be logged in.', 'userspn')]);
+            exit;
+          }
+
+          $user_id = get_current_user_id();
+          $is_enabled = USERSPN_2FA::user_has_2fa_enabled($user_id);
+          $method = get_user_meta($user_id, 'userspn_2fa_method', true);
+          $backup_codes_count = USERSPN_2FA::get_backup_codes_count($user_id);
+          $is_required = USERSPN_2FA::is_2fa_required_for_user($user_id);
+          $is_in_grace = USERSPN_2FA::is_in_grace_period($user_id);
+          $grace_days = USERSPN_2FA::get_grace_period_remaining_days($user_id);
+
+          echo wp_json_encode([
+            'success' => true,
+            'enabled' => $is_enabled,
+            'method' => $method ?: 'none',
+            'backup_codes_count' => $backup_codes_count,
+            'is_required' => $is_required,
+            'is_in_grace_period' => $is_in_grace,
+            'grace_days_remaining' => $grace_days,
+          ]);
           exit;
           break;
       }

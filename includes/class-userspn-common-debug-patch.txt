@@ -1,0 +1,97 @@
+# This is the section to replace (lines 186-209)
+
+# OLD CODE:
+				$has_pending = false;
+
+				if (!empty($userspn_fields)) {
+					foreach ($userspn_fields as $field) {
+						// Skip if not required
+						if (empty($field['required']) || !$field['required']) {
+							continue;
+						}
+
+						// Check if field is visible based on parent dependencies
+						$is_visible = $this->userspn_is_field_visible($field, $userspn_fields, $user_id);
+
+						// Only check if field is empty when it's actually visible
+						if ($is_visible && empty(get_user_meta($user_id, $field['id'], true))) {
+							$has_pending = true;
+							break;
+						}
+					}
+				}
+
+				if ($has_pending) {
+					wp_enqueue_script($this->plugin_name . '-profile-fields-validation', USERSPN_URL . 'assets/js/userspn-profile-fields-validation.js', ['jquery', $this->plugin_name . '-popups', $this->plugin_name], $this->version, false);
+				}
+
+# NEW CODE with debugging:
+				$has_pending = false;
+				$debug_fields = [];
+				$pending_fields = [];
+
+				if (!empty($userspn_fields)) {
+					foreach ($userspn_fields as $field) {
+						$field_id = isset($field['id']) ? $field['id'] : 'unknown';
+						$field_label = isset($field['label']) ? $field['label'] : $field_id;
+
+						// Debug info for this field
+						$debug_info = [
+							'id' => $field_id,
+							'label' => $field_label,
+							'required' => !empty($field['required']) && $field['required'],
+							'has_parent' => !empty($field['parent']) && $field['parent'] !== 'this',
+							'parent' => isset($field['parent']) ? $field['parent'] : null,
+							'parent_option' => isset($field['parent_option']) ? $field['parent_option'] : null,
+						];
+
+						// Skip if not required
+						if (empty($field['required']) || !$field['required']) {
+							$debug_info['status'] = 'skipped_not_required';
+							$debug_fields[] = $debug_info;
+							continue;
+						}
+
+						// Check if field is visible based on parent dependencies
+						$is_visible = $this->userspn_is_field_visible($field, $userspn_fields, $user_id);
+						$field_value = get_user_meta($user_id, $field['id'], true);
+
+						$debug_info['is_visible'] = $is_visible;
+						$debug_info['current_value'] = $field_value;
+						$debug_info['is_empty'] = empty($field_value);
+
+						// If has parent, get parent value for debugging
+						if (!empty($field['parent']) && $field['parent'] !== 'this') {
+							$debug_info['parent_current_value'] = get_user_meta($user_id, $field['parent'], true);
+						}
+
+						// Only check if field is empty when it's actually visible
+						if ($is_visible && empty($field_value)) {
+							$debug_info['status'] = 'PENDING - visible and empty';
+							$has_pending = true;
+							$pending_fields[] = $field_label . ' (' . $field_id . ')';
+						} elseif (!$is_visible) {
+							$debug_info['status'] = 'skipped_hidden';
+						} else {
+							$debug_info['status'] = 'completed';
+						}
+
+						$debug_fields[] = $debug_info;
+					}
+				}
+
+				// Pass debug info to JavaScript (always, even when no pending fields)
+				wp_localize_script($this->plugin_name, 'userspn_validation_debug', [
+					'enabled' => true,
+					'has_pending' => $has_pending,
+					'pending_count' => count($pending_fields),
+					'pending_fields' => $pending_fields,
+					'all_fields' => $debug_fields,
+				]);
+
+				// Enqueue debug script
+				wp_enqueue_script($this->plugin_name . '-validation-debug', USERSPN_URL . 'assets/js/userspn-validation-debug.js', ['jquery', $this->plugin_name], $this->version, false);
+
+				if ($has_pending) {
+					wp_enqueue_script($this->plugin_name . '-profile-fields-validation', USERSPN_URL . 'assets/js/userspn-profile-fields-validation.js', ['jquery', $this->plugin_name . '-popups', $this->plugin_name], $this->version, false);
+				}

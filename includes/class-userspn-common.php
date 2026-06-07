@@ -184,20 +184,38 @@ class USERSPN_Common {
 				$userspn_fields = $plugin_user->userspn_user_register_get_fields([]);
 				$user_id = get_current_user_id();
 				$has_pending = false;
+				$pending_fields = [];
 
 				if (!empty($userspn_fields)) {
 					foreach ($userspn_fields as $field) {
-						if (!empty($field['required']) && $field['required'] && empty(get_user_meta($user_id, $field['id'], true))) {
+						// Skip if not required
+						if (empty($field['required']) || !$field['required']) {
+							continue;
+						}
+
+						// Check if field is visible based on parent dependencies
+						$is_visible = $this->userspn_is_field_visible($field, $userspn_fields, $user_id);
+						$field_value = get_user_meta($user_id, $field['id'], true);
+
+						// Only check if field is empty when it's actually visible
+						if ($is_visible && empty($field_value)) {
 							$has_pending = true;
-							break;
+							$field_id = isset($field['id']) ? $field['id'] : 'unknown';
+							$field_label = isset($field['label']) ? $field['label'] : $field_id;
+							$pending_fields[] = $field_label . ' (' . $field_id . ')';
 						}
 					}
 				}
 
+				// Pass pending fields info to JavaScript for validation message
 				if ($has_pending) {
+					wp_localize_script($this->plugin_name, 'userspn_validation_debug', [
+						'pending_fields' => $pending_fields,
+					]);
 					wp_enqueue_script($this->plugin_name . '-profile-fields-validation', USERSPN_URL . 'assets/js/userspn-profile-fields-validation.js', ['jquery', $this->plugin_name . '-popups', $this->plugin_name], $this->version, false);
 				}
-			}
+
+		}
 		}
 
 		$nonce = wp_create_nonce('userspn-nonce');
@@ -231,7 +249,7 @@ class USERSPN_Common {
 			$userspn_popup = !empty($_GET['userspn_popup']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_GET['userspn_popup'])) : '';
 			$userspn_tab = !empty($_GET['userspn_tab']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_GET['userspn_tab'])) : '';
 		}
-		
+
 		wp_localize_script($this->plugin_name, 'userspn_action', [
 			'action' => $userspn_action,
 			'btn_id' => $userspn_btn_id,
@@ -332,7 +350,7 @@ class USERSPN_Common {
 			'recaptcha_site_key' => $recaptcha_enabled ? $recaptcha_site_key : '',
 			'honeypot_enabled' => (get_option('userspn_honeypot_enabled') === 'on'),
 		]);
-			
+
 		$userspn_login = !empty($_GET['userspn_login']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_GET['userspn_login'])) : '';
 		$userspn_notice = !empty($_GET['userspn_notice']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_GET['userspn_notice'])) : '';
 
@@ -348,6 +366,64 @@ class USERSPN_Common {
 		USERSPN_Selector::instance();
 	}
 
+	/**
+	 * Check if a field is visible based on parent dependencies.
+	 *
+	 * @since    1.0.0
+	 * @param    array    $field          The field configuration
+	 * @param    array    $all_fields     All available fields
+	 * @param    int      $user_id        The user ID
+	 * @return   bool                     True if field is visible, false otherwise
+	 */
+	private function userspn_is_field_visible($field, $all_fields, $user_id) {
+		// Special case: hostpn_surname_alt is only required when identity type is NIF or NIE
+		if (isset($field['id']) && $field['id'] === 'hostpn_surname_alt') {
+			$identity_type = get_user_meta($user_id, 'hostpn_identity', true);
+			// Only consider this field required if identity is NIF or NIE
+			if ($identity_type !== 'nif' && $identity_type !== 'nie') {
+				return false; // Field is hidden/not required for other identity types
+			}
+		}
+
+		// If field has no parent dependency, it's always visible
+		if (empty($field['parent']) || $field['parent'] === 'this') {
+			return true;
+		}
+
+		$parent_field_id = $field['parent'];
+		$parent_option = !empty($field['parent_option']) ? $field['parent_option'] : '';
+
+		// Get parent field's current value
+		$parent_value = get_user_meta($user_id, $parent_field_id, true);
+
+		// Find parent field configuration
+		$parent_field_config = null;
+		foreach ($all_fields as $pf) {
+			if ($pf['id'] === $parent_field_id) {
+				$parent_field_config = $pf;
+				break;
+			}
+		}
+
+		// If parent field itself is hidden, child is also hidden (recursive check)
+		if ($parent_field_config && !$this->userspn_is_field_visible($parent_field_config, $all_fields, $user_id)) {
+			return false;
+		}
+
+		// Check if parent value matches the required option for this field to be visible
+		if (!empty($parent_option)) {
+			// For checkboxes, parent_option is 'on'
+			if ($parent_option === 'on') {
+				return ($parent_value === 'on' || $parent_value === '1' || $parent_value === 1 || $parent_value === true);
+			} else {
+				// For other fields, exact match
+				return ($parent_value === $parent_option);
+			}
+		}
+
+		return true;
+	}
+
   	public function userspn_body_classes($classes) {
 		$classes[] = 'userspn-body';
 
@@ -355,7 +431,7 @@ class USERSPN_Common {
 			$classes[] = 'userspn-body-unlogged';
 		}else{
 		$classes[] = 'userspn-body-logged-in';
-		
+
 		$user = new WP_User(get_current_user_id());
 		foreach ($user->roles as $role) {
 			$classes[] = 'userspn-body-' . $role;

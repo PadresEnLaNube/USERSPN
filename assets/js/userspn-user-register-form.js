@@ -41,6 +41,53 @@
     return recaptchaLoadPromise;
   }
 
+  /**
+   * Clean URL parameters after user registration to prevent popup from reopening
+   */
+  function userspn_clean_url_params() {
+    try {
+      if (window.history && window.history.replaceState) {
+        var currentUrl = window.location.href;
+        var url = new URL(currentUrl);
+        var hadParams = false;
+
+        // Remove popup-related parameters
+        var paramsToRemove = [
+          'hostpn_action',
+          'hostpn_popup',
+          'hostpn_tab',
+          'userspn_action',
+          'userspn_popup',
+          'userspn_tab',
+          'hostpn_btn_id',
+          'userspn_btn_id'
+        ];
+
+        paramsToRemove.forEach(function(param) {
+          if (url.searchParams.has(param)) {
+            url.searchParams.delete(param);
+            hadParams = true;
+          }
+        });
+
+        if (hadParams) {
+          var newUrl = url.toString();
+          console.log('[USERSPN] Cleaning URL:', currentUrl, '->', newUrl);
+
+          // Replace the current URL without reloading the page
+          window.history.replaceState({}, document.title, newUrl);
+
+          // Also update the href in case of refresh
+          if (window.history.pushState) {
+            window.history.replaceState(null, document.title, newUrl);
+          }
+        }
+      }
+    } catch (error) {
+      console.error('[USERSPN] Error cleaning URL:', error);
+    }
+  }
+
   $(document).ready(function() {
     var recaptchaEnabled = (typeof userspn_security !== 'undefined' && userspn_security.recaptcha_enabled && userspn_security.recaptcha_site_key);
 
@@ -158,6 +205,9 @@
 
             $('#userspn-login input#user_login').focus();
           }else if (response == 'userspn_profile_create_simple_success') {
+            // Clean URL immediately
+            userspn_clean_url_params();
+
             userspn_form.trigger('reset');
             userspn_get_main_message(userspn_i18n.user_created_check_email);
 
@@ -169,6 +219,9 @@
               $('.userspn-profile-wrapper').prepend('<div class="userspn-alert userspn-alert-warning user-created-check-email">' + userspn_i18n.user_created_check_email + '</div>');
             }
           }else {
+            // Clean URL immediately for any other success response
+            userspn_clean_url_params();
+
             $('.userspn-tab-links[data-userspn-id="userspn-tab-login"]').click();
 
             setTimeout(function() {

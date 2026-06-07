@@ -957,6 +957,28 @@ class USERSPN_Ajax_Nopriv {
           $redirect_url = home_url();
           if (isset($_POST['redirect_to']) && !empty($_POST['redirect_to'])) {
             $redirect_url = esc_url_raw(wp_unslash($_POST['redirect_to']));
+
+            // Limpiar parámetros de popup de la URL
+            $parsed_url = wp_parse_url($redirect_url);
+            if (isset($parsed_url['query'])) {
+              parse_str($parsed_url['query'], $params);
+              // Eliminar parámetros relacionados con popups
+              unset($params['hostpn_action'], $params['hostpn_popup'], $params['hostpn_tab']);
+              unset($params['userspn_action'], $params['userspn_popup'], $params['userspn_tab']);
+              unset($params['hostpn_btn_id'], $params['userspn_btn_id']);
+
+              // Reconstruir URL
+              $redirect_url = $parsed_url['scheme'] . '://' . $parsed_url['host'];
+              if (isset($parsed_url['path'])) {
+                $redirect_url .= $parsed_url['path'];
+              }
+              if (!empty($params)) {
+                $redirect_url .= '?' . http_build_query($params);
+              }
+              if (isset($parsed_url['fragment'])) {
+                $redirect_url .= '#' . $parsed_url['fragment'];
+              }
+            }
           }
 
           echo wp_json_encode([
@@ -1315,6 +1337,147 @@ class USERSPN_Ajax_Nopriv {
             ]);
             exit;
           }
+
+        // 2FA Login Cases
+        case 'userspn_2fa_send_email_code':
+          // This endpoint sends 2FA email code during login process
+          $userspn_email = isset($_POST['userspn_email']) ? sanitize_email(wp_unslash($_POST['userspn_email'])) : '';
+          $userspn_password = isset($_POST['userspn_password']) ? $_POST['userspn_password'] : '';
+
+          if (empty($userspn_email) || !is_email($userspn_email)) {
+            echo wp_json_encode([
+              'error' => esc_html(__('Invalid email address.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          // Verify user exists and password is correct
+          $user = get_user_by('email', $userspn_email);
+          if (!$user || !wp_check_password($userspn_password, $user->user_pass, $user->ID)) {
+            echo wp_json_encode([
+              'error' => esc_html(__('Invalid credentials.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          // Send 2FA code
+          $result = USERSPN_2FA::send_email_2fa_code($user->ID);
+          if (is_wp_error($result)) {
+            echo wp_json_encode([
+              'error' => $result->get_error_message(),
+            ]);
+            exit;
+          }
+
+          echo wp_json_encode([
+            'success' => true,
+            'message' => esc_html(__('Verification code sent to your email.', 'userspn')),
+          ]);
+          exit;
+
+        case 'userspn_2fa_verify_login':
+          // This endpoint verifies 2FA code and completes login
+          $userspn_email = isset($_POST['userspn_email']) ? sanitize_email(wp_unslash($_POST['userspn_email'])) : '';
+          $userspn_password = isset($_POST['userspn_password']) ? $_POST['userspn_password'] : '';
+          $userspn_2fa_code = isset($_POST['userspn_2fa_code']) ? sanitize_text_field(wp_unslash($_POST['userspn_2fa_code'])) : '';
+
+          if (empty($userspn_email) || !is_email($userspn_email)) {
+            echo wp_json_encode([
+              'error' => esc_html(__('Invalid email address.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          // Verify user exists and password is correct
+          $user = get_user_by('email', $userspn_email);
+          if (!$user || !wp_check_password($userspn_password, $user->user_pass, $user->ID)) {
+            echo wp_json_encode([
+              'error' => esc_html(__('Invalid credentials.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          $user_id = $user->ID;
+
+          // Verify 2FA code
+          if (!USERSPN_2FA::verify_2fa_code($user_id, $userspn_2fa_code)) {
+            echo wp_json_encode([
+              'error' => esc_html(__('Invalid verification code. Please try again.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          // Code is correct - complete login
+          wp_set_current_user($user_id);
+          wp_set_auth_cookie($user_id, true);
+          do_action('wp_login', $user->user_login, $user);
+
+          // Determinar URL de redirección
+          $redirect_url = home_url();
+          if (isset($_POST['redirect_to']) && !empty($_POST['redirect_to'])) {
+            $redirect_url = esc_url_raw(wp_unslash($_POST['redirect_to']));
+
+            // Limpiar parámetros de popup de la URL
+            $parsed_url = wp_parse_url($redirect_url);
+            if (isset($parsed_url['query'])) {
+              parse_str($parsed_url['query'], $params);
+              // Eliminar parámetros relacionados con popups
+              unset($params['hostpn_action'], $params['hostpn_popup'], $params['hostpn_tab']);
+              unset($params['userspn_action'], $params['userspn_popup'], $params['userspn_tab']);
+              unset($params['hostpn_btn_id'], $params['userspn_btn_id']);
+
+              // Reconstruir URL
+              $redirect_url = $parsed_url['scheme'] . '://' . $parsed_url['host'];
+              if (isset($parsed_url['path'])) {
+                $redirect_url .= $parsed_url['path'];
+              }
+              if (!empty($params)) {
+                $redirect_url .= '?' . http_build_query($params);
+              }
+              if (isset($parsed_url['fragment'])) {
+                $redirect_url .= '#' . $parsed_url['fragment'];
+              }
+            }
+          }
+
+          echo wp_json_encode([
+            'success' => true,
+            'message' => esc_html(__('Login successful!', 'userspn')),
+            'redirect_url' => $redirect_url,
+          ]);
+          exit;
+
+        case 'userspn_2fa_check_required':
+          // Check if user needs 2FA verification
+          $userspn_email = isset($_POST['userspn_email']) ? sanitize_email(wp_unslash($_POST['userspn_email'])) : '';
+          $userspn_password = isset($_POST['userspn_password']) ? $_POST['userspn_password'] : '';
+
+          if (empty($userspn_email) || !is_email($userspn_email)) {
+            echo wp_json_encode([
+              'error' => esc_html(__('Invalid email address.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          // Verify user exists and password is correct
+          $user = get_user_by('email', $userspn_email);
+          if (!$user || !wp_check_password($userspn_password, $user->user_pass, $user->ID)) {
+            // Don't reveal that credentials are invalid for security
+            echo wp_json_encode([
+              'requires_2fa' => false,
+            ]);
+            exit;
+          }
+
+          $user_id = $user->ID;
+          $has_2fa = USERSPN_2FA::user_has_2fa_enabled($user_id);
+          $method = get_user_meta($user_id, 'userspn_2fa_method', true);
+
+          echo wp_json_encode([
+            'requires_2fa' => $has_2fa,
+            'method' => $has_2fa ? $method : 'none',
+          ]);
+          exit;
       }
 
       echo wp_json_encode(['error_key' => '', ]);exit;
