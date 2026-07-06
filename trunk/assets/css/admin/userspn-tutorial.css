@@ -1,0 +1,342 @@
+/**
+ * UsersPN - Tutorial Onboarding Styles
+ *
+ * @package USERSPN
+ * @since 1.0.0
+ */
+
+/* Tutorial Overlay */
+.userspn-tutorial-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 999998;
+  display: none;
+}
+
+/* Spotlight Effect */
+.userspn-tutorial-spotlight {
+  position: fixed;
+  border: 3px solid var(--userspn-color-main, #b84a00);
+  border-radius: 8px;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.35), 0 0 30px rgba(184, 74, 0, 0.9);
+  pointer-events: none;
+  z-index: 999999;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  display: none;
+}
+
+/* Tutorial Box */
+.userspn-tutorial-box {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  z-index: 1000000;
+  max-width: 420px;
+  width: 90%;
+  max-height: 65vh;
+  display: flex;
+  flex-direction: column;
+  animation: userspnTutorialSlideIn 0.3s ease-out;
+}
+
+@keyframes userspnTutorialSlideIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -45%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+/* Tutorial Step */
+.userspn-tutorial-step {
+  display: none;
+}
+
+/* Tutorial Header */
+.userspn-tutorial-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 20px 14px;
+  border-bottom: 1px solid #e5e5e5;
+  flex-shrink: 0;
+  cursor: move;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.userspn-tutorial-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1d2327;
+}
+
+.userspn-tutorial-skip {
+  background: none;
+  border: none;
+  color: #787c82;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.userspn-tutorial-skip:hover {
+  background: #f0f0f1;
+  color: #1d2327;
+}
+
+.userspn-tutorial-skip .material-icons-outlined {
+  font-size: 20px;
+}
+
+/* Tutorial Content */
+.userspn-tutorial-content {
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+}
+
+.userspn-tutorial-content p {
+  margin: 0 0 16px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #50575e;
+}
+
+.userspn-tutorial-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* Tutorial Features List */
+.userspn-tutorial-features {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0;
+}
+
+.userspn-tutorial-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 0;
+  font-size: 14px;
+  color: #50575e;
+}
+
+.userspn-tutorial-features li .material-icons-outlined {
+  font-size: 20px;
+  color: var(--userspn-color-main, #b84a00);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* Tutorial Tip */
+.userspn-tutorial-tip {
+  background: #f0f6fc;
+  border: 1px solid #d0e4f7;
+  border-radius: 6px;
+  padding: 12px;
+  margin-top: 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.userspn-tutorial-tip .material-icons-outlined {
+  font-size: 20px;
+  color: #0073aa;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.userspn-tutorial-tip strong {
+  display: block;
+  margin-bottom: 4px;
+  color: #0073aa;
+}
+
+/* Tutorial Content Scrollbar */
+.userspn-tutorial-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.userspn-tutorial-content::-webkit-scrollbar-track {
+  background: #f0f0f1;
+  border-radius: 3px;
+}
+
+.userspn-tutorial-content::-webkit-scrollbar-thumb {
+  background: #c3c4c7;
+  border-radius: 3px;
+  transition: all 0.2s;
+}
+
+.userspn-tutorial-content::-webkit-scrollbar-thumb:hover {
+  background: var(--userspn-color-main, #b84a00);
+}
+
+/* Tutorial Footer */
+.userspn-tutorial-footer {
+  padding: 14px 20px 20px;
+  border-top: 1px solid #e5e5e5;
+  flex-shrink: 0;
+}
+
+/* Tutorial Progress */
+.userspn-tutorial-progress {
+  margin-bottom: 16px;
+}
+
+.userspn-tutorial-progress-text {
+  display: block;
+  font-size: 12px;
+  color: #787c82;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.userspn-tutorial-progress-bar {
+  height: 4px;
+  background: #e5e5e5;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.userspn-tutorial-progress-fill {
+  height: 100%;
+  background: var(--userspn-bg-color-main, #b84a00);
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+
+/* Tutorial Navigation */
+.userspn-tutorial-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.userspn-tutorial-next,
+.userspn-tutorial-prev,
+.userspn-tutorial-finish {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.userspn-tutorial-next .material-icons-outlined,
+.userspn-tutorial-prev .material-icons-outlined,
+.userspn-tutorial-finish .material-icons-outlined {
+  font-size: 18px;
+}
+
+.userspn-tutorial-prev {
+  margin-right: auto;
+}
+
+/* Responsive */
+
+/* Medium screens (tablet/laptop with sidebar) */
+@media screen and (max-width: 1200px) {
+  .userspn-tutorial-box {
+    /* Center on medium screens by default, but allow dragging */
+    max-width: 420px;
+    width: calc(100% - 40px);
+    max-height: 70vh;
+  }
+
+  .userspn-tutorial-spotlight {
+    /* Hide spotlight on medium screens for better visibility */
+    display: none !important;
+  }
+}
+
+/* Small screens (mobile) */
+@media screen and (max-width: 782px) {
+  .userspn-tutorial-box {
+    max-width: calc(100% - 32px);
+    max-height: 75vh;
+  }
+
+  .userspn-tutorial-spotlight {
+    display: none !important;
+  }
+
+  .userspn-tutorial-header {
+    padding: 16px 16px 12px;
+  }
+
+  .userspn-tutorial-header h2 {
+    font-size: 17px;
+  }
+
+  .userspn-tutorial-content {
+    padding: 16px;
+  }
+
+  .userspn-tutorial-footer {
+    padding: 12px 16px 16px;
+  }
+
+  .userspn-tutorial-navigation {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .userspn-tutorial-prev {
+    order: 2;
+    margin-right: 0;
+  }
+
+  .userspn-tutorial-next,
+  .userspn-tutorial-finish {
+    order: 1;
+  }
+}
+
+/* Extra small screens */
+@media screen and (max-width: 600px) {
+  .userspn-tutorial-box {
+    max-width: calc(100% - 24px);
+    max-height: 80vh;
+    margin: 12px;
+  }
+
+  .userspn-tutorial-header h2 {
+    font-size: 16px;
+  }
+
+  .userspn-tutorial-content {
+    padding: 14px;
+  }
+
+  .userspn-tutorial-features li {
+    font-size: 13px;
+  }
+
+  .userspn-tutorial-tip {
+    font-size: 13px;
+  }
+}
