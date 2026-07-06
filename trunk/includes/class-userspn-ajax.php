@@ -1413,6 +1413,15 @@ class USERSPN_Ajax {
           ]);
           exit;
           break;
+
+        case 'userspn_complete_tutorial':
+          $completed = isset($_POST['completed']) && intval($_POST['completed']) === 1;
+          USERSPN_Tutorial::mark_completed($completed);
+          echo wp_json_encode([
+            'success' => true,
+          ]);
+          exit;
+          break;
       }
 
       echo wp_json_encode([

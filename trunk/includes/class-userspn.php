@@ -54,7 +54,7 @@ class USERSPN
 		if (defined('USERSPN_VERSION')) {
 			$this->version = USERSPN_VERSION;
 		} else {
-			$this->version = '1.1.49';
+			$this->version = '1.1.50';
 		}
 
 		$this->plugin_name = 'userspn';
@@ -276,6 +276,11 @@ class USERSPN
 		 */
 		require_once USERSPN_DIR . 'includes/class-userspn-blocks.php';
 
+		/**
+		 * The class responsible for tutorial/onboarding functionality.
+		 */
+		require_once USERSPN_DIR . 'includes/class-userspn-tutorial.php';
+
 		$this->loader = new USERSPN_Loader();
 	}
 
@@ -397,10 +402,12 @@ class USERSPN
 		}
 
 		// Enqueue social login scripts if any provider is enabled
-		if (get_option('userspn_google_login_enabled') == 'on' ||
-		    get_option('userspn_facebook_login_enabled') == 'on' ||
-		    get_option('userspn_github_login_enabled') == 'on' ||
-		    get_option('userspn_apple_login_enabled') == 'on') {
+		if (
+			get_option('userspn_google_login_enabled') == 'on' ||
+			get_option('userspn_facebook_login_enabled') == 'on' ||
+			get_option('userspn_github_login_enabled') == 'on' ||
+			get_option('userspn_apple_login_enabled') == 'on'
+		) {
 			$this->loader->userspn_add_action('wp_enqueue_scripts', $plugin_public, 'userspn_enqueue_social_login_scripts');
 		}
 

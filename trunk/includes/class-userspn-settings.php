@@ -1557,6 +1557,8 @@ class USERSPN_Settings
       </div>
     <?php endif ?>
     <?php
+    // Render tutorial if not completed
+    USERSPN_Tutorial::render();
   }
 
   public function userspn_dashboard_page()

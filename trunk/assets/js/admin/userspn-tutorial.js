@@ -308,6 +308,9 @@
       }
     });
 
+    // Scroll to top of the page
+    $('html, body').animate({ scrollTop: 0 }, 400);
+
     $overlay.fadeOut(300, function () {
       $overlay.remove();
     });

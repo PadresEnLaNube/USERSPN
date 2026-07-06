@@ -60,5 +60,11 @@ class USERSPN_Admin {
 		wp_enqueue_media();
 		wp_enqueue_script('jquery-ui-draggable');
 		wp_enqueue_script($this->plugin_name . '-admin', USERSPN_URL . 'assets/js/admin/userspn-admin.js', ['jquery', 'jquery-ui-draggable'], $this->version, false);
+
+		// Enqueue tutorial assets if on settings page
+		$screen = get_current_screen();
+		if ($screen && $screen->id === 'toplevel_page_userspn_options') {
+			USERSPN_Tutorial::enqueue_assets();
+		}
 	}
 }
