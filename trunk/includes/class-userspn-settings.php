@@ -1645,19 +1645,19 @@ class USERSPN_Settings
       <div class="userspn-dashboard-widgets" style="display:flex;gap:30px;margin-bottom:30px;">
         <div class="userspn-dashboard-widget userspn-bg-primary" data-popup="userspn-users-week" data-widget="users"
           style="flex:1;cursor:pointer;">
-          <div class="userspn-dashboard-widget-title"><?php printf(esc_html__('New users (%s)', 'userspn'), esc_html($period_label)); ?></div>
+          <div class="userspn-dashboard-widget-title"><?php echo str_replace('%s', esc_html($period_label), esc_html__('New users (%s)', 'userspn')); ?></div>
           <div class="userspn-dashboard-widget-value" style="font-size:2em;font-weight:bold;">
             <?php echo esc_html($users_last_week['count']); ?></div>
         </div>
         <div class="userspn-dashboard-widget userspn-bg-secondary" data-popup="userspn-newsletter-week" data-widget="newsletter"
           style="flex:1;cursor:pointer;">
-          <div class="userspn-dashboard-widget-title"><?php printf(esc_html__('Newsletter (%s)', 'userspn'), esc_html($period_label)); ?></div>
+          <div class="userspn-dashboard-widget-title"><?php echo str_replace('%s', esc_html($period_label), esc_html__('Newsletter (%s)', 'userspn')); ?></div>
           <div class="userspn-dashboard-widget-value" style="font-size:2em;font-weight:bold;">
             <?php echo esc_html($newsletter_last_week['count']); ?></div>
         </div>
         <div class="userspn-dashboard-widget userspn-bg-accent" data-popup="userspn-last-logins" data-widget="logins"
           style="flex:1;cursor:pointer;">
-          <div class="userspn-dashboard-widget-title"><?php printf(esc_html__('Logins (%s)', 'userspn'), esc_html($period_label)); ?></div>
+          <div class="userspn-dashboard-widget-title"><?php echo str_replace('%s', esc_html($period_label), esc_html__('Logins (%s)', 'userspn')); ?></div>
           <div class="userspn-dashboard-widget-value" style="font-size:2em;font-weight:bold;">
             <?php echo esc_html($last_logins['count']); ?></div>
         </div>
