@@ -4,10 +4,10 @@ Donate link: https://padresenlanube.com/
 Tags: user management, users, register, login, contacts
 Requires at least: 3.0.1
 Tested up to: 7.0
-Stable tag: 1.1.50
+Stable tag: 1.1.60
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Streamline user management on your WordPress site with this powerful plugin. Enable custom forms, secure login, and seamless profile management.
+Streamline user management on your WordPress site with this powerful plugin. Enable custom forms, secure login, custom login page styling, and seamless profile management.
 
 == Description ==
 
@@ -18,6 +18,8 @@ This WordPress plugin simplifies user management by providing customizable regis
 * **Frontend User Registration**: Complete user registration system accessible directly from your website's frontend. Users can create accounts without accessing the WordPress admin area, with customizable registration forms that include email, password, and unlimited custom fields.
 
 * **Custom Login System**: Beautiful, responsive login forms with multiple authentication options including traditional username/password, social login (Google, Facebook, GitHub, Apple), and passwordless email code verification. Includes "Remember Me" functionality, password recovery links, and seamless integration with your site design via shortcodes.
+
+* **Custom Login Page Style**: Optional modern restyling of the default WordPress login and password reset pages. When enabled, applies a clean card-based layout with Inter font, styled inputs, responsive design, password strength meter styling, and language switcher integration — replacing the default WordPress appearance without requiring a custom login page.
 
 * **Advanced Profile Management**: Comprehensive user profile system with tabbed interface including Profile editing, Image/avatar management, Notifications preferences, Private file management, and Advanced options (password change, account deletion). Users can edit their profiles directly from the frontend with real-time validation.
 
@@ -270,6 +272,31 @@ For developer support, bug reports, or feature requests:
 
 
 == Changelog ==
+
+= 1.1.60 =
+
+- Add custom login page style option to replace the default WordPress login and password reset page appearance with a modern design
+- Add new stylesheet with card-based layout, Inter font, styled inputs, responsive design, and password strength meter styling for the WordPress login and password reset pages
+- Enqueue custom login page stylesheet on login_enqueue_scripts when the option is enabled
+- Add settings banner visibility option allowing administrators to show or hide the banner image at the top of the settings page
+- Add hide button on the settings banner image with confirmation dialog, loader overlay, and fade-out animation
+- Add userspn_hide_banner AJAX endpoint to persist banner visibility preference
+- Move all popups and their overlay to the document body to escape stacking context issues caused by WordPress block navigation z-index
+- Increase popup and overlay z-index to prevent popups from being hidden behind other elements
+- Fix default value logic in form fields using strict check instead of empty() to prevent overriding legitimate empty or zero values with defaults
+- Add WP_User instanceof check in userspn_profile_fields to prevent errors when the user parameter is not a valid user object
+- Add user ID validation before rendering the auto-login tool section in user profile fields
+- Only render Akismet protection option when the Akismet plugin is active instead of showing it as disabled
+- Store tutorial completion status as completed or skipped string instead of a boolean value for more granular tracking
+
+= 1.1.50 =
+
+- Fix ValueError in dashboard widgets by replacing printf with str_replace for widget titles to prevent PHP 8 format specifier errors from translations
+- Fix Spanish translation of "New users (%s)" which was missing the s in the format specifier
+- Fix Spanish translation of "IP" (was incorrectly translated as "Propiedad intelectual")
+- Add Spanish translations for two-factor authentication strings including backup codes, security alerts, and verification codes
+- Update line number references across translation files to match current source code
+- Update compiled .mo binary and .l10n.php with all new and corrected translations
 
 = 1.1.42 =
 

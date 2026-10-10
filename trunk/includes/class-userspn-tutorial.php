@@ -288,7 +288,7 @@ class USERSPN_Tutorial
    */
   public static function mark_completed($completed = true)
   {
-    update_option('userspn_tutorial_completed', $completed);
+    update_option('userspn_tutorial_completed', $completed ? 'completed' : 'skipped');
   }
 
   /**

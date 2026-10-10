@@ -1,0 +1,449 @@
+/* ==========================================================================
+   USERSPN - Custom Login & Password Reset Page Styles (Light)
+   ========================================================================== */
+
+/* --- Font --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* --- Background --- */
+body.login {
+  background: #f0f2f5 !important;
+  background-image:
+    radial-gradient(ellipse at 20% 0%, rgba(0, 170, 68, 0.07) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 100%, rgba(110, 110, 255, 0.05) 0%, transparent 60%) !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}
+
+/* Remove pseudo-elements from dark theme */
+body.login::before,
+body.login::after {
+  display: none !important;
+}
+
+/* --- Main wrapper --- */
+#login {
+  position: relative;
+  z-index: 1;
+  width: 420px !important;
+  max-width: 90vw;
+  padding: 0 !important;
+  padding-top: 50px !important;
+  animation: userspn-slide-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes userspn-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- Logo area --- */
+#login h1 {
+  margin-bottom: 0 !important;
+  padding: 36px 40px 20px !important;
+  background: #ffffff;
+  border-radius: 16px 16px 0 0;
+  border: 1px solid #e2e5ea;
+  border-bottom: none;
+}
+
+#login h1 a {
+  width: 100% !important;
+  max-width: 200px !important;
+  margin: 0 auto !important;
+  transition: transform 0.3s ease;
+}
+
+#login h1 a:hover {
+  transform: scale(1.03);
+}
+
+/* --- Form card --- */
+.login form,
+#loginform,
+#lostpasswordform,
+#resetpassform {
+  background: #ffffff !important;
+  border: 1px solid #e2e5ea !important;
+  border-top: none !important;
+  border-radius: 0 0 16px 16px !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06), 0 2px 10px rgba(0, 0, 0, 0.04) !important;
+  padding: 10px 40px 36px !important;
+  margin: 0 !important;
+}
+
+/* --- Labels --- */
+.login form label,
+.login form .user-pass-wrap label {
+  color: #3d4551 !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  margin-bottom: 6px !important;
+  display: block;
+}
+
+/* --- Inputs --- */
+.login form input[type="text"],
+.login form input[type="password"],
+.login form input[type="email"],
+.login input[type="text"],
+.login input[type="password"],
+.login input[type="email"] {
+  background: #f7f8fa !important;
+  border: 1px solid #dcdfe4 !important;
+  border-radius: 10px !important;
+  color: #1a1a2e !important;
+  font-size: 15px !important;
+  font-family: 'Inter', sans-serif !important;
+  padding: 14px 18px !important;
+  height: auto !important;
+  min-height: 48px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  transition: all 0.25s ease !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.login form input[type="text"]:focus,
+.login form input[type="password"]:focus,
+.login form input[type="email"]:focus,
+.login input[type="text"]:focus,
+.login input[type="password"]:focus,
+.login input[type="email"]:focus {
+  background: #ffffff !important;
+  border-color: var(--userspn-color-main, #00aa44) !important;
+  box-shadow: 0 0 0 3px rgba(0, 170, 68, 0.12) !important;
+}
+
+.login form input[type="text"]::placeholder,
+.login form input[type="password"]::placeholder,
+.login form input[type="email"]::placeholder {
+  color: #a0a7b5 !important;
+}
+
+/* --- Password wrapper (WP 5.3+ show/hide toggle) --- */
+.login .user-pass-wrap {
+  margin-bottom: 14px;
+}
+
+.login .wp-pwd {
+  position: relative;
+}
+
+.login .wp-pwd .dashicons {
+  color: #8c94a3 !important;
+}
+
+.login .wp-pwd button.button.wp-hide-pw {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: #8c94a3 !important;
+  height: 48px !important;
+}
+
+.login .wp-pwd button.button.wp-hide-pw:hover {
+  color: var(--userspn-color-main, #00aa44) !important;
+}
+
+.login .wp-pwd button.button.wp-hide-pw:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* --- Remember me checkbox --- */
+.login .forgetmenot {
+  margin-bottom: 14px;
+}
+
+.login .forgetmenot label {
+  color: #6b7280 !important;
+  font-size: 13px !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-weight: 400 !important;
+  cursor: pointer;
+}
+
+.login form input[type="checkbox"] {
+  background: #f0f2f5 !important;
+  border: 1.5px solid #cdd1d9 !important;
+  border-radius: 4px !important;
+  transition: all 0.2s ease !important;
+}
+
+.login form input[type="checkbox"]:checked {
+  background: var(--userspn-color-main, #00aa44) !important;
+  border-color: var(--userspn-color-main, #00aa44) !important;
+}
+
+/* --- Submit button --- */
+.login form .submit input[type="submit"],
+.login form input[type="submit"],
+.login #wp-submit {
+  background: var(--userspn-color-main, #00aa44) !important;
+  border: none !important;
+  border-radius: 10px !important;
+  color: #ffffff !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.3px;
+  padding: 14px 32px !important;
+  min-height: 48px !important;
+  width: 100% !important;
+  cursor: pointer;
+  transition: all 0.25s ease !important;
+  box-shadow: 0 2px 8px rgba(0, 170, 68, 0.25) !important;
+  text-shadow: none !important;
+  text-transform: none;
+}
+
+.login form .submit input[type="submit"]:hover,
+.login form input[type="submit"]:hover,
+.login #wp-submit:hover {
+  background: var(--userspn-bg-color-main-alt, #232323) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
+  transform: translateY(-1px);
+}
+
+.login form .submit input[type="submit"]:active,
+.login form input[type="submit"]:active,
+.login #wp-submit:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12) !important;
+}
+
+.login form .submit {
+  text-align: center !important;
+}
+
+/* --- Links below the form --- */
+#login #nav,
+#login #backtoblog,
+.login #nav,
+.login #backtoblog {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 14px 0 0 !important;
+  margin: 0 !important;
+  text-align: center !important;
+}
+
+#login #nav a,
+#login #backtoblog a,
+.login #nav a,
+.login #backtoblog a {
+  color: #8c94a3 !important;
+  font-size: 13px !important;
+  font-family: 'Inter', sans-serif !important;
+  text-decoration: none !important;
+  transition: color 0.2s ease !important;
+}
+
+#login #nav a:hover,
+#login #backtoblog a:hover,
+.login #nav a:hover,
+.login #backtoblog a:hover {
+  color: var(--userspn-color-main, #00aa44) !important;
+}
+
+/* Separator between links */
+#login #nav {
+  font-size: 0 !important;
+}
+
+#login #nav a {
+  font-size: 13px !important;
+}
+
+/* --- Error / Success messages --- */
+.login .message,
+.login .success,
+#login_error {
+  background: #ffffff !important;
+  border-left: 4px solid var(--userspn-color-main, #00aa44) !important;
+  border-radius: 0 10px 10px 0 !important;
+  color: #3d4551 !important;
+  font-size: 14px !important;
+  font-family: 'Inter', sans-serif !important;
+  padding: 14px 20px !important;
+  margin: 0 0 16px !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06) !important;
+}
+
+#login_error {
+  border-left-color: #e74c3c !important;
+}
+
+#login_error a {
+  color: var(--userspn-color-main, #00aa44) !important;
+}
+
+.login .message a,
+.login .success a {
+  color: var(--userspn-color-main, #00aa44) !important;
+}
+
+/* --- Password reset specifics --- */
+.login .reset-pass-submit {
+  text-align: center;
+}
+
+/* Password strength meter */
+#pass-strength-result {
+  background: #f7f8fa !important;
+  border: 1px solid #e2e5ea !important;
+  border-radius: 8px !important;
+  color: #6b7280 !important;
+  font-family: 'Inter', sans-serif !important;
+  padding: 10px 14px !important;
+  margin: 10px 0 !important;
+  font-size: 13px !important;
+}
+
+#pass-strength-result.bad,
+#pass-strength-result.short {
+  background: #fef2f2 !important;
+  border-color: #fecaca !important;
+  color: #dc2626 !important;
+}
+
+#pass-strength-result.good {
+  background: #fffbeb !important;
+  border-color: #fde68a !important;
+  color: #d97706 !important;
+}
+
+#pass-strength-result.strong {
+  background: #f0fdf4 !important;
+  border-color: #bbf7d0 !important;
+  color: var(--userspn-color-main, #00aa44) !important;
+}
+
+/* Reset password description text */
+.login form p.description,
+.login p.description {
+  color: #8c94a3 !important;
+  font-size: 12px !important;
+}
+
+/* Password hint */
+.login .pw-weak label {
+  color: #6b7280 !important;
+}
+
+/* --- Hide WordPress branding --- */
+.login h1 a[href="https://wordpress.org/"] {
+  display: none !important;
+}
+
+.login .privacy-policy-page-link {
+  margin-top: 16px;
+}
+
+.login .privacy-policy-page-link a {
+  color: #a0a7b5 !important;
+  font-size: 12px !important;
+  font-family: 'Inter', sans-serif !important;
+}
+
+.login .privacy-policy-page-link a:hover {
+  color: #6b7280 !important;
+}
+
+/* --- Language switcher (WP 5.9+) - Below login, full width --- */
+.login .language-switcher {
+  width: 100% !important;
+  max-width: 420px;
+  background: #ffffff !important;
+  border: 1px solid #e2e5ea !important;
+  border-radius: 12px !important;
+  padding: 16px 24px !important;
+  margin-top: 16px !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04) !important;
+  box-sizing: border-box !important;
+  clear: both !important;
+  float: none !important;
+  position: relative !important;
+  display: block !important;
+}
+
+.login .language-switcher label {
+  color: #6b7280 !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+}
+
+.login .language-switcher select {
+  background: #f7f8fa !important;
+  border: 1px solid #dcdfe4 !important;
+  border-radius: 8px !important;
+  color: #3d4551 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 14px !important;
+  padding: 8px 12px !important;
+  min-height: 40px !important;
+}
+
+.login .language-switcher select:focus {
+  border-color: var(--userspn-color-main, #00aa44) !important;
+  box-shadow: 0 0 0 3px rgba(0, 170, 68, 0.12) !important;
+  outline: none !important;
+}
+
+.login .language-switcher .button {
+  background: #f0f2f5 !important;
+  border: 1px solid #dcdfe4 !important;
+  border-radius: 8px !important;
+  color: #3d4551 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  padding: 8px 20px !important;
+  cursor: pointer;
+  transition: all 0.2s ease !important;
+}
+
+.login .language-switcher .button:hover {
+  background: var(--userspn-color-main, #00aa44) !important;
+  border-color: var(--userspn-color-main, #00aa44) !important;
+  color: #ffffff !important;
+}
+
+/* --- Responsive --- */
+@media screen and (max-width: 480px) {
+
+  #login {
+    width: 100% !important;
+    max-width: 100vw;
+    margin-top: 0 !important;
+  }
+
+  #login h1 {
+    padding: 28px 24px 16px !important;
+    border-radius: 0 !important;
+  }
+
+  .login form,
+  #loginform,
+  #lostpasswordform,
+  #resetpassform {
+    padding: 8px 24px 28px !important;
+    border-radius: 0 !important;
+  }
+
+  .login .language-switcher {
+    border-radius: 0 !important;
+    max-width: 100%;
+  }
+}

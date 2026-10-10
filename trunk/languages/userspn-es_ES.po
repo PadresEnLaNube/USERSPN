@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Users manager - PN\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-23 12:29+0000\n"
-"PO-Revision-Date: 2026-07-12 13:57+0000\n"
+"PO-Revision-Date: 2026-10-10 15:11+0000\n"
 "Last-Translator: \n"
 "Language-Team: Español\n"
 "Language: es_ES\n"
@@ -50,25 +50,25 @@ msgstr "02 - Subir el CSV con la información de los nuevos contactos."
 msgid "1 año"
 msgstr "1 año"
 
-#: includes/class-userspn-settings.php:1581
+#: includes/class-userspn-settings.php:1607
 msgid "1 year"
 msgstr "1 año"
 
-#: includes/class-userspn-settings.php:1578 includes/class-userspn-ajax.php:834
+#: includes/class-userspn-ajax.php:834 includes/class-userspn-settings.php:1604
 msgid "24h"
 msgstr "24 horas"
 
-#: includes/class-userspn-settings.php:817
+#: includes/class-userspn-settings.php:827
 msgid "2FA Method"
 msgstr "Método 2FA"
 
-#: includes/class-userspn-settings.php:868
+#: includes/class-userspn-settings.php:878
 msgid "2FA Setup Grace Period (days)"
 msgstr ""
 "Periodo de gracia para la configuración de la autenticación de dos factores "
 "(días)"
 
-#: includes/class-userspn-settings.php:1580
+#: includes/class-userspn-settings.php:1606
 msgid "30 days"
 msgstr "30 días"
 
@@ -76,7 +76,7 @@ msgstr "30 días"
 msgid "30 días"
 msgstr "30 días"
 
-#: includes/class-userspn-settings.php:1579
+#: includes/class-userspn-settings.php:1605
 msgid "7 days"
 msgstr "7 días"
 
@@ -144,16 +144,16 @@ msgstr "¡Eliminación de cuenta!"
 msgid "Account details"
 msgstr "Detalles de la cuenta"
 
-#: includes/class-userspn-settings.php:2293
-#: includes/class-userspn-settings.php:2393
-#: includes/class-userspn-settings.php:2469
+#: includes/class-userspn-settings.php:2319
+#: includes/class-userspn-settings.php:2419
+#: includes/class-userspn-settings.php:2495
 #, fuzzy
 #| msgid "Acciones"
 msgid "Actions"
 msgstr "Acciones"
 
-#: includes/class-userspn-settings.php:1403
-#: includes/class-userspn-settings.php:1446
+#: includes/class-userspn-settings.php:1428
+#: includes/class-userspn-settings.php:1472
 msgid "Activate"
 msgstr "Activar"
 
@@ -170,13 +170,13 @@ msgstr "Activa tu cuenta"
 msgid "Activate your subscription"
 msgstr "Activar tu suscripción"
 
-#: includes/class-userspn-settings.php:1442
+#: includes/class-userspn-settings.php:1468
 msgid "Activating..."
 msgstr "Activando..."
 
 #: includes/class-userspn-2fa-profile.php:225
-#: includes/class-userspn-settings.php:1401
-#: includes/class-userspn-settings.php:1445
+#: includes/class-userspn-settings.php:1426
+#: includes/class-userspn-settings.php:1471
 msgid "Active"
 msgstr "Activo"
 
@@ -209,7 +209,7 @@ msgstr "Agregar campos personalizados a los perfiles de usuario"
 msgid "Add element"
 msgstr "Agregar elemento"
 
-#: includes/class-userspn-settings.php:689
+#: includes/class-userspn-settings.php:699
 msgid "Add extra profile fields on admin dashboard"
 msgstr "Agregue campos de perfil adicionales en el panel de administración"
 
@@ -221,7 +221,7 @@ msgstr "Agregar archivo"
 msgid "Add files"
 msgstr "Agregar archivos"
 
-#: includes/class-userspn-settings.php:1073
+#: includes/class-userspn-settings.php:1081
 msgid "Add hidden honeypot field to catch bots."
 msgstr "Agregue un campo honeypot oculto para atrapar bots."
 
@@ -249,9 +249,9 @@ msgstr "Agregar vídeos"
 msgid "Addresses"
 msgstr "Direcciones"
 
-#: templates/userspn-footer.php:63 includes/class-userspn-settings.php:1485
 #: includes/class-userspn-functions-user.php:797
 #: includes/class-userspn-functions-user.php:923
+#: includes/class-userspn-settings.php:1511 templates/userspn-footer.php:63
 msgid "Advanced"
 msgstr "Avanzado"
 
@@ -267,23 +267,15 @@ msgstr "Clave API de Akismet no encontrada."
 msgid "Akismet plugin is not active."
 msgstr "El complemento Akismet no está activo."
 
-#: includes/class-userspn-settings.php:1064
-msgid ""
-"Akismet plugin is not installed or not active. Install and activate Akismet "
-"to use this feature."
-msgstr ""
-"El complemento Akismet no está instalado o no está activo. Instala y activa "
-"Akismet para usar esta función."
-
-#: includes/class-userspn-settings.php:2060
+#: includes/class-userspn-settings.php:2086
 msgid "All events"
 msgstr "Todos los eventos"
 
-#: includes/class-userspn-settings.php:1622
+#: includes/class-userspn-settings.php:1648
 msgid "All logins"
 msgstr "Todos los inicios de sesión"
 
-#: includes/class-userspn-settings.php:1615
+#: includes/class-userspn-settings.php:1641
 msgid "All Newsletter registrations"
 msgstr "Todos los registros de boletín informativo"
 
@@ -291,15 +283,15 @@ msgstr "Todos los registros de boletín informativo"
 msgid "All registration pages"
 msgstr "Todas las páginas de registro"
 
-#: includes/class-userspn-settings.php:2074
+#: includes/class-userspn-settings.php:2100
 msgid "All statuses"
 msgstr "Todos los estados"
 
-#: includes/class-userspn-settings.php:1608
+#: includes/class-userspn-settings.php:1634
 msgid "All users"
 msgstr "Todos los usuarios"
 
-#: includes/class-userspn-settings.php:881
+#: includes/class-userspn-settings.php:891
 msgid ""
 "Allow users to login using a verification code sent to their email address."
 msgstr ""
@@ -352,31 +344,31 @@ msgstr "Altas en newsletter en la última semana"
 msgid "Altas en newsletter en las últimas 24h"
 msgstr "Altas en newsletter en las últimas 24h"
 
-#: includes/class-userspn-settings.php:1194
+#: includes/class-userspn-settings.php:1202
 msgid "Alternative Main Background Color"
 msgstr "Color de fondo principal alternativo"
 
-#: includes/class-userspn-settings.php:1195
+#: includes/class-userspn-settings.php:1203
 msgid "Alternative main background color used throughout the plugin interface."
 msgstr ""
 "Color de fondo principal alternativo utilizado en toda la interfaz del "
 "complemento."
 
-#: includes/class-userspn-settings.php:1203
+#: includes/class-userspn-settings.php:1211
 msgid "Alternative Main Border Color"
 msgstr "Color alternativo del borde principal"
 
-#: includes/class-userspn-settings.php:1204
+#: includes/class-userspn-settings.php:1212
 msgid "Alternative main border color used throughout the plugin interface."
 msgstr ""
 "Color de borde principal alternativo utilizado en toda la interfaz del "
 "complemento."
 
-#: includes/class-userspn-settings.php:1185
+#: includes/class-userspn-settings.php:1193
 msgid "Alternative Main Color"
 msgstr "Color principal alternativo"
 
-#: includes/class-userspn-settings.php:1186
+#: includes/class-userspn-settings.php:1194
 msgid "Alternative main color used throughout the plugin interface."
 msgstr ""
 "Color principal alternativo utilizado en toda la interfaz del complemento."
@@ -411,11 +403,11 @@ msgstr "Se ha producido un error. Por favor, inténtelo de nuevo."
 msgid "Analysis Criteria:"
 msgstr "Criterios de análisis:"
 
-#: includes/class-userspn-settings.php:1635
+#: includes/class-userspn-settings.php:1661
 msgid "Analytics Dashboard"
 msgstr "Panel de análisis"
 
-#: includes/class-userspn-settings.php:1140
+#: includes/class-userspn-settings.php:1148
 msgid "Analyze Existing Users for Bots"
 msgstr "Analizar usuarios existentes en busca de bots"
 
@@ -423,13 +415,13 @@ msgstr "Analizar usuarios existentes en busca de bots"
 msgid "Apple Key ID"
 msgstr "ID de clave de Apple"
 
-#: includes/class-userspn-apple-oauth.php:83
 #: includes/class-userspn-ajax-nopriv.php:1118
+#: includes/class-userspn-apple-oauth.php:83
 msgid "Apple login is not available."
 msgstr "El inicio de sesión con Apple no está disponible."
 
-#: includes/class-userspn-apple-oauth.php:92
 #: includes/class-userspn-ajax-nopriv.php:1131
+#: includes/class-userspn-apple-oauth.php:92
 msgid "Apple login is not properly configured."
 msgstr "El inicio de sesión de Apple no está configurado correctamente."
 
@@ -449,11 +441,20 @@ msgstr "ID de servicio de Apple"
 msgid "Apple Team ID"
 msgstr "ID de equipo de Apple"
 
+#: includes/class-userspn-settings.php:632
+msgid ""
+"Apply a modern custom style to the login and password reset pages to replace "
+"the default WordPress appearance."
+msgstr ""
+"Aplica un estilo moderno y personalizado a las páginas de inicio de sesión y "
+"restablecimiento de contraseña para reemplazar la apariencia predeterminada "
+"de WordPress."
+
 #: includes/class-userspn-functions-user.php:2167
 msgid "Are you sure to process this contacts and add them to the system?"
 msgstr "¿Está seguro de procesar estos contactos y agregarlos al sistema?"
 
-#: includes/class-userspn-settings.php:2236
+#: includes/class-userspn-settings.php:2262
 msgid "Are you sure you want to delete logs older than 30 days?"
 msgstr ""
 "¿Está seguro de que desea eliminar los registros con más de 30 días de "
@@ -462,6 +463,14 @@ msgstr ""
 #: includes/class-userspn-2fa-profile.php:47
 msgid "Are you sure you want to disable two-factor authentication?"
 msgstr "¿Está seguro de que desea desactivar la autenticación de dos factores?"
+
+#: includes/class-userspn-settings.php:1461
+msgid ""
+"Are you sure you want to hide the banner image? You can re-enable it in "
+"System settings."
+msgstr ""
+"¿Seguro que quieres ocultar la imagen del banner? Puedes volver a activarla "
+"en la configuración del sistema."
 
 #: includes/class-userspn-2fa-profile.php:48
 msgid ""
@@ -499,7 +508,7 @@ msgid "Authenticator App"
 msgstr "Aplicación de autenticación"
 
 #: includes/class-userspn-2fa-profile.php:158
-#: includes/class-userspn-settings.php:820
+#: includes/class-userspn-settings.php:830
 msgid "Authenticator App (Google Authenticator, Authy, etc.)"
 msgstr "Aplicación de autenticación (Google Authenticator, Authy, etc.)"
 
@@ -519,7 +528,7 @@ msgstr "Inicio de sesión automático"
 msgid "Auto-login tool"
 msgstr "Herramienta de inicio de sesión automático"
 
-#: includes/class-userspn-settings.php:899
+#: includes/class-userspn-settings.php:909
 msgid ""
 "Automatically delete users who have not logged in for a specified number of "
 "days. Administrators are always excluded from deletion."
@@ -576,21 +585,21 @@ msgstr "Se requiere identificación BaseCPT."
 msgid "Best regards,"
 msgstr "Atentamente,"
 
-#: includes/class-userspn-settings.php:1051
+#: includes/class-userspn-settings.php:1061
 msgid "Block Suspicious Scores"
 msgstr "Bloquear puntuaciones sospechosas"
 
-#: includes/class-userspn-settings.php:1940
+#: includes/class-userspn-settings.php:1966
 msgid "Blocked"
 msgstr "Obstruido"
 
-#: includes/class-userspn-settings.php:2049
+#: includes/class-userspn-settings.php:2075
 msgid "Blocked / Errors"
 msgstr "Bloqueado / Errores"
 
+#: includes/class-userspn-settings.php:1147
 #: templates/userspn-bot-analysis-popup.php:21
 #: templates/userspn-bot-analysis-popup.php:24
-#: includes/class-userspn-settings.php:1139
 msgid "Bot Analysis Tool"
 msgstr "Herramienta de análisis de bots"
 
@@ -598,10 +607,10 @@ msgstr "Herramienta de análisis de bots"
 msgid "Bot-like usernames (user123, test456, etc.)"
 msgstr "Nombres de usuario tipo bot (usuario123, test456, etc.)"
 
-#: includes/class-userspn-2fa-profile.php:286
+#: includes/class-userspn-common.php:341 includes/class-userspn-ajax.php:269
 #: includes/class-userspn-forms.php:160
 #: includes/class-userspn-functions-user.php:2172
-#: includes/class-userspn-common.php:341 includes/class-userspn-ajax.php:269
+#: includes/class-userspn-2fa-profile.php:286
 #: includes/class-userspn-2fa-login.php:248
 msgid "Cancel"
 msgstr "Cancelar"
@@ -631,7 +640,7 @@ msgstr ""
 "Consulte nuestra documentación o utilice las sugerencias emergentes "
 "disponibles en toda la interfaz para obtener ayuda."
 
-#: includes/class-userspn-settings.php:744
+#: includes/class-userspn-settings.php:754
 msgid ""
 "Check this option if you already have a newsletter form loaded in the page. "
 "For example, if you are using the shortcode [userspn-newsletter] in the page "
@@ -649,7 +658,7 @@ msgstr ""
 "Marca para abrir el editor de posiciones. Arrastra la burbuja a la ubicación "
 "deseada y confirma."
 
-#: includes/class-userspn-settings.php:953
+#: includes/class-userspn-settings.php:963
 msgid ""
 "Choose how to send the inactivity warning. Install and activate MailPN to "
 "use email templates."
@@ -657,7 +666,7 @@ msgstr ""
 "Elige cómo enviar la advertencia de inactividad. Instala y activa MailPN "
 "para usar plantillas de correo electrónico."
 
-#: includes/class-userspn-settings.php:952
+#: includes/class-userspn-settings.php:962
 msgid ""
 "Choose how to send the inactivity warning: a built-in default template, a "
 "custom message or a MailPN email template."
@@ -671,7 +680,7 @@ msgid "Choose the navigation menu where you want to add the profile icon."
 msgstr ""
 "Seleccione el menú de navegación donde desea agregar el icono de perfil."
 
-#: includes/class-userspn-settings.php:818
+#: includes/class-userspn-settings.php:828
 msgid "Choose the two-factor authentication method."
 msgstr "Elige el método de autenticación de dos factores."
 
@@ -752,7 +761,7 @@ msgstr "Continuar con GitHub"
 msgid "Continue with Google"
 msgstr "Continuar con Google"
 
-#: includes/class-userspn-settings.php:1332
+#: includes/class-userspn-settings.php:1357
 msgid "Cookie consent and GDPR compliance."
 msgstr "Consentimiento de cookies y cumplimiento del RGPD."
 
@@ -806,7 +815,7 @@ msgstr "Copiar códigos"
 msgid "Could not copy to clipboard."
 msgstr "No se pudo copiar al portapapeles."
 
-#: includes/class-userspn-settings.php:724
+#: includes/class-userspn-settings.php:734
 msgid ""
 "Create a message that will be shown just above of the Newsletter "
 "registration form."
@@ -818,12 +827,12 @@ msgstr ""
 msgid "Create user"
 msgstr "Crear usuario"
 
-#: includes/class-userspn-settings.php:1311
+#: includes/class-userspn-settings.php:1336
 msgid "CRM with AI-powered WhatsApp and Instagram chat."
 msgstr "CRM con chat de WhatsApp e Instagram impulsado por IA."
 
-#: includes/class-userspn-settings.php:245
 #: includes/class-userspn-functions-attachment.php:93
+#: includes/class-userspn-settings.php:245
 msgid "Current file max size allowed:"
 msgstr "Tamaño máximo permitido del archivo actual:"
 
@@ -831,7 +840,11 @@ msgstr "Tamaño máximo permitido del archivo actual:"
 msgid "Current form"
 msgstr "Formulario actual"
 
-#: includes/class-userspn-settings.php:938
+#: includes/class-userspn-settings.php:631
+msgid "Custom login page style"
+msgstr "Estilo de página de inicio de sesión personalizado"
+
+#: includes/class-userspn-settings.php:948
 msgid "Custom message"
 msgstr "Mensaje personalizado"
 
@@ -888,16 +901,16 @@ msgid "Dashboard main login page logo link text"
 msgstr ""
 "Texto del enlace del logo de la página principal de login del dashboard"
 
-#: includes/class-userspn-settings.php:631
+#: includes/class-userspn-settings.php:641
 msgid "Dashboard main logo"
 msgstr "Logotipo principal del panel de control"
 
-#: includes/class-userspn-settings.php:641
+#: includes/class-userspn-settings.php:651
 msgid "Dashboard main logo link"
 msgstr "Enlace al logotipo principal del panel de administración"
 
 #: includes/class-userspn-forms.php:114
-#: includes/class-userspn-settings.php:2092
+#: includes/class-userspn-settings.php:2118
 msgid "Date"
 msgstr "Fecha"
 
@@ -906,15 +919,15 @@ msgstr "Fecha"
 msgid "Date and time:"
 msgstr "Fecha y hora:"
 
-#: includes/class-userspn-settings.php:930
+#: includes/class-userspn-settings.php:940
 msgid "Days before deletion to send warning"
 msgstr "Días antes de la eliminación para enviar una advertencia"
 
-#: includes/class-userspn-settings.php:908
+#: includes/class-userspn-settings.php:918
 msgid "Days of inactivity before deletion"
 msgstr "Días de inactividad antes de la eliminación"
 
-#: includes/class-userspn-settings.php:784
+#: includes/class-userspn-settings.php:794
 msgid "Days to delete unactivated account"
 msgstr "Días para eliminar una cuenta no activada"
 
@@ -922,43 +935,43 @@ msgstr "Días para eliminar una cuenta no activada"
 msgid "Default (right side)"
 msgstr "Predeterminado (lado derecho)"
 
-#: includes/class-userspn-settings.php:2942
+#: includes/class-userspn-settings.php:2972
 msgid "Default Menu"
 msgstr "Menú predeterminado"
 
-#: includes/class-userspn-settings.php:937
+#: includes/class-userspn-settings.php:947
 msgid "Default template"
 msgstr "Plantilla predeterminada"
 
-#: includes/class-userspn-settings.php:898
+#: includes/class-userspn-settings.php:908
 msgid "Delete inactive users"
 msgstr "Eliminar usuarios inactivos"
 
-#: includes/class-userspn-settings.php:2083
+#: includes/class-userspn-settings.php:2109
 msgid "Delete logs older than 30 days"
 msgstr "Eliminar registros con más de 30 días de antigüedad"
 
-#: includes/class-userspn-settings.php:774
+#: includes/class-userspn-settings.php:784
 msgid "Delete unactivated accounts"
 msgstr "Eliminar cuentas no activadas"
 
-#: includes/class-userspn-settings.php:1591
+#: includes/class-userspn-settings.php:1617
 msgid "Desde siempre"
 msgstr "Desde siempre"
 
-#: includes/class-userspn-settings.php:1150
+#: includes/class-userspn-settings.php:1158
 msgid "Design"
 msgstr "Diseño"
 
-#: includes/class-userspn-settings.php:2097
+#: includes/class-userspn-settings.php:2123
 msgid "Details"
 msgstr "Detalles"
 
-#: includes/class-userspn-settings.php:670
+#: includes/class-userspn-settings.php:680
 msgid "Disable admin bar"
 msgstr "Deshabilitar la barra de administración"
 
-#: includes/class-userspn-settings.php:650
+#: includes/class-userspn-settings.php:660
 msgid "Disable dashboard access"
 msgstr "Deshabilitar el acceso al panel de control"
 
@@ -970,15 +983,15 @@ msgstr "Deshabilitar la ventana emergente del perfil"
 msgid "Disable Two-Factor Authentication"
 msgstr "Desactivar la autenticación de dos factores"
 
-#: templates/userspn-footer.php:106 includes/class-userspn-settings.php:1528
 #: includes/class-userspn-functions-user.php:850
 #: includes/class-userspn-functions-user.php:977
+#: includes/class-userspn-settings.php:1554 templates/userspn-footer.php:106
 msgid "Disconnect account"
 msgstr "Desconectar la cuenta"
 
-#: templates/userspn-footer.php:116 includes/class-userspn-settings.php:1536
 #: includes/class-userspn-functions-user.php:862
 #: includes/class-userspn-functions-user.php:989
+#: includes/class-userspn-settings.php:1562 templates/userspn-footer.php:116
 #| msgid "Disconnect your user from the system. You will have to log in again."
 msgid "Disconnect your user from the system. You will need to log in again."
 msgstr ""
@@ -1000,41 +1013,41 @@ msgstr "Descargas"
 msgid "Drag the bubble to the desired position"
 msgstr "Arrastre la burbuja a la posición deseada"
 
-#: includes/class-userspn-forms.php:473 includes/class-userspn-common.php:311
+#: includes/class-userspn-common.php:311 includes/class-userspn-forms.php:473
 msgid "Edit audio"
 msgstr "Editar audio"
 
-#: includes/class-userspn-forms.php:473 includes/class-userspn-common.php:312
+#: includes/class-userspn-common.php:312 includes/class-userspn-forms.php:473
 msgid "Edit audios"
 msgstr "editar audios"
 
-#: includes/class-userspn-forms.php:494 includes/class-userspn-common.php:315
+#: includes/class-userspn-common.php:315 includes/class-userspn-forms.php:494
 msgid "Edit file"
 msgstr "Editar archivo"
 
-#: includes/class-userspn-forms.php:494 includes/class-userspn-common.php:316
+#: includes/class-userspn-common.php:316 includes/class-userspn-forms.php:494
 msgid "Edit files"
 msgstr "Editar archivos"
 
-#: includes/class-userspn-forms.php:431 includes/class-userspn-common.php:303
+#: includes/class-userspn-common.php:303 includes/class-userspn-forms.php:431
 msgid "Edit image"
 msgstr "Editar imagen"
 
-#: includes/class-userspn-forms.php:431 includes/class-userspn-common.php:304
+#: includes/class-userspn-common.php:304 includes/class-userspn-forms.php:431
 msgid "Edit images"
 msgstr "Editar imágenes"
 
-#: includes/class-userspn-settings.php:2337
-#: includes/class-userspn-settings.php:2410
-#: includes/class-userspn-settings.php:2489
+#: includes/class-userspn-settings.php:2363
+#: includes/class-userspn-settings.php:2436
+#: includes/class-userspn-settings.php:2515
 msgid "Edit profile"
 msgstr "Editar perfil"
 
-#: includes/class-userspn-forms.php:452 includes/class-userspn-common.php:307
+#: includes/class-userspn-common.php:307 includes/class-userspn-forms.php:452
 msgid "Edit video"
 msgstr "Editar video"
 
-#: includes/class-userspn-forms.php:452 includes/class-userspn-common.php:308
+#: includes/class-userspn-common.php:308 includes/class-userspn-forms.php:452
 msgid "Edit videos"
 msgstr "Editar vídeos"
 
@@ -1046,16 +1059,15 @@ msgstr ""
 "El usuario ha sido registrado pero marcado como sospechoso.\n"
 "\n"
 
-#: includes/class-userspn-mailing.php:313
-#: includes/class-userspn-2fa-profile.php:105
-#: includes/class-userspn-forms.php:114
-#: includes/class-userspn-settings.php:2094
-#: includes/class-userspn-settings.php:2291
-#: includes/class-userspn-settings.php:2391
-#: includes/class-userspn-settings.php:2467
+#: includes/class-userspn-mailing.php:313 includes/class-userspn-forms.php:114
 #: includes/class-userspn-functions-user.php:1802
 #: includes/class-userspn-functions-user.php:1803
 #: includes/class-userspn-functions-user.php:1991
+#: includes/class-userspn-2fa-profile.php:105
+#: includes/class-userspn-settings.php:2120
+#: includes/class-userspn-settings.php:2317
+#: includes/class-userspn-settings.php:2417
+#: includes/class-userspn-settings.php:2493
 msgid "Email"
 msgstr "Correo electrónico"
 
@@ -1063,13 +1075,13 @@ msgstr "Correo electrónico"
 msgid "Email address"
 msgstr "Dirección de correo electrónico"
 
-#: includes/class-userspn-settings.php:1318
+#: includes/class-userspn-settings.php:1343
 msgid "Email marketing and newsletter campaigns."
 msgstr "Marketing por correo electrónico y campañas de boletines informativos."
 
 #: includes/class-userspn-2fa-profile.php:165
 #: includes/class-userspn-2fa-profile.php:233
-#: includes/class-userspn-settings.php:821
+#: includes/class-userspn-settings.php:831
 msgid "Email verification code"
 msgstr "Código de verificación de correo electrónico"
 
@@ -1092,11 +1104,11 @@ msgstr "Datos de perfil vacíos o genéricos"
 msgid "Enable 2FA"
 msgstr "Habilitar la autenticación de dos factores (2FA)"
 
-#: includes/class-userspn-settings.php:1061
+#: includes/class-userspn-settings.php:1071
 msgid "Enable Akismet Protection"
 msgstr "Habilitar la protección de Akismet"
 
-#: includes/class-userspn-settings.php:1063
+#: includes/class-userspn-settings.php:1072
 msgid ""
 "Enable Akismet spam protection for user registration (requires Akismet "
 "plugin)."
@@ -1118,7 +1130,7 @@ msgstr "Habilitar el inicio de sesión con Apple"
 msgid "Enable Email 2FA"
 msgstr "Habilitar la autenticación de dos factores por correo electrónico"
 
-#: includes/class-userspn-settings.php:880
+#: includes/class-userspn-settings.php:890
 msgid "Enable email code login"
 msgstr "Habilitar el inicio de sesión con código de correo electrónico"
 
@@ -1138,29 +1150,29 @@ msgstr "Habilitar el inicio de sesión de GitHub"
 msgid "Enable Google Login"
 msgstr "Habilitar el inicio de sesión de Google"
 
-#: includes/class-userspn-settings.php:1005
+#: includes/class-userspn-settings.php:1015
 msgid "Enable Google reCAPTCHA v3"
 msgstr "Habilitar Google reCAPTCHA v3"
 
-#: includes/class-userspn-settings.php:1006
+#: includes/class-userspn-settings.php:1016
 msgid "Enable Google reCAPTCHA v3 protection for user registration forms."
 msgstr ""
 "Habilite la protección reCAPTCHA v3 de Google para los formularios de "
 "registro de usuarios."
 
-#: includes/class-userspn-settings.php:1072
+#: includes/class-userspn-settings.php:1080
 msgid "Enable Honeypot Protection"
 msgstr "Habilitar la protección Honeypot"
 
-#: includes/class-userspn-settings.php:1081
+#: includes/class-userspn-settings.php:1089
 msgid "Enable Rate Limiting"
 msgstr "Habilitar limitación de velocidad"
 
-#: includes/class-userspn-settings.php:889
+#: includes/class-userspn-settings.php:899
 msgid "Enable strong password"
 msgstr "Habilitar contraseña segura"
 
-#: includes/class-userspn-settings.php:890
+#: includes/class-userspn-settings.php:900
 msgid "Enable strong password check for user registration forms."
 msgstr ""
 "Habilitar la verificación de contraseña segura para los formularios de "
@@ -1170,11 +1182,11 @@ msgstr ""
 msgid "Enable Two-Factor Authentication"
 msgstr "Habilitar la autenticación de dos factores"
 
-#: includes/class-userspn-settings.php:806
+#: includes/class-userspn-settings.php:816
 msgid "Enable Two-Factor Authentication (2FA)"
 msgstr "Habilitar la autenticación de dos factores (2FA)"
 
-#: includes/class-userspn-settings.php:807
+#: includes/class-userspn-settings.php:817
 msgid ""
 "Enable two-factor authentication to add an extra layer of security to user "
 "accounts."
@@ -1186,8 +1198,8 @@ msgstr ""
 msgid "Enabled"
 msgstr "Activado"
 
-#: includes/class-userspn-settings.php:661
-#: includes/class-userspn-settings.php:681
+#: includes/class-userspn-settings.php:671
+#: includes/class-userspn-settings.php:691
 msgid "Enabled roles"
 msgstr "Roles habilitados"
 
@@ -1199,7 +1211,7 @@ msgstr ""
 "Mejora la seguridad de tu sitio web con autenticación de dos factores y "
 "opciones de inicio de sesión a través de redes sociales."
 
-#: includes/class-userspn-settings.php:1381
+#: includes/class-userspn-settings.php:1406
 msgid "Enhance your workflow with these companion plugins."
 msgstr "Optimiza tu flujo de trabajo con estos plugins complementarios."
 
@@ -1268,23 +1280,23 @@ msgstr "Introduce tu clave secreta de cliente de Google."
 msgid "Enter your password to confirm:"
 msgstr "Introduce tu contraseña para confirmar:"
 
-#: includes/class-userspn-settings.php:1027
+#: includes/class-userspn-settings.php:1037
 msgid "Enter your reCAPTCHA Secret Key"
 msgstr "Ingrese su clave secreta reCAPTCHA"
 
-#: includes/class-userspn-settings.php:1016
+#: includes/class-userspn-settings.php:1026
 msgid "Enter your reCAPTCHA Site Key"
 msgstr "Ingrese su clave de sitio reCAPTCHA"
 
-#: includes/class-userspn-settings.php:2339
+#: includes/class-userspn-settings.php:2365
 msgid "Enviar email"
 msgstr "Enviar correo electrónico"
 
-#: includes/class-userspn-settings.php:1946
+#: includes/class-userspn-settings.php:1972
 msgid "Error"
 msgstr "Error"
 
-#: includes/class-userspn-settings.php:1444
+#: includes/class-userspn-settings.php:1470
 msgid "Error activating plugin."
 msgstr "Error al activar el complemento."
 
@@ -1304,43 +1316,43 @@ msgstr "Error al conectar con Facebook."
 msgid "Error connecting to GitHub."
 msgstr "Error al conectar con GitHub."
 
-#: includes/class-userspn-ajax-nopriv.php:1205
 #: includes/class-userspn-google-oauth.php:128
+#: includes/class-userspn-ajax-nopriv.php:1205
 msgid "Error connecting to Google."
 msgstr "Error al conectar con Google."
 
-#: includes/class-userspn-apple-oauth.php:319
-#: includes/class-userspn-github-oauth.php:265
-#: includes/class-userspn-ajax-nopriv.php:1299
-#: includes/class-userspn-facebook-oauth.php:218
 #: includes/class-userspn-google-oauth.php:221
+#: includes/class-userspn-ajax-nopriv.php:1299
+#: includes/class-userspn-apple-oauth.php:319
+#: includes/class-userspn-facebook-oauth.php:218
+#: includes/class-userspn-github-oauth.php:265
 msgid "Error creating user account."
 msgstr "Error al crear la cuenta de usuario."
 
-#: includes/class-userspn-settings.php:1440
+#: includes/class-userspn-settings.php:1466
 msgid "Error exporting settings."
 msgstr "Error al exportar la configuración."
 
-#: includes/class-userspn-github-oauth.php:149
+#: includes/class-userspn-google-oauth.php:146
 #: includes/class-userspn-ajax-nopriv.php:1231
 #: includes/class-userspn-facebook-oauth.php:143
-#: includes/class-userspn-google-oauth.php:146
+#: includes/class-userspn-github-oauth.php:149
 msgid "Error getting user information."
 msgstr "Error al obtener la información del usuario."
 
-#: includes/class-userspn-settings.php:1438
+#: includes/class-userspn-settings.php:1464
 msgid "Error importing settings."
 msgstr "Error al importar la configuración."
 
-#: includes/class-userspn-settings.php:1443
+#: includes/class-userspn-settings.php:1469
 msgid "Error installing plugin."
 msgstr "Error al instalar el complemento."
 
-#: includes/class-userspn-apple-oauth.php:158
-#: includes/class-userspn-github-oauth.php:135
-#: includes/class-userspn-ajax-nopriv.php:1215
-#: includes/class-userspn-facebook-oauth.php:131
 #: includes/class-userspn-google-oauth.php:134
+#: includes/class-userspn-ajax-nopriv.php:1215
+#: includes/class-userspn-apple-oauth.php:158
+#: includes/class-userspn-facebook-oauth.php:131
+#: includes/class-userspn-github-oauth.php:135
 msgid "Error obtaining access token."
 msgstr "Error al obtener el token de acceso."
 
@@ -1348,8 +1360,8 @@ msgstr "Error al obtener el token de acceso."
 msgid "Este usuario no está marcado como sospechoso."
 msgstr "Este usuario no está marcado como sospechoso."
 
-#: includes/class-userspn-settings.php:1949
-#: includes/class-userspn-settings.php:2093
+#: includes/class-userspn-settings.php:1975
+#: includes/class-userspn-settings.php:2119
 msgid "Event"
 msgstr "Evento"
 
@@ -1378,19 +1390,19 @@ msgstr "Evolución últimos 30 días"
 msgid "Evolución últimos 7 días"
 msgstr "Evolución últimos 7 días"
 
-#: includes/class-userspn-settings.php:1595
+#: includes/class-userspn-settings.php:1621
 msgid "Evolution last 24 hours"
 msgstr "La evolución dura 24 horas."
 
-#: includes/class-userspn-settings.php:1597
+#: includes/class-userspn-settings.php:1623
 msgid "Evolution last 30 days"
 msgstr "La evolución dura 30 días."
 
-#: includes/class-userspn-settings.php:1596
+#: includes/class-userspn-settings.php:1622
 msgid "Evolution last 7 days"
 msgstr "La evolución duró 7 días."
 
-#: includes/class-userspn-settings.php:1598
+#: includes/class-userspn-settings.php:1624
 msgid "Evolution last year"
 msgstr "Evolución el año pasado"
 
@@ -1399,7 +1411,7 @@ msgstr "Evolución el año pasado"
 msgid "Existing user. Please login."
 msgstr "Usuario existente. Por favor inicia sesión."
 
-#: includes/class-userspn-settings.php:1366
+#: includes/class-userspn-settings.php:1391
 msgid "Export settings"
 msgstr "Exportar configuración"
 
@@ -1437,7 +1449,7 @@ msgstr "El inicio de sesión con Facebook no está configurado correctamente."
 msgid "Facebook login was cancelled."
 msgstr "Se canceló el inicio de sesión de Facebook."
 
-#: includes/class-userspn-settings.php:1941
+#: includes/class-userspn-settings.php:1967
 msgid "Failed"
 msgstr "Fallido"
 
@@ -1466,7 +1478,7 @@ msgstr ""
 "Fecha: %s\n"
 "\n"
 
-#: includes/class-userspn-settings.php:2141
+#: includes/class-userspn-settings.php:2167
 msgid "fields"
 msgstr "campos"
 
@@ -1474,9 +1486,9 @@ msgstr "campos"
 msgid "File uploads by role"
 msgstr "Carga de archivos por rol"
 
-#: templates/userspn-footer.php:59 includes/class-userspn-settings.php:1481
 #: includes/class-userspn-functions-user.php:785
 #: includes/class-userspn-functions-user.php:911
+#: includes/class-userspn-settings.php:1507 templates/userspn-footer.php:59
 msgid "Files"
 msgstr "Archivos"
 
@@ -1492,7 +1504,7 @@ msgstr "Finalizar el tutorial"
 msgid "First Name"
 msgstr "Nombre de pila"
 
-#: includes/class-userspn-settings.php:2946
+#: includes/class-userspn-settings.php:2976
 msgid "Footer Menu"
 msgstr "Menú de pie de página"
 
@@ -1551,11 +1563,11 @@ msgstr ""
 "Obtén tus credenciales desde la <a href=\"https://console.cloud.google."
 "com/apis/credentials\" target=\"_blank\">consola de Google Cloud</a> ."
 
-#: includes/class-userspn-settings.php:1028
+#: includes/class-userspn-settings.php:1038
 msgid "Get your Secret Key from Google reCAPTCHA console."
 msgstr "Obtén tu clave secreta de la consola Google reCAPTCHA."
 
-#: includes/class-userspn-settings.php:1017
+#: includes/class-userspn-settings.php:1027
 msgid "Get your Site Key from Google reCAPTCHA console."
 msgstr "Obtén tu clave de sitio desde la consola Google reCAPTCHA."
 
@@ -1567,13 +1579,13 @@ msgstr "ID de cliente de GitHub"
 msgid "GitHub Client Secret"
 msgstr "Secreto de cliente de GitHub"
 
-#: includes/class-userspn-github-oauth.php:82
 #: includes/class-userspn-ajax-nopriv.php:1079
+#: includes/class-userspn-github-oauth.php:82
 msgid "GitHub login is not available."
 msgstr "El inicio de sesión en GitHub no está disponible."
 
-#: includes/class-userspn-github-oauth.php:89
 #: includes/class-userspn-ajax-nopriv.php:1090
+#: includes/class-userspn-github-oauth.php:89
 msgid "GitHub login is not properly configured."
 msgstr "El inicio de sesión de GitHub no está configurado correctamente."
 
@@ -1589,15 +1601,15 @@ msgstr "ID de cliente de Google"
 msgid "Google Client Secret"
 msgstr "Secreto de cliente de Google"
 
+#: includes/class-userspn-google-oauth.php:82
 #: includes/class-userspn-ajax-nopriv.php:996
 #: includes/class-userspn-ajax-nopriv.php:1161
-#: includes/class-userspn-google-oauth.php:82
 msgid "Google login is not available."
 msgstr "El inicio de sesión con Google no está disponible."
 
+#: includes/class-userspn-google-oauth.php:89
 #: includes/class-userspn-ajax-nopriv.php:1007
 #: includes/class-userspn-ajax-nopriv.php:1172
-#: includes/class-userspn-google-oauth.php:89
 msgid "Google login is not properly configured."
 msgstr "El inicio de sesión con Google no está configurado correctamente."
 
@@ -1605,8 +1617,8 @@ msgstr "El inicio de sesión con Google no está configurado correctamente."
 msgid "Google login was cancelled."
 msgstr "Se canceló el inicio de sesión de Google."
 
-#: includes/class-userspn-mailing.php:204
 #: includes/class-userspn-ajax-nopriv.php:760
+#: includes/class-userspn-mailing.php:204
 #: includes/class-userspn-functions-user.php:606
 msgid "Hello"
 msgstr "Hola"
@@ -1632,7 +1644,7 @@ msgstr ""
 "por inactividad (quedan [days_remaining] días). Inicia sesión para mantener "
 "tu cuenta activa: [login_url]"
 
-#: includes/class-userspn-settings.php:974
+#: includes/class-userspn-settings.php:984
 msgid ""
 "Hello [user_name], your account at [site_name] will be deleted on "
 "[deletion_date] due to inactivity. Please log in to keep your account active."
@@ -1640,7 +1652,11 @@ msgstr ""
 "Hola [user_name], tu cuenta en [site_name] se eliminará el [deletion_date] "
 "por inactividad. Inicia sesión para mantenerla activa."
 
-#: includes/class-userspn-settings.php:1599
+#: includes/class-userspn-settings.php:1311
+msgid "Hide image"
+msgstr "Ocultar imagen"
+
+#: includes/class-userspn-settings.php:1625
 msgid "Historical evolution"
 msgstr "Evolución histórica"
 
@@ -1692,7 +1708,7 @@ msgstr ""
 "Si este no era usted, póngase en contacto con el servicio de asistencia de "
 "inmediato y cambie su contraseña."
 
-#: includes/class-userspn-settings.php:690
+#: includes/class-userspn-settings.php:700
 msgid ""
 "If you check this option, admin dashboard user edition and creation pages "
 "will show the added profile extra fields at the bottom. Administrators and "
@@ -1745,13 +1761,13 @@ msgstr ""
 msgid "If you did not request this code, please ignore this email."
 msgstr "Si usted no solicitó este código, ignore este correo electrónico."
 
-#: templates/userspn-footer.php:49 includes/class-userspn-settings.php:1471
 #: includes/class-userspn-functions-user.php:772
 #: includes/class-userspn-functions-user.php:898
+#: includes/class-userspn-settings.php:1497 templates/userspn-footer.php:49
 msgid "Image"
 msgstr "Imagen"
 
-#: includes/class-userspn-settings.php:1363
+#: includes/class-userspn-settings.php:1388
 msgid "Import settings"
 msgstr "Importar configuración"
 
@@ -1776,7 +1792,7 @@ msgstr "Incluye tu contraseña para confirmar la eliminación"
 msgid "Incorrect verification code."
 msgstr "Código de verificación incorrecto."
 
-#: includes/class-userspn-settings.php:1942
+#: includes/class-userspn-settings.php:1968
 msgid "Info"
 msgstr "Información"
 
@@ -1804,11 +1820,11 @@ msgstr "Subtipo de entrada"
 msgid "Input type"
 msgstr "Tipo de entrada"
 
-#: includes/class-userspn-settings.php:1405
+#: includes/class-userspn-settings.php:1430
 msgid "Install"
 msgstr "Instalar"
 
-#: includes/class-userspn-settings.php:1441
+#: includes/class-userspn-settings.php:1467
 msgid "Installing..."
 msgstr "Instalando..."
 
@@ -1825,11 +1841,11 @@ msgstr "Formato de código no válido."
 msgid "Invalid credentials."
 msgstr "Credenciales no válidas."
 
-#: includes/class-userspn-security.php:487
 #: includes/class-userspn-ajax-nopriv.php:859
 #: includes/class-userspn-ajax-nopriv.php:1349
 #: includes/class-userspn-ajax-nopriv.php:1386
 #: includes/class-userspn-ajax-nopriv.php:1457
+#: includes/class-userspn-security.php:487
 msgid "Invalid email address."
 msgstr "Dirección de correo electrónico no válida."
 
@@ -1841,11 +1857,11 @@ msgstr "Punto final no válido."
 msgid "Invalid ID token format."
 msgstr "Formato de token de ID no válido."
 
-#: includes/class-userspn-settings.php:1439
+#: includes/class-userspn-settings.php:1465
 msgid "Invalid JSON file."
 msgstr "Archivo JSON no válido."
 
-#: includes/class-userspn-ajax.php:1343
+#: includes/class-userspn-ajax.php:1353
 msgid "Invalid password. Please try again."
 msgstr "Contraseña incorrecta. Inténtalo de nuevo."
 
@@ -1857,14 +1873,14 @@ msgstr "Rol no válido especificado."
 msgid "Invalid selection format."
 msgstr "Formato de selección no válido."
 
-#: includes/class-userspn-ajax.php:1144
+#: includes/class-userspn-ajax.php:1154
 msgid "Invalid settings data."
 msgstr "Datos de configuración no válidos."
 
-#: includes/class-userspn-apple-oauth.php:114
-#: includes/class-userspn-github-oauth.php:109
-#: includes/class-userspn-facebook-oauth.php:109
 #: includes/class-userspn-google-oauth.php:109
+#: includes/class-userspn-apple-oauth.php:114
+#: includes/class-userspn-facebook-oauth.php:109
+#: includes/class-userspn-github-oauth.php:109
 msgid "Invalid state parameter."
 msgstr "Parámetro de estado no válido."
 
@@ -1881,15 +1897,15 @@ msgstr "Usuario no válido."
 msgid "Invalid verification code."
 msgstr "Código de verificación no válido."
 
+#: includes/class-userspn-ajax.php:1291
 #: includes/class-userspn-ajax-nopriv.php:1405
-#: includes/class-userspn-ajax.php:1281
 #: includes/class-userspn-2fa-login.php:448
 msgid "Invalid verification code. Please try again."
 msgstr "Código de verificación no válido. Inténtalo de nuevo."
 
-#: includes/class-userspn-settings.php:2095
+#: includes/class-userspn-settings.php:2121
 msgid "IP"
-msgstr "IP"
+msgstr "Propiedad intelectual"
 
 #: includes/class-userspn-security.php:746
 #, php-format
@@ -1898,15 +1914,15 @@ msgid ""
 msgstr ""
 "Dirección IP: %s\n"
 
-#: includes/class-userspn-settings.php:1587
+#: includes/class-userspn-settings.php:1613
 msgid "Last day"
 msgstr "Día último"
 
-#: includes/class-userspn-settings.php:2468
+#: includes/class-userspn-settings.php:2494
 msgid "Last login"
 msgstr "Último inicio de sesión"
 
-#: includes/class-userspn-settings.php:1589
+#: includes/class-userspn-settings.php:1615
 msgid "Last month"
 msgstr "Mes pasado"
 
@@ -1914,11 +1930,11 @@ msgstr "Mes pasado"
 msgid "Last Name"
 msgstr "Apellido"
 
-#: includes/class-userspn-settings.php:1588
+#: includes/class-userspn-settings.php:1614
 msgid "Last week"
 msgstr "La semana pasada"
 
-#: includes/class-userspn-settings.php:1590
+#: includes/class-userspn-settings.php:1616
 msgid "Last year"
 msgstr "El año pasado"
 
@@ -1934,12 +1950,12 @@ msgstr ""
 "Permítanos guiarle a través de las principales características de este "
 "potente plugin de gestión de usuarios."
 
-#: includes/class-userspn-settings.php:1082
+#: includes/class-userspn-settings.php:1090
 msgid "Limit registration attempts per IP address."
 msgstr "Limitar los intentos de registro por dirección IP."
 
-#: includes/class-userspn-2fa-profile.php:50
 #: includes/class-userspn-functions-user.php:2180
+#: includes/class-userspn-2fa-profile.php:50
 msgid "Loading..."
 msgstr "Cargando..."
 
@@ -1947,15 +1963,15 @@ msgstr "Cargando..."
 msgid "Log In"
 msgstr "Acceso"
 
-#: templates/userspn-footer.php:122 includes/class-userspn-settings.php:1541
 #: includes/class-userspn-functions-user.php:869
 #: includes/class-userspn-functions-user.php:996
+#: includes/class-userspn-settings.php:1567 templates/userspn-footer.php:122
 msgid "Log out"
 msgstr "Cerrar sesión"
 
-#: templates/userspn-footer.php:150
 #: includes/class-userspn-functions-user.php:1044
 #: includes/class-userspn-functions-user.php:1072
+#: templates/userspn-footer.php:150
 msgid "Login"
 msgstr "Acceso"
 
@@ -1963,9 +1979,9 @@ msgstr "Acceso"
 msgid "Login as"
 msgstr "Iniciar sesión como"
 
-#: includes/class-userspn-settings.php:2343
-#: includes/class-userspn-settings.php:2416
-#: includes/class-userspn-settings.php:2495
+#: includes/class-userspn-settings.php:2369
+#: includes/class-userspn-settings.php:2442
+#: includes/class-userspn-settings.php:2521
 msgid "Login as user"
 msgstr "Iniciar sesión como usuario"
 
@@ -1984,29 +2000,29 @@ msgstr "Código de verificación de inicio de sesión"
 msgid "Login with email code"
 msgstr "Iniciar sesión con el código de correo electrónico"
 
-#: includes/class-userspn-settings.php:1747
+#: includes/class-userspn-settings.php:1773
 msgid "Logins"
 msgstr "Inicios de sesión"
 
-#: includes/class-userspn-settings.php:1660
-#: includes/class-userspn-settings.php:1752
+#: includes/class-userspn-settings.php:1686
+#: includes/class-userspn-settings.php:1778
 #, php-format
 msgid "Logins (%s)"
 msgstr "Inicios de sesión (%s)"
 
-#: includes/class-userspn-settings.php:1618
+#: includes/class-userspn-settings.php:1644
 msgid "Logins in the last 24h"
 msgstr "Inicios de sesión en las últimas 24 horas"
 
-#: includes/class-userspn-settings.php:1620
+#: includes/class-userspn-settings.php:1646
 msgid "Logins in the last month"
 msgstr "Inicios de sesión en el último mes"
 
-#: includes/class-userspn-settings.php:1619
+#: includes/class-userspn-settings.php:1645
 msgid "Logins in the last week"
 msgstr "Inicios de sesión en la última semana"
 
-#: includes/class-userspn-settings.php:1621
+#: includes/class-userspn-settings.php:1647
 msgid "Logins in the last year"
 msgstr "Inicios de sesión en el último año"
 
@@ -2014,51 +2030,51 @@ msgstr "Inicios de sesión en el último año"
 msgid "Lowercase & Uppercase"
 msgstr "Mayúsculas y minúsculas"
 
-#: templates/userspn-footer.php:86 includes/class-userspn-settings.php:1508
 #: includes/class-userspn-functions-user.php:824
 #: includes/class-userspn-functions-user.php:950
+#: includes/class-userspn-settings.php:1534 templates/userspn-footer.php:86
 msgid "Mailing Manager - PN"
 msgstr "Mailing Manager - PN"
 
-#: includes/class-userspn-settings.php:994
+#: includes/class-userspn-settings.php:1004
 msgid "MailPN email template"
 msgstr "Plantilla de correo electrónico de MailPN"
 
-#: includes/class-userspn-settings.php:941
+#: includes/class-userspn-settings.php:951
 msgid "MailPN template"
 msgstr "Plantilla de MailPN"
 
-#: includes/class-userspn-settings.php:1167
+#: includes/class-userspn-settings.php:1175
 msgid "Main Background Color"
 msgstr "Color de fondo principal"
 
-#: includes/class-userspn-settings.php:1168
+#: includes/class-userspn-settings.php:1176
 msgid "Main background color used throughout the plugin interface."
 msgstr ""
 "Color de fondo principal utilizado en toda la interfaz del complemento."
 
-#: includes/class-userspn-settings.php:1212
+#: includes/class-userspn-settings.php:1220
 msgid "Main Blue Color"
 msgstr "Color azul principal"
 
-#: includes/class-userspn-settings.php:1213
+#: includes/class-userspn-settings.php:1221
 msgid "Main blue color used throughout the plugin interface."
 msgstr "Color azul principal utilizado en toda la interfaz del complemento."
 
-#: includes/class-userspn-settings.php:1176
+#: includes/class-userspn-settings.php:1184
 msgid "Main Border Color"
 msgstr "Color del borde principal"
 
-#: includes/class-userspn-settings.php:1177
+#: includes/class-userspn-settings.php:1185
 msgid "Main border color used throughout the plugin interface."
 msgstr ""
 "Color del borde principal utilizado en toda la interfaz del complemento."
 
-#: includes/class-userspn-settings.php:1158
+#: includes/class-userspn-settings.php:1166
 msgid "Main Color"
 msgstr "Color principal"
 
-#: includes/class-userspn-settings.php:1159
+#: includes/class-userspn-settings.php:1167
 msgid "Main color used throughout the plugin interface."
 msgstr "Color principal utilizado en toda la interfaz del complemento."
 
@@ -2076,7 +2092,7 @@ msgstr ""
 msgid "Manage tabs for the profile popup."
 msgstr "Gestiona las pestañas de la ventana emergente del perfil."
 
-#: includes/class-userspn-settings.php:1223
+#: includes/class-userspn-settings.php:1231
 msgid "Manage user role assignments for this plugin."
 msgstr ""
 "Administrar las asignaciones de roles de usuario para este complemento."
@@ -2085,11 +2101,11 @@ msgstr ""
 msgid "Manage your subscription"
 msgstr "Gestionar tu suscripción"
 
-#: includes/class-userspn-settings.php:1091
+#: includes/class-userspn-settings.php:1099
 msgid "Max Registration Attempts"
 msgstr "Intentos máximos de registro"
 
-#: includes/class-userspn-settings.php:1120
+#: includes/class-userspn-settings.php:1128
 msgid ""
 "Maximum newsletter subscription attempts per IP (more strict than general "
 "rate limit). Leave empty to use general rate limit."
@@ -2097,21 +2113,21 @@ msgstr ""
 "Máximo de intentos de suscripción al boletín por IP (más estricto que el "
 "límite general). Déjelo en blanco para usar el límite general."
 
-#: includes/class-userspn-settings.php:763
-#: includes/class-userspn-settings.php:764
+#: includes/class-userspn-settings.php:773
+#: includes/class-userspn-settings.php:774
 #| msgid "Max number of activation emails"
 msgid "Maximum number of activation emails"
 msgstr "Número máximo de correos electrónicos de activación"
 
-#: includes/class-userspn-settings.php:1095
+#: includes/class-userspn-settings.php:1103
 msgid "Maximum registration attempts per IP per hour."
 msgstr "Máximo de intentos de registro por IP por hora."
 
-#: includes/class-userspn-settings.php:2096
+#: includes/class-userspn-settings.php:2122
 msgid "Message"
 msgstr "Mensaje"
 
-#: includes/class-userspn-settings.php:975
+#: includes/class-userspn-settings.php:985
 msgid ""
 "Message body for the inactivity warning email. You can use [site_name], "
 "[user_name], [days_remaining], [deletion_date] and [login_url] as "
@@ -2156,7 +2172,7 @@ msgstr "Nombre obligatorio"
 msgid "Need help?"
 msgstr "¿Necesitar ayuda?"
 
-#: includes/class-userspn-ajax.php:1386
+#: includes/class-userspn-ajax.php:1396
 msgid ""
 "New backup codes have been generated. Previous codes are no longer valid."
 msgstr ""
@@ -2167,42 +2183,42 @@ msgstr ""
 msgid "New field"
 msgstr "Nuevo campo"
 
-#: includes/class-userspn-settings.php:1673
-#: includes/class-userspn-settings.php:1745
+#: includes/class-userspn-settings.php:1699
+#: includes/class-userspn-settings.php:1771
 msgid "New users"
 msgstr "Nuevos usuarios"
 
-#: includes/class-userspn-settings.php:1648
-#: includes/class-userspn-settings.php:1750
+#: includes/class-userspn-settings.php:1674
+#: includes/class-userspn-settings.php:1776
 #, php-format
 msgid "New users (%s)"
 msgstr "Nuevos usuarios (%s)"
 
-#: includes/class-userspn-settings.php:1604
+#: includes/class-userspn-settings.php:1630
 msgid "New users in the last 24h"
 msgstr "Nuevos usuarios en las últimas 24 horas"
 
-#: includes/class-userspn-settings.php:1606
+#: includes/class-userspn-settings.php:1632
 msgid "New users in the last month"
 msgstr "Nuevos usuarios en el último mes"
 
-#: includes/class-userspn-settings.php:1605
+#: includes/class-userspn-settings.php:1631
 msgid "New users in the last week"
 msgstr "Nuevos usuarios en la última semana"
 
-#: includes/class-userspn-settings.php:1607
+#: includes/class-userspn-settings.php:1633
 msgid "New users in the last year"
 msgstr "Nuevos usuarios en el último año"
 
-#: includes/class-userspn-settings.php:707
-#: includes/class-userspn-settings.php:715
-#: includes/class-userspn-settings.php:1677
-#: includes/class-userspn-settings.php:1746
+#: includes/class-userspn-settings.php:717
+#: includes/class-userspn-settings.php:725
+#: includes/class-userspn-settings.php:1703
+#: includes/class-userspn-settings.php:1772
 msgid "Newsletter"
 msgstr "Newsltetter"
 
-#: includes/class-userspn-settings.php:1654
-#: includes/class-userspn-settings.php:1751
+#: includes/class-userspn-settings.php:1680
+#: includes/class-userspn-settings.php:1777
 #, php-format
 msgid "Newsletter (%s)"
 msgstr "Boletín informativo (%s)"
@@ -2215,49 +2231,49 @@ msgstr ""
 "La activación del boletín informativo está deshabilitada. Contacte con el "
 "administrador."
 
-#: includes/class-userspn-settings.php:753
+#: includes/class-userspn-settings.php:763
 msgid "Newsletter activation required"
 msgstr "Se requiere activación del boletín informativo"
 
-#: includes/class-userspn-settings.php:733
+#: includes/class-userspn-settings.php:743
 msgid "Newsletter exit popup"
 msgstr "Ventana emergente de salida del boletín informativo"
 
-#: includes/class-userspn-settings.php:743
+#: includes/class-userspn-settings.php:753
 msgid "Newsletter is already loaded"
 msgstr "El boletín ya está cargado"
 
-#: includes/class-userspn-settings.php:1117
+#: includes/class-userspn-settings.php:1125
 msgid "Newsletter Max Attempts"
 msgstr "Boletín informativo Max Attempts"
 
-#: includes/class-userspn-settings.php:723
+#: includes/class-userspn-settings.php:733
 msgid "Newsletter message"
 msgstr "Mensaje del boletín informativo"
 
-#: includes/class-userspn-settings.php:1129
+#: includes/class-userspn-settings.php:1137
 msgid "Newsletter Rate Limit Window (hours)"
 msgstr "Ventana de límite de frecuencia del boletín informativo (horas)"
 
-#: includes/class-userspn-settings.php:1611
+#: includes/class-userspn-settings.php:1637
 msgid "Newsletter registrations in the last 24 hours"
 msgstr "Registros al boletín informativo en las últimas 24 horas"
 
-#: includes/class-userspn-settings.php:1613
+#: includes/class-userspn-settings.php:1639
 msgid "Newsletter registrations in the last month"
 msgstr "Registros al boletín informativo en el último mes"
 
-#: includes/class-userspn-settings.php:1612
+#: includes/class-userspn-settings.php:1638
 msgid "Newsletter registrations in the last week"
 msgstr "Registros para el boletín informativo en la última semana"
 
-#: includes/class-userspn-settings.php:1614
+#: includes/class-userspn-settings.php:1640
 msgid "Newsletter registrations in the last year"
 msgstr "Registros de boletines informativos en el último año"
 
-#: includes/class-userspn-forms.php:721
-#: includes/class-userspn-settings.php:1229
-#: includes/class-userspn-settings.php:1231 includes/class-userspn-ajax.php:137
+#: includes/class-userspn-ajax.php:137 includes/class-userspn-forms.php:721
+#: includes/class-userspn-settings.php:1237
+#: includes/class-userspn-settings.php:1239
 msgid "Newsletter Subscriber"
 msgstr "Suscriptor del boletín informativo"
 
@@ -2273,11 +2289,11 @@ msgstr "No"
 msgid "No activity since registration"
 msgstr "Sin actividad desde el registro"
 
-#: includes/class-userspn-apple-oauth.php:109
-#: includes/class-userspn-github-oauth.php:104
-#: includes/class-userspn-ajax-nopriv.php:1183
-#: includes/class-userspn-facebook-oauth.php:104
 #: includes/class-userspn-google-oauth.php:104
+#: includes/class-userspn-ajax-nopriv.php:1183
+#: includes/class-userspn-apple-oauth.php:109
+#: includes/class-userspn-facebook-oauth.php:104
+#: includes/class-userspn-github-oauth.php:104
 msgid "No authorization code received."
 msgstr "No se recibió ningún código de autorización."
 
@@ -2297,8 +2313,8 @@ msgstr "No se recibió ninguna dirección de correo electrónico de Facebook."
 msgid "No email address received from GitHub."
 msgstr "No se recibió ninguna dirección de correo electrónico de GitHub."
 
-#: includes/class-userspn-ajax-nopriv.php:1241
 #: includes/class-userspn-google-oauth.php:152
+#: includes/class-userspn-ajax-nopriv.php:1241
 msgid "No email address received from Google."
 msgstr "No se recibió ninguna dirección de correo electrónico de Google."
 
@@ -2314,11 +2330,11 @@ msgstr "No se ha subido ningún archivo"
 msgid "No images uploaded"
 msgstr "No hay imágenes cargadas"
 
-#: includes/class-userspn-ajax.php:1275
+#: includes/class-userspn-ajax.php:1285
 msgid "No secret found. Please generate a new QR code."
 msgstr "No se encontró ningún secreto. Genere un nuevo código QR."
 
-#: includes/class-userspn-settings.php:2175
+#: includes/class-userspn-settings.php:2201
 msgid "No security logs found. All clear!"
 msgstr "No se encontraron registros de seguridad. ¡Todo en orden!"
 
@@ -2339,15 +2355,15 @@ msgstr "No habilitado"
 msgid "Not required"
 msgstr "No requerido"
 
-#: templates/userspn-footer.php:54 includes/class-userspn-settings.php:1476
 #: includes/class-userspn-functions-user.php:779
 #: includes/class-userspn-functions-user.php:905
+#: includes/class-userspn-settings.php:1502 templates/userspn-footer.php:54
 msgid "Notifications"
 msgstr "Notificaciones"
 
-#: templates/userspn-footer.php:85 includes/class-userspn-settings.php:1507
 #: includes/class-userspn-functions-user.php:821
 #: includes/class-userspn-functions-user.php:947
+#: includes/class-userspn-settings.php:1533 templates/userspn-footer.php:85
 msgid ""
 "Notifications are inactive. Please install and activate Mailing Manager - PN "
 "to allow integrated notifications in your platform."
@@ -2382,7 +2398,7 @@ msgstr "El número debe ser al menos %s."
 msgid "Number must be at most %s."
 msgstr "El número debe ser como máximo %s."
 
-#: includes/class-userspn-settings.php:933
+#: includes/class-userspn-settings.php:943
 msgid ""
 "Number of days before account deletion to send the warning email. Must be "
 "less than the inactivity days."
@@ -2390,7 +2406,7 @@ msgstr ""
 "Número de días antes de la eliminación de la cuenta para enviar el correo "
 "electrónico de advertencia. Debe ser menor que los días de inactividad."
 
-#: includes/class-userspn-settings.php:788
+#: includes/class-userspn-settings.php:798
 msgid ""
 "Number of days that must pass since registration for the account to be "
 "deleted if it has not been activated. Default: 5 days."
@@ -2398,7 +2414,7 @@ msgstr ""
 "Número de días que deben transcurrir desde el registro para que la cuenta se "
 "elimine si no se ha activado. Valor predeterminado: 5 días."
 
-#: includes/class-userspn-settings.php:872
+#: includes/class-userspn-settings.php:882
 msgid ""
 "Number of days users have to set up 2FA after it becomes required. Set to 0 "
 "to require immediate setup."
@@ -2407,7 +2423,7 @@ msgstr ""
 "dos factores (2FA) después de que se vuelva obligatoria. Establezca el valor "
 "en 0 para que la configuración sea inmediata."
 
-#: includes/class-userspn-settings.php:911
+#: includes/class-userspn-settings.php:921
 msgid "Number of days without login before a user account is deleted."
 msgstr ""
 "Número de días sin iniciar sesión antes de que se elimine una cuenta de "
@@ -2422,9 +2438,9 @@ msgstr "Una opción por línea"
 msgid "Only letters, numbers and these symbols: !@#$%^&*()_+-=[]{}|;:,.<>?"
 msgstr "Sólo letras, números y estos símbolos: !@#$%^&*()_+-=[]{}|;:,.<>?"
 
-#: includes/class-userspn-settings.php:2045
-#: includes/class-userspn-settings.php:2075
-#: includes/class-userspn-settings.php:2157
+#: includes/class-userspn-settings.php:2071
+#: includes/class-userspn-settings.php:2101
+#: includes/class-userspn-settings.php:2183
 msgid "Open"
 msgstr "Abierto"
 
@@ -2483,11 +2499,11 @@ msgstr ""
 msgid "Parámetros inválidos."
 msgstr "Parámetros inválidos."
 
-#: includes/class-userspn-2fa-profile.php:280
 #: includes/class-userspn-forms.php:114
 #: includes/class-userspn-functions-user.php:1536
 #: includes/class-userspn-functions-user.php:1813
 #: includes/class-userspn-functions-user.php:1814
+#: includes/class-userspn-2fa-profile.php:280
 msgid "Password"
 msgstr "Contraseña"
 
@@ -2515,7 +2531,7 @@ msgstr "Métodos de pago"
 msgid "Pending"
 msgstr "Pendiente"
 
-#: includes/class-userspn-settings.php:1637
+#: includes/class-userspn-settings.php:1663
 #, fuzzy
 #| msgid "Periodo:"
 msgid "Period:"
@@ -2632,8 +2648,8 @@ msgstr ""
 msgid "Please, select a valid file."
 msgstr "Por favor, selecciona un archivo válido."
 
-#: includes/class-userspn-settings.php:1288
-#: includes/class-userspn-settings.php:1289
+#: includes/class-userspn-settings.php:1308
+#: includes/class-userspn-settings.php:1309
 msgid "Plugin main Banner"
 msgstr "Banner principal del complemento"
 
@@ -2645,7 +2661,7 @@ msgstr "Posición guardada exitosamente"
 msgid "Position the bubble in menu or custom location"
 msgstr "Coloca la burbuja en el menú o en una ubicación personalizada."
 
-#: includes/class-userspn-settings.php:2741
+#: includes/class-userspn-settings.php:2767
 msgid "Powered by"
 msgstr "Desarrollado por"
 
@@ -2657,13 +2673,13 @@ msgstr "Vista previa del perfil"
 msgid "Preview profile popup"
 msgstr "Ventana emergente de vista previa del perfil"
 
-#: includes/class-userspn-settings.php:2944
+#: includes/class-userspn-settings.php:2974
 msgid "Primary Menu"
 msgstr "Menú principal"
 
-#: templates/userspn-footer.php:46 includes/class-userspn-settings.php:1468
 #: includes/class-userspn-functions-user.php:768
 #: includes/class-userspn-functions-user.php:894
+#: includes/class-userspn-settings.php:1494 templates/userspn-footer.php:46
 msgid "Profile"
 msgstr "Perfil"
 
@@ -2704,11 +2720,11 @@ msgstr "Compras"
 msgid "Random images in avatar block"
 msgstr "Imágenes aleatorias en el bloque del avatar"
 
-#: includes/class-userspn-settings.php:1947
+#: includes/class-userspn-settings.php:1973
 msgid "Rate limit"
 msgstr "Límite de velocidad"
 
-#: includes/class-userspn-settings.php:1104
+#: includes/class-userspn-settings.php:1112
 msgid "Rate Limit Window (hours)"
 msgstr "Ventana de límite de velocidad (horas)"
 
@@ -2716,15 +2732,15 @@ msgstr "Ventana de límite de velocidad (horas)"
 msgid "Ready to record"
 msgstr "Listo para grabar"
 
-#: includes/class-userspn-settings.php:1037
+#: includes/class-userspn-settings.php:1047
 msgid "reCAPTCHA Score Threshold"
 msgstr "Umbral de puntuación de reCAPTCHA"
 
-#: includes/class-userspn-settings.php:1026
+#: includes/class-userspn-settings.php:1036
 msgid "reCAPTCHA Secret Key"
 msgstr "Clave secreta de reCAPTCHA"
 
-#: includes/class-userspn-settings.php:1015
+#: includes/class-userspn-settings.php:1025
 msgid "reCAPTCHA Site Key"
 msgstr "Clave del sitio reCAPTCHA"
 
@@ -2748,15 +2764,15 @@ msgstr "Error en la verificación de reCAPTCHA: no se puede conectar a Google."
 msgid "Receive notifications"
 msgstr "Recibir notificaciones"
 
-#: includes/class-userspn-settings.php:1394
+#: includes/class-userspn-settings.php:1419
 msgid "Recommended"
 msgstr "Recomendado"
 
-#: includes/class-userspn-settings.php:1380
+#: includes/class-userspn-settings.php:1405
 msgid "Recommended Plugins"
 msgstr "Plugins recomendados"
 
-#: includes/class-userspn-settings.php:1356
+#: includes/class-userspn-settings.php:1381
 msgid "Recommended plugins"
 msgstr "Plugins recomendados"
 
@@ -2764,10 +2780,10 @@ msgstr "Plugins recomendados"
 msgid "Regenerate Backup Codes"
 msgstr "Regenerar códigos de respaldo"
 
-#: templates/userspn-footer.php:153
 #: includes/class-userspn-functions-user.php:1049
 #: includes/class-userspn-functions-user.php:1077
 #: includes/class-userspn-functions-user.php:1840
+#: templates/userspn-footer.php:153
 msgid "Register"
 msgstr "Registro"
 
@@ -2802,11 +2818,11 @@ msgid ""
 msgstr ""
 "Registro bloqueado: Demasiados intentos. Inténtalo de nuevo en %d horas."
 
-#: includes/class-userspn-settings.php:2292
+#: includes/class-userspn-settings.php:2318
 msgid "Registration data"
 msgstr "Datos de registro"
 
-#: includes/class-userspn-settings.php:2392
+#: includes/class-userspn-settings.php:2418
 msgid "Registration date"
 msgstr "Fecha de inscripción"
 
@@ -2848,10 +2864,10 @@ msgstr "Eliminar campo"
 msgid "Remove file"
 msgstr "Eliminar archivo"
 
+#: includes/class-userspn-ajax.php:263 includes/class-userspn-ajax.php:273
 #: includes/class-userspn-functions-user.php:1489
 #: includes/class-userspn-functions-user.php:1508
 #: includes/class-userspn-functions-user.php:1540
-#: includes/class-userspn-ajax.php:263 includes/class-userspn-ajax.php:273
 msgid "Remove user"
 msgstr "Eliminar usuario"
 
@@ -2878,13 +2894,13 @@ msgstr "Requisitos para su puesto"
 msgid "Resend code"
 msgstr "Reenviar código"
 
-#: includes/class-userspn-settings.php:2164
+#: includes/class-userspn-settings.php:2190
 msgid "Resolve"
 msgstr "Resolver"
 
-#: includes/class-userspn-settings.php:2076
-#: includes/class-userspn-settings.php:2155
-#: includes/class-userspn-settings.php:2223
+#: includes/class-userspn-settings.php:2102
+#: includes/class-userspn-settings.php:2181
+#: includes/class-userspn-settings.php:2249
 msgid "Resolved"
 msgstr "Resuelto"
 
@@ -2910,8 +2926,8 @@ msgid "Save field"
 msgstr "Guardar campo"
 
 #: includes/class-userspn-notifications.php:195
-#: includes/class-userspn-settings.php:1298
-#: includes/class-userspn-settings.php:1370
+#: includes/class-userspn-settings.php:1323
+#: includes/class-userspn-settings.php:1395
 msgid "Save options"
 msgstr "Guardar opciones"
 
@@ -2930,7 +2946,7 @@ msgid ""
 msgstr ""
 "Puntuación reCAPTCHA: %.2f (Umbral: %.2f)\n"
 
-#: includes/class-userspn-settings.php:1042
+#: includes/class-userspn-settings.php:1052
 msgid ""
 "Score threshold for blocking (0.1 = very strict, 1.0 = very permissive). "
 "Recommended: 0.5"
@@ -2947,7 +2963,7 @@ msgstr ""
 "Se ha detectado un posible registro fraudulento en %s:\n"
 "\n"
 
-#: includes/class-userspn-settings.php:2945
+#: includes/class-userspn-settings.php:2975
 msgid "Secondary Menu"
 msgstr "Menú secundario"
 
@@ -2969,11 +2985,11 @@ msgstr "Falló la comprobación de seguridad."
 msgid "Security check failed. Please try again."
 msgstr "Error en la comprobación de seguridad. Inténtalo de nuevo."
 
-#: includes/class-userspn-ajax-nopriv.php:33 includes/class-userspn-ajax.php:34
+#: includes/class-userspn-ajax.php:34 includes/class-userspn-ajax-nopriv.php:33
 msgid "Security check failed: Invalid nonce."
 msgstr "Error en la comprobación de seguridad: nonce no válido."
 
-#: includes/class-userspn-ajax-nopriv.php:24 includes/class-userspn-ajax.php:25
+#: includes/class-userspn-ajax.php:25 includes/class-userspn-ajax-nopriv.php:24
 msgid "Security check failed: Nonce is required."
 msgstr "Error en la comprobación de seguridad: se requiere Nonce."
 
@@ -2983,13 +2999,13 @@ msgstr ""
 "Comprobación de seguridad aprobada. Procediendo con el restablecimiento de "
 "contraseña..."
 
-#: includes/class-userspn-settings.php:1264
-#: includes/class-userspn-settings.php:1265
-#: includes/class-userspn-settings.php:2026
+#: includes/class-userspn-settings.php:1282
+#: includes/class-userspn-settings.php:1283
+#: includes/class-userspn-settings.php:2052
 msgid "Security Logs"
 msgstr "Registros de seguridad"
 
-#: includes/class-userspn-settings.php:2032
+#: includes/class-userspn-settings.php:2058
 msgid ""
 "Security logs table not found. Please deactivate and reactivate the plugin "
 "to create it."
@@ -2998,7 +3014,7 @@ msgstr ""
 "complemento para crearla."
 
 #: includes/class-userspn-tutorial.php:184
-#: includes/class-userspn-settings.php:796
+#: includes/class-userspn-settings.php:806
 msgid "Security Settings"
 msgstr "Configuración de seguridad"
 
@@ -3051,7 +3067,7 @@ msgstr "Selector múltiple"
 msgid "Select requirement"
 msgstr "Selector requerido"
 
-#: includes/class-userspn-settings.php:854
+#: includes/class-userspn-settings.php:864
 msgid "Select roles for 2FA"
 msgstr "Seleccione los roles para la autenticación de dos factores (2FA)."
 
@@ -3059,7 +3075,7 @@ msgstr "Seleccione los roles para la autenticación de dos factores (2FA)."
 msgid "Select subtype"
 msgstr "Seleccionar subtipo"
 
-#: includes/class-userspn-settings.php:995
+#: includes/class-userspn-settings.php:1005
 msgid ""
 "Select the MailPN email template to use for the inactivity warning "
 "notification."
@@ -3073,7 +3089,7 @@ msgstr ""
 "Seleccione la página y la clave meta que desea rastrear para completar el "
 "perfil."
 
-#: includes/class-userspn-settings.php:855
+#: includes/class-userspn-settings.php:865
 msgid ""
 "Select the user roles that will be required to use two-factor authentication."
 " Hold Ctrl (Windows) or Cmd (Mac) to select multiple roles."
@@ -3102,7 +3118,7 @@ msgstr "Seleccionar vídeos"
 msgid "Selector subtype"
 msgstr "Seleccionar subtipo"
 
-#: includes/class-userspn-settings.php:921
+#: includes/class-userspn-settings.php:931
 msgid ""
 "Send an email notification to users before their account is deleted due to "
 "inactivity."
@@ -3110,8 +3126,8 @@ msgstr ""
 "Enviar una notificación por correo electrónico a los usuarios antes de que "
 "su cuenta sea eliminada por inactividad."
 
-#: includes/class-userspn-settings.php:2412
-#: includes/class-userspn-settings.php:2491
+#: includes/class-userspn-settings.php:2438
+#: includes/class-userspn-settings.php:2517
 msgid "Send email"
 msgstr "Enviar correo electrónico"
 
@@ -3119,7 +3135,7 @@ msgstr "Enviar correo electrónico"
 msgid "Send verification code"
 msgstr "Enviar código de verificación"
 
-#: includes/class-userspn-settings.php:920
+#: includes/class-userspn-settings.php:930
 msgid "Send warning before deletion"
 msgstr "Enviar advertencia antes de la eliminación"
 
@@ -3131,7 +3147,7 @@ msgstr "La sesión ha caducado. Por favor, inicie sesión de nuevo."
 msgid "Set custom position"
 msgstr "Establecer posición personalizada"
 
-#: includes/class-userspn-settings.php:662
+#: includes/class-userspn-settings.php:672
 msgid ""
 "Set up the roles to get dashboard access. This option takes priority over "
 "the previous one. If a role appears in both fields, this \"Enabled roles\" "
@@ -3142,7 +3158,7 @@ msgstr ""
 "campo \"Roles habilitados\" será el que se tenga en cuenta y se proporcione "
 "el acceso."
 
-#: includes/class-userspn-settings.php:682
+#: includes/class-userspn-settings.php:692
 msgid ""
 "Set up the roles to get the admin bar. This option takes priority over the "
 "previous one. If a role appears in both fields, this \"Enabled roles\" field "
@@ -3154,12 +3170,12 @@ msgstr ""
 "tendrá en cuenta este campo “Roles habilitados” y se mostrará la barra de "
 "administración."
 
-#: includes/class-userspn-settings.php:2890
-#: includes/class-userspn-settings.php:2959
+#: includes/class-userspn-settings.php:2920
+#: includes/class-userspn-settings.php:2989
 msgid "Settings"
 msgstr "Ajustes"
 
-#: includes/class-userspn-settings.php:1437
+#: includes/class-userspn-settings.php:1463
 msgid "Settings imported successfully. Reloading..."
 msgstr "Configuración importada correctamente. Recargando..."
 
@@ -3173,6 +3189,16 @@ msgstr "Instrucciones de configuración"
 #: includes/class-userspn-settings.php:152
 msgid "Show profile completion block"
 msgstr "Mostrar bloque de finalización de perfil"
+
+#: includes/class-userspn-settings.php:1252
+msgid "Show settings banner image"
+msgstr "Mostrar imagen de banner de configuración"
+
+#: includes/class-userspn-settings.php:1253
+msgid "Show the banner image at the top of the settings page."
+msgstr ""
+"Mostrar la imagen del banner en la parte superior de la página de "
+"configuración."
 
 #: includes/class-userspn-security.php:752
 msgid "Si no haces nada, el usuario podrá acceder normalmente a la web."
@@ -3189,8 +3215,8 @@ msgstr "Selector simple"
 msgid "Skip tutorial"
 msgstr "Saltar tutorial"
 
-#: includes/class-userspn-settings.php:367
 #: includes/class-userspn-functions-user.php:1649
+#: includes/class-userspn-settings.php:367
 msgid "Social Login"
 msgstr "Inicio de sesión social"
 
@@ -3206,7 +3232,7 @@ msgstr "Inicio de sesión social:"
 msgid "Special Character (!@#$%^&*)"
 msgstr "Caracter especial (!@#$%^&*)"
 
-#: includes/class-userspn-settings.php:832
+#: includes/class-userspn-settings.php:842
 msgid "Specify roles to which 2FA will apply"
 msgstr ""
 "Especifique los roles a los que se aplicará la autenticación de dos factores "
@@ -3220,12 +3246,12 @@ msgstr "Iniciar análisis"
 msgid "Start recording"
 msgstr "Iniciar grabación"
 
-#: includes/class-userspn-settings.php:1254
-#: includes/class-userspn-settings.php:1255
+#: includes/class-userspn-settings.php:1272
+#: includes/class-userspn-settings.php:1273
 msgid "Statistics"
 msgstr "Estadística"
 
-#: includes/class-userspn-settings.php:2098
+#: includes/class-userspn-settings.php:2124
 msgid "Status"
 msgstr "Estado"
 
@@ -3256,7 +3282,7 @@ msgstr ""
 "sesión seguros y una gestión de perfiles sin inconvenientes para sus "
 "usuarios."
 
-#: includes/class-userspn-settings.php:965
+#: includes/class-userspn-settings.php:975
 msgid ""
 "Subject line for the inactivity warning email. You can use [site_name], "
 "[user_name], [days_remaining] and [deletion_date] as placeholders."
@@ -3269,11 +3295,11 @@ msgstr ""
 msgid "Submit"
 msgstr "Enviar"
 
-#: includes/class-userspn-settings.php:1939
+#: includes/class-userspn-settings.php:1965
 msgid "Success"
 msgstr "Éxito"
 
-#: includes/class-userspn-settings.php:2053
+#: includes/class-userspn-settings.php:2079
 msgid "Successful"
 msgstr "Exitoso"
 
@@ -3286,8 +3312,8 @@ msgstr "Apellidos"
 msgid "Surname compulsory"
 msgstr "Apellido obligatorio"
 
-#: includes/class-userspn-settings.php:1943
-#: includes/class-userspn-settings.php:1944
+#: includes/class-userspn-settings.php:1969
+#: includes/class-userspn-settings.php:1970
 msgid "Suspicious"
 msgstr "Sospechoso"
 
@@ -3305,7 +3331,7 @@ msgstr "Cadenas de agente de usuario sospechosas"
 msgid "Tabs"
 msgstr "Cortina a la italiana"
 
-#: includes/class-userspn-settings.php:1325
+#: includes/class-userspn-settings.php:1350
 msgid "Task and project management."
 msgstr "Gestión de tareas y proyectos."
 
@@ -3381,7 +3407,7 @@ msgstr "El usuario ha sido eliminado con éxito del sistema. Recargando..."
 msgid "The verification code has expired. Please request a new one."
 msgstr "El código de verificación ha caducado. Solicite uno nuevo."
 
-#: includes/class-userspn-settings.php:2504
+#: includes/class-userspn-settings.php:2530
 msgid "There are no access records for this period"
 msgstr "No hay registros de acceso para este período."
 
@@ -3389,11 +3415,11 @@ msgstr "No hay registros de acceso para este período."
 msgid "There are no extra fields in the profile"
 msgstr "No hay campos extra en el perfil"
 
-#: includes/class-userspn-settings.php:2351
+#: includes/class-userspn-settings.php:2377
 msgid "There are no new users during this period"
 msgstr "No hay nuevos usuarios durante este período."
 
-#: includes/class-userspn-settings.php:2424
+#: includes/class-userspn-settings.php:2450
 msgid "There were no newsletter sign-ups during this period."
 msgstr ""
 "Durante este período no se registraron nuevas suscripciones al boletín "
@@ -3563,7 +3589,7 @@ msgstr ""
 "contraseña de WordPress de forma predeterminada. Generará un nonce único y "
 "lo enviará al usuario para que cambie la contraseña de forma segura."
 
-#: includes/class-userspn-settings.php:765
+#: includes/class-userspn-settings.php:775
 msgid ""
 "This option set up the maximum numer of activating emails allowed to be sent "
 "from the platform."
@@ -3588,7 +3614,7 @@ msgstr ""
 "perfil que permite a los usuarios administrar sus pedidos, descargas y "
 "detalles de cuenta de WooCommerce."
 
-#: includes/class-userspn-settings.php:699
+#: includes/class-userspn-settings.php:709
 msgid ""
 "This option will allow administrators to login as any user on the platform "
 "with no administrator role. Please use this option with caution and "
@@ -3610,7 +3636,7 @@ msgstr ""
 "usuario actual. Esto no funcionará para perfiles de administrador, sino para "
 "cualquier otro contacto en todo el sitio web."
 
-#: includes/class-userspn-settings.php:642
+#: includes/class-userspn-settings.php:652
 msgid ""
 "This option will modify also the dashboard main top left logo link using the "
 "link and text set above."
@@ -3619,7 +3645,7 @@ msgstr ""
 "principal del panel de administracón usando el enlace y el texto "
 "establecidos arriba."
 
-#: includes/class-userspn-settings.php:632
+#: includes/class-userspn-settings.php:642
 msgid ""
 "This option will modify also the dashboard main top left logo using the "
 "image set above."
@@ -3650,7 +3676,7 @@ msgstr ""
 "Estas opciones permiten a los contactos incluir imágenes de perfil "
 "personalizadas en sus perfiles."
 
-#: includes/class-userspn-settings.php:1142
+#: includes/class-userspn-settings.php:1150
 msgid ""
 "This tool analyzes existing users to identify potential bots based on "
 "various patterns and behaviors such as suspicious email patterns, bot-like "
@@ -3670,7 +3696,7 @@ msgstr ""
 "Esta herramienta analiza a los usuarios existentes para identificar posibles "
 "bots basándose en diversos patrones y comportamientos."
 
-#: includes/class-userspn-settings.php:1436
+#: includes/class-userspn-settings.php:1462
 msgid "This will overwrite your current settings. Continue?"
 msgstr "Esto sobrescribirá tu configuración actual. ¿Continuar?"
 
@@ -3678,7 +3704,7 @@ msgstr "Esto sobrescribirá tu configuración actual. ¿Continuar?"
 msgid "Time"
 msgstr "Hora"
 
-#: includes/class-userspn-settings.php:1132
+#: includes/class-userspn-settings.php:1140
 msgid ""
 "Time window in hours for newsletter rate limiting. Leave empty to use "
 "general rate limit."
@@ -3686,7 +3712,7 @@ msgstr ""
 "Ventana de tiempo en horas para limitar la frecuencia del boletín. Deje este "
 "campo en blanco para usar el límite de frecuencia general."
 
-#: includes/class-userspn-settings.php:1108
+#: includes/class-userspn-settings.php:1116
 msgid "Time window in hours for rate limiting."
 msgstr "Ventana de tiempo en horas para limitación de velocidad."
 
@@ -3710,11 +3736,11 @@ msgstr "Todos los usuarios"
 msgid "Too many failed attempts. Please request a new code."
 msgstr "Demasiados intentos fallidos. Por favor, solicite un nuevo código."
 
-#: includes/class-userspn-settings.php:1582 includes/class-userspn-ajax.php:838
+#: includes/class-userspn-ajax.php:838 includes/class-userspn-settings.php:1608
 msgid "total"
 msgstr "total"
 
-#: includes/class-userspn-settings.php:2041
+#: includes/class-userspn-settings.php:2067
 msgid "Total events"
 msgstr "Total de eventos"
 
@@ -3752,11 +3778,11 @@ msgstr "Autenticación de dos factores habilitada"
 msgid "Two-factor authentication has been disabled on your account."
 msgstr "La autenticación de dos factores se ha desactivado en tu cuenta."
 
-#: includes/class-userspn-ajax.php:1361
+#: includes/class-userspn-ajax.php:1371
 msgid "Two-factor authentication has been disabled."
 msgstr "La autenticación de dos factores ha sido desactivada."
 
-#: includes/class-userspn-ajax.php:1301
+#: includes/class-userspn-ajax.php:1311
 msgid "Two-factor authentication has been enabled successfully."
 msgstr "La autenticación de dos factores se ha habilitado correctamente."
 
@@ -3767,7 +3793,7 @@ msgid ""
 msgstr ""
 "La autenticación de dos factores se ha activado correctamente en su cuenta."
 
-#: includes/class-userspn-ajax.php:1375
+#: includes/class-userspn-ajax.php:1385
 msgid "Two-factor authentication is not enabled."
 msgstr "La autenticación de dos factores no está habilitada."
 
@@ -3780,8 +3806,8 @@ msgstr ""
 "contacto con un administrador o configure la autenticación de dos factores "
 "en su perfil."
 
+#: includes/class-userspn-ajax.php:1359
 #: includes/class-userspn-2fa-profile.php:293
-#: includes/class-userspn-ajax.php:1349
 msgid ""
 "Two-factor authentication is required for your role and cannot be disabled."
 msgstr ""
@@ -3792,7 +3818,7 @@ msgstr ""
 msgid "Two-factor authentication required."
 msgstr "Se requiere autenticación de dos factores."
 
-#: includes/class-userspn-ajax.php:1325
+#: includes/class-userspn-ajax.php:1335
 msgid "Two-factor authentication via email has been enabled successfully."
 msgstr ""
 "La autenticación de dos factores mediante correo electrónico se ha "
@@ -3806,9 +3832,9 @@ msgstr "Actualizar perfil"
 msgid "Update user"
 msgstr "Actualizar usuario"
 
+#: includes/class-userspn-functions-attachment.php:101
 #: includes/class-userspn-functions-user.php:2116
 #: includes/class-userspn-functions-user.php:2119
-#: includes/class-userspn-functions-attachment.php:101
 msgid "Upload"
 msgstr "Cargar"
 
@@ -3840,9 +3866,9 @@ msgstr ""
 msgid "Use WordPress password recovery system"
 msgstr "Utilice el sistema de recuperación de contraseña de WordPress"
 
-#: includes/class-userspn-settings.php:2290
-#: includes/class-userspn-settings.php:2390
-#: includes/class-userspn-settings.php:2466
+#: includes/class-userspn-settings.php:2316
+#: includes/class-userspn-settings.php:2416
+#: includes/class-userspn-settings.php:2492
 msgid "User"
 msgstr "Usuario"
 
@@ -3890,11 +3916,11 @@ msgstr "pestaña de notificaciones de usuario"
 msgid "User Profile Block"
 msgstr "Bloque de perfil de usuario"
 
-#: includes/class-userspn-settings.php:1222
+#: includes/class-userspn-settings.php:1230
 msgid "User Roles"
 msgstr "Roles de usuario"
 
-#: includes/class-userspn-settings.php:698
+#: includes/class-userspn-settings.php:708
 msgid "Users auto-login"
 msgstr "Login automático de usuarios"
 
@@ -3902,7 +3928,7 @@ msgstr "Login automático de usuarios"
 msgid "Users files"
 msgstr "Archivos de usuarios"
 
-#: includes/class-userspn-settings.php:1249
+#: includes/class-userspn-settings.php:1267
 msgid "Users manager"
 msgstr "Gestor de usuarios"
 
@@ -3911,7 +3937,7 @@ msgstr "Gestor de usuarios"
 msgid "Users manager - PN"
 msgstr "Gestión de usuarios - PN"
 
-#: includes/class-userspn-settings.php:1292
+#: includes/class-userspn-settings.php:1317
 msgid "Users manager - PN Settings"
 msgstr "Gestor de usuarios - Opciones de PN"
 
@@ -3992,25 +4018,25 @@ msgstr "Código de verificación"
 msgid "View details"
 msgstr "Ver detalles"
 
-#: includes/class-userspn-settings.php:1945
+#: includes/class-userspn-settings.php:1971
 msgid "Warning"
 msgstr "Advertencia"
 
-#: includes/class-userspn-settings.php:973
+#: includes/class-userspn-settings.php:983
 msgid "Warning email message"
 msgstr "Mensaje de correo electrónico de advertencia"
 
-#: includes/class-userspn-settings.php:963
+#: includes/class-userspn-settings.php:973
 msgid "Warning email subject"
 msgstr "Asunto del correo electrónico de advertencia"
 
-#: includes/class-userspn-settings.php:950
+#: includes/class-userspn-settings.php:960
 msgid "Warning notification method"
 msgstr "Método de notificación de advertencia"
 
-#: templates/userspn-bot-analysis-popup.php:46
 #: includes/class-userspn-mailing.php:530
 #: includes/class-userspn-mailing.php:561
+#: templates/userspn-bot-analysis-popup.php:46
 msgid "Warning:"
 msgstr "Advertencia:"
 
@@ -4036,7 +4062,7 @@ msgstr "Bienvenido a nuestro boletín informativo"
 msgid "Welcome to UsersPN"
 msgstr "Bienvenido a UsersPN"
 
-#: includes/class-userspn-settings.php:1052
+#: includes/class-userspn-settings.php:1062
 msgid ""
 "When enabled, registrations with reCAPTCHA scores below the threshold will "
 "be blocked. When disabled, they will be logged but allowed."
@@ -4045,7 +4071,7 @@ msgstr ""
 "reCAPTCHA inferiores al umbral. Al deshabilitarla, se registrarán, pero se "
 "permitirán."
 
-#: includes/class-userspn-settings.php:833
+#: includes/class-userspn-settings.php:843
 msgid ""
 "When enabled, you can select specific user roles that will be required to "
 "use 2FA."
@@ -4053,7 +4079,7 @@ msgstr ""
 "Cuando está habilitada, puedes seleccionar roles de usuario específicos que "
 "deberán usar la autenticación de dos factores (2FA)."
 
-#: includes/class-userspn-settings.php:754
+#: includes/class-userspn-settings.php:764
 msgid ""
 "When this option is active, the system asks contacts to verify their emails "
 "via a link sent to their email address as they register in the platform."
@@ -4062,7 +4088,7 @@ msgstr ""
 "verifiquen sus correos electrónicos a través de un enlace enviado a su "
 "dirección de correo electrónico cuando se registran en la plataforma."
 
-#: includes/class-userspn-settings.php:734
+#: includes/class-userspn-settings.php:744
 msgid ""
 "When this option is active, the system shows a popup when a contact tries to "
 "exit page without completing the newsletter registration form."
@@ -4071,7 +4097,7 @@ msgstr ""
 "cuando un contacto intenta salir de la página sin completar el formulario de "
 "registro del boletín."
 
-#: includes/class-userspn-settings.php:775
+#: includes/class-userspn-settings.php:785
 msgid ""
 "When this option is active, the system will automatically delete user "
 "accounts that have registered for the newsletter but have not activated "
@@ -4184,13 +4210,13 @@ msgstr ""
 "Puedes volver a activar la autenticación de dos factores en cualquier "
 "momento desde la configuración de tu perfil."
 
-#: includes/class-userspn-settings.php:671
+#: includes/class-userspn-settings.php:681
 msgid "You can remove the front-end admin bar by contacts role."
 msgstr ""
 "Puede eliminar la barra de administración de front-end según la función de "
 "contactos."
 
-#: includes/class-userspn-settings.php:651
+#: includes/class-userspn-settings.php:661
 msgid ""
 "You can revoke the accesss to certain roles to the administrator dashboard "
 "completely."
@@ -4202,7 +4228,7 @@ msgstr ""
 msgid "You can upload files to the system and access them from your profile."
 msgstr "Puedes subir archivos al sistema y acceder a ellos desde tu perfil."
 
-#: includes/class-userspn-forms.php:716 includes/class-userspn-ajax.php:110
+#: includes/class-userspn-ajax.php:110 includes/class-userspn-forms.php:716
 msgid "You do not have permission to manage user roles."
 msgstr "No tienes permiso para administrar roles de usuario."
 
@@ -4236,10 +4262,10 @@ msgstr "No has registrado ningún campo todavía"
 msgid "You must be logged in to create a new asset."
 msgstr "Debe iniciar sesión para crear un nuevo activo."
 
-#: includes/class-userspn-ajax.php:1063 includes/class-userspn-ajax.php:1243
-#: includes/class-userspn-ajax.php:1264 includes/class-userspn-ajax.php:1309
-#: includes/class-userspn-ajax.php:1333 includes/class-userspn-ajax.php:1368
-#: includes/class-userspn-ajax.php:1393
+#: includes/class-userspn-ajax.php:1063 includes/class-userspn-ajax.php:1253
+#: includes/class-userspn-ajax.php:1274 includes/class-userspn-ajax.php:1319
+#: includes/class-userspn-ajax.php:1343 includes/class-userspn-ajax.php:1378
+#: includes/class-userspn-ajax.php:1403
 msgid "You must be logged in."
 msgstr "Debes estar conectado."
 
@@ -4306,7 +4332,7 @@ msgstr ""
 "La eliminación de tu cuenta será permanente. ¡Esta acción no se puede "
 "deshacer!"
 
-#: includes/class-userspn-settings.php:964
+#: includes/class-userspn-settings.php:974
 msgid "Your account will be deleted due to inactivity"
 msgstr "Tu cuenta será eliminada por inactividad."
 
@@ -4357,7 +4383,7 @@ msgstr "Tu código de verificación es:"
 msgid "your@email.com"
 msgstr "your@email.com"
 
-#: includes/class-userspn-settings.php:983
+#: includes/class-userspn-settings.php:993
 msgid "— Select a template —"
 msgstr "— Seleccione una plantilla —"
 

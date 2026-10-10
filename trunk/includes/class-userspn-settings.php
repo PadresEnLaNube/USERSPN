@@ -621,6 +621,16 @@ class USERSPN_Settings
       'label' => __('Dashboard main login page CSS', 'userspn'),
       'placeholder' => __('Dashboard main login page CSS', 'userspn'),
     ];
+    $userspn_options['userspn_login_custom_style'] = [
+      'id' => 'userspn_login_custom_style',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'input',
+      'type' => 'checkbox',
+      'parent' => 'userspn_admin_page',
+      'parent_option' => 'on',
+      'label' => __('Custom login page style', 'userspn'),
+      'description' => __('Apply a modern custom style to the login and password reset pages to replace the default WordPress appearance.', 'userspn'),
+    ];
     $userspn_options['userspn_dashboard_logo'] = [
       'id' => 'userspn_dashboard_logo',
       'class' => 'userspn-input userspn-width-100-percent',
@@ -1051,19 +1061,17 @@ class USERSPN_Settings
       'label' => __('Block Suspicious Scores', 'userspn'),
       'description' => __('When enabled, registrations with reCAPTCHA scores below the threshold will be blocked. When disabled, they will be logged but allowed.', 'userspn'),
     ];
-    $akismet_active = function_exists('akismet_http_post');
-    $userspn_options['userspn_akismet_enabled'] = [
-      'id' => 'userspn_akismet_enabled',
-      'class' => 'userspn-input userspn-width-100-percent',
-      'input' => 'input',
-      'type' => 'checkbox',
-      'parent' => 'this',
-      'label' => __('Enable Akismet Protection', 'userspn'),
-      'description' => $akismet_active
-        ? __('Enable Akismet spam protection for user registration (requires Akismet plugin).', 'userspn')
-        : __('Akismet plugin is not installed or not active. Install and activate Akismet to use this feature.', 'userspn'),
-      'disabled' => !$akismet_active,
-    ];
+    if (function_exists('akismet_http_post')) {
+      $userspn_options['userspn_akismet_enabled'] = [
+        'id' => 'userspn_akismet_enabled',
+        'class' => 'userspn-input userspn-width-100-percent',
+        'input' => 'input',
+        'type' => 'checkbox',
+        'parent' => 'this',
+        'label' => __('Enable Akismet Protection', 'userspn'),
+        'description' => __('Enable Akismet spam protection for user registration (requires Akismet plugin).', 'userspn'),
+      ];
+    }
     $userspn_options['userspn_honeypot_enabled'] = [
       'id' => 'userspn_honeypot_enabled',
       'class' => 'userspn-input userspn-width-100-percent',
@@ -1236,6 +1244,16 @@ class USERSPN_Settings
       'section' => 'end',
     ];
 
+    $userspn_options['userspn_show_banner'] = [
+      'id' => 'userspn_show_banner',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'input',
+      'type' => 'checkbox',
+      'label' => __('Show settings banner image', 'userspn'),
+      'description' => __('Show the banner image at the top of the settings page.', 'userspn'),
+      'default' => 'on',
+    ];
+
     return $userspn_options;
   }
 
@@ -1284,10 +1302,17 @@ class USERSPN_Settings
     $user_id = get_current_user_id();
     ?>
     <div class="userspn-options userspn-max-width-1000 userspn-margin-auto userspn-mt-50 userspn-mb-50">
-      <img src="<?php echo esc_url(USERSPN_URL . 'assets/media/banner-1544x500.png'); ?>"
-        alt="<?php esc_html_e('Plugin main Banner', 'userspn'); ?>"
-        title="<?php esc_html_e('Plugin main Banner', 'userspn'); ?>"
-        class="userspn-width-100-percent userspn-border-radius-20 userspn-mb-30">
+      <?php if (get_option('userspn_show_banner', 'on') === 'on'): ?>
+      <div class="userspn-banner-wrapper">
+        <img src="<?php echo esc_url(USERSPN_URL . 'assets/media/banner-1544x500.png'); ?>"
+          alt="<?php esc_html_e('Plugin main Banner', 'userspn'); ?>"
+          title="<?php esc_html_e('Plugin main Banner', 'userspn'); ?>"
+          class="userspn-width-100-percent userspn-border-radius-20 userspn-mb-30">
+        <button type="button" id="userspn-banner-hide-btn" class="userspn-banner-hide-btn userspn-tooltip" title="<?php esc_attr_e('Hide image', 'userspn'); ?>">
+          <i class="material-icons-outlined">close</i>
+        </button>
+      </div>
+      <?php endif; ?>
 
       <h1 class="userspn-mb-30"><?php esc_html_e('Users manager - PN Settings', 'userspn'); ?></h1>
       <div class="userspn-options-fields userspn-mb-30 userspn-settings-pb-80">
@@ -1433,6 +1458,7 @@ class USERSPN_Settings
       'nonce'         => wp_create_nonce('userspn-nonce'),
       'settingsPages' => $pn_rp_settings,
       'i18n'          => [
+        'confirmHideBanner' => __('Are you sure you want to hide the banner image? You can re-enable it in System settings.', 'userspn'),
         'confirmImport'  => __('This will overwrite your current settings. Continue?', 'userspn'),
         'importSuccess'  => __('Settings imported successfully. Reloading...', 'userspn'),
         'importError'    => __('Error importing settings.', 'userspn'),
@@ -2758,6 +2784,10 @@ class USERSPN_Settings
       wp_register_style('userspn-admin-page-logo-css', false, [], USERSPN_VERSION);
       wp_enqueue_style('userspn-admin-page-logo-css');
       wp_add_inline_style('userspn-admin-page-logo-css', $userspn_admin_page_logo_css);
+    }
+
+    if (get_option('userspn_login_custom_style') === 'on') {
+      wp_enqueue_style('userspn-login-custom-style', USERSPN_URL . 'assets/css/userspn-login-style.css', [], USERSPN_VERSION);
     }
   }
 

@@ -1106,6 +1106,16 @@ class USERSPN_Ajax {
 
           exit;
           break;
+        case 'userspn_hide_banner':
+          if (!current_user_can('manage_options')) {
+            echo wp_json_encode(['error_key' => 'permission_denied']);
+            exit;
+          }
+          update_option('userspn_show_banner', '');
+          echo wp_json_encode(['error_key' => '']);
+          exit;
+          break;
+
         case 'userspn_settings_export':
           if (!current_user_can('manage_options')) {
             echo wp_json_encode(['error_key' => 'permission_denied']);

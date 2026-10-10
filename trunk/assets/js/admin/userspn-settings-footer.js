@@ -21,6 +21,51 @@
     if (form) form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
   });
 
+  // Hide banner image
+  var bannerHideBtn = document.getElementById('userspn-banner-hide-btn');
+  if (bannerHideBtn) {
+    bannerHideBtn.addEventListener('click', function () {
+      if (!confirm(userspnSettingsFooter.i18n.confirmHideBanner)) return;
+
+      var wrapper = bannerHideBtn.closest('.userspn-banner-wrapper');
+      if (!wrapper) return;
+
+      var overlay = document.createElement('div');
+      overlay.className = 'userspn-banner-loader-overlay';
+      overlay.innerHTML = '<div class="userspn-waiting userspn-display-block"><div class="userspn-loader-circle-waiting"><div></div><div></div><div></div><div></div></div></div>';
+      wrapper.appendChild(overlay);
+      bannerHideBtn.style.display = 'none';
+
+      var fd = new FormData();
+      fd.append('action', 'userspn_ajax');
+      fd.append('userspn_ajax_type', 'userspn_hide_banner');
+      fd.append('userspn_ajax_nonce', userspnSettingsFooter.nonce);
+
+      fetch(userspnSettingsFooter.ajaxUrl, { method: 'POST', body: fd })
+        .then(function (r) { return r.json(); })
+        .then(function (res) {
+          if (!res.error_key) {
+            wrapper.style.transition = 'opacity 0.3s';
+            wrapper.style.opacity = '0';
+            setTimeout(function () { wrapper.remove(); }, 300);
+
+            var bannerCheckbox = document.getElementById('userspn_show_banner');
+            if (bannerCheckbox) {
+              bannerCheckbox.checked = false;
+              bannerCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+          } else {
+            overlay.remove();
+            bannerHideBtn.style.display = '';
+          }
+        })
+        .catch(function () {
+          overlay.remove();
+          bannerHideBtn.style.display = '';
+        });
+    });
+  }
+
   exportBtn.addEventListener('click', function () {
     var fd = new FormData();
     fd.append('action', 'userspn_ajax');

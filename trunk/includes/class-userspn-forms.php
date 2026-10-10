@@ -68,7 +68,7 @@ class USERSPN_Forms {
 
     // If no value is found and there's a default value in the input config, use it
     // BUT NOT for checkboxes in multiple fields, as empty string and 'off' are valid states (unchecked)
-    if (empty($current_value) && !empty($userspn_input['value'])) {
+    if ($current_value === false && !empty($userspn_input['value'])) {
       // For checkboxes in multiple fields, don't override empty values or 'off' with default
       if (!($userspn_meta_array && isset($userspn_input['type']) && $userspn_input['type'] === 'checkbox')) {
         $current_value = $userspn_input['value'];

@@ -222,7 +222,7 @@ class USERSPN_Functions_User
 
   public function userspn_profile_fields($user)
   {
-    $user_id = $user->ID;
+    $user_id = ($user instanceof WP_User) ? $user->ID : 0;
 
     $userspn_profile_fields_nonce = [];
     $userspn_profile_fields_nonce['userspn_ajax_nopriv_nonce'] = [
@@ -261,7 +261,7 @@ class USERSPN_Functions_User
     <?php
     }
 
-    if (get_option('userspn_auto_login') == 'on' && current_user_can('administrator')) {
+    if ($user_id && get_option('userspn_auto_login') == 'on' && current_user_can('administrator')) {
       ?>
       <h3><?php esc_html_e('Auto-login tool', 'userspn'); ?></h3>
       <p>

@@ -377,3 +377,9 @@ body.folded .userspn-settings-footer{left:36px}
 .pn-cm-rp-active-badge{display:inline-block;padding:4px 12px;background:#dff0d8;color:#3c763d;border-radius:4px;font-size:12px;font-weight:600}
 .pn-cm-rp-recommended{display:inline-block;padding:2px 8px;background:#fef3cd;color:#856404;border-radius:4px;font-size:11px;font-weight:600;margin-left:8px;vertical-align:middle}
 @media screen and (max-width:600px){.pn-cm-rp-card{flex-wrap:wrap;gap:10px}.pn-cm-rp-action{width:100%;text-align:right}}
+/* Banner hide button */
+.userspn-banner-wrapper{position:relative}
+.userspn-banner-hide-btn{position:absolute;top:12px;right:12px;background:none;border:none;color:#333;cursor:pointer;padding:0;line-height:1;opacity:.7;transition:opacity .2s}
+.userspn-banner-hide-btn:hover{opacity:1}
+.userspn-banner-hide-btn i{font-size:22px}
+.userspn-banner-loader-overlay{position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(255,255,255,.7);border-radius:20px;display:flex;align-items:center;justify-content:center}

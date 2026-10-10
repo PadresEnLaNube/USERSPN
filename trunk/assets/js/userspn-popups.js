@@ -4,19 +4,19 @@
   window.USERSPN_Popups = {
     open: function(popup, options = {}) {
       var popupElement = typeof popup === 'string' ? $('#' + popup) : popup;
-      
+
       if (!popupElement.length) {
         return;
       }
 
-      // Move the popup outside the .userspn-profile container if it's inside it
-      // This ensures the popup is visible at all resolutions
-      if (popupElement.attr('id') === 'userspn-profile-popup') {
-        var $profileContainer = popupElement.closest('.userspn-profile');
-        if ($profileContainer.length && !popupElement.parent().is('body')) {
-          // Move the popup to the body so it's always visible
-          $('body').append(popupElement);
-        }
+      // Move the popup and overlay to body to escape any stacking context
+      // (e.g. WordPress block navigation uses z-index that traps child elements)
+      if (!popupElement.parent().is('body')) {
+        $('body').append(popupElement);
+      }
+      var $overlay = $('.userspn-popup-overlay');
+      if ($overlay.length && !$overlay.parent().is('body')) {
+        $('body').append($overlay);
       }
 
       if (typeof options.beforeShow === 'function') {
