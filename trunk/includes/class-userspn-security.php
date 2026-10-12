@@ -275,8 +275,9 @@ class USERSPN_Security {
      * @param string $event Event type
      * @param string $message Event message
      * @param array $data Additional data
+     * @param int $user_id Optional user ID
      */
-    public static function log_security_event($event, $message, $data = []) {
+    public static function log_security_event($event, $message, $data = [], $user_id = 0) {
         global $wpdb;
         $table_name = $wpdb->prefix . 'userspn_security_logs';
 
@@ -288,9 +289,18 @@ class USERSPN_Security {
             $email = sanitize_email($data['user_email']);
         }
 
+        // Auto-detect user_id if not provided
+        if (empty($user_id) && !empty($data['user_id'])) {
+            $user_id = intval($data['user_id']);
+        }
+        if (empty($user_id) && is_user_logged_in()) {
+            $user_id = get_current_user_id();
+        }
+
         $wpdb->insert(
             $table_name,
             [
+                'user_id'     => intval($user_id),
                 'created_at'  => current_time('mysql'),
                 'ip_address'  => self::get_user_ip(),
                 'user_agent'  => $_SERVER['HTTP_USER_AGENT'] ?? '',
@@ -300,8 +310,20 @@ class USERSPN_Security {
                 'email'       => $email,
                 'resolved'    => 0,
             ],
-            ['%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d']
+            ['%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d']
         );
+    }
+
+    /**
+     * Log audit event (convenience wrapper)
+     *
+     * @param string $event Event type
+     * @param string $message Event message
+     * @param array $data Additional context data
+     * @param int $user_id Actor user ID
+     */
+    public static function log_audit_event($event, $message, $data = [], $user_id = 0) {
+        self::log_security_event($event, $message, $data, $user_id);
     }
 
     /**

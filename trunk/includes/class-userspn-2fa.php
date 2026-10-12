@@ -302,6 +302,12 @@ class USERSPN_2FA {
         $backup_codes = self::generate_backup_codes();
         self::save_backup_codes($user_id, $backup_codes);
 
+        if (class_exists('USERSPN_Security')) {
+            USERSPN_Security::log_audit_event('2fa_enabled', '2FA (TOTP) enabled', [
+                'method' => 'app',
+            ], $user_id);
+        }
+
         return true;
     }
 
@@ -320,6 +326,12 @@ class USERSPN_2FA {
         $backup_codes = self::generate_backup_codes();
         self::save_backup_codes($user_id, $backup_codes);
 
+        if (class_exists('USERSPN_Security')) {
+            USERSPN_Security::log_audit_event('2fa_enabled', '2FA (email) enabled', [
+                'method' => 'email',
+            ], $user_id);
+        }
+
         return true;
     }
 
@@ -330,6 +342,8 @@ class USERSPN_2FA {
      * @return bool
      */
     public static function disable_2fa_for_user($user_id) {
+        $method = get_user_meta($user_id, 'userspn_2fa_method', true);
+
         delete_user_meta($user_id, 'userspn_2fa_enabled');
         delete_user_meta($user_id, 'userspn_2fa_method');
         delete_user_meta($user_id, 'userspn_2fa_secret');
@@ -338,6 +352,12 @@ class USERSPN_2FA {
         delete_user_meta($user_id, 'userspn_2fa_email_code');
         delete_user_meta($user_id, 'userspn_2fa_email_code_expiry');
         delete_user_meta($user_id, 'userspn_2fa_grace_period_start');
+
+        if (class_exists('USERSPN_Security')) {
+            USERSPN_Security::log_audit_event('2fa_disabled', '2FA disabled', [
+                'previous_method' => $method,
+            ], $user_id);
+        }
 
         return true;
     }

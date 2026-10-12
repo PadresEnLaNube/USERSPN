@@ -63,10 +63,26 @@ class USERSPN_Public {
 		if (get_option('userspn_bubble_position_type', 'default') === 'menu') {
 			wp_enqueue_script('userspn-profile-menu', USERSPN_URL . 'assets/js/userspn-profile-menu.js', ['jquery'], $this->version, true);
 			
+			// Determine redirect settings
+			$redirect_to_page = false;
+			$redirect_url = '';
+			if (!is_user_logged_in() && get_option('userspn_profile_redirect_page') === 'on') {
+				$redirect_page_id = get_option('userspn_profile_redirect_page_id');
+				if (!empty($redirect_page_id)) {
+					$permalink = get_permalink($redirect_page_id);
+					if ($permalink) {
+						$redirect_to_page = true;
+						$redirect_url = $permalink;
+					}
+				}
+			}
+
 			// Pass data to JavaScript
 			wp_localize_script('userspn-profile-menu', 'userspnProfileMenu', [
 				'enabled' => true,
-				'selectedMenu' => get_option('userspn_menu_profile_icon_location')
+				'selectedMenu' => get_option('userspn_menu_profile_icon_location'),
+				'redirectToPage' => $redirect_to_page,
+				'redirectUrl' => $redirect_url,
 			]);
 			
 		}
@@ -100,6 +116,34 @@ class USERSPN_Public {
 			$this->version,
 			false
 		);
+	}
+
+	/**
+	 * Enqueue passkeys scripts
+	 *
+	 * @since    1.1.61
+	 */
+	public function userspn_enqueue_passkeys_scripts() {
+		wp_enqueue_script(
+			$this->plugin_name . '-passkeys',
+			USERSPN_URL . 'assets/js/userspn-passkeys.js',
+			array('jquery'),
+			$this->version,
+			true
+		);
+
+		wp_localize_script($this->plugin_name . '-passkeys', 'userspnPasskeys', [
+			'ajaxUrl' => admin_url('admin-ajax.php'),
+			'nonce' => wp_create_nonce('userspn-nonce'),
+			'i18n' => [
+				'not_supported' => __('Passkeys are not supported in this browser.', 'userspn'),
+				'device_name_prompt' => __('Enter a name for this passkey (e.g., "My MacBook"):', 'userspn'),
+				'registering' => __('Registering...', 'userspn'),
+				'register' => __('Add Passkey', 'userspn'),
+				'registered' => __('Passkey registered successfully!', 'userspn'),
+				'confirm_delete' => __('Delete this passkey?', 'userspn'),
+			],
+		]);
 	}
 
 	/**

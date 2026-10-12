@@ -1447,6 +1447,58 @@ class USERSPN_Ajax_Nopriv {
           ]);
           exit;
 
+        case 'userspn_passkey_auth_options':
+          if (get_option('userspn_passkeys_enabled') !== 'on') {
+            echo wp_json_encode(['error' => __('Passkeys are not enabled.', 'userspn')]);
+            exit;
+          }
+          $passkeys = new USERSPN_Passkeys();
+          $passkey_email = isset($_POST['userspn_email']) ? sanitize_email(wp_unslash($_POST['userspn_email'])) : '';
+          $options = $passkeys->create_authentication_options($passkey_email);
+          if (is_wp_error($options)) {
+            echo wp_json_encode(['error' => $options->get_error_message()]);
+            exit;
+          }
+          echo wp_json_encode(['success' => true, 'options' => $options]);
+          exit;
+
+        case 'userspn_passkey_auth_verify':
+          if (get_option('userspn_passkeys_enabled') !== 'on') {
+            echo wp_json_encode(['error' => __('Passkeys are not enabled.', 'userspn')]);
+            exit;
+          }
+          $credential = isset($_POST['credential']) ? $_POST['credential'] : '';
+          if (is_string($credential)) {
+            $credential = json_decode(stripslashes($credential), true);
+          }
+          $passkeys = new USERSPN_Passkeys();
+          $result = $passkeys->verify_authentication($credential);
+          if (is_wp_error($result)) {
+            echo wp_json_encode(['error' => $result->get_error_message()]);
+            exit;
+          }
+
+          $passkey_user_id = $result['user_id'];
+          $user = get_userdata($passkey_user_id);
+
+          wp_set_current_user($passkey_user_id);
+          wp_set_auth_cookie($passkey_user_id, true);
+          do_action('wp_login', $user->user_login, $user);
+
+          if (class_exists('USERSPN_Security')) {
+            USERSPN_Security::log_audit_event('login_success', 'User logged in via passkey', [
+              'email' => $user->user_email,
+              'method' => 'passkey',
+            ], $passkey_user_id);
+          }
+
+          echo wp_json_encode([
+            'success' => true,
+            'message' => esc_html(__('Login successful!', 'userspn')),
+            'redirect_url' => home_url(),
+          ]);
+          exit;
+
         case 'userspn_2fa_check_required':
           // Check if user needs 2FA verification
           $userspn_email = isset($_POST['userspn_email']) ? sanitize_email(wp_unslash($_POST['userspn_email'])) : '';

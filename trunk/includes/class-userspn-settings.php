@@ -191,6 +191,57 @@ class USERSPN_Settings
       'description' => __('This option allows users to create their account from the front-end profile popup.', 'userspn'),
     ];
 
+    $userspn_options['userspn_profile_redirect_page'] = [
+      'id' => 'userspn_profile_redirect_page',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'input',
+      'type' => 'checkbox',
+      'parent' => 'this',
+      'label' => __('Redirect profile icon to a page', 'userspn'),
+      'description' => __('When enabled, clicking the profile icon will redirect non-logged-in users to a page instead of opening the popup. Create a page with the shortcodes [userspn-login] and [userspn-user-register-form] for the login and registration forms.', 'userspn'),
+    ];
+
+    $redirect_post_types = get_post_types(['public' => true], 'objects');
+    $redirect_post_type_options = [];
+    foreach ($redirect_post_types as $pt) {
+      $redirect_post_type_options[$pt->name] = $pt->labels->singular_name;
+    }
+
+    $userspn_options['userspn_profile_redirect_post_type'] = [
+      'id' => 'userspn_profile_redirect_post_type',
+      'class' => 'userspn-select userspn-width-100-percent',
+      'input' => 'select',
+      'options' => $redirect_post_type_options,
+      'parent' => 'userspn_profile_redirect_page',
+      'parent_option' => 'on',
+      'label' => __('Content type', 'userspn'),
+      'description' => __('Select the content type for the redirect page.', 'userspn'),
+    ];
+
+    $redirect_selected_post_type = get_option('userspn_profile_redirect_post_type', 'page');
+    $redirect_pages = get_posts([
+      'post_type' => $redirect_selected_post_type,
+      'posts_per_page' => -1,
+      'post_status' => 'publish',
+      'orderby' => 'title',
+      'order' => 'ASC',
+    ]);
+    $redirect_page_options = [];
+    foreach ($redirect_pages as $rp) {
+      $redirect_page_options[$rp->ID] = $rp->post_title;
+    }
+
+    $userspn_options['userspn_profile_redirect_page_id'] = [
+      'id' => 'userspn_profile_redirect_page_id',
+      'class' => 'userspn-select userspn-width-100-percent',
+      'input' => 'select',
+      'options' => $redirect_page_options,
+      'parent' => 'userspn_profile_redirect_page',
+      'parent_option' => 'on',
+      'label' => __('Select page', 'userspn'),
+      'description' => __('Select the page where non-logged-in users will be redirected.', 'userspn'),
+    ];
+
     $userspn_options['userspn_tabs_section_start'] = [
       'id' => 'userspn_tabs_section_start',
       'input' => 'section',
@@ -1149,8 +1200,54 @@ class USERSPN_Settings
       'onclick' => 'userspn_open_bot_analysis_popup()',
       'description' => __('This tool analyzes existing users to identify potential bots based on various patterns and behaviors such as suspicious email patterns, bot-like usernames, empty profiles, multiple registrations from same IP, and lack of activity.', 'userspn'),
     ];
+    $userspn_options['userspn_audit_log_retention_days'] = [
+      'id' => 'userspn_audit_log_retention_days',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'input',
+      'type' => 'number',
+      'label' => __('Audit log retention (days)', 'userspn'),
+      'description' => __('Number of days to keep audit log entries. Older entries are automatically deleted. Set 0 to keep forever.', 'userspn'),
+      'default' => '365',
+    ];
+
+    $userspn_options['userspn_sessions_enabled'] = [
+      'id' => 'userspn_sessions_enabled',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'input',
+      'type' => 'checkbox',
+      'label' => __('Enable session management', 'userspn'),
+      'description' => __('Allow users and admins to view and revoke active login sessions.', 'userspn'),
+      'default' => 'on',
+    ];
+
+    $userspn_options['userspn_passkeys_enabled'] = [
+      'id' => 'userspn_passkeys_enabled',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'input',
+      'type' => 'checkbox',
+      'label' => __('Enable Passkeys (WebAuthn)', 'userspn'),
+      'description' => __('Allow users to register and login with passkeys (biometric/device-based authentication). Requires HTTPS.', 'userspn'),
+    ];
+
     $userspn_options['userspn_section_security_end'] = [
       'section' => 'end',
+    ];
+
+    $userspn_options['userspn_system_section_start'] = [
+      'id' => 'userspn_system_section_start',
+      'section' => 'start',
+      'label' => __('System', 'userspn'),
+      'description' => __('Manage system settings for this plugin.', 'userspn'),
+    ];
+
+    $userspn_options['userspn_show_banner'] = [
+      'id' => 'userspn_show_banner',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'input',
+      'type' => 'checkbox',
+      'label' => __('Show settings banner image', 'userspn'),
+      'description' => __('Show the banner image at the top of the settings page.', 'userspn'),
+      'default' => 'on',
     ];
 
     $userspn_options['userspn_section_design_start'] = [
@@ -1244,14 +1341,9 @@ class USERSPN_Settings
       'section' => 'end',
     ];
 
-    $userspn_options['userspn_show_banner'] = [
-      'id' => 'userspn_show_banner',
-      'class' => 'userspn-input userspn-width-100-percent',
-      'input' => 'input',
-      'type' => 'checkbox',
-      'label' => __('Show settings banner image', 'userspn'),
-      'description' => __('Show the banner image at the top of the settings page.', 'userspn'),
-      'default' => 'on',
+    $userspn_options['userspn_system_section_end'] = [
+      'id' => 'userspn_system_section_end',
+      'section' => 'end',
     ];
 
     return $userspn_options;
@@ -1971,6 +2063,20 @@ class USERSPN_Settings
       'suspicious_email_pattern'=> ['dashicons-email',      '#dba617', __('Warning', 'userspn')],
       'wp_create_user_error'    => ['dashicons-dismiss',    '#d63638', __('Error', 'userspn')],
       'rate_limit_exceeded'     => ['dashicons-clock',      '#dba617', __('Rate limit', 'userspn')],
+      'login_success'           => ['dashicons-yes-alt',    '#00a32a', __('Login', 'userspn')],
+      'login_failed'            => ['dashicons-lock',       '#d63638', __('Login Failed', 'userspn')],
+      'logout'                  => ['dashicons-migrate',    '#72aee6', __('Logout', 'userspn')],
+      'user_registered'         => ['dashicons-admin-users','#00a32a', __('Registered', 'userspn')],
+      'user_deleted'            => ['dashicons-trash',      '#d63638', __('Deleted', 'userspn')],
+      'profile_updated'         => ['dashicons-edit',       '#72aee6', __('Updated', 'userspn')],
+      'role_changed'            => ['dashicons-groups',     '#dba617', __('Role Changed', 'userspn')],
+      'password_changed'        => ['dashicons-lock',       '#72aee6', __('Password', 'userspn')],
+      '2fa_enabled'             => ['dashicons-shield',     '#00a32a', __('2FA On', 'userspn')],
+      '2fa_disabled'            => ['dashicons-shield',     '#dba617', __('2FA Off', 'userspn')],
+      'settings_changed'        => ['dashicons-admin-settings','#72aee6', __('Settings', 'userspn')],
+      'session_revoked'         => ['dashicons-dismiss',    '#dba617', __('Session', 'userspn')],
+      'passkey_registered'      => ['dashicons-admin-network','#00a32a', __('Passkey', 'userspn')],
+      'passkey_deleted'         => ['dashicons-admin-network','#d63638', __('Passkey', 'userspn')],
     ];
     $default_event = ['dashicons-marker', '#787c82', __('Event', 'userspn')];
 
@@ -2102,6 +2208,10 @@ class USERSPN_Settings
           <option value="resolved"><?php esc_html_e('Resolved', 'userspn'); ?></option>
         </select>
 
+        <input type="text" id="userspn-sl-filter-user" class="userspn-sl-filter" placeholder="<?php esc_attr_e('Filter by user ID...', 'userspn'); ?>" style="width:130px;">
+        <input type="text" id="userspn-sl-filter-ip" class="userspn-sl-filter" placeholder="<?php esc_attr_e('Filter by IP...', 'userspn'); ?>" style="width:130px;">
+        <input type="date" id="userspn-sl-filter-date" class="userspn-sl-filter" title="<?php esc_attr_e('Filter by date', 'userspn'); ?>">
+
         <div style="flex:1;"></div>
 
         <button type="button" id="userspn-logs-delete-old" class="userspn-sl-btn-danger">
@@ -2116,6 +2226,7 @@ class USERSPN_Settings
           <thead>
             <tr>
               <th><?php esc_html_e('Date', 'userspn'); ?></th>
+              <th><?php esc_html_e('User', 'userspn'); ?></th>
               <th><?php esc_html_e('Event', 'userspn'); ?></th>
               <th><?php esc_html_e('Email', 'userspn'); ?></th>
               <th><?php esc_html_e('IP', 'userspn'); ?></th>
@@ -2131,15 +2242,34 @@ class USERSPN_Settings
                 $evt = isset($event_config[$log->event]) ? $event_config[$log->event] : $default_event;
                 $badge_bg = $evt[1] . '15';
               ?>
+                <?php
+                  $log_user_id = isset($log->user_id) ? intval($log->user_id) : 0;
+                  $log_date_str = wp_date('Y-m-d', strtotime($log->created_at));
+                ?>
                 <tr id="userspn-log-row-<?php echo esc_attr($log->id); ?>"
                     data-event="<?php echo esc_attr($log->event); ?>"
-                    data-status="<?php echo $log->resolved ? 'resolved' : 'open'; ?>">
+                    data-status="<?php echo $log->resolved ? 'resolved' : 'open'; ?>"
+                    data-user-id="<?php echo esc_attr($log_user_id); ?>"
+                    data-ip="<?php echo esc_attr($log->ip_address); ?>"
+                    data-date="<?php echo esc_attr($log_date_str); ?>">
                   <td class="userspn-sl-date">
                     <?php
                       $dt = strtotime($log->created_at);
                       echo esc_html(wp_date('M j, Y', $dt));
                     ?>
                     <span class="userspn-sl-date-time"><?php echo esc_html(wp_date('H:i:s', $dt)); ?></span>
+                  </td>
+                  <td>
+                    <?php if ($log_user_id > 0):
+                      $log_user_data = get_userdata($log_user_id);
+                    ?>
+                      <a href="<?php echo esc_url(get_edit_user_link($log_user_id)); ?>" style="font-weight:500;color:#2271b1;">
+                        <?php echo esc_html($log_user_data ? $log_user_data->display_name : '#' . $log_user_id); ?>
+                      </a>
+                      <span style="display:block;font-size:11px;color:#787c82;">ID: <?php echo esc_html($log_user_id); ?></span>
+                    <?php else: ?>
+                      <span style="color:#ccc;">&mdash;</span>
+                    <?php endif; ?>
                   </td>
                   <td>
                     <span class="userspn-sl-badge" style="background:<?php echo esc_attr($badge_bg); ?>;color:<?php echo esc_attr($evt[1]); ?>;">
@@ -2218,16 +2348,25 @@ class USERSPN_Settings
       });
 
       // Filter by event
-      $('#userspn-sl-filter-event, #userspn-sl-filter-status').on('change', function() {
+      function userspnFilterLogs() {
         var eventFilter = $('#userspn-sl-filter-event').val();
         var statusFilter = $('#userspn-sl-filter-status').val();
+        var userFilter = $('#userspn-sl-filter-user').val().trim();
+        var ipFilter = $('#userspn-sl-filter-ip').val().trim().toLowerCase();
+        var dateFilter = $('#userspn-sl-filter-date').val();
         $('#userspn-security-logs-table tbody tr').each(function() {
           var row = $(this);
           var showEvent = !eventFilter || row.data('event') === eventFilter;
           var showStatus = !statusFilter || row.data('status') === statusFilter;
-          row.toggle(showEvent && showStatus);
+          var showUser = !userFilter || String(row.data('user-id')) === userFilter;
+          var showIp = !ipFilter || (row.data('ip') || '').toLowerCase().indexOf(ipFilter) !== -1;
+          var showDate = !dateFilter || row.data('date') === dateFilter;
+          row.toggle(showEvent && showStatus && showUser && showIp && showDate);
         });
-      });
+      }
+      $('#userspn-sl-filter-event, #userspn-sl-filter-status').on('change', userspnFilterLogs);
+      $('#userspn-sl-filter-user, #userspn-sl-filter-ip').on('input', userspnFilterLogs);
+      $('#userspn-sl-filter-date').on('change', userspnFilterLogs);
 
       // Resolve a log entry
       $(document).on('click', '.userspn-log-resolve', function() {

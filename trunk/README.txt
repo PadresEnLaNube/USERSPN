@@ -4,10 +4,10 @@ Donate link: https://padresenlanube.com/
 Tags: user management, users, register, login, contacts
 Requires at least: 3.0.1
 Tested up to: 7.0
-Stable tag: 1.1.60
+Stable tag: 1.1.70
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Streamline user management on your WordPress site with this powerful plugin. Enable custom forms, secure login, custom login page styling, and seamless profile management.
+Streamline user management on your WordPress site with this powerful plugin. Enable custom forms, secure login, custom login page styling, passkeys (WebAuthn), session management, audit logging, GDPR compliance, REST API, and seamless profile management.
 
 == Description ==
 
@@ -74,7 +74,11 @@ All form fields support: custom CSS classes, required field validation, placehol
 
 * **Bot Analysis Tool**: Advanced analysis system that examines existing users for bot patterns including suspicious email patterns, bot-like usernames, empty profiles, rapid registrations from same IP, suspicious user agents, sequential email patterns, and generic display names. Provides detailed reports with suspicion scores and pattern identification.
 
-* **Security Logging**: Comprehensive logging system that tracks security events, failed registration attempts, suspicious activities, and bot confirmations for administrative review.
+* **Security Logging & Audit Trail**: Comprehensive logging system that tracks security events, failed registration attempts, suspicious activities, and bot confirmations for administrative review. Includes a full audit trail with user attribution, event type filtering, IP and date filters, and configurable retention period with automatic cleanup.
+
+* **Session Management**: View and manage active user sessions using WordPress core session tokens. Users can see all their active sessions from the frontend profile popup with device name detection, and revoke individual sessions or all sessions at once. Administrators can manage sessions for any user via AJAX endpoints.
+
+* **Passkeys (WebAuthn)**: Passwordless authentication using the WebAuthn standard. Users can register passkeys (fingerprint, face recognition, security keys) from their profile and use them to log in without a password. Implemented server-side with native PHP openssl functions, requiring no external Composer dependencies. Supports credential registration, authentication, device naming, and passkey management.
 
 **User Profile Features:**
 
@@ -124,6 +128,16 @@ The plugin provides numerous shortcodes for easy integration:
 **Gutenberg Blocks:**
 
 * **User Profile Block**: Native Gutenberg block for inserting user profiles directly into pages and posts. Supports inline display mode and integrates seamlessly with the block editor.
+
+**Privacy & Compliance:**
+
+* **GDPR Personal Data Export**: Full integration with WordPress Tools > Export Personal Data. Exports all plugin-related user data organized in groups: profile data, login history (including audit log entries), security settings (2FA, registration IP, bot status), OAuth connections (Google, Facebook, GitHub, Apple), and newsletter preferences.
+
+* **GDPR Personal Data Erasure**: Full integration with WordPress Tools > Erase Personal Data. Removes all plugin user meta keys, deletes uploaded avatars, removes passkey credentials, and anonymizes security log entries by hashing emails, zeroing IP addresses, and clearing user agents.
+
+**REST API:**
+
+* **Admin REST API**: RESTful endpoints under `/wp-json/userspn/v1/` for programmatic access to plugin data. Includes endpoints for user management (list, view, update, delete with search and role filtering), audit log queries (with event, user, date, and IP filters), session management (list and revoke), and plugin settings. All endpoints require `manage_options` capability and support pagination.
 
 **Additional Features:**
 
@@ -272,6 +286,48 @@ For developer support, bug reports, or feature requests:
 
 
 == Changelog ==
+
+= 1.1.70 =
+
+- Add immutable audit log system tracking login, logout, registration, profile updates, role changes, password changes, 2FA events, settings changes, session revocations, and passkey operations
+- Add user_id column to security logs table for linking events to specific users
+- Add audit log event type configuration with icons and color-coded labels in the security logs admin view
+- Add security log filters by event type, status, user ID, IP address, and date
+- Add User column to the security logs table showing linked user with profile link
+- Add configurable audit log retention period with automatic cleanup via daily cron job
+- Add GDPR privacy compliance with WordPress personal data exporter integration (profile data, login history, security data, OAuth connections, newsletter status)
+- Add GDPR personal data eraser integration to anonymize security logs and remove all plugin user meta, avatars, and passkey credentials
+- Add session management using WordPress core WP_Session_Tokens with device name detection
+- Add session enrichment on login with device name and login timestamp
+- Add AJAX endpoints to list, revoke individual, and revoke all user sessions
+- Add Sessions tab in the frontend profile popup showing active sessions with revoke controls
+- Add REST API under /wp-json/userspn/v1/ with admin-only endpoints for users, audit logs, sessions, and settings
+- Add REST API user endpoints with search, role filtering, and pagination support
+- Add REST API audit log endpoints with filtering by event, user, date range, and IP
+- Add REST API session management endpoints for listing and revoking sessions
+- Add Passkeys (WebAuthn) authentication support for passwordless login
+- Add server-side WebAuthn implementation without external Composer dependencies using native PHP openssl functions
+- Add passkeys database table for storing credential IDs, public keys, sign counts, and device names
+- Add passkey registration flow from the user profile with device naming
+- Add passkey authentication flow from the login form
+- Add Passkeys tab in the frontend profile popup for managing registered passkeys
+- Add "Sign in with Passkey" button on the login form when passkeys are enabled
+- Add passkeys settings option to enable or disable the feature globally
+- Add sessions management settings option to enable or disable the feature globally
+- Add dynamic post type selector for profile redirect page setting in admin
+- Add userspn_get_posts_by_type AJAX handler to fetch posts by custom post type for the redirect page selector
+- Add Bridge theme by Qode navigation support for the profile menu icon injection
+- Preserve redirect URL on cloned profile menu buttons when redirect to page is active
+- Update security logs table schema with user_id column and index via dbDelta migration
+- Update database version to 1.1.61 with automatic migration on plugin load
+- Update plugin main class to load privacy, sessions, REST API, and passkeys modules
+- Update plugin main class to log logout and failed login events via wp_logout and wp_login_failed hooks
+- Update 2FA class to log audit events when enabling or disabling two-factor authentication
+- Update user functions class to log audit events on login, registration, and profile save
+- Update AJAX handler to log audit events on user deletion, role assignment, settings save, and profile edit
+- Update cron daily job to clean up audit log entries older than the configured retention period
+- Update Spanish translations and compiled .mo/.l10n.php with all new strings for audit log, sessions, passkeys, and privacy features
+- Update translation template .pot file with all new translatable strings
 
 = 1.1.60 =
 

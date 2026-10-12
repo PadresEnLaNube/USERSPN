@@ -39,6 +39,16 @@ jQuery(document).ready(function($) {
             }
         }
 
+        // Bridge theme by Qode
+        var $bridgeNav = $('.qodef-header-navigation, .qodef-menu-area nav');
+        if ($bridgeNav.length > 0) {
+            var $menuList = $bridgeNav.first().find('> ul').first();
+            if ($menuList.length > 0) {
+                $menuList.append('<li class="menu-item userspn-profile-container" id="userspn-profile-menu-container"></li>');
+                return;
+            }
+        }
+
         // Fallback for classic themes
         var $classicMenus = $('.menu, .nav-menu');
         if ($classicMenus.length > 0) {
@@ -61,6 +71,10 @@ jQuery(document).ready(function($) {
                 var $btnClone = $triggerBtn.clone(true);
                 // Mark as in-menu for styling purposes
                 $btnClone.addClass('userspn-profile-in-menu');
+                // If redirect is active, keep the real href instead of #
+                if (userspnProfileMenu.redirectToPage && userspnProfileMenu.redirectUrl) {
+                    $btnClone.attr('href', userspnProfileMenu.redirectUrl);
+                }
                 $menuContainer.empty().append($btnClone);
             }
         }

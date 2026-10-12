@@ -215,6 +215,17 @@ class USERSPN_Cron {
       }
     }
 
+    // Cleanup old audit logs
+    $retention_days = intval(get_option('userspn_audit_log_retention_days', 365));
+    if ($retention_days > 0) {
+      global $wpdb;
+      $audit_table = $wpdb->prefix . 'userspn_security_logs';
+      $wpdb->query($wpdb->prepare(
+        "DELETE FROM $audit_table WHERE created_at < DATE_SUB(NOW(), INTERVAL %d DAY)",
+        $retention_days
+      ));
+    }
+
     // Find users who have not activated their newsletter subscription
     $args = array(
       'meta_query' => array(

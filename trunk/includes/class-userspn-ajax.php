@@ -160,6 +160,12 @@ class USERSPN_Ajax {
             $message = sprintf(__('%s role removed from %d user(s) successfully.', 'userspn'), $label, $processed);
           }
 
+          USERSPN_Security::log_audit_event('role_changed', $message, [
+            'user_ids' => $user_ids,
+            'role' => $role,
+            'action_type' => $action_type,
+          ], get_current_user_id());
+
           echo wp_json_encode([
             'success' => true,
             'message' => esc_html($message),
@@ -176,6 +182,9 @@ class USERSPN_Ajax {
 
             // Flush rewrite rules only here (admin context), never on frontend (avoids 503 on checkout).
             flush_rewrite_rules();
+            USERSPN_Security::log_audit_event('settings_changed', 'Plugin settings updated', [
+              'changed_keys' => array_keys($userspn_key_value),
+            ], get_current_user_id());
             echo wp_json_encode(['error_key' => '']);
             exit;
           } else {
@@ -250,6 +259,10 @@ class USERSPN_Ajax {
             }
 
             do_action('userspn_manager_edit', $user_id, $userspn_key_value);
+            USERSPN_Security::log_audit_event('profile_updated', 'User edited by admin', [
+              'target_user_id' => $user_id,
+              'changed_keys' => array_keys($userspn_key_value),
+            ], $current_user_id);
             echo 'userspn_manager_edit_success';
             exit;
           } else {
@@ -282,7 +295,12 @@ class USERSPN_Ajax {
           break;
         case 'userspn_manager_remove':
           if (!empty($user_id) && user_can($current_user_id, 'administrator')) {
+            $deleted_user = get_userdata($user_id);
             wp_delete_user($user_id);
+            USERSPN_Security::log_audit_event('user_deleted', 'User deleted by admin', [
+              'target_user_id' => $user_id,
+              'email' => $deleted_user ? $deleted_user->user_email : '',
+            ], $current_user_id);
             echo 'userspn_manager_remove_success';
             exit;
           } else {
@@ -1422,6 +1440,152 @@ class USERSPN_Ajax {
             'grace_days_remaining' => $grace_days,
           ]);
           exit;
+          break;
+
+        case 'userspn_get_posts_by_type':
+          if (!current_user_can('manage_options')) {
+            echo wp_json_encode(['error_key' => 'permission_denied']);
+            exit;
+          }
+
+          $post_type = !empty($_POST['post_type']) ? sanitize_text_field(wp_unslash($_POST['post_type'])) : 'page';
+          $post_type_obj = get_post_type_object($post_type);
+
+          if (!$post_type_obj || !$post_type_obj->public) {
+            echo wp_json_encode(['error_key' => 'invalid_post_type']);
+            exit;
+          }
+
+          $posts = get_posts([
+            'post_type' => $post_type,
+            'posts_per_page' => -1,
+            'post_status' => 'publish',
+            'orderby' => 'title',
+            'order' => 'ASC',
+          ]);
+
+          $options = [];
+          foreach ($posts as $p) {
+            $options[] = ['id' => $p->ID, 'title' => $p->post_title];
+          }
+
+          echo wp_json_encode(['error_key' => '', 'options' => $options]);
+          exit;
+          break;
+
+        case 'userspn_revoke_session':
+          if (!is_user_logged_in()) {
+            wp_send_json_error(__('You must be logged in.', 'userspn'));
+          }
+
+          $target_user_id = !empty($_POST['target_user_id']) ? intval($_POST['target_user_id']) : get_current_user_id();
+          $token_hash = !empty($_POST['token_hash']) ? sanitize_text_field(wp_unslash($_POST['token_hash'])) : '';
+
+          // Only admins can revoke other users' sessions
+          if ($target_user_id !== get_current_user_id() && !current_user_can('manage_options')) {
+            wp_send_json_error(__('Insufficient permissions.', 'userspn'));
+          }
+
+          if (empty($token_hash)) {
+            wp_send_json_error(__('Invalid session token.', 'userspn'));
+          }
+
+          USERSPN_Sessions::revoke_session($target_user_id, $token_hash);
+          wp_send_json_success(__('Session revoked.', 'userspn'));
+          break;
+
+        case 'userspn_revoke_all_sessions':
+          if (!is_user_logged_in()) {
+            wp_send_json_error(__('You must be logged in.', 'userspn'));
+          }
+
+          $target_user_id = !empty($_POST['target_user_id']) ? intval($_POST['target_user_id']) : get_current_user_id();
+          $except_current = !empty($_POST['except_current']) && $_POST['except_current'] === 'true';
+
+          // Only admins can revoke other users' sessions
+          if ($target_user_id !== get_current_user_id() && !current_user_can('manage_options')) {
+            wp_send_json_error(__('Insufficient permissions.', 'userspn'));
+          }
+
+          USERSPN_Sessions::revoke_all_sessions($target_user_id, $except_current);
+          wp_send_json_success(__('All sessions revoked.', 'userspn'));
+          break;
+
+        case 'userspn_get_user_sessions':
+          if (!is_user_logged_in()) {
+            wp_send_json_error(__('You must be logged in.', 'userspn'));
+          }
+
+          $target_user_id = !empty($_POST['target_user_id']) ? intval($_POST['target_user_id']) : get_current_user_id();
+
+          // Only admins can see other users' sessions
+          if ($target_user_id !== get_current_user_id() && !current_user_can('manage_options')) {
+            wp_send_json_error(__('Insufficient permissions.', 'userspn'));
+          }
+
+          $sessions = USERSPN_Sessions::get_user_sessions($target_user_id);
+          $current_hash = USERSPN_Sessions::get_current_token_hash();
+          wp_send_json_success(['sessions' => $sessions, 'current_token_hash' => $current_hash]);
+          break;
+
+        case 'userspn_passkey_register_options':
+          if (!is_user_logged_in()) {
+            wp_send_json_error(__('You must be logged in.', 'userspn'));
+          }
+          if (get_option('userspn_passkeys_enabled') !== 'on') {
+            wp_send_json_error(__('Passkeys are not enabled.', 'userspn'));
+          }
+          $passkeys = new USERSPN_Passkeys();
+          $options = $passkeys->create_registration_options(get_current_user_id());
+          if (is_wp_error($options)) {
+            wp_send_json_error($options->get_error_message());
+          }
+          wp_send_json_success($options);
+          break;
+
+        case 'userspn_passkey_register_verify':
+          if (!is_user_logged_in()) {
+            wp_send_json_error(__('You must be logged in.', 'userspn'));
+          }
+          if (get_option('userspn_passkeys_enabled') !== 'on') {
+            wp_send_json_error(__('Passkeys are not enabled.', 'userspn'));
+          }
+          $credential = isset($_POST['credential']) ? $_POST['credential'] : '';
+          if (is_string($credential)) {
+            $credential = json_decode(stripslashes($credential), true);
+          }
+          $device_name = !empty($_POST['device_name']) ? sanitize_text_field(wp_unslash($_POST['device_name'])) : '';
+          $passkeys = new USERSPN_Passkeys();
+          $result = $passkeys->verify_registration(get_current_user_id(), $credential, $device_name);
+          if (is_wp_error($result)) {
+            wp_send_json_error($result->get_error_message());
+          }
+          wp_send_json_success(__('Passkey registered successfully.', 'userspn'));
+          break;
+
+        case 'userspn_passkey_delete':
+          if (!is_user_logged_in()) {
+            wp_send_json_error(__('You must be logged in.', 'userspn'));
+          }
+          $passkey_id = !empty($_POST['passkey_id']) ? intval($_POST['passkey_id']) : 0;
+          if (empty($passkey_id)) {
+            wp_send_json_error(__('Invalid passkey ID.', 'userspn'));
+          }
+          $passkeys = new USERSPN_Passkeys();
+          $result = $passkeys->delete_passkey(get_current_user_id(), $passkey_id);
+          if (is_wp_error($result)) {
+            wp_send_json_error($result->get_error_message());
+          }
+          wp_send_json_success(__('Passkey deleted.', 'userspn'));
+          break;
+
+        case 'userspn_passkey_get_list':
+          if (!is_user_logged_in()) {
+            wp_send_json_error(__('You must be logged in.', 'userspn'));
+          }
+          $passkeys = new USERSPN_Passkeys();
+          $list = $passkeys->get_user_passkeys(get_current_user_id());
+          wp_send_json_success($list);
           break;
 
         case 'userspn_complete_tutorial':

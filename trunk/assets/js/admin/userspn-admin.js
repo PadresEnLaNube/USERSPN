@@ -115,4 +115,32 @@
     });
   }
 
+  // Dynamic post type → page selector for profile redirect
+  $(document).on('change', '#userspn_profile_redirect_post_type', function() {
+    var postType = $(this).val();
+    var $pageSelect = $('#userspn_profile_redirect_page_id');
+
+    if (!$pageSelect.length) return;
+
+    $pageSelect.prop('disabled', true);
+
+    $.post(userspn_ajax.url, {
+      action: 'userspn_ajax',
+      userspn_ajax_type: 'userspn_get_posts_by_type',
+      userspn_ajax_nonce: userspn_ajax.nonce,
+      post_type: postType
+    }, function(response) {
+      var data = typeof response === 'string' ? JSON.parse(response) : response;
+
+      if (data.error_key === '') {
+        $pageSelect.empty();
+        $.each(data.options, function(i, item) {
+          $pageSelect.append($('<option>', { value: item.id, text: item.title }));
+        });
+      }
+
+      $pageSelect.prop('disabled', false);
+    });
+  });
+
 })(jQuery);

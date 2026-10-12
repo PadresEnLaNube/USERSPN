@@ -218,6 +218,13 @@ class USERSPN_Functions_User
 
     // Reset inactive warning flag on login so it can be sent again in a future inactivity period
     delete_user_meta($user_id, 'userspn_inactive_warning_sent');
+
+    // Audit log: login success
+    if (class_exists('USERSPN_Security')) {
+      USERSPN_Security::log_audit_event('login_success', 'User logged in successfully', [
+        'email' => $user->user_email,
+      ], $user_id);
+    }
   }
 
   public function userspn_profile_fields($user)
@@ -512,6 +519,14 @@ class USERSPN_Functions_User
 
     // Guardar timestamp del registro
     update_user_meta($user_id, 'userspn_registration_date', current_time('timestamp'));
+
+    // Audit log: user registered
+    if (class_exists('USERSPN_Security')) {
+      $user = get_userdata($user_id);
+      USERSPN_Security::log_audit_event('user_registered', 'New user registered', [
+        'email' => $user ? $user->user_email : '',
+      ], $user_id);
+    }
   }
 
   /**
@@ -1012,23 +1027,37 @@ class USERSPN_Functions_User
             </div>
           <?php endif ?>
         <?php else: ?>
+          <?php
+            $userspn_redirect_active = get_option('userspn_profile_redirect_page') === 'on';
+            $userspn_redirect_url = '#';
+            if ($userspn_redirect_active) {
+              $redirect_page_id = get_option('userspn_profile_redirect_page_id');
+              if (!empty($redirect_page_id)) {
+                $userspn_redirect_url = get_permalink($redirect_page_id);
+              }
+              if (empty($userspn_redirect_url)) {
+                $userspn_redirect_url = '#';
+                $userspn_redirect_active = false;
+              }
+            }
+          ?>
           <?php if (!$is_inline): ?>
             <?php if (get_option('userspn_image_custom') == 'on'): ?>
               <?php $custom_ids = get_option('userspn_image_custom_ids'); ?>
 
               <?php if (!empty($custom_ids)): ?>
                 <?php $custom_ids = explode(',', $custom_ids); ?>
-                <a href="#"
+                <a href="<?php echo esc_url($userspn_redirect_url); ?>"
                   class="userspn-profile-popup-btn userspn-tooltip-left<?php echo (get_option('userspn_disabled') == 'on') ? ' userspn-display-none-soft' : ''; ?>"
                   title="<?php esc_html_e('Your profile', 'userspn'); ?>"><?php echo wp_get_attachment_image($custom_ids[array_rand($custom_ids)], [50, 50], false, ['class' => 'userspn-border-radius-50-percent userspn-m-10 userspn-display-block']); ?></a>
               <?php else: ?>
-                <a href="#"
+                <a href="<?php echo esc_url($userspn_redirect_url); ?>"
                   class="userspn-profile-popup-btn userspn-tooltip-left<?php echo (get_option('userspn_disabled') == 'on') ? ' userspn-display-none-soft' : ''; ?>"
                   title="<?php esc_html_e('Your profile', 'userspn'); ?>"><i
                     class="material-icons-outlined userspn-profile-icon userspn-color-main-0 userspn-vertical-align-middle userspn-font-size-50">account_circle</i></a>
               <?php endif ?>
             <?php else: ?>
-              <a href="#"
+              <a href="<?php echo esc_url($userspn_redirect_url); ?>"
                 class="userspn-profile-popup-btn userspn-tooltip-left<?php echo (get_option('userspn_disabled') == 'on') ? ' userspn-display-none-soft' : ''; ?>"
                 aria-label="<?php esc_html_e('Your profile link button', 'userspn'); ?>"
                 title="<?php esc_html_e('Your profile', 'userspn'); ?>"><i
@@ -1062,7 +1091,7 @@ class USERSPN_Functions_User
                 <?php endif ?>
               </div>
             </div>
-          <?php else: ?>
+          <?php elseif (!$userspn_redirect_active): ?>
             <div id="userspn-profile-popup" class="userspn-popup userspn-display-none-soft">
               <div class="userspn-popup-content">
                 <div class="userspn-profile-wrapper">
@@ -1981,6 +2010,13 @@ class USERSPN_Functions_User
           update_user_meta($user_id, $field_key, $sanitized_value);
         }
       }
+    }
+
+    // Audit log: profile updated
+    if (class_exists('USERSPN_Security')) {
+      USERSPN_Security::log_audit_event('profile_updated', 'User profile updated from admin', [
+        'target_user_id' => $user_id,
+      ], get_current_user_id());
     }
   }
 

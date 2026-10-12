@@ -54,7 +54,7 @@ class USERSPN
 		if (defined('USERSPN_VERSION')) {
 			$this->version = USERSPN_VERSION;
 		} else {
-			$this->version = '1.1.60';
+			$this->version = '1.1.70';
 		}
 
 		$this->plugin_name = 'userspn';
@@ -86,6 +86,14 @@ class USERSPN
 			require_once USERSPN_DIR . 'includes/class-userspn-activator.php';
 			USERSPN_Activator::userspn_create_security_logs_table();
 			update_option('userspn_db_version', '1.1.8');
+		}
+		if (version_compare($current_db_version, '1.1.61', '<')) {
+			require_once USERSPN_DIR . 'includes/class-userspn-activator.php';
+			// Re-run security_logs table creation to add user_id column via dbDelta
+			USERSPN_Activator::userspn_create_security_logs_table();
+			// Create passkeys table
+			USERSPN_Activator::userspn_create_passkeys_table();
+			update_option('userspn_db_version', '1.1.61');
 		}
 	}
 
@@ -281,6 +289,26 @@ class USERSPN
 		 */
 		require_once USERSPN_DIR . 'includes/class-userspn-tutorial.php';
 
+		/**
+		 * The class responsible for GDPR privacy (export/erase).
+		 */
+		require_once USERSPN_DIR . 'includes/class-userspn-privacy.php';
+
+		/**
+		 * The class responsible for session management.
+		 */
+		require_once USERSPN_DIR . 'includes/class-userspn-sessions.php';
+
+		/**
+		 * The class responsible for REST API admin endpoints.
+		 */
+		require_once USERSPN_DIR . 'includes/class-userspn-rest-api.php';
+
+		/**
+		 * The class responsible for passkeys/WebAuthn authentication.
+		 */
+		require_once USERSPN_DIR . 'includes/class-userspn-passkeys.php';
+
 		$this->loader = new USERSPN_Loader();
 	}
 
@@ -346,6 +374,21 @@ class USERSPN
 		$this->loader->userspn_add_action('rest_api_init', $plugin_apple_oauth, 'register_routes');
 		$plugin_apple_oauth->register_ajax_callback();
 
+		// GDPR Privacy — register exporters/erasers
+		new USERSPN_Privacy();
+
+		// Session Management
+		$plugin_sessions = new USERSPN_Sessions();
+		$this->loader->userspn_add_action('wp_login', $plugin_sessions, 'enrich_session_on_login', 20, 2);
+
+		// REST API Admin endpoints
+		$plugin_rest_api = new USERSPN_REST_API();
+		$this->loader->userspn_add_action('rest_api_init', $plugin_rest_api, 'register_routes');
+
+		// Audit logging: logout and login failure
+		$this->loader->userspn_add_action('wp_logout', $this, 'userspn_log_logout');
+		$this->loader->userspn_add_action('wp_login_failed', $this, 'userspn_log_login_failed');
+
 		// Add redirect hook for plugin activation
 		$this->loader->userspn_add_action('admin_init', $this, 'userspn_redirect_to_options');
 	}
@@ -409,6 +452,11 @@ class USERSPN
 			get_option('userspn_apple_login_enabled') == 'on'
 		) {
 			$this->loader->userspn_add_action('wp_enqueue_scripts', $plugin_public, 'userspn_enqueue_social_login_scripts');
+		}
+
+		// Enqueue passkeys JS if enabled
+		if (get_option('userspn_passkeys_enabled') === 'on') {
+			$this->loader->userspn_add_action('wp_enqueue_scripts', $plugin_public, 'userspn_enqueue_passkeys_scripts');
 		}
 
 		$this->loader->userspn_add_filter('wp_nav_menu_items', $plugin_public, 'userspn_add_profile_icon_to_menu', 10, 2);
@@ -651,6 +699,30 @@ class USERSPN
 	 *
 	 * @since    1.0.0
 	 */
+	/**
+	 * Log failed login attempt for audit trail
+	 */
+	public function userspn_log_login_failed($username) {
+		if (class_exists('USERSPN_Security')) {
+			USERSPN_Security::log_audit_event('login_failed', 'Failed login attempt', [
+				'username' => $username,
+			]);
+		}
+	}
+
+	/**
+	 * Log user logout for audit trail
+	 */
+	public function userspn_log_logout() {
+		$user_id = get_current_user_id();
+		if ($user_id && class_exists('USERSPN_Security')) {
+			$user = get_userdata($user_id);
+			USERSPN_Security::log_audit_event('logout', 'User logged out', [
+				'email' => $user ? $user->user_email : '',
+			], $user_id);
+		}
+	}
+
 	public function userspn_redirect_to_options()
 	{
 		// Check if we should redirect (only for administrators)
