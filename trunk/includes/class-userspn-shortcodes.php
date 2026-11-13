@@ -73,4 +73,16 @@ class USERSPN_Shortcodes {
     ob_end_clean(); 
     return $userspn_return_string;
   }
+
+  /**
+   * Sequential login shortcode.
+   *
+   * @since 1.1.71
+   * @param array $atts Shortcode attributes.
+   * @return string HTML output.
+   */
+  public function userspn_sequential_login($atts) {
+    $plugin_user = new USERSPN_Functions_User();
+    return $plugin_user->userspn_sequential_login($atts);
+  }
 }

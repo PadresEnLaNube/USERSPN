@@ -381,13 +381,14 @@ class USERSPN_2FA {
         if ($last_sent && ($current_time - $last_sent) < 60) {
             $wait_time = 60 - ($current_time - $last_sent);
             return new WP_Error('rate_limit', sprintf(
+                // translators: %d is the number of seconds to wait before requesting a new code.
                 __('Please wait %d seconds before requesting a new code.', 'userspn'),
                 $wait_time
             ));
         }
 
         // Generate 6-digit code
-        $code = sprintf('%06d', mt_rand(0, 999999));
+        $code = sprintf('%06d', wp_rand(0, 999999));
         $expiry = $current_time + 600; // 10 minutes
 
         // Save to user meta
@@ -397,9 +398,12 @@ class USERSPN_2FA {
 
         // Send email
         $site_name = get_bloginfo('name');
+        // translators: %s is the site name.
         $subject = sprintf(__('[%s] Two-Factor Authentication Code', 'userspn'), $site_name);
         $message = sprintf(
+            // translators: %s is the user's display name.
             __('Hello %s,', 'userspn') . "\n\n" .
+            // translators: %s is the two-factor authentication code.
             __('Your two-factor authentication code is: %s', 'userspn') . "\n\n" .
             __('This code will expire in 10 minutes.', 'userspn') . "\n\n" .
             __('If you did not request this code, please ignore this email or contact support if you have concerns.', 'userspn') . "\n\n" .

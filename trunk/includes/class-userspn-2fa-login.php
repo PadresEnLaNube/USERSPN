@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 /**
  * Two-Factor Authentication Login Integration for USERSPN plugin.
  *
@@ -210,7 +214,7 @@ class USERSPN_2FA_Login {
                     <?php echo esc_html__('Use backup code', 'userspn'); ?>
                 </a>
                 <br>
-                <a href="<?php echo wp_login_url(); ?>?userspn_2fa_cancel=1" class="userspn-2fa-link">
+                <a href="<?php echo esc_url( add_query_arg( 'userspn_2fa_cancel', '1', wp_login_url() ) ); ?>" class="userspn-2fa-link">
                     <i class="dashicons dashicons-arrow-left-alt" style="vertical-align: middle;"></i>
                     <?php echo esc_html__('Back to login', 'userspn'); ?>
                 </a>
@@ -251,7 +255,7 @@ class USERSPN_2FA_Login {
             </div>
 
             <input type="hidden" name="action" value="userspn_2fa_verify">
-            <input type="hidden" name="userspn_2fa_nonce" value="<?php echo wp_create_nonce('userspn_2fa_verify'); ?>">
+            <input type="hidden" name="userspn_2fa_nonce" value="<?php echo esc_attr( wp_create_nonce('userspn_2fa_verify') ); ?>">
         </div>
         <?php
     }
@@ -346,15 +350,15 @@ class USERSPN_2FA_Login {
                         btn.innerHTML = '<i class="dashicons dashicons-update spin" style="vertical-align: middle;"></i> Enviando...';
                         btn.style.pointerEvents = 'none';
 
-                        fetch('<?php echo admin_url('admin-ajax.php'); ?>', {
+                        fetch('<?php echo esc_url( admin_url('admin-ajax.php') ); ?>', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/x-www-form-urlencoded',
                             },
                             body: new URLSearchParams({
                                 action: 'userspn_2fa_resend_login_code',
-                                user_id: '<?php echo isset($_SESSION[self::SESSION_KEY]) ? $_SESSION[self::SESSION_KEY] : 0; ?>',
-                                nonce: '<?php echo wp_create_nonce('userspn_2fa_resend'); ?>'
+                                user_id: '<?php echo esc_attr( isset($_SESSION[self::SESSION_KEY]) ? $_SESSION[self::SESSION_KEY] : 0 ); ?>',
+                                nonce: '<?php echo esc_attr( wp_create_nonce('userspn_2fa_resend') ); ?>'
                             })
                         })
                         .then(response => response.json())
@@ -416,7 +420,7 @@ class USERSPN_2FA_Login {
 
         // Verify nonce
         if (!isset($_POST['userspn_2fa_nonce']) || !wp_verify_nonce($_POST['userspn_2fa_nonce'], 'userspn_2fa_verify')) {
-            wp_die(__('Security check failed.', 'userspn'));
+            wp_die( esc_html__('Security check failed.', 'userspn') );
         }
 
         // Check if user is in session

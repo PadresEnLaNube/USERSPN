@@ -44,6 +44,7 @@ class USERSPN_Validation {
             return new WP_Error(
                 'required_field', 
                 sprintf(
+                    // translators: %s: field label.
                     __('%s is required.', 'userspn'),
                     !empty($field_config['label']) ? $field_config['label'] : __('This field', 'userspn')
                 )
@@ -98,6 +99,7 @@ class USERSPN_Validation {
                     return new WP_Error(
                         'number_too_small', 
                         sprintf(
+                            // translators: %s: minimum allowed number.
                             __('Number must be at least %s.', 'userspn'),
                             $field_config['min']
                         )
@@ -107,6 +109,7 @@ class USERSPN_Validation {
                     return new WP_Error(
                         'number_too_large', 
                         sprintf(
+                            // translators: %s: maximum allowed number.
                             __('Number must be at most %s.', 'userspn'),
                             $field_config['max']
                         )
@@ -121,6 +124,7 @@ class USERSPN_Validation {
                     return new WP_Error(
                         'text_too_short', 
                         sprintf(
+                            // translators: %d: minimum number of characters.
                             __('Text must be at least %d characters long.', 'userspn'),
                             $field_config['minlength']
                         )
@@ -130,6 +134,7 @@ class USERSPN_Validation {
                     return new WP_Error(
                         'text_too_long', 
                         sprintf(
+                            // translators: %d: maximum number of characters.
                             __('Text must be at most %d characters long.', 'userspn'),
                             $field_config['maxlength']
                         )

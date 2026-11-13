@@ -48,7 +48,7 @@ class USERSPN_Cron {
     if ($delete_inactive_enabled && $delete_days > 0) {
       require_once(ABSPATH . 'wp-admin/includes/user.php');
       
-      $cutoff_date = date('Y-m-d H:i:s', strtotime('-' . $delete_days . ' days', current_time('timestamp')));
+      $cutoff_date = gmdate('Y-m-d H:i:s', strtotime('-' . $delete_days . ' days', current_time('timestamp')));
       
       $args_delete = array(
         'meta_query' => array(

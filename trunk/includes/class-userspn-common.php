@@ -78,6 +78,7 @@ class USERSPN_Common {
 
 		wp_enqueue_style($this->plugin_name, USERSPN_URL . 'assets/css/userspn.css', [], $this->version, 'all');
 		wp_enqueue_style('userspn-profile-completion', USERSPN_URL . 'assets/css/userspn-profile-completion.css', [], $this->version, 'all');
+		wp_enqueue_style('userspn-sequential-login', USERSPN_URL . 'assets/css/userspn-sequential-login.css', [$this->plugin_name], $this->version, 'all');
 
 		if (get_option('userspn_woocommerce_tab') == 'on' && class_exists('WooCommerce')) {
 			wp_enqueue_style('woocommerce-general');
@@ -168,6 +169,7 @@ class USERSPN_Common {
 
 		// Load Chart.js for bot analysis charts (only in admin)
 		if (is_admin()) {
+			// phpcs:ignore PluginCheck.CodeAnalysis.EnqueuedResourceOffloading.OffloadedContent
 			wp_enqueue_script('chart-js', 'https://cdn.jsdelivr.net/npm/chart.js', [], '4.4.0', true);
 		}
 
@@ -175,6 +177,15 @@ class USERSPN_Common {
 		if (!is_admin()) {
 			wp_enqueue_script('userspn-user-profile-image', USERSPN_URL . 'assets/js/userspn-user-profile-image.js', ['jquery'], $this->version, false);
 			wp_enqueue_script('userspn-user-register-form', USERSPN_URL . 'assets/js/userspn-user-register-form.js', ['jquery'], $this->version, false);
+			wp_enqueue_script('userspn-sequential-login', USERSPN_URL . 'assets/js/userspn-sequential-login.js', ['jquery', $this->plugin_name], $this->version, false);
+			wp_localize_script('userspn-sequential-login', 'userspn_seq_login_i18n', [
+				'empty_email'     => __('Please enter your email or username.', 'userspn'),
+				'invalid_email'   => __('Please enter a valid email address.', 'userspn'),
+				'empty_password'  => __('Please enter your password.', 'userspn'),
+				'logging_in'      => __('Signing in...', 'userspn'),
+				'verifying'       => __('Verifying...', 'userspn'),
+				'generic_error'   => __('An error occurred. Please try again.', 'userspn'),
+			]);
 			wp_enqueue_script('userspn-upload-private-files-btn', USERSPN_URL . 'assets/js/userspn-upload-private-files-btn.js', ['jquery'], $this->version, false);
 			wp_enqueue_script('userspn-notifications', USERSPN_URL . 'assets/js/userspn-notifications.js', ['jquery'], $this->version, false);
 

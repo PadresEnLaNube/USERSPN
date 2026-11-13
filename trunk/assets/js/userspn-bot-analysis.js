@@ -7,7 +7,7 @@
         console.log('Chart.js available:', typeof Chart !== 'undefined');
         
         $('#userspn-bot-analysis-popup').removeClass('userspn-display-none-soft').addClass('userspn-display-block');
-        $('.userspn-popup-overlay').removeClass('userspn-display-none-soft').addClass('userspn-display-block');
+        $('body > .userspn-popup-overlay').first().removeClass('userspn-display-none-soft').addClass('userspn-display-block');
         loadBotAnalysisResults();
     };
 
@@ -15,13 +15,13 @@
         // Close popup handlers
         $(document).on('click', '.userspn-popup-close-wrapper', function() {
             $('#userspn-bot-analysis-popup').removeClass('userspn-display-block').addClass('userspn-display-none-soft');
-            $('.userspn-popup-overlay').removeClass('userspn-display-block').addClass('userspn-display-none-soft');
+            $('body > .userspn-popup-overlay').first().removeClass('userspn-display-block').addClass('userspn-display-none-soft');
         });
         
         // Close popup when clicking overlay
         $(document).on('click', '.userspn-popup-overlay', function() {
             $('#userspn-bot-analysis-popup').removeClass('userspn-display-block').addClass('userspn-display-none-soft');
-            $('.userspn-popup-overlay').removeClass('userspn-display-block').addClass('userspn-display-none-soft');
+            $('body > .userspn-popup-overlay').first().removeClass('userspn-display-block').addClass('userspn-display-none-soft');
         });
 
         // Start analysis button

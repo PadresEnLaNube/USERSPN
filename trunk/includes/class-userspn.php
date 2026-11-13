@@ -54,7 +54,7 @@ class USERSPN
 		if (defined('USERSPN_VERSION')) {
 			$this->version = USERSPN_VERSION;
 		} else {
-			$this->version = '1.1.70';
+			$this->version = '1.1.71';
 		}
 
 		$this->plugin_name = 'userspn';
@@ -280,6 +280,11 @@ class USERSPN
 		require_once USERSPN_DIR . 'includes/class-userspn-apple-oauth.php';
 
 		/**
+		 * The class responsible for X OAuth functionality.
+		 */
+		require_once USERSPN_DIR . 'includes/class-userspn-x-oauth.php';
+
+		/**
 		 * The class responsible for Gutenberg blocks.
 		 */
 		require_once USERSPN_DIR . 'includes/class-userspn-blocks.php';
@@ -374,6 +379,11 @@ class USERSPN
 		$this->loader->userspn_add_action('rest_api_init', $plugin_apple_oauth, 'register_routes');
 		$plugin_apple_oauth->register_ajax_callback();
 
+		// Register X OAuth REST API routes and AJAX handlers
+		$plugin_x_oauth = new USERSPN_X_OAuth();
+		$this->loader->userspn_add_action('rest_api_init', $plugin_x_oauth, 'register_routes');
+		$plugin_x_oauth->register_ajax_callback();
+
 		// GDPR Privacy — register exporters/erasers
 		new USERSPN_Privacy();
 
@@ -448,6 +458,7 @@ class USERSPN
 		if (
 			get_option('userspn_google_login_enabled') == 'on' ||
 			get_option('userspn_facebook_login_enabled') == 'on' ||
+			get_option('userspn_x_login_enabled') == 'on' ||
 			get_option('userspn_github_login_enabled') == 'on' ||
 			get_option('userspn_apple_login_enabled') == 'on'
 		) {
@@ -470,6 +481,7 @@ class USERSPN
 		$this->loader->userspn_add_action('wp', $plugin_user, 'userspn_auto_login');
 		$this->loader->userspn_add_action('wp_login', $plugin_user, 'userspn_user_wp_login');
 		$this->loader->userspn_add_action('user_register', $plugin_user, 'userspn_user_register');
+		$this->loader->userspn_add_action('template_redirect', $plugin_user, 'userspn_maybe_redirect_logged_in_user');
 
 		$this->loader->userspn_add_filter('get_avatar', $plugin_user, 'userspn_get_avatar_hook', 10, 5);
 		$this->loader->userspn_add_filter('get_avatar_url', $plugin_user, 'userspn_get_avatar_url_hook', 10, 3);
@@ -600,6 +612,8 @@ class USERSPN
 		$this->loader->userspn_add_shortcode('userspn-user-register-fields', $plugin_user, 'userspn_user_register_fields');
 		$this->loader->userspn_add_shortcode('userspn-user-register-form', $plugin_user, 'userspn_user_register_form');
 		$this->loader->userspn_add_shortcode('userspn-login', $plugin_user, 'userspn_login');
+		$this->loader->userspn_add_shortcode('userspn-sequential-login', $plugin_user, 'userspn_sequential_login');
+		$this->loader->userspn_add_shortcode('userspn_sequential_login', $plugin_user, 'userspn_sequential_login');
 		$this->loader->userspn_add_shortcode('userspn-csv-template', $plugin_user, 'userspn_csv_template');
 		$this->loader->userspn_add_shortcode('userspn-csv-template-upload', $plugin_user, 'userspn_csv_template_upload');
 

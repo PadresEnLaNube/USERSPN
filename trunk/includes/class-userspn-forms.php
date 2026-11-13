@@ -724,6 +724,7 @@ class USERSPN_Forms {
         <div class="userspn-user-role-selector-wrapper" <?php echo wp_kses_post($userspn_parent_block); ?>>
           <?php if (!empty($users_with_role)): ?>
             <div class="userspn-mb-20 userspn-p-15 userspn-users-with-role-box">
+              <?php // translators: %s: user role label (e.g. "Newsletter Subscriber"). ?>
               <h4 class="userspn-mb-10"><?php echo esc_html(sprintf(__('Users with %s Role', 'userspn'), $role_label)); ?> <span class="userspn-role-badge"><?php echo count($users_with_role); ?></span></h4>
               <div class="userspn-users-with-role-list">
                 <?php foreach ($users_with_role as $user): ?>
@@ -732,6 +733,7 @@ class USERSPN_Forms {
               </div>
             </div>
           <?php else: ?>
+            <?php // translators: %s: user role label (e.g. "Newsletter Subscriber"). ?>
             <div class="userspn-mb-20 userspn-p-15 userspn-alert-warning"><p><i class="material-icons-outlined userspn-vertical-align-middle">info</i> <?php echo esc_html(sprintf(__('No users currently have the %s role.', 'userspn'), $role_label)); ?></p></div>
           <?php endif; ?>
           <div class="userspn-mb-20">
@@ -744,7 +746,9 @@ class USERSPN_Forms {
           </div>
           <div class="userspn-role-actions userspn-mb-20">
             <input type="hidden" class="userspn-role-nonce" value="<?php echo esc_attr(wp_create_nonce('userspn-role-assignment')); ?>">
+            <?php // translators: %s: user role label (e.g. "Newsletter Subscriber"). ?>
             <div class="userspn-display-inline-block userspn-mr-10"><button type="button" class="userspn-btn userspn-btn-mini userspn-assign-role-btn" data-input-id="<?php echo esc_attr($userspn_input['id']); ?>"><i class="material-icons-outlined userspn-vertical-align-middle">person_add</i> <?php echo esc_html(sprintf(__('Assign %s Role', 'userspn'), $role_label)); ?></button></div>
+            <?php // translators: %s: user role label (e.g. "Newsletter Subscriber"). ?>
             <div class="userspn-display-inline-block"><button type="button" class="userspn-btn userspn-btn-mini userspn-remove-role-btn" data-input-id="<?php echo esc_attr($userspn_input['id']); ?>"><i class="material-icons-outlined userspn-vertical-align-middle">person_remove</i> <?php echo esc_html(sprintf(__('Remove %s Role', 'userspn'), $role_label)); ?></button></div>
           </div>
           <div class="userspn-role-message userspn-mt-20 userspn-display-none-soft"></div>

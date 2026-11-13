@@ -1,0 +1,266 @@
+/**
+ * Sequential Login Styling - USERSPN
+ *
+ * Styles for the two-step sequential login form (email -> password stacked layout).
+ *
+ * @package USERSPN
+ */
+
+.userspn-sequential-login {
+  max-width: 420px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  padding: 30px;
+  transition: all 0.3s ease;
+}
+
+/* Alert Notification */
+.userspn-sequential-login .userspn-seq-alert {
+  margin: 0 0 20px 0;
+  padding: 12px 18px;
+  border-radius: 6px;
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.userspn-sequential-login .userspn-alert-error {
+  background-color: #b61627;
+  color: #ffffff;
+}
+
+.userspn-sequential-login .userspn-alert-success {
+  background-color: #699801;
+  color: #ffffff;
+}
+
+.userspn-sequential-login .userspn-alert-warning {
+  background-color: #b6821d;
+  color: #ffffff;
+}
+
+/* Steps Transition */
+.userspn-seq-step {
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.userspn-seq-step.userspn-display-none {
+  display: none !important;
+}
+
+/* Step Headers */
+.userspn-seq-header h4 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--userspn-color-main-alt, #232323);
+  margin-top: 0;
+  margin-bottom: 6px;
+}
+
+.userspn-seq-header p {
+  color: #64748b;
+  font-size: 13px;
+  margin: 0;
+}
+
+/* Stacked Layout */
+.userspn-seq-step .userspn-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 8px;
+}
+
+.userspn-seq-step input.userspn-input {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 16px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 15px;
+  margin-bottom: 0;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.userspn-seq-step input.userspn-input:focus {
+  border-color: var(--userspn-color-main, #00aa44);
+  box-shadow: 0 0 0 3px rgba(0, 170, 68, 0.15);
+  outline: none;
+}
+
+/* Stacked Buttons */
+.userspn-seq-action-wrapper {
+  margin-top: 18px;
+  margin-bottom: 12px;
+}
+
+.userspn-seq-action-wrapper button.userspn-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 24px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 6px;
+  border: none;
+  background-color: var(--userspn-color-main, #00aa44);
+  color: #ffffff;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.userspn-seq-action-wrapper button.userspn-btn:hover:not(:disabled) {
+  background-color: var(--userspn-bg-color-main-alt, #232323);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.userspn-seq-action-wrapper button.userspn-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Step 2 User Identity Chip */
+.userspn-seq-user-badge {
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 8px 14px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.userspn-seq-user-info {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.userspn-seq-user-info .material-icons-outlined,
+.userspn-seq-user-avatar img {
+  color: var(--userspn-color-main, #00aa44);
+  margin-right: 8px;
+}
+
+.userspn-seq-current-identifier {
+  color: #1e293b;
+  font-size: 14px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.userspn-seq-btn-back {
+  background: none;
+  border: none;
+  color: var(--userspn-color-main, #00aa44);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 2px 6px;
+  text-decoration: underline;
+  transition: color 0.2s ease;
+  white-space: nowrap;
+}
+
+.userspn-seq-btn-back:hover {
+  color: var(--userspn-bg-color-main-alt, #232323);
+}
+
+/* Password Toggle */
+.userspn-seq-password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.userspn-seq-toggle-password {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+}
+
+.userspn-seq-toggle-password:hover {
+  color: var(--userspn-color-main, #00aa44);
+}
+
+/* Remember Me Checkbox */
+.userspn-seq-remember-wrapper {
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+.userspn-seq-remember-wrapper label {
+  display: inline-flex;
+  align-items: center;
+  font-size: 13px;
+  color: #475569;
+  cursor: pointer;
+  user-select: none;
+}
+
+.userspn-seq-remember-wrapper input[type="checkbox"] {
+  margin-right: 8px;
+  accent-color: var(--userspn-color-main, #00aa44);
+  cursor: pointer;
+}
+
+/* Logged-in State Card */
+.userspn-seq-logged-in-badge img {
+  border-radius: 50%;
+  border: 2px solid var(--userspn-color-main, #00aa44);
+  padding: 2px;
+}
+
+/* Button Spinner */
+.userspn-seq-action-wrapper .userspn-waiting {
+  margin-left: 8px;
+}
+
+.userspn-seq-action-wrapper .userspn-loader-circle-waiting {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
+}
+
+.userspn-seq-action-wrapper .userspn-loader-circle-waiting div {
+  width: 14px;
+  height: 14px;
+  border-width: 2px;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .userspn-sequential-login {
+    padding: 20px 16px;
+    border-radius: 6px;
+    box-shadow: none;
+    border: 1px solid #e2e8f0;
+  }
+}

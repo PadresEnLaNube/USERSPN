@@ -893,6 +893,44 @@
 
     userspn_toggle.siblings('.userspn-toggle-content').fadeToggle();
   });
+
+  // ── Auto-expand settings section from URL ?section= parameter ──
+  // Format: ?section=parent_id.child_id (dot-separated for nested sections)
+  (function () {
+    var params = new URLSearchParams(window.location.search);
+    var sectionParam = params.get('section');
+    if (!sectionParam) return;
+
+    var sectionIds = sectionParam.split('.');
+
+    setTimeout(function () {
+      var $lastSection = null;
+
+      for (var i = 0; i < sectionIds.length; i++) {
+        var $section = $('#' + sectionIds[i]);
+        if (!$section.length) continue;
+
+        var $content = $section.children('.userspn-toggle-content');
+        var $toggle = $section.children('.userspn-toggle');
+
+        if ($content.length && $content.is(':hidden')) {
+          $content.removeClass('userspn-display-none-soft').show();
+          if ($toggle.find('i').length) {
+            $toggle.find('i').first().text('clear');
+          }
+        }
+
+        $lastSection = $section;
+      }
+
+      if ($lastSection && $lastSection.length) {
+        $('html, body').animate({
+          scrollTop: $lastSection.offset().top - 40
+        }, 400);
+      }
+    }, 300);
+  })();
+
   $(document).on('click', '.userspn-assign-role-btn, .userspn-remove-role-btn', function (e) {
     e.preventDefault(); e.stopPropagation();
     var $button = $(this), isAssign = $button.hasClass('userspn-assign-role-btn');

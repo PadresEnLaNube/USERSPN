@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 /**
  * Plugin menus manager.
  *
@@ -418,7 +421,8 @@ class USERSPN_Settings
       'label' => __('Social Login', 'userspn'),
       'description' => __('Allow users to register and login using their social accounts.', 'userspn'),
     ];
-    
+
+    // Google Login
     $userspn_options['userspn_google_login_enabled'] = [
       'id' => 'userspn_google_login_enabled',
       'class' => 'userspn-input userspn-width-100-percent',
@@ -450,6 +454,17 @@ class USERSPN_Settings
       'placeholder' => __('Enter your Google Client Secret', 'userspn'),
       'description' => __('This is your application secret key from Google Cloud Console.', 'userspn'),
     ];
+    $userspn_options['userspn_google_custom_class'] = [
+      'id' => 'userspn_google_custom_class',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'input',
+      'type' => 'text',
+      'parent' => 'userspn_google_login_enabled',
+      'parent_option' => 'on',
+      'label' => __('Google Login CSS Class', 'userspn'),
+      'placeholder' => 'userspn-trigger-google-login',
+      'description' => __('Add this CSS class to any button or clickable element on your page to trigger Google login when clicked.', 'userspn'),
+    ];
     $userspn_options['userspn_google_redirect_uri_info'] = [
       'id' => 'userspn_google_redirect_uri_info',
       'input' => 'html',
@@ -460,15 +475,15 @@ class USERSPN_Settings
       'description' => __('Copy both Redirect URIs above and add them to your Google Cloud Console in the "Authorized redirect URIs" section. This ensures compatibility with different server configurations.', 'userspn'),
     ];
 
-    // Facebook Login
+    // Meta Login
     $userspn_options['userspn_facebook_login_enabled'] = [
       'id' => 'userspn_facebook_login_enabled',
       'class' => 'userspn-input userspn-width-100-percent',
       'input' => 'input',
       'type' => 'checkbox',
       'parent' => 'this',
-      'label' => __('Enable Facebook Login', 'userspn'),
-      'description' => __('Allow users to register and login using their Facebook account.', 'userspn'),
+      'label' => __('Enable Meta Login', 'userspn'),
+      'description' => __('Allow users to register and login using their Meta account.', 'userspn'),
     ];
     $userspn_options['userspn_facebook_app_id'] = [
       'id' => 'userspn_facebook_app_id',
@@ -477,9 +492,9 @@ class USERSPN_Settings
       'type' => 'text',
       'parent' => 'userspn_facebook_login_enabled',
       'parent_option' => 'on',
-      'label' => __('Facebook App ID', 'userspn'),
-      'placeholder' => __('Enter your Facebook App ID', 'userspn'),
-      'description' => __('Get your credentials from <a href="https://developers.facebook.com/apps" target="_blank">Facebook Developers</a>.', 'userspn'),
+      'label' => __('Meta App ID', 'userspn'),
+      'placeholder' => __('Enter your Meta App ID', 'userspn'),
+      'description' => __('Get your credentials from <a href="https://developers.facebook.com/apps" target="_blank">Meta for Developers</a>.', 'userspn'),
     ];
     $userspn_options['userspn_facebook_app_secret'] = [
       'id' => 'userspn_facebook_app_secret',
@@ -488,18 +503,82 @@ class USERSPN_Settings
       'type' => 'password',
       'parent' => 'userspn_facebook_login_enabled',
       'parent_option' => 'on',
-      'label' => __('Facebook App Secret', 'userspn'),
-      'placeholder' => __('Enter your Facebook App Secret', 'userspn'),
-      'description' => __('This is your application secret key from Facebook Developers.', 'userspn'),
+      'label' => __('Meta App Secret', 'userspn'),
+      'placeholder' => __('Enter your Meta App Secret', 'userspn'),
+      'description' => __('This is your application secret key from Meta for Developers.', 'userspn'),
+    ];
+    $userspn_options['userspn_facebook_custom_class'] = [
+      'id' => 'userspn_facebook_custom_class',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'input',
+      'type' => 'text',
+      'parent' => 'userspn_facebook_login_enabled',
+      'parent_option' => 'on',
+      'label' => __('Meta Login CSS Class', 'userspn'),
+      'placeholder' => 'userspn-trigger-meta-login',
+      'description' => __('Add this CSS class to any button or clickable element on your page to trigger Meta login when clicked.', 'userspn'),
     ];
     $userspn_options['userspn_facebook_redirect_uri_info'] = [
       'id' => 'userspn_facebook_redirect_uri_info',
       'input' => 'html',
       'parent' => 'userspn_facebook_login_enabled',
       'parent_option' => 'on',
-      'html_content' => '<div style="background: #f0f6fc; padding: 15px; border-left: 4px solid #1877f2; margin: 10px 0;"><strong>' . esc_html__('Valid OAuth Redirect URIs (add BOTH):', 'userspn') . '</strong><br><br><strong style="font-size: 11px; color: #1877f2;">Primary:</strong><br><code style="background: #fff; padding: 5px 10px; display: inline-block; margin: 5px 0; word-break: break-all;">' . esc_url(rest_url('userspn/v1/facebook-callback')) . '</code><br><br><strong style="font-size: 11px; color: #666;">Fallback:</strong><br><code style="background: #fff; padding: 5px 10px; display: inline-block; margin: 5px 0; word-break: break-all;">' . esc_url(admin_url('admin-ajax.php?action=userspn_facebook_callback')) . '</code><br><br><small style="color: #d63638;">' . esc_html__('⚠️ Add BOTH URLs to Facebook App Dashboard → Products → Facebook Login → Settings. The system will try the primary URL first and use the fallback if needed.', 'userspn') . '</small></div>',
+      'html_content' => '<div style="background: #f0f6fc; padding: 15px; border-left: 4px solid #1877f2; margin: 10px 0;"><strong>' . esc_html__('Valid OAuth Redirect URIs (add BOTH):', 'userspn') . '</strong><br><br><strong style="font-size: 11px; color: #1877f2;">Primary:</strong><br><code style="background: #fff; padding: 5px 10px; display: inline-block; margin: 5px 0; word-break: break-all;">' . esc_url(rest_url('userspn/v1/facebook-callback')) . '</code><br><br><strong style="font-size: 11px; color: #666;">Fallback:</strong><br><code style="background: #fff; padding: 5px 10px; display: inline-block; margin: 5px 0; word-break: break-all;">' . esc_url(admin_url('admin-ajax.php?action=userspn_facebook_callback')) . '</code><br><br><small style="color: #d63638;">' . esc_html__('⚠️ Add BOTH URLs to Meta App Dashboard → Products → Facebook Login → Settings. The system will try the primary URL first and use the fallback if needed.', 'userspn') . '</small></div>',
       'label' => __('Setup Instructions', 'userspn'),
-      'description' => __('Copy both Redirect URIs above and add them to your Facebook App in the "Valid OAuth Redirect URIs" field. This ensures compatibility with different server configurations.', 'userspn'),
+      'description' => __('Copy both Redirect URIs above and add them to your Meta App in the "Valid OAuth Redirect URIs" field. This ensures compatibility with different server configurations.', 'userspn'),
+    ];
+
+    // X Login
+    $userspn_options['userspn_x_login_enabled'] = [
+      'id' => 'userspn_x_login_enabled',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'input',
+      'type' => 'checkbox',
+      'parent' => 'this',
+      'label' => __('Enable X Login', 'userspn'),
+      'description' => __('Allow users to register and login using their X account.', 'userspn'),
+    ];
+    $userspn_options['userspn_x_client_id'] = [
+      'id' => 'userspn_x_client_id',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'input',
+      'type' => 'text',
+      'parent' => 'userspn_x_login_enabled',
+      'parent_option' => 'on',
+      'label' => __('X Client ID', 'userspn'),
+      'placeholder' => __('Enter your X Client ID', 'userspn'),
+      'description' => __('Get your credentials from the <a href="https://developer.x.com/en/portal/dashboard" target="_blank">X Developer Portal</a>.', 'userspn'),
+    ];
+    $userspn_options['userspn_x_client_secret'] = [
+      'id' => 'userspn_x_client_secret',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'input',
+      'type' => 'password',
+      'parent' => 'userspn_x_login_enabled',
+      'parent_option' => 'on',
+      'label' => __('X Client Secret', 'userspn'),
+      'placeholder' => __('Enter your X Client Secret', 'userspn'),
+      'description' => __('This is your application secret from the X Developer Portal.', 'userspn'),
+    ];
+    $userspn_options['userspn_x_custom_class'] = [
+      'id' => 'userspn_x_custom_class',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'input',
+      'type' => 'text',
+      'parent' => 'userspn_x_login_enabled',
+      'parent_option' => 'on',
+      'label' => __('X Login CSS Class', 'userspn'),
+      'placeholder' => 'userspn-trigger-x-login',
+      'description' => __('Add this CSS class to any button or clickable element on your page to trigger X login when clicked.', 'userspn'),
+    ];
+    $userspn_options['userspn_x_redirect_uri_info'] = [
+      'id' => 'userspn_x_redirect_uri_info',
+      'input' => 'html',
+      'parent' => 'userspn_x_login_enabled',
+      'parent_option' => 'on',
+      'html_content' => '<div style="background: #f0f6fc; padding: 15px; border-left: 4px solid #000; margin: 10px 0;"><strong>' . esc_html__('Callback URLs (add BOTH):', 'userspn') . '</strong><br><br><strong style="font-size: 11px; color: #000;">Primary:</strong><br><code style="background: #fff; padding: 5px 10px; display: inline-block; margin: 5px 0; word-break: break-all;">' . esc_url(rest_url('userspn/v1/x-callback')) . '</code><br><br><strong style="font-size: 11px; color: #666;">Fallback:</strong><br><code style="background: #fff; padding: 5px 10px; display: inline-block; margin: 5px 0; word-break: break-all;">' . esc_url(admin_url('admin-ajax.php?action=userspn_x_callback')) . '</code><br><br><small style="color: #d63638;">' . esc_html__('⚠️ Add BOTH URLs to your X App in the Developer Portal. The system will try the primary URL first and use the fallback if needed.', 'userspn') . '</small></div>',
+      'label' => __('Setup Instructions', 'userspn'),
+      'description' => __('Copy both Callback URLs above and add them to your X App configuration in the Developer Portal. This ensures compatibility with different server configurations.', 'userspn'),
     ];
 
     // GitHub Login
@@ -533,6 +612,17 @@ class USERSPN_Settings
       'label' => __('GitHub Client Secret', 'userspn'),
       'placeholder' => __('Enter your GitHub Client Secret', 'userspn'),
       'description' => __('This is your application secret from GitHub Developer Settings.', 'userspn'),
+    ];
+    $userspn_options['userspn_github_custom_class'] = [
+      'id' => 'userspn_github_custom_class',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'input',
+      'type' => 'text',
+      'parent' => 'userspn_github_login_enabled',
+      'parent_option' => 'on',
+      'label' => __('GitHub Login CSS Class', 'userspn'),
+      'placeholder' => 'userspn-trigger-github-login',
+      'description' => __('Add this CSS class to any button or clickable element on your page to trigger GitHub login when clicked.', 'userspn'),
     ];
     $userspn_options['userspn_github_redirect_uri_info'] = [
       'id' => 'userspn_github_redirect_uri_info',
@@ -596,6 +686,17 @@ class USERSPN_Settings
       'label' => __('Apple Private Key', 'userspn'),
       'placeholder' => __('Paste the content of your .p8 private key file', 'userspn'),
       'description' => __('The private key from your Sign In with Apple key (.p8 file). Keep this secure!', 'userspn'),
+    ];
+    $userspn_options['userspn_apple_custom_class'] = [
+      'id' => 'userspn_apple_custom_class',
+      'class' => 'userspn-input userspn-width-100-percent',
+      'input' => 'input',
+      'type' => 'text',
+      'parent' => 'userspn_apple_login_enabled',
+      'parent_option' => 'on',
+      'label' => __('Apple Login CSS Class', 'userspn'),
+      'placeholder' => 'userspn-trigger-apple-login',
+      'description' => __('Add this CSS class to any button or clickable element on your page to trigger Apple login when clicked.', 'userspn'),
     ];
     $userspn_options['userspn_apple_redirect_uri_info'] = [
       'id' => 'userspn_apple_redirect_uri_info',
@@ -1491,8 +1592,7 @@ class USERSPN_Settings
     </div>
 
     <!-- Recommended plugins popup -->
-    <div class="userspn-popup-overlay userspn-display-none-soft" style="z-index:1000000;"></div>
-    <div id="userspn-recommended-plugins" class="userspn-popup userspn-popup-size-medium userspn-display-none-soft" style="z-index:1000001;">
+    <div id="userspn-recommended-plugins" class="userspn-popup userspn-popup-size-medium userspn-display-none-soft">
       <div class="userspn-popup-content" style="padding:30px;">
         <h3 style="margin:0 0 8px;"><?php esc_html_e('Recommended Plugins', 'userspn'); ?></h3>
         <p style="color:#787c82;margin:0 0 20px;"><?php esc_html_e('Enhance your workflow with these companion plugins.', 'userspn'); ?></p>
@@ -1503,7 +1603,7 @@ class USERSPN_Settings
             $pn_is_rec       = in_array($pn_slug, $pn_recommended, true);
           ?>
           <div class="pn-cm-rp-card" data-slug="<?php echo esc_attr($pn_slug); ?>">
-            <div class="pn-cm-rp-icon"><?php echo $pn_pl['icon']; ?></div>
+            <div class="pn-cm-rp-icon"><?php echo wp_kses_post( $pn_pl['icon'] ); ?></div>
             <div class="pn-cm-rp-info">
               <div class="pn-cm-rp-name">
                 <?php echo esc_html($pn_pl['name']); ?>
@@ -1763,19 +1863,25 @@ class USERSPN_Settings
       <div class="userspn-dashboard-widgets" style="display:flex;gap:30px;margin-bottom:30px;">
         <div class="userspn-dashboard-widget userspn-bg-primary" data-popup="userspn-users-week" data-widget="users"
           style="flex:1;cursor:pointer;">
-          <div class="userspn-dashboard-widget-title"><?php echo str_replace('%s', esc_html($period_label), esc_html__('New users (%s)', 'userspn')); ?></div>
+          <div class="userspn-dashboard-widget-title"><?php
+									// translators: %s is the period label (e.g. "Last week").
+									echo esc_html( str_replace( '%s', $period_label, __( 'New users (%s)', 'userspn' ) ) ); ?></div>
           <div class="userspn-dashboard-widget-value" style="font-size:2em;font-weight:bold;">
             <?php echo esc_html($users_last_week['count']); ?></div>
         </div>
         <div class="userspn-dashboard-widget userspn-bg-secondary" data-popup="userspn-newsletter-week" data-widget="newsletter"
           style="flex:1;cursor:pointer;">
-          <div class="userspn-dashboard-widget-title"><?php echo str_replace('%s', esc_html($period_label), esc_html__('Newsletter (%s)', 'userspn')); ?></div>
+          <div class="userspn-dashboard-widget-title"><?php
+									// translators: %s is the period label (e.g. "Last week").
+									echo esc_html( str_replace( '%s', $period_label, __( 'Newsletter (%s)', 'userspn' ) ) ); ?></div>
           <div class="userspn-dashboard-widget-value" style="font-size:2em;font-weight:bold;">
             <?php echo esc_html($newsletter_last_week['count']); ?></div>
         </div>
         <div class="userspn-dashboard-widget userspn-bg-accent" data-popup="userspn-last-logins" data-widget="logins"
           style="flex:1;cursor:pointer;">
-          <div class="userspn-dashboard-widget-title"><?php echo str_replace('%s', esc_html($period_label), esc_html__('Logins (%s)', 'userspn')); ?></div>
+          <div class="userspn-dashboard-widget-title"><?php
+									// translators: %s is the period label (e.g. "Last week").
+									echo esc_html( str_replace( '%s', $period_label, __( 'Logins (%s)', 'userspn' ) ) ); ?></div>
           <div class="userspn-dashboard-widget-value" style="font-size:2em;font-weight:bold;">
             <?php echo esc_html($last_logins['count']); ?></div>
         </div>
@@ -1803,7 +1909,7 @@ class USERSPN_Settings
         <div class="userspn-popup-content">
           <div class="userspn-p-30">
             <h2><?php echo esc_html($period_popup_titles['users'][$period]); ?></h2>
-            <div class="userspn-popup-body"><?php echo $users_last_week['html']; ?></div>
+            <div class="userspn-popup-body"><?php echo wp_kses_post( $users_last_week['html'] ); ?></div>
           </div>
         </div>
       </div>
@@ -1812,7 +1918,7 @@ class USERSPN_Settings
         <div class="userspn-popup-content">
           <div class="userspn-p-30">
             <h2><?php echo esc_html($period_popup_titles['newsletter'][$period]); ?></h2>
-            <div class="userspn-popup-body"><?php echo $newsletter_last_week['html']; ?></div>
+            <div class="userspn-popup-body"><?php echo wp_kses_post( $newsletter_last_week['html'] ); ?></div>
           </div>
         </div>
       </div>
@@ -1820,7 +1926,7 @@ class USERSPN_Settings
         <div class="userspn-popup-content">
           <div class="userspn-p-30">
             <h2><?php echo esc_html($period_popup_titles['logins'][$period]); ?></h2>
-            <div class="userspn-popup-body"><?php echo $last_logins['html']; ?></div>
+            <div class="userspn-popup-body"><?php echo wp_kses_post( $last_logins['html'] ); ?></div>
           </div>
         </div>
       </div>
@@ -1865,8 +1971,11 @@ class USERSPN_Settings
         var chartLabelLogins = '<?php echo esc_js(__('Logins', 'userspn')); ?>';
 
         // Widget label templates
+        <?php // translators: %s is the period label (e.g. "Last week"). ?>
         var widgetLabelUsers = '<?php echo esc_js(__('New users (%s)', 'userspn')); ?>';
+        <?php // translators: %s is the period label (e.g. "Last week"). ?>
         var widgetLabelNewsletter = '<?php echo esc_js(__('Newsletter (%s)', 'userspn')); ?>';
+        <?php // translators: %s is the period label (e.g. "Last week"). ?>
         var widgetLabelLogins = '<?php echo esc_js(__('Logins (%s)', 'userspn')); ?>';
 
         // Chart creation functions
@@ -2686,14 +2795,14 @@ class USERSPN_Settings
     if ($period === 'day') {
       // Hourly grouping for 24 hours
       for ($i = 23; $i >= 0; $i--) {
-        $hour_key = date('Y-m-d H', strtotime("-$i hours"));
+        $hour_key = gmdate('Y-m-d H', strtotime("-$i hours"));
         $labels[] = date_i18n('H:i', strtotime("-$i hours"));
         $users_data[$hour_key] = 0;
         $newsletter_data[$hour_key] = 0;
         $logins_data[$hour_key] = 0;
       }
 
-      $date_from = date('Y-m-d H:i:s', strtotime('-1 day'));
+      $date_from = gmdate('Y-m-d H:i:s', strtotime('-1 day'));
 
       // Users per hour
       $results = $wpdb->get_results($wpdb->prepare(
@@ -2748,15 +2857,15 @@ class USERSPN_Settings
       // Monthly grouping
       if ($period === 'all') {
         $oldest_user = $wpdb->get_var("SELECT MIN(user_registered) FROM {$wpdb->users}");
-        $start_date = $oldest_user ? date('Y-m-01', strtotime($oldest_user)) : date('Y-m-01', strtotime('-1 year'));
+        $start_date = $oldest_user ? gmdate('Y-m-01', strtotime($oldest_user)) : gmdate('Y-m-01', strtotime('-1 year'));
       } else {
-        $start_date = date('Y-m-01', strtotime('-1 year'));
+        $start_date = gmdate('Y-m-01', strtotime('-1 year'));
       }
 
       $current = strtotime($start_date);
       $now = time();
       while ($current <= $now) {
-        $month_key = date('Y-m', $current);
+        $month_key = gmdate('Y-m', $current);
         $labels[] = date_i18n('M Y', $current);
         $users_data[$month_key] = 0;
         $newsletter_data[$month_key] = 0;
@@ -2818,14 +2927,14 @@ class USERSPN_Settings
       $days = ($period === 'week') ? 7 : 30;
 
       for ($i = $days - 1; $i >= 0; $i--) {
-        $date = date('Y-m-d', strtotime("-$i days"));
+        $date = gmdate('Y-m-d', strtotime("-$i days"));
         $labels[] = date_i18n('d M', strtotime($date));
         $users_data[$date] = 0;
         $newsletter_data[$date] = 0;
         $logins_data[$date] = 0;
       }
 
-      $date_from = date('Y-m-d', strtotime("-$days days"));
+      $date_from = gmdate('Y-m-d', strtotime("-$days days"));
 
       // New users per day
       $results = $wpdb->get_results($wpdb->prepare(
@@ -2927,6 +3036,27 @@ class USERSPN_Settings
 
     if (get_option('userspn_login_custom_style') === 'on') {
       wp_enqueue_style('userspn-login-custom-style', USERSPN_URL . 'assets/css/userspn-login-style.css', [], USERSPN_VERSION);
+
+      // Inject CSS color variables so the login stylesheet can use them
+      $color_main            = get_option('userspn_color_main', '#00aa44');
+      $bg_color_main         = get_option('userspn_bg_color_main', '#00aa44');
+      $border_color_main     = get_option('userspn_border_color_main', '#00aa44');
+      $color_main_alt        = get_option('userspn_color_main_alt', '#232323');
+      $bg_color_main_alt     = get_option('userspn_bg_color_main_alt', '#232323');
+      $border_color_main_alt = get_option('userspn_border_color_main_alt', '#232323');
+      $color_main_blue       = get_option('userspn_color_main_blue', '#6e6eff');
+
+      $vars_css  = ':root {';
+      $vars_css .= '--userspn-color-main:' . esc_attr($color_main) . ';';
+      $vars_css .= '--userspn-bg-color-main:' . esc_attr($bg_color_main) . ';';
+      $vars_css .= '--userspn-border-color-main:' . esc_attr($border_color_main) . ';';
+      $vars_css .= '--userspn-color-main-alt:' . esc_attr($color_main_alt) . ';';
+      $vars_css .= '--userspn-bg-color-main-alt:' . esc_attr($bg_color_main_alt) . ';';
+      $vars_css .= '--userspn-border-color-main-alt:' . esc_attr($border_color_main_alt) . ';';
+      $vars_css .= '--userspn-color-main-blue:' . esc_attr($color_main_blue) . ';';
+      $vars_css .= '}';
+
+      wp_add_inline_style('userspn-login-custom-style', $vars_css);
     }
   }
 

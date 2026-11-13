@@ -469,7 +469,7 @@ class USERSPN_Functions_User
       }
 
       $selected = selected($current_filter, $page, false);
-      echo '<option value="' . esc_attr($page) . '" ' . $selected . '>' . esc_html($display_url) . '</option>';
+      echo '<option value="' . esc_attr($page) . '" ' . esc_attr($selected) . '>' . esc_html($display_url) . '</option>';
     }
 
     echo '</select>';
@@ -1231,10 +1231,9 @@ class USERSPN_Functions_User
         </div>
 
         <div class="userspn-profile-completion-stats userspn-mt-10">
-          <?php
+          <small><?php
           /* translators: 1: Number of completed fields, 2: Total number of fields */
-          ?>
-          <small><?php echo sprintf(esc_html__('%1$d of %2$d fields completed', 'userspn'), esc_html($completed_fields), esc_html($total_fields)); ?></small>
+          echo sprintf(esc_html__('%1$d of %2$d fields completed', 'userspn'), esc_html($completed_fields), esc_html($total_fields)); ?></small>
         </div>
 
         <div class="userspn-toggle-wrapper userspn-position-relative userspn-mt-10">
@@ -1644,11 +1643,18 @@ class USERSPN_Functions_User
       $social_providers[] = 'google';
     }
 
-    // Facebook
+    // Meta (Facebook)
     if (get_option('userspn_facebook_login_enabled') == 'on' &&
         !empty(get_option('userspn_facebook_app_id')) &&
         !empty(get_option('userspn_facebook_app_secret'))) {
       $social_providers[] = 'facebook';
+    }
+
+    // X
+    if (get_option('userspn_x_login_enabled') == 'on' &&
+        !empty(get_option('userspn_x_client_id')) &&
+        !empty(get_option('userspn_x_client_secret'))) {
+      $social_providers[] = 'x';
     }
 
     // GitHub
@@ -1660,7 +1666,7 @@ class USERSPN_Functions_User
 
     // Apple
     if (get_option('userspn_apple_login_enabled') == 'on' &&
-        !empty(get_option('userspn_apple_client_id')) &&
+        !empty(get_option('userspn_apple_service_id')) &&
         !empty(get_option('userspn_apple_team_id')) &&
         !empty(get_option('userspn_apple_key_id')) &&
         !empty(get_option('userspn_apple_private_key'))) {
@@ -1693,9 +1699,17 @@ class USERSPN_Functions_User
         <?php endif; ?>
 
         <?php if (in_array('facebook', $social_providers)): ?>
-          <button type="button" class="userspn-social-icon-btn userspn-facebook-login-btn" data-provider="facebook" title="<?php esc_attr_e('Continue with Facebook', 'userspn'); ?>">
+          <button type="button" class="userspn-social-icon-btn userspn-facebook-login-btn" data-provider="facebook" title="<?php esc_attr_e('Continue with Meta', 'userspn'); ?>">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="#1877F2">
               <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+            </svg>
+          </button>
+        <?php endif; ?>
+
+        <?php if (in_array('x', $social_providers)): ?>
+          <button type="button" class="userspn-social-icon-btn userspn-x-login-btn" data-provider="x" title="<?php esc_attr_e('Continue with X', 'userspn'); ?>">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#000">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
             </svg>
           </button>
         <?php endif; ?>
@@ -1815,6 +1829,319 @@ class USERSPN_Functions_User
     $userspn_return_string = ob_get_contents();
     ob_end_clean();
     return $userspn_return_string;
+  }
+
+  /**
+   * Sequential login form shortcode / renderer.
+   *
+   * @since 1.1.71
+   * @param array $atts Shortcode attributes.
+   * @return string HTML output.
+   */
+  public function userspn_sequential_login($atts = [])
+  {
+    /* echo do_shortcode('[userspn-sequential-login]'); */
+    $atts = shortcode_atts([
+      'redirect_page_id'   => '',
+      'redirect_to'        => '',
+      'button_text'        => __('Continue', 'userspn'),
+      'login_button_text'  => __('Log In', 'userspn'),
+      'placeholder_email'  => __('Email address or username', 'userspn'),
+      'placeholder_pass'   => __('Password', 'userspn'),
+      'show_remember'      => 'true',
+      'show_lost_password' => 'true',
+      'class'              => '',
+    ], $atts, 'userspn-sequential-login');
+
+    if (!wp_style_is('userspn-sequential-login', 'enqueued')) {
+      wp_enqueue_style('userspn-sequential-login');
+    }
+    if (!wp_script_is('userspn-sequential-login', 'enqueued')) {
+      wp_enqueue_script('userspn-sequential-login');
+    }
+
+    // Resolve destination page if redirect_page_id is provided
+    $redirect_page_id = !empty($atts['redirect_page_id']) ? (int) $atts['redirect_page_id'] : 0;
+    $redirect_to = !empty($atts['redirect_to']) ? esc_url($atts['redirect_to']) : '';
+    if ($redirect_page_id > 0) {
+      $destination_url = get_permalink($redirect_page_id);
+      if ($destination_url) {
+        $redirect_to = $destination_url;
+      }
+    }
+
+    ob_start();
+
+    if (is_user_logged_in()) {
+      $is_admin_or_editor = is_admin() || wp_is_json_request() || (defined('REST_REQUEST') && REST_REQUEST);
+      $current_page_id = get_queried_object_id();
+
+      // Automatically redirect logged-in user if destination is configured and not in admin/editor
+      if (!$is_admin_or_editor && !empty($redirect_to)) {
+        // Prevent infinite redirect loop if current page is the destination page
+        $is_same_page = ($redirect_page_id > 0 && (int) $current_page_id === $redirect_page_id);
+
+        if (!$is_same_page) {
+          if (!headers_sent()) {
+            wp_safe_redirect($redirect_to);
+            exit;
+          }
+
+          // Fallback via immediate JavaScript replace & meta refresh
+          ?>
+          <script type="text/javascript">
+            window.location.replace("<?php echo esc_url_raw($redirect_to); ?>");
+          </script>
+          <noscript>
+            <meta http-equiv="refresh" content="0;url=<?php echo esc_url($redirect_to); ?>">
+          </noscript>
+          <div class="userspn-sequential-login userspn-login userspn-p-20 userspn-margin-auto userspn-text-align-center">
+            <p><?php esc_html_e('Redirecting...', 'userspn'); ?> <a href="<?php echo esc_url($redirect_to); ?>"><?php esc_html_e('Click here if you are not redirected', 'userspn'); ?></a></p>
+          </div>
+          <?php
+          $userspn_return_string = ob_get_contents();
+          ob_end_clean();
+          return $userspn_return_string;
+        }
+      }
+
+      $current_user = wp_get_current_user();
+      ?>
+      <div class="userspn-sequential-login userspn-login userspn-p-20 userspn-margin-auto userspn-mb-30 userspn-text-align-center <?php echo esc_attr($atts['class']); ?>">
+        <div class="userspn-seq-logged-in-badge userspn-mb-15">
+          <?php echo get_avatar($current_user->ID, 64, '', '', ['class' => 'userspn-border-radius-50-percent userspn-mb-10']); ?>
+          <h4 class="userspn-mt-10 userspn-mb-5"><?php echo esc_html($current_user->display_name); ?></h4>
+          <p class="userspn-font-size-13 userspn-mb-15" style="color:#666;"><?php echo esc_html($current_user->user_email); ?></p>
+        </div>
+        <div class="userspn-alert-success userspn-mb-20">
+          <?php esc_html_e('You are already logged in.', 'userspn'); ?>
+        </div>
+        <div class="userspn-display-flex userspn-justify-content-center">
+          <a href="<?php echo esc_url(wp_logout_url(get_permalink() ?: home_url())); ?>" class="userspn-btn userspn-btn-transparent userspn-btn-mini">
+            <?php esc_html_e('Log Out', 'userspn'); ?>
+          </a>
+        </div>
+      </div>
+      <?php
+      $userspn_return_string = ob_get_contents();
+      ob_end_clean();
+      return $userspn_return_string;
+    }
+
+    $unique_id = wp_generate_uuid4();
+    $email_input_id = 'userspn-seq-email-' . $unique_id;
+    $pass_input_id = 'userspn-seq-pass-' . $unique_id;
+    $show_remember = ($atts['show_remember'] === 'true' || $atts['show_remember'] === true || $atts['show_remember'] === '1' || $atts['show_remember'] === 1);
+    $show_lost_password = ($atts['show_lost_password'] === 'true' || $atts['show_lost_password'] === true || $atts['show_lost_password'] === '1' || $atts['show_lost_password'] === 1);
+
+    ?>
+    <div class="userspn-sequential-login userspn-login userspn-p-20 userspn-margin-auto userspn-mb-30 userspn-position-relative <?php echo esc_attr($atts['class']); ?>" data-redirect-to="<?php echo esc_attr($redirect_to); ?>">
+      
+      <!-- Alert notification container -->
+      <div class="userspn-seq-alert userspn-display-none"></div>
+
+      <!-- STEP 1: Email / Username -->
+      <div class="userspn-seq-step userspn-seq-step-email">
+        <div class="userspn-seq-header userspn-text-align-center userspn-mb-20">
+          <h4 class="userspn-mt-0 userspn-mb-5"><?php esc_html_e('Sign In', 'userspn'); ?></h4>
+          <p class="userspn-font-size-13"><?php esc_html_e('Enter your email to continue', 'userspn'); ?></p>
+        </div>
+
+        <div class="userspn-mb-15">
+          <label for="<?php echo esc_attr($email_input_id); ?>" class="userspn-label userspn-display-block userspn-font-weight-bold userspn-mb-5">
+            <?php echo esc_html($atts['placeholder_email']); ?>
+          </label>
+          <input
+            type="text"
+            id="<?php echo esc_attr($email_input_id); ?>"
+            class="userspn-input userspn-width-100-percent userspn-seq-email-input"
+            placeholder="<?php echo esc_attr($atts['placeholder_email']); ?>"
+            required
+            autocomplete="username"
+          />
+        </div>
+
+        <!-- Stacked Button -->
+        <div class="userspn-seq-action-wrapper userspn-mt-10 userspn-mb-15">
+          <button type="button" class="userspn-btn userspn-width-100-percent userspn-seq-btn-next">
+            <span class="userspn-seq-btn-text"><?php echo esc_html($atts['button_text']); ?></span>
+            <span class="userspn-waiting userspn-display-inline userspn-display-none">
+              <span class="userspn-loader-circle-waiting"><span></span><span></span><span></span><span></span></span>
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 2: Password -->
+      <div class="userspn-seq-step userspn-seq-step-password userspn-display-none">
+        
+        <!-- User identity chip with change button -->
+        <div class="userspn-seq-user-badge userspn-mb-20 userspn-display-flex userspn-justify-content-space-between">
+          <div class="userspn-seq-user-info userspn-display-flex">
+            <span class="material-icons-outlined userspn-font-size-20 userspn-vertical-align-middle userspn-mr-10">account_circle</span>
+            <span class="userspn-seq-current-identifier userspn-font-weight-bold userspn-font-size-14"></span>
+          </div>
+          <button type="button" class="userspn-seq-btn-back userspn-btn-link userspn-font-size-13" title="<?php esc_attr_e('Change account', 'userspn'); ?>">
+            <?php esc_html_e('Change', 'userspn'); ?>
+          </button>
+        </div>
+
+        <div class="userspn-mb-15">
+          <label for="<?php echo esc_attr($pass_input_id); ?>" class="userspn-label userspn-display-block userspn-font-weight-bold userspn-mb-5">
+            <?php echo esc_html($atts['placeholder_pass']); ?>
+          </label>
+          <div class="userspn-seq-password-wrapper userspn-position-relative">
+            <input
+              type="password"
+              id="<?php echo esc_attr($pass_input_id); ?>"
+              class="userspn-input userspn-width-100-percent userspn-seq-password-input"
+              placeholder="<?php echo esc_attr($atts['placeholder_pass']); ?>"
+              required
+              autocomplete="current-password"
+            />
+            <button type="button" class="userspn-seq-toggle-password" aria-label="<?php esc_attr_e('Toggle password visibility', 'userspn'); ?>" tabindex="-1">
+              <span class="material-icons-outlined userspn-font-size-18">visibility</span>
+            </button>
+          </div>
+        </div>
+
+        <?php if ($show_remember): ?>
+          <div class="userspn-seq-remember-wrapper userspn-mb-15">
+            <label class="userspn-display-flex userspn-cursor-pointer">
+              <input type="checkbox" name="userspn_remember" class="userspn-seq-remember-checkbox userspn-mr-10" value="1" />
+              <span class="userspn-font-size-13"><?php esc_html_e('Remember Me', 'userspn'); ?></span>
+            </label>
+          </div>
+        <?php endif; ?>
+
+        <!-- Stacked Button -->
+        <div class="userspn-seq-action-wrapper userspn-mt-10 userspn-mb-15">
+          <button type="button" class="userspn-btn userspn-width-100-percent userspn-seq-btn-login">
+            <span class="userspn-seq-btn-text"><?php echo esc_html($atts['login_button_text']); ?></span>
+            <span class="userspn-waiting userspn-display-inline userspn-display-none">
+              <span class="userspn-loader-circle-waiting"><span></span><span></span><span></span><span></span></span>
+            </span>
+          </button>
+        </div>
+
+        <?php if ($show_lost_password): ?>
+          <div class="userspn-text-align-center userspn-mt-15 userspn-font-size-12">
+            <a href="<?php echo esc_url(wp_lostpassword_url()); ?>" class="userspn-color-main userspn-text-decoration-underline" target="_blank">
+              <?php esc_html_e('Forgot your password?', 'userspn'); ?>
+            </a>
+          </div>
+        <?php endif; ?>
+      </div>
+
+      <?php
+      if (method_exists($this, 'userspn_render_social_login_icons')) {
+        $this->userspn_render_social_login_icons();
+      }
+      ?>
+    </div>
+    <?php
+
+    $userspn_return_string = ob_get_contents();
+    ob_end_clean();
+    return $userspn_return_string;
+  }
+
+  /**
+   * Redirect logged-in users who visit a page containing the sequential login block/shortcode.
+   *
+   * @since 1.1.71
+   */
+  public function userspn_maybe_redirect_logged_in_user()
+  {
+    if (!is_user_logged_in() || is_admin() || wp_is_json_request() || (defined('REST_REQUEST') && REST_REQUEST)) {
+      return;
+    }
+
+    if (!is_singular()) {
+      return;
+    }
+
+    $post = get_queried_object();
+    if (!$post instanceof WP_Post || empty($post->post_content)) {
+      return;
+    }
+
+    $redirect_url = '';
+    $redirect_page_id = 0;
+
+    // Check for Gutenberg block
+    if (function_exists('has_block') && has_block('userspn/sequential-login', $post)) {
+      $blocks = parse_blocks($post->post_content);
+      $redirect_info = $this->userspn_find_block_redirect($blocks, 'userspn/sequential-login');
+      if (!empty($redirect_info['redirect_url'])) {
+        $redirect_url = $redirect_info['redirect_url'];
+        $redirect_page_id = $redirect_info['redirect_page_id'];
+      }
+    }
+
+    // Check for shortcode
+    if (empty($redirect_url) && (has_shortcode($post->post_content, 'userspn-sequential-login') || has_shortcode($post->post_content, 'userspn_sequential_login'))) {
+      if (preg_match('/\[userspn[-_]sequential[-_]login[^\]]*redirect_page_id=["\'](\d+)["\']/i', $post->post_content, $matches)) {
+        $redirect_page_id = (int) $matches[1];
+        $page_url = get_permalink($redirect_page_id);
+        if ($page_url) {
+          $redirect_url = $page_url;
+        }
+      } elseif (preg_match('/\[userspn[-_]sequential[-_]login[^\]]*redirect_to=["\']([^"\']+)["\']/i', $post->post_content, $matches)) {
+        $redirect_url = esc_url_raw($matches[1]);
+      }
+    }
+
+    if (!empty($redirect_url)) {
+      // Prevent infinite redirect loop if destination is the current page itself
+      if ($redirect_page_id > 0 && (int) $post->ID === $redirect_page_id) {
+        return;
+      }
+
+      wp_safe_redirect($redirect_url);
+      exit;
+    }
+  }
+
+  /**
+   * Helper to recursively find redirect attribute in blocks (including nested/reusable blocks).
+   *
+   * @since 1.1.71
+   * @param array $blocks Array of parsed blocks.
+   * @param string $block_name Block name to search.
+   * @return array Array with 'redirect_url' and 'redirect_page_id'.
+   */
+  private function userspn_find_block_redirect($blocks, $block_name)
+  {
+    foreach ($blocks as $block) {
+      if ($block['blockName'] === $block_name) {
+        $attrs = $block['attrs'] ?? [];
+        if (!empty($attrs['redirectPageId'])) {
+          $page_id = (int) $attrs['redirectPageId'];
+          $page_url = get_permalink($page_id);
+          if ($page_url) {
+            return [
+              'redirect_url' => $page_url,
+              'redirect_page_id' => $page_id,
+            ];
+          }
+        } elseif (!empty($attrs['redirectTo'])) {
+          return [
+            'redirect_url' => esc_url_raw($attrs['redirectTo']),
+            'redirect_page_id' => 0,
+          ];
+        }
+      }
+
+      if (!empty($block['innerBlocks'])) {
+        $found = $this->userspn_find_block_redirect($block['innerBlocks'], $block_name);
+        if (!empty($found['redirect_url'])) {
+          return $found;
+        }
+      }
+    }
+
+    return ['redirect_url' => '', 'redirect_page_id' => 0];
   }
 
   public function userspn_user_register_form()

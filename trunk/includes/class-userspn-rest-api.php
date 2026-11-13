@@ -266,24 +266,42 @@ class USERSPN_REST_API {
             $values[] = $request['ip'];
         }
 
-        $where_sql = implode(' AND ', $where);
         $per_page = min($request['per_page'], 100);
         $offset = ($request['page'] - 1) * $per_page;
 
-        $count_sql = "SELECT COUNT(*) FROM $table WHERE $where_sql";
-        $query_sql = "SELECT * FROM $table WHERE $where_sql ORDER BY created_at DESC LIMIT %d OFFSET %d";
+        $where_sql = implode(' AND ', $where);
 
-        $values_with_limit = array_merge($values, [$per_page, $offset]);
-
-        if (!empty($values)) {
-            $total = $wpdb->get_var($wpdb->prepare($count_sql, $values));
-            $logs = $wpdb->get_results($wpdb->prepare($query_sql, $values_with_limit));
+        if ( ! empty( $values ) ) {
+            $total = $wpdb->get_var(
+                $wpdb->prepare(
+                    // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $table uses $wpdb->prefix; $where_sql is built from hardcoded column names with prepare() placeholders.
+                    "SELECT COUNT(*) FROM $table WHERE $where_sql",
+                    $values
+                )
+            );
+            $logs = $wpdb->get_results(
+                $wpdb->prepare(
+                    // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $table uses $wpdb->prefix; $where_sql is built from hardcoded column names with prepare() placeholders.
+                    "SELECT * FROM $table WHERE $where_sql ORDER BY created_at DESC LIMIT %d OFFSET %d",
+                    array_merge( $values, [ $per_page, $offset ] )
+                )
+            );
         } else {
-            $total = $wpdb->get_var($count_sql);
-            $logs = $wpdb->get_results($wpdb->prepare(
-                "SELECT * FROM $table WHERE 1=1 ORDER BY created_at DESC LIMIT %d OFFSET %d",
-                $per_page, $offset
-            ));
+            $total = $wpdb->get_var(
+                $wpdb->prepare(
+                    // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $table uses $wpdb->prefix; no user input in WHERE clause.
+                    "SELECT COUNT(*) FROM $table WHERE 1=1 AND %d = 0",
+                    0
+                )
+            );
+            $logs = $wpdb->get_results(
+                $wpdb->prepare(
+                    // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $table uses $wpdb->prefix; no user input in WHERE clause.
+                    "SELECT * FROM $table WHERE 1=1 ORDER BY created_at DESC LIMIT %d OFFSET %d",
+                    $per_page,
+                    $offset
+                )
+            );
         }
 
         $results = [];

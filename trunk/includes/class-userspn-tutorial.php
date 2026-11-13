@@ -255,7 +255,10 @@ class USERSPN_Tutorial
     ?>
     <div class="userspn-tutorial-progress">
       <span class="userspn-tutorial-progress-text">
-        <?php echo esc_html(sprintf(__('Step %d of %d', 'userspn'), $current, $total)); ?>
+        <?php
+        // translators: %1$d is the current step number, %2$d is the total number of steps.
+        echo esc_html(sprintf(__('Step %1$d of %2$d', 'userspn'), $current, $total));
+        ?>
       </span>
       <div class="userspn-tutorial-progress-bar">
         <div class="userspn-tutorial-progress-fill" style="width: <?php echo esc_attr($percentage); ?>%;"></div>

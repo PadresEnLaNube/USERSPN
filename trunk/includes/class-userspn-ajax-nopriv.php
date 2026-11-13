@@ -737,7 +737,7 @@ class USERSPN_Ajax_Nopriv {
             if (get_option('userspn_newsletter_activation') == 'on') {
               $plugin_mailing = new USERSPN_Mailing();
               $result = $plugin_mailing->userspn_send_newsletter_activation_email($user_id, $userspn_email);
-              echo $result;exit;
+              echo wp_kses_post($result);exit;
             } else {
               update_user_meta($user_id, 'userspn_newsletter_active', current_time('timestamp'));
               update_user_meta($user_id, 'userspn_notifications', 'on');
@@ -812,6 +812,7 @@ class USERSPN_Ajax_Nopriv {
             echo wp_json_encode([
               'error_key' => 'userspn_code_rate_limit',
               'error_content' => sprintf(
+                // translators: %d is the number of seconds the user must wait before requesting a new code.
                 esc_html(__('Please wait %d seconds before requesting a new code.', 'userspn')),
                 $wait_time
               ),
@@ -820,7 +821,7 @@ class USERSPN_Ajax_Nopriv {
           }
 
           // Generar código de 6 dígitos
-          $code = sprintf('%06d', mt_rand(0, 999999));
+          $code = sprintf('%06d', wp_rand(0, 999999));
           $expiry = $current_time + 900; // 15 minutos
 
           // Guardar en user meta
@@ -1032,11 +1033,11 @@ class USERSPN_Ajax_Nopriv {
           exit;
 
         case 'userspn_facebook_auth_url':
-          // Verificar que Facebook Login esté habilitado
+          // Verificar que Meta Login esté habilitado
           if (get_option('userspn_facebook_login_enabled') != 'on') {
             echo wp_json_encode([
               'error_key' => 'userspn_facebook_disabled',
-              'error_content' => esc_html(__('Facebook login is not available.', 'userspn')),
+              'error_content' => esc_html(__('Meta login is not available.', 'userspn')),
             ]);
             exit;
           }
@@ -1047,12 +1048,12 @@ class USERSPN_Ajax_Nopriv {
           if (empty($app_id) || empty($app_secret)) {
             echo wp_json_encode([
               'error_key' => 'userspn_facebook_not_configured',
-              'error_content' => esc_html(__('Facebook login is not properly configured.', 'userspn')),
+              'error_content' => esc_html(__('Meta login is not properly configured.', 'userspn')),
             ]);
             exit;
           }
 
-          // Generar URL de autorización de Facebook
+          // Generar URL de autorización de Meta
           $redirect_uri = admin_url('admin-ajax.php?action=userspn_facebook_callback');
           $state = 'userspn_facebook_login';
           $scope = 'email,public_profile';
@@ -1146,6 +1147,53 @@ class USERSPN_Ajax_Nopriv {
             'scope' => $scope,
             'response_mode' => 'form_post',
           ], 'https://appleid.apple.com/auth/authorize');
+
+          echo wp_json_encode([
+            'success' => true,
+            'auth_url' => $auth_url,
+          ]);
+          exit;
+
+        case 'userspn_x_auth_url':
+          if (get_option('userspn_x_login_enabled') != 'on') {
+            echo wp_json_encode([
+              'error_key' => 'userspn_x_disabled',
+              'error_content' => esc_html(__('X login is not available.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          $client_id = get_option('userspn_x_client_id');
+          $client_secret = get_option('userspn_x_client_secret');
+
+          if (empty($client_id) || empty($client_secret)) {
+            echo wp_json_encode([
+              'error_key' => 'userspn_x_not_configured',
+              'error_content' => esc_html(__('X login is not properly configured.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          // X OAuth 2.0 with PKCE
+          $redirect_uri = admin_url('admin-ajax.php?action=userspn_x_callback');
+          $state = 'userspn_x_login';
+
+          // Generate PKCE code verifier and challenge
+          $code_verifier = wp_generate_password(64, false, false);
+          $code_challenge = rtrim(strtr(base64_encode(hash('sha256', $code_verifier, true)), '+/', '-_'), '=');
+
+          // Store code verifier in transient for callback
+          set_transient('userspn_x_code_verifier', $code_verifier, 600);
+
+          $auth_url = add_query_arg([
+            'response_type' => 'code',
+            'client_id' => $client_id,
+            'redirect_uri' => $redirect_uri,
+            'scope' => 'users.read tweet.read offline.access',
+            'state' => $state,
+            'code_challenge' => $code_challenge,
+            'code_challenge_method' => 'S256',
+          ], 'https://x.com/i/oauth2/authorize');
 
           echo wp_json_encode([
             'success' => true,
@@ -1528,6 +1576,127 @@ class USERSPN_Ajax_Nopriv {
           echo wp_json_encode([
             'requires_2fa' => $has_2fa,
             'method' => $has_2fa ? $method : 'none',
+          ]);
+          exit;
+
+        case 'userspn_sequential_login_check_email':
+          $identifier = isset($_POST['userspn_identifier']) ? sanitize_text_field(wp_unslash($_POST['userspn_identifier'])) : '';
+
+          if (empty($identifier)) {
+            echo wp_json_encode([
+              'success'       => false,
+              'error_key'     => 'empty_identifier',
+              'error_content' => esc_html(__('Please enter your email or username.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          $user = null;
+          if (is_email($identifier)) {
+            $user = get_user_by('email', $identifier);
+          }
+          if (!$user) {
+            $user = get_user_by('login', $identifier);
+          }
+
+          if (!$user) {
+            echo wp_json_encode([
+              'success'       => false,
+              'error_key'     => 'user_not_found',
+              'error_content' => esc_html(__('No account found with this email or username.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          $avatar_url = get_avatar_url($user->ID, ['size' => 48]);
+
+          echo wp_json_encode([
+            'success'      => true,
+            'user_login'   => $user->user_login,
+            'user_email'   => $user->user_email,
+            'display_name' => $user->display_name,
+            'avatar_url'   => $avatar_url,
+          ]);
+          exit;
+
+        case 'userspn_sequential_login_submit':
+          $identifier  = isset($_POST['userspn_identifier']) ? sanitize_text_field(wp_unslash($_POST['userspn_identifier'])) : '';
+          $password    = isset($_POST['userspn_password']) ? $_POST['userspn_password'] : '';
+          $remember    = !empty($_POST['userspn_remember']) && ($_POST['userspn_remember'] === '1' || $_POST['userspn_remember'] === 'true');
+          $redirect_to = !empty($_POST['redirect_to']) ? esc_url_raw(wp_unslash($_POST['redirect_to'])) : '';
+
+          if (empty($identifier)) {
+            echo wp_json_encode([
+              'success'       => false,
+              'error_key'     => 'empty_identifier',
+              'error_content' => esc_html(__('Please enter your email or username.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          if (empty($password)) {
+            echo wp_json_encode([
+              'success'       => false,
+              'error_key'     => 'empty_password',
+              'error_content' => esc_html(__('Please enter your password.', 'userspn')),
+            ]);
+            exit;
+          }
+
+          // Authenticate user
+          $creds = [
+            'user_login'    => $identifier,
+            'user_password' => $password,
+            'remember'      => $remember,
+          ];
+
+          $user = wp_signon($creds, is_ssl());
+
+          if (is_wp_error($user)) {
+            $error_code = $user->get_error_code();
+            $error_message = $user->get_error_message();
+
+            if (in_array($error_code, ['incorrect_password', 'invalid_username', 'invalid_email'], true)) {
+              $error_message = __('Incorrect password. Please try again.', 'userspn');
+            }
+
+            echo wp_json_encode([
+              'success'       => false,
+              'error_key'     => $error_code,
+              'error_content' => wp_strip_all_tags($error_message),
+            ]);
+            exit;
+          }
+
+          // Support 2FA if active for this user
+          if (class_exists('USERSPN_2FA') && USERSPN_2FA::is_2fa_enabled() && USERSPN_2FA::user_has_2fa_enabled($user->ID)) {
+            if (!session_id() && !headers_sent()) {
+              session_start();
+            }
+            if (session_id()) {
+              $_SESSION['userspn_2fa_pending_user_id'] = $user->ID;
+              $_SESSION['userspn_2fa_username'] = $user->user_login;
+            }
+
+            echo wp_json_encode([
+              'success'      => true,
+              'requires_2fa' => true,
+              'message'      => esc_html(__('Two-factor authentication required.', 'userspn')),
+              'redirect_url' => wp_login_url(),
+            ]);
+            exit;
+          }
+
+          wp_set_current_user($user->ID);
+
+          if (empty($redirect_to)) {
+            $redirect_to = home_url();
+          }
+
+          echo wp_json_encode([
+            'success'      => true,
+            'message'      => esc_html(__('Login successful. Redirecting...', 'userspn')),
+            'redirect_url' => $redirect_to,
           ]);
           exit;
       }

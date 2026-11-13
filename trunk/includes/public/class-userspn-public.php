@@ -116,6 +116,28 @@ class USERSPN_Public {
 			$this->version,
 			false
 		);
+
+		$custom_classes = [];
+		$providers = [
+			'google' => 'userspn_google_custom_class',
+			'facebook' => 'userspn_facebook_custom_class',
+			'x' => 'userspn_x_custom_class',
+			'github' => 'userspn_github_custom_class',
+			'apple' => 'userspn_apple_custom_class',
+		];
+		foreach ($providers as $provider => $option_key) {
+			$class = get_option($option_key);
+			if (!empty($class)) {
+				$custom_classes[$provider] = sanitize_html_class($class);
+			}
+		}
+		if (!empty($custom_classes)) {
+			wp_localize_script(
+				$this->plugin_name . '-social-login',
+				'userspn_social_custom_classes',
+				$custom_classes
+			);
+		}
 	}
 
 	/**

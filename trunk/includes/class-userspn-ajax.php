@@ -155,9 +155,11 @@ class USERSPN_Ajax {
 
           $label = $role_labels[$role];
           if ($action_type === 'assign') {
-            $message = sprintf(__('%s role assigned to %d user(s) successfully.', 'userspn'), $label, $processed);
+            // translators: %1$s is the role name, %2$d is the number of users
+            $message = sprintf(__('%1$s role assigned to %2$d user(s) successfully.', 'userspn'), $label, $processed);
           } else {
-            $message = sprintf(__('%s role removed from %d user(s) successfully.', 'userspn'), $label, $processed);
+            // translators: %1$s is the role name, %2$d is the number of users
+            $message = sprintf(__('%1$s role removed from %2$d user(s) successfully.', 'userspn'), $label, $processed);
           }
 
           USERSPN_Security::log_audit_event('role_changed', $message, [
@@ -1055,9 +1057,9 @@ class USERSPN_Ajax {
           break;
         case 'userspn_calendar_view':
           $calendar_view = !empty($_POST['calendar_view']) ? sanitize_text_field(wp_unslash($_POST['calendar_view'])) : 'month';
-          $calendar_year = !empty($_POST['calendar_year']) ? intval($_POST['calendar_year']) : date('Y');
-          $calendar_month = !empty($_POST['calendar_month']) ? intval($_POST['calendar_month']) : date('m');
-          $calendar_day = !empty($_POST['calendar_day']) ? intval($_POST['calendar_day']) : date('d');
+          $calendar_year = !empty($_POST['calendar_year']) ? intval($_POST['calendar_year']) : gmdate('Y');
+          $calendar_month = !empty($_POST['calendar_month']) ? intval($_POST['calendar_month']) : gmdate('m');
+          $calendar_day = !empty($_POST['calendar_day']) ? intval($_POST['calendar_day']) : gmdate('d');
           
           $plugin_calendar = new USERSPN_Calendar();
           $calendar_html = $plugin_calendar->userspn_calendar_render_view_content($calendar_view, $calendar_year, $calendar_month, $calendar_day);

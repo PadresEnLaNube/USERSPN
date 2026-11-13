@@ -259,6 +259,7 @@ class USERSPN_Mailing {
         $body = '<html><body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">';
         $body .= '<div style="max-width: 600px; margin: 0 auto; padding: 20px;">';
         $body .= '<h2 style="color: #444;">' . esc_html__('Login Verification Code', 'userspn') . '</h2>';
+        // translators: %s is the user's display name.
         $body .= '<p>' . sprintf(esc_html__('Hello %s,', 'userspn'), esc_html($userspn_name)) . '</p>';
         $body .= '<p>' . esc_html__('You requested to login using a verification code. Here is your code:', 'userspn') . '</p>';
         $body .= '<div style="background: #f5f5f5; padding: 20px; text-align: center; margin: 20px 0; border-radius: 8px;">';
@@ -324,6 +325,7 @@ class USERSPN_Mailing {
             } else {
                 // Usar template por defecto con contenido simple
                 $subject = '🔒 ' . __('Two-Factor Authentication Enabled', 'userspn');
+                // translators: %s is the user's display name.
                 $message = sprintf(__('Hello %s,', 'userspn'), esc_html($userspn_name)) . '<br><br>';
                 $message .= __('Two-factor authentication has been successfully enabled on your account.', 'userspn') . '<br><br>';
                 $message .= '<strong>' . __('Method:', 'userspn') . '</strong> ' . esc_html($method_name) . '<br><br>';
@@ -351,6 +353,7 @@ class USERSPN_Mailing {
         $body = '<html><body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">';
         $body .= '<div style="max-width: 600px; margin: 0 auto; padding: 20px;">';
         $body .= '<h2 style="color: #28a745;">🔒 ' . esc_html__('Two-Factor Authentication Enabled', 'userspn') . '</h2>';
+        // translators: %s is the user's display name.
         $body .= '<p>' . sprintf(esc_html__('Hello %s,', 'userspn'), esc_html($userspn_name)) . '</p>';
         $body .= '<p>' . esc_html__('Two-factor authentication has been successfully enabled on your account.', 'userspn') . '</p>';
         $body .= '<div style="background: #f0f9ff; padding: 15px; border-left: 4px solid #2271b1; margin: 20px 0;">';
@@ -429,6 +432,7 @@ class USERSPN_Mailing {
             } else {
                 // Usar template por defecto con contenido simple
                 $subject = '⚠️ ' . __('Two-Factor Authentication Disabled', 'userspn');
+                // translators: %s is the user's display name.
                 $message = sprintf(__('Hello %s,', 'userspn'), esc_html($userspn_name)) . '<br><br>';
                 $message .= __('Two-factor authentication has been disabled on your account.', 'userspn') . '<br><br>';
                 $message .= __('Your account is now protected only by your password. We recommend keeping 2FA enabled for better security.', 'userspn') . '<br><br>';
@@ -448,6 +452,7 @@ class USERSPN_Mailing {
         $body = '<html><body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">';
         $body .= '<div style="max-width: 600px; margin: 0 auto; padding: 20px;">';
         $body .= '<h2 style="color: #d63638;">⚠️ ' . esc_html__('Two-Factor Authentication Disabled', 'userspn') . '</h2>';
+        // translators: %s is the user's display name.
         $body .= '<p>' . sprintf(esc_html__('Hello %s,', 'userspn'), esc_html($userspn_name)) . '</p>';
         $body .= '<p>' . esc_html__('Two-factor authentication has been disabled on your account.', 'userspn') . '</p>';
         $body .= '<div style="background: #fff3cd; padding: 15px; border-left: 4px solid #ffc107; margin: 20px 0;">';
@@ -520,6 +525,7 @@ class USERSPN_Mailing {
             } else {
                 // Usar template por defecto con contenido simple
                 $subject = '🔑 ' . __('Backup Code Used for Two-Factor Authentication', 'userspn');
+                // translators: %s is the user's display name.
                 $message = sprintf(__('Hello %s,', 'userspn'), esc_html($userspn_name)) . '<br><br>';
                 $message .= __('A backup code was used to log into your account.', 'userspn') . '<br><br>';
                 $message .= '<strong>' . __('Date and time:', 'userspn') . '</strong> ' . esc_html($current_time) . '<br>';
@@ -549,6 +555,7 @@ class USERSPN_Mailing {
         $body = '<html><body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">';
         $body .= '<div style="max-width: 600px; margin: 0 auto; padding: 20px;">';
         $body .= '<h2 style="color: #2271b1;">🔑 ' . esc_html__('Backup Code Used', 'userspn') . '</h2>';
+        // translators: %s is the user's display name.
         $body .= '<p>' . sprintf(esc_html__('Hello %s,', 'userspn'), esc_html($userspn_name)) . '</p>';
         $body .= '<p>' . esc_html__('A backup code was used to log into your account.', 'userspn') . '</p>';
         $body .= '<div style="background: #f0f9ff; padding: 15px; border-left: 4px solid #2271b1; margin: 20px 0;">';

@@ -199,7 +199,7 @@ class USERSPN_Notifications {
     ?>
       <?php
       // Apply filter to allow other plugins to add content before the notifications form
-      echo apply_filters('userspn_notifications_before_form', '', $user_id);
+      echo wp_kses_post(apply_filters('userspn_notifications_before_form', '', $user_id));
       ?>
       <form id="userspn-form" class="userspn-mt-30 userspn-form">
         <?php foreach ($userspn_notifications as $notifications_field): ?>

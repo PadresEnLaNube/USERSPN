@@ -14,8 +14,10 @@
       if (!popupElement.parent().is('body')) {
         $('body').append(popupElement);
       }
-      var $overlay = $('.userspn-popup-overlay');
-      if ($overlay.length && !$overlay.parent().is('body')) {
+      // Use only the first global overlay (ignore any nested/duplicate overlays)
+      var $overlay = $('body > .userspn-popup-overlay').first();
+      if (!$overlay.length) {
+        $overlay = $('.userspn-popup-overlay').first();
         $('body').append($overlay);
       }
 
@@ -24,7 +26,7 @@
       }
 
       // Show overlay
-      $('.userspn-popup-overlay').removeClass('userspn-display-none-soft').fadeIn('fast');
+      $overlay.removeClass('userspn-display-none-soft').fadeIn('fast');
 
       // Show the popup
       popupElement.addClass('userspn-popup-active').fadeIn('fast');
@@ -52,8 +54,8 @@
       // Hide all popups
       $('.userspn-popup').fadeOut('fast');
 
-      // Hide overlay
-      $('.userspn-popup-overlay').fadeOut('fast', function() {
+      // Hide overlay (only the global body-level overlay)
+      $('body > .userspn-popup-overlay').first().fadeOut('fast', function() {
         $(this).addClass('userspn-display-none-soft');
       });
 

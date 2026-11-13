@@ -163,6 +163,7 @@ class USERSPN_Security {
         }
 
         if ($attempts >= $max_attempts) {
+            // translators: %d: number of hours until the user can try again.
             return new WP_Error('rate_limit_exceeded', sprintf(__('Registration blocked: Too many attempts. Please try again in %d hour(s).', 'userspn'), $window_hours));
         }
 
@@ -750,6 +751,7 @@ class USERSPN_Security {
         $site_name = get_bloginfo('name');
         $site_url = get_site_url();
         
+        // translators: %s: site name.
         $subject = sprintf(__('[%s] Posible registro fraudulento detectado', 'userspn'), $site_name);
         
         // Create delete user URL with nonce
@@ -761,12 +763,19 @@ class USERSPN_Security {
         ], admin_url('admin-ajax.php'));
 
         $message = sprintf(
+            // translators: %s: site name.
             __("Se ha detectado un posible registro fraudulento en %s:\n\n", 'userspn') .
+            // translators: %s: username.
             __("Usuario: %s\n", 'userspn') .
+            // translators: %s: email address.
             __("Email: %s\n", 'userspn') .
-            __("Score reCAPTCHA: %.2f (Umbral: %.2f)\n", 'userspn') .
+            // translators: %1$.2f: reCAPTCHA score, %2$.2f: threshold value.
+            __("Score reCAPTCHA: %1$.2f (Umbral: %2$.2f)\n", 'userspn') .
+            // translators: %s: IP address.
             __("IP: %s\n", 'userspn') .
+            // translators: %s: user agent string.
             __("User Agent: %s\n", 'userspn') .
+            // translators: %s: date and time.
             __("Fecha: %s\n\n", 'userspn') .
             __("El usuario ha sido registrado pero marcado como sospechoso.\n\n", 'userspn') .
             __("Para borrar este usuario directamente, haz clic en el siguiente enlace:\n", 'userspn') .
@@ -802,25 +811,25 @@ class USERSPN_Security {
         }
 
         if (!isset($_GET['user_id']) || !isset($_GET['nonce'])) {
-            wp_die(__('Parámetros inválidos.', 'userspn'));
+            wp_die(esc_html__('Parámetros inválidos.', 'userspn'));
         }
 
         $user_id = intval($_GET['user_id']);
         $nonce = sanitize_text_field($_GET['nonce']);
 
         if (!wp_verify_nonce($nonce, 'userspn_delete_suspicious_user_' . $user_id)) {
-            wp_die(__('Verificación de seguridad fallida.', 'userspn'));
+            wp_die(esc_html__('Verificación de seguridad fallida.', 'userspn'));
         }
 
         $user = get_user_by('ID', $user_id);
         if (!$user) {
-            wp_die(__('Usuario no encontrado.', 'userspn'));
+            wp_die(esc_html__('Usuario no encontrado.', 'userspn'));
         }
 
         // Check if user is marked as suspicious
         $is_suspicious = get_user_meta($user_id, 'userspn_recaptcha_suspicious', true);
         if (!$is_suspicious) {
-            wp_die(__('Este usuario no está marcado como sospechoso.', 'userspn'));
+            wp_die(esc_html__('Este usuario no está marcado como sospechoso.', 'userspn'));
         }
 
         // Delete the user
@@ -833,12 +842,13 @@ class USERSPN_Security {
             ]);
 
             wp_die(
-                sprintf(__('Usuario %s eliminado correctamente.', 'userspn'), $user->user_login),
-                __('Usuario eliminado', 'userspn'),
+                // translators: %s: username of the deleted user.
+                sprintf(esc_html__('Usuario %s eliminado correctamente.', 'userspn'), esc_html($user->user_login)),
+                esc_html__('Usuario eliminado', 'userspn'),
                 ['response' => 200]
             );
         } else {
-            wp_die(__('Error al eliminar el usuario.', 'userspn'));
+            wp_die(esc_html__('Error al eliminar el usuario.', 'userspn'));
         }
     }
 }

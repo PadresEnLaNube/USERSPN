@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Two-Factor Authentication Profile Interface for USERSPN plugin.
  *
@@ -135,8 +139,9 @@ class USERSPN_2FA_Profile {
                             <i class="material-icons-outlined userspn-vertical-align-middle">info</i>
                             <?php
                             echo sprintf(
+                                // translators: %d is the number of days remaining in the grace period.
                                 esc_html__('You have %d days remaining to set up two-factor authentication.', 'userspn'),
-                                $grace_days_remaining
+                                absint( $grace_days_remaining )
                             );
                             ?>
                         </div>
