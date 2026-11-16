@@ -7,6 +7,7 @@
 
   // Register userspn/profile block
   registerBlockType('userspn/profile', {
+    apiVersion: 3,
     title: __('User Profile', 'userspn'),
     description: __('Display user profile or login/registration forms.', 'userspn'),
     icon: 'admin-users',
@@ -32,6 +33,7 @@
 
   // Register userspn/sequential-login block
   registerBlockType('userspn/sequential-login', {
+    apiVersion: 3,
     title: __('Sequential Login', 'userspn'),
     description: __('Two-step sequential login form with stacked email and password fields.', 'userspn'),
     icon: 'lock',

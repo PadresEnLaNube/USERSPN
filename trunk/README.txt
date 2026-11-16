@@ -4,7 +4,7 @@ Donate link: https://padresenlanube.com/
 Tags: user management, users, register, login, contacts
 Requires at least: 5.9.0
 Tested up to: 7.1
-Stable tag: 1.1.72
+Stable tag: 1.1.75
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Custom registration forms, social login, 2FA, passkeys, session management, audit logging, GDPR compliance, REST API, and profile management.
