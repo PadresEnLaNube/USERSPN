@@ -92,10 +92,12 @@ class USERSPN_Mailing {
    */
   public function userspn_newsletter($atts) {
     // echo do_shortcode('[userspn-newsletter userspn_checkbox_policies="" text_btn="Text"]');
-    $a = extract(shortcode_atts([
+    $atts = shortcode_atts([
       'userspn_checkbox_policies' => '',
       'text_btn' => __('Submit', 'userspn'),
-    ], $atts));
+    ], $atts);
+    $userspn_checkbox_policies = $atts['userspn_checkbox_policies'];
+    $text_btn = $atts['text_btn'];
 
     $user_id = get_current_user_id();
     $policies_page_id = get_option('wp_page_for_privacy_policy');

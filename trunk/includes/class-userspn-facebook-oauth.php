@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
 /**
  * Facebook OAuth REST API endpoints
  *
@@ -104,20 +107,22 @@ class USERSPN_Facebook_OAuth
       return $this->redirect_with_error('no_code', __('No authorization code received.', 'userspn'));
     }
 
-    // Verificar state
-    if ($state !== 'userspn_facebook_login') {
+    // Verificar state (random token stored in transient)
+    if (empty($state) || !get_transient('userspn_facebook_oauth_state_' . $state)) {
       return $this->redirect_with_error('invalid_state', __('Invalid state parameter.', 'userspn'));
     }
+    delete_transient('userspn_facebook_oauth_state_' . $state);
 
     // Intercambiar código por token de acceso
     $redirect_uri = admin_url('admin-ajax.php?action=userspn_facebook_callback');
 
-    $token_response = wp_remote_get(add_query_arg([
-      'client_id' => $app_id,
-      'client_secret' => $app_secret,
-      'code' => $code,
-      'redirect_uri' => $redirect_uri,
-    ], 'https://graph.facebook.com/v18.0/oauth/access_token'), [
+    $token_response = wp_remote_post('https://graph.facebook.com/v18.0/oauth/access_token', [
+      'body' => [
+        'client_id' => $app_id,
+        'client_secret' => $app_secret,
+        'code' => $code,
+        'redirect_uri' => $redirect_uri,
+      ],
       'timeout' => 30,
     ]);
 

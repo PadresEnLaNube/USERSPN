@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
 /**
  * GitHub OAuth REST API endpoints
  *
@@ -104,10 +107,11 @@ class USERSPN_GitHub_OAuth
       return $this->redirect_with_error('no_code', __('No authorization code received.', 'userspn'));
     }
 
-    // Verificar state
-    if ($state !== 'userspn_github_login') {
+    // Verificar state (random token stored in transient)
+    if (empty($state) || !get_transient('userspn_github_oauth_state_' . $state)) {
       return $this->redirect_with_error('invalid_state', __('Invalid state parameter.', 'userspn'));
     }
+    delete_transient('userspn_github_oauth_state_' . $state);
 
     // Intercambiar código por token de acceso
     $redirect_uri = admin_url('admin-ajax.php?action=userspn_github_callback');

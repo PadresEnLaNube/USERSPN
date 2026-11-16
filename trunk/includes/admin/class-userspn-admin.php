@@ -57,7 +57,10 @@ class USERSPN_Admin {
 	 * @since    1.0.0
 	 */
 	public function userspn_enqueue_scripts() {
-		wp_enqueue_media();
+		$screen = get_current_screen();
+		if ($screen && $screen->id === 'toplevel_page_userspn_options') {
+			wp_enqueue_media();
+		}
 		wp_enqueue_script('jquery-ui-draggable');
 		wp_enqueue_script($this->plugin_name . '-admin', USERSPN_URL . 'assets/js/admin/userspn-admin.js', ['jquery', 'jquery-ui-draggable'], $this->version, false);
 

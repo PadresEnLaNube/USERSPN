@@ -34,6 +34,11 @@ class USERSPN_Functions_Attachment {
       include_once(ABSPATH . WPINC . '/class-http.php');
     }
 
+    // SSRF prevention: validate the URL before requesting
+    if (function_exists('wp_http_validate_url') && !wp_http_validate_url($url)) {
+      return false;
+    }
+
     $http = new WP_Http();
     $response = $http->request($url);
     $file_extension = pathinfo($url, PATHINFO_EXTENSION);

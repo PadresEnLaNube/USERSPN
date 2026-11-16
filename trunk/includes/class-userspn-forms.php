@@ -716,7 +716,7 @@ class USERSPN_Forms {
           ?><div class="userspn-field"><p class="userspn-color-error"><?php esc_html_e('You do not have permission to manage user roles.', 'userspn'); ?></p></div><?php
           break;
         }
-        $users = get_users(['orderby' => 'display_name', 'order' => 'ASC']);
+        $users = get_users(['orderby' => 'display_name', 'order' => 'ASC', 'number' => 500]);
         $target_role = isset($userspn_input['role']) ? $userspn_input['role'] : 'userspn_newsletter_subscriber';
         $role_label = isset($userspn_input['role_label']) ? $userspn_input['role_label'] : __('Newsletter Subscriber', 'userspn');
         $users_with_role = array_filter($users, function ($user) use ($target_role) { return in_array($target_role, (array) $user->roles); });

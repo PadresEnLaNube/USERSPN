@@ -13,10 +13,11 @@
 class USERSPN_Shortcodes {
   public function userspn_test($atts) {
     /* echo do_shortcode('[userspn-test]'); */
-    $a = extract(shortcode_atts([
+    $atts = shortcode_atts([
       'user_id' => get_current_user_id(),
-    ], $atts));
-  
+    ], $atts);
+    $user_id = $atts['user_id'];
+
     ob_start();
     ?>
       <div class="userspn-shortcode-example">
@@ -36,7 +37,7 @@ class USERSPN_Shortcodes {
 	 */
   public function userspn_call_to_action($atts) {
     // echo do_shortcode('[userspn-call-to-action userspn_call_to_action_icon="error_outline" userspn_call_to_action_title="' . esc_html(__('Default title', 'userspn')) . '" userspn_call_to_action_content="' . esc_html(__('Default content', 'userspn')) . '" userspn_call_to_action_button_link="#" userspn_call_to_action_button_text="' . esc_html(__('Button text', 'userspn')) . '" userspn_call_to_action_button_class="userspn-class"]');
-    $a = extract(shortcode_atts(array(
+    $atts = shortcode_atts(array(
       'userspn_call_to_action_class' => '',
       'userspn_call_to_action_icon' => '',
       'userspn_call_to_action_title' => '',
@@ -47,7 +48,17 @@ class USERSPN_Shortcodes {
       'userspn_call_to_action_button_data_key' => '',
       'userspn_call_to_action_button_data_value' => '',
       'userspn_call_to_action_button_blank' => 0,
-    ), $atts));
+    ), $atts);
+    $userspn_call_to_action_class = $atts['userspn_call_to_action_class'];
+    $userspn_call_to_action_icon = $atts['userspn_call_to_action_icon'];
+    $userspn_call_to_action_title = $atts['userspn_call_to_action_title'];
+    $userspn_call_to_action_content = $atts['userspn_call_to_action_content'];
+    $userspn_call_to_action_button_link = $atts['userspn_call_to_action_button_link'];
+    $userspn_call_to_action_button_text = $atts['userspn_call_to_action_button_text'];
+    $userspn_call_to_action_button_class = $atts['userspn_call_to_action_button_class'];
+    $userspn_call_to_action_button_data_key = $atts['userspn_call_to_action_button_data_key'];
+    $userspn_call_to_action_button_data_value = $atts['userspn_call_to_action_button_data_value'];
+    $userspn_call_to_action_button_blank = $atts['userspn_call_to_action_button_blank'];
 
     ob_start();
     ?>

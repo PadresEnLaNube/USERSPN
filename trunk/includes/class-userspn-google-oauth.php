@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
 /**
  * Google OAuth REST API endpoints
  *
@@ -104,10 +107,11 @@ class USERSPN_Google_OAuth
       return $this->redirect_with_error('no_code', __('No authorization code received.', 'userspn'));
     }
 
-    // Verificar state
-    if ($state !== 'userspn_google_login') {
+    // Verificar state (random token stored in transient)
+    if (empty($state) || !get_transient('userspn_google_oauth_state_' . $state)) {
       return $this->redirect_with_error('invalid_state', __('Invalid state parameter.', 'userspn'));
     }
+    delete_transient('userspn_google_oauth_state_' . $state);
 
     // Intercambiar código por token de acceso
     // Usar admin-ajax.php (debe coincidir con la URL enviada a Google)

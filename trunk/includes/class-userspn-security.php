@@ -254,20 +254,10 @@ class USERSPN_Security {
      * @return string IP address
      */
     public static function get_user_ip() {
-        $ip_keys = ['HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'REMOTE_ADDR'];
-        
-        foreach ($ip_keys as $key) {
-            if (array_key_exists($key, $_SERVER) === true) {
-                foreach (explode(',', $_SERVER[$key]) as $ip) {
-                    $ip = trim($ip);
-                    if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
-                        return $ip;
-                    }
-                }
-            }
-        }
-        
-        return $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+        // Only trust REMOTE_ADDR to prevent IP spoofing via headers.
+        // If behind a trusted reverse proxy, configure the web server to set REMOTE_ADDR correctly.
+        $ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '0.0.0.0';
+        return filter_var($ip, FILTER_VALIDATE_IP) ? $ip : '0.0.0.0';
     }
 
     /**
@@ -304,7 +294,7 @@ class USERSPN_Security {
                 'user_id'     => intval($user_id),
                 'created_at'  => current_time('mysql'),
                 'ip_address'  => self::get_user_ip(),
-                'user_agent'  => $_SERVER['HTTP_USER_AGENT'] ?? '',
+                'user_agent'  => substr($_SERVER['HTTP_USER_AGENT'] ?? '', 0, 500),
                 'event'       => $event,
                 'message'     => $message,
                 'data'        => wp_json_encode($data),

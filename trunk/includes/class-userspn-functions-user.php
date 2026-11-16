@@ -315,13 +315,18 @@ class USERSPN_Functions_User
       return;
     }
 
+    // Verify nonce for CSRF protection
+    if (!isset($_GET['userspn_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_GET['userspn_nonce'])), 'userspn_nonce_action')) {
+      return;
+    }
+
     $login_username = !empty($_GET['userspn_login_username']) ? sanitize_text_field(wp_unslash($_GET['userspn_login_username'])) : '';
     $user_id = !empty($_GET['userspn_user_id']) ? intval($_GET['userspn_user_id']) : 0;
     $secret_token = get_user_meta($user_id, 'userspn_secret_token', true);
     $userspn_secret_token = !empty($_GET['userspn_secret_token']) ? sanitize_text_field(wp_unslash($_GET['userspn_secret_token'])) : '';
 
     // Validación de seguridad usando el token secreto
-    if (empty($secret_token) || $secret_token !== $userspn_secret_token || user_can($user_id, 'administrator')) {
+    if (empty($secret_token) || !hash_equals($secret_token, $userspn_secret_token) || user_can($user_id, 'administrator')) {
       return;
     }
 
@@ -329,9 +334,9 @@ class USERSPN_Functions_User
     wp_set_current_user($user_id, $login_username);
     wp_set_auth_cookie($user_id);
 
-    // Redireccionar sin parámetros
-    $request_uri = !empty($_SERVER['REQUEST_URI']) ? sanitize_text_field(wp_unslash($_SERVER['REQUEST_URI'])) : esc_url(home_url());
-    wp_redirect(strtok($request_uri, '?'));
+    // Redireccionar sin parámetros (use wp_safe_redirect to prevent open redirects)
+    $request_uri = !empty($_SERVER['REQUEST_URI']) ? sanitize_text_field(wp_unslash($_SERVER['REQUEST_URI'])) : home_url();
+    wp_safe_redirect(strtok($request_uri, '?'));
     exit;
   }
 
@@ -630,11 +635,13 @@ class USERSPN_Functions_User
   public function userspn_user_register_fields($atts)
   {
     // echo do_shortcode('[userspn-user-register-fields]');
-    $a = extract(shortcode_atts([
+    $atts = shortcode_atts([
       'userspn_form_type' => 'option',
       'userspn_meta' => 'userspn_forum_form_fields',
       'post_id' => 0,
-    ], $atts));
+    ], $atts);
+    $userspn_form_type = $atts['userspn_form_type'];
+    $userspn_meta = $atts['userspn_meta'];
 
     $post_id = get_the_ID();
     $userspn_user_register_fields = ($userspn_form_type == 'option') ? get_option('userspn_user_register_fields') : get_post_meta($post_id, $userspn_meta, true);

@@ -61,7 +61,7 @@ class USERSPN_Ajax {
         foreach ($userspn_ajax_keys as $userspn_key) {
           if (strpos((string)$userspn_key['id'], '[]') !== false) {
             $userspn_clear_key = str_replace('[]', '', $userspn_key['id']);
-            ${$userspn_clear_key} = $userspn_key_value[$userspn_clear_key] = [];
+            $userspn_key_value[$userspn_clear_key] = [];
 
             if (!empty($_POST[$userspn_clear_key])) {
               $unslashed_array = wp_unslash($_POST[$userspn_clear_key]);
@@ -73,7 +73,7 @@ class USERSPN_Ajax {
                   $userspn_key['field_config']
                 );
               }, $unslashed_array);
-              
+
               // filter empty entries
               $sanitized_array = array_filter($sanitized_array, function($v) { return $v !== '' && $v !== null; });
               // generic normalization: ints if all numeric, unique, reindex
@@ -82,22 +82,21 @@ class USERSPN_Ajax {
                 $sanitized_array = array_map('intval', $sanitized_array);
               }
               $sanitized_array = array_values(array_unique($sanitized_array));
-              ${$userspn_clear_key} = $userspn_key_value[$userspn_clear_key] = $sanitized_array;
+              $userspn_key_value[$userspn_clear_key] = $sanitized_array;
             } else {
               // explicit empty array for multiple fields
-              ${$userspn_clear_key} = [];
               $userspn_key_value[$userspn_clear_key] = [];
             }
           } else {
             $sanitized_key = sanitize_key($userspn_key['id']);
-            $userspn_key_id = !empty($_POST[$sanitized_key]) ? 
+            $userspn_key_id = !empty($_POST[$sanitized_key]) ?
               USERSPN_Forms::userspn_sanitizer(
-                wp_unslash($_POST[$sanitized_key]), 
-                $userspn_key['node'], 
+                wp_unslash($_POST[$sanitized_key]),
+                $userspn_key['node'],
                 $userspn_key['type'],
                 $userspn_key['field_config']
               ) : '';
-            ${$userspn_key['id']} = $userspn_key_value[$userspn_key['id']] = $userspn_key_id;
+            $userspn_key_value[$userspn_key['id']] = $userspn_key_id;
           }
         }
       }
@@ -175,9 +174,13 @@ class USERSPN_Ajax {
           exit;
           break;
         case 'userspn_options_save':
+          if (!current_user_can('manage_options')) {
+            echo wp_json_encode(['error_key' => 'userspn_permission_error']);
+            exit;
+          }
           if (!empty($userspn_key_value)) {
             foreach ($userspn_key_value as $key => $value) {
-              if (!in_array($key, ['action', 'userspn_ajax_type'])) {
+              if (!in_array($key, ['action', 'userspn_ajax_type']) && strpos($key, 'userspn_') === 0) {
                 update_option($key, $value);
               }
             }
@@ -195,6 +198,10 @@ class USERSPN_Ajax {
           }
           break;
         case 'userspn_popup_manager_edit':
+          if (!current_user_can('edit_users')) {
+            echo 'userspn_popup_manager_edit_error';
+            exit;
+          }
           if (!empty($user_id)) {
             global $wp_roles;
             $profile_array = apply_filters('userspn_register_fields', []);
@@ -241,7 +248,7 @@ class USERSPN_Ajax {
           }
           break;
         case 'userspn_manager_edit':
-          if (!empty($user_id) && user_can($current_user_id, 'administrator')) {
+          if (!empty($user_id) && current_user_can('manage_options')) {
             if (!empty($userspn_key_value)) {
               foreach ($userspn_key_value as $key => $value) {
                 if ($key == 'userspn_roles') {
@@ -264,7 +271,7 @@ class USERSPN_Ajax {
             USERSPN_Security::log_audit_event('profile_updated', 'User edited by admin', [
               'target_user_id' => $user_id,
               'changed_keys' => array_keys($userspn_key_value),
-            ], $current_user_id);
+            ], get_current_user_id());
             echo 'userspn_manager_edit_success';
             exit;
           } else {
@@ -273,6 +280,10 @@ class USERSPN_Ajax {
           }
           break;
         case 'userspn_popup_manager_remove':
+          if (!current_user_can('delete_users')) {
+            echo 'userspn_popup_manager_remove_error';
+            exit;
+          }
           if (!empty($user_id)) {
             ?>
               <h3 class="userspn-text-align-center"><?php esc_html_e('Remove user', 'userspn'); ?></h3>
@@ -296,13 +307,13 @@ class USERSPN_Ajax {
           }
           break;
         case 'userspn_manager_remove':
-          if (!empty($user_id) && user_can($current_user_id, 'administrator')) {
+          if (!empty($user_id) && current_user_can('manage_options')) {
             $deleted_user = get_userdata($user_id);
             wp_delete_user($user_id);
             USERSPN_Security::log_audit_event('user_deleted', 'User deleted by admin', [
               'target_user_id' => $user_id,
               'email' => $deleted_user ? $deleted_user->user_email : '',
-            ], $current_user_id);
+            ], get_current_user_id());
             echo 'userspn_manager_remove_success';
             exit;
           } else {
@@ -311,6 +322,7 @@ class USERSPN_Ajax {
           }
           break;
         case 'userspn_profile_progress':
+          $user_id = get_current_user_id();
           if (!empty($user_id)) {
             $user = get_user_by('id', $user_id);
             if (!$user) {
@@ -370,6 +382,10 @@ class USERSPN_Ajax {
           exit;
           break;
         case 'userspn_input_editor_builder_add':
+          if (!current_user_can('manage_options')) {
+            echo wp_json_encode(['error_key' => 'userspn_permission_error']);
+            exit;
+          }
           $userspn_meta = !empty($_POST['userspn_meta']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_meta'])) : [];
 
           $userspn_array = [
@@ -386,6 +402,10 @@ class USERSPN_Ajax {
           exit;
           break;
         case 'userspn_input_editor_builder_save':
+          if (!current_user_can('manage_options')) {
+            echo wp_json_encode(['error_key' => 'userspn_permission_error']);
+            exit;
+          }
           $userspn_input_name = !empty($_POST['userspn_input_name']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_input_name'])) : '';
           $userspn_input_current_id = !empty($_POST['userspn_input_current_id']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_input_current_id'])) : 0;
           $userspn_input_type = !empty($_POST['userspn_input_type']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_input_type'])) : '';
@@ -519,6 +539,10 @@ class USERSPN_Ajax {
           }
           break;
         case 'userspn_input_editor_builder_remove':
+          if (!current_user_can('manage_options')) {
+            echo wp_json_encode(['error_key' => 'userspn_permission_error']);
+            exit;
+          }
           $userspn_meta = !empty($_POST['userspn_meta']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_meta'])) : '';
           $userspn_input_id = !empty($_POST['userspn_input_id']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_input_id'])) : 0;
           $userspn_form_type = !empty($_POST['userspn_form_type']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_form_type'])) : '';
@@ -546,9 +570,10 @@ class USERSPN_Ajax {
           }
           break;
         case 'userspn_notifications':
+          $user_id = get_current_user_id();
           if (!empty($user_id)) {
             foreach ($userspn_key_value as $key => $value) {
-              if (!in_array($key, ['userspn_ajax_type', 'user_id', 'action', 'userspn-notifications-btn'])) {
+              if (!in_array($key, ['userspn_ajax_type', 'user_id', 'action', 'userspn-notifications-btn']) && strpos($key, 'userspn_') === 0) {
                 update_user_meta($user_id, $key, $value);
               }
             }
@@ -623,6 +648,10 @@ class USERSPN_Ajax {
           }
           break;
         case 'userspn_csv_add_contacts':
+          if (!current_user_can('manage_options')) {
+            echo 'userspn_csv_add_contacts_error';
+            exit;
+          }
           if (!empty($user_id)) {
             $userspn_uploaded_file = get_posts(['fields' => 'ids', 'numberposts' => 1, 'post_type' => 'attachment', 'post_status' => ['any'], 'author' => $user_id, 'orderby' => 'ID', 'order' => 'DESC']);
             $plugin_csv = new USERSPN_CSV();
@@ -636,7 +665,8 @@ class USERSPN_Ajax {
           break;
         case 'userspn_file_private_remove':
           if (!empty($user_id) && !empty($file_id)) {
-            if (get_post($file_id)->post_author == $user_id || current_user_can('administrator')) {
+            $file_post = get_post($file_id);
+            if ($file_post && ((int)$file_post->post_author === get_current_user_id() || current_user_can('manage_options'))) {
               wp_delete_post($file_id, true);
               echo 'userspn_file_private_remove_success';
               exit;
@@ -673,7 +703,10 @@ class USERSPN_Ajax {
             require_once(ABSPATH . 'wp-admin' . '/includes/media.php');
 
             $file_handler = 'userspn_uploaded_file';
-            $userspn_related_user_id = !empty($_POST['userspn_related_user_id']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_related_user_id'])) : '';
+            $userspn_related_user_id = get_current_user_id();
+            if (current_user_can('edit_users') && !empty($_POST['userspn_related_user_id'])) {
+              $userspn_related_user_id = absint(USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_related_user_id'])));
+            }
             $userspn_file_id = media_handle_upload($file_handler, 0);
 
             if (is_wp_error($userspn_file_id)) {
@@ -698,7 +731,10 @@ class USERSPN_Ajax {
           }
           break;
         case 'userspn_remove_avatar':
-          $userspn_user_id = !empty($_POST['userspn_user_id']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_user_id'])) : '';
+          $userspn_user_id = get_current_user_id();
+          if (current_user_can('edit_users') && !empty($_POST['userspn_user_id'])) {
+            $userspn_user_id = absint(USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_user_id'])));
+          }
           if (!empty($userspn_user_id)) {
             $current_avatar_id = get_user_meta($userspn_user_id, 'userspn_user_image', true);
             if (!empty($current_avatar_id)) {
@@ -716,10 +752,13 @@ class USERSPN_Ajax {
           }
           break;
         case 'userspn_get_avatar_html':
-          $userspn_user_id = !empty($_POST['userspn_user_id']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_user_id'])) : '';
+          $userspn_user_id = get_current_user_id();
+          if (current_user_can('edit_users') && !empty($_POST['userspn_user_id'])) {
+            $userspn_user_id = absint(USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_user_id'])));
+          }
           if (!empty($userspn_user_id)) {
             $plugin_user = new USERSPN_Functions_User();
-            $avatar_html = do_shortcode('[userspn-get-avatar user_id="' . $userspn_user_id . '" size="50"]');
+            $avatar_html = do_shortcode('[userspn-get-avatar user_id="' . intval($userspn_user_id) . '" size="50"]');
             echo wp_json_encode(['html' => $avatar_html]);
             exit;
           } else {
@@ -728,6 +767,10 @@ class USERSPN_Ajax {
           }
           break;
         case 'userspn_csv_template_upload':
+          if (!current_user_can('manage_options')) {
+            echo 'userspn_csv_template_upload_error';
+            exit;
+          }
           if ($_FILES) {
             $userspn_csv_template_upload = !empty($_POST['userspn_csv_template_upload']) ? USERSPN_Forms::userspn_sanitizer(wp_unslash($_POST['userspn_csv_template_upload'])) : 0;
             require_once(ABSPATH . 'wp-admin/includes/image.php');
@@ -948,9 +991,12 @@ class USERSPN_Ajax {
           }
           break;
         case 'userspn_basecpt_edit':
+          if (!current_user_can('edit_posts')) {
+            echo wp_json_encode(['error_key' => 'userspn_permission_error', 'error_content' => esc_html(__('You do not have permission to edit this item.', 'userspn'))]);
+            exit;
+          }
           // Check if the BaseCPT exists
           $userspn_basecpt = get_post($userspn_basecpt_id);
-          
 
           if (!empty($userspn_basecpt_id)) {
             $plugin_post_type_userspn = new USERSPN_Post_Type_BaseCPT();
@@ -1006,6 +1052,10 @@ class USERSPN_Ajax {
           }
           break;
         case 'userspn_basecpt_duplicate':
+          if (!current_user_can('edit_posts')) {
+            echo wp_json_encode(['error_key' => 'userspn_permission_error', 'error_content' => esc_html(__('You do not have permission to duplicate this item.', 'userspn'))]);
+            exit;
+          }
           if (!empty($userspn_basecpt_id)) {
             $plugin_post_type_post = new USERSPN_Functions_Post();
             $plugin_post_type_post->userspn_duplicate_post($userspn_basecpt_id, 'publish');
@@ -1027,6 +1077,10 @@ class USERSPN_Ajax {
           }
           break;
         case 'userspn_basecpt_remove':
+          if (!current_user_can('delete_posts')) {
+            echo wp_json_encode(['error_key' => 'userspn_permission_error', 'error_content' => esc_html(__('You do not have permission to remove this item.', 'userspn'))]);
+            exit;
+          }
           if (!empty($userspn_basecpt_id)) {
             wp_delete_post($userspn_basecpt_id, true);
 

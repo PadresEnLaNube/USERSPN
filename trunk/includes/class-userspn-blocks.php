@@ -252,15 +252,20 @@ class USERSPN_Blocks {
    * @return   string   Block HTML output.
    */
   public function userspn_render_block_filter($block_content, $block) {
+    // Early return for non-userspn blocks
+    if (!isset($block['blockName']) || strpos($block['blockName'], 'userspn/') !== 0) {
+      return $block_content;
+    }
+
     // Process profile block
-    if (isset($block['blockName']) && $block['blockName'] === 'userspn/profile') {
+    if ($block['blockName'] === 'userspn/profile') {
       if (empty($block_content)) {
         return $this->userspn_profile_block_render([]);
       }
     }
 
     // Process sequential login block
-    if (isset($block['blockName']) && $block['blockName'] === 'userspn/sequential-login') {
+    if ($block['blockName'] === 'userspn/sequential-login') {
       if (empty($block_content)) {
         return $this->userspn_sequential_login_block_render($block['attrs'] ?? []);
       }

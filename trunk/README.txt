@@ -4,7 +4,7 @@ Donate link: https://padresenlanube.com/
 Tags: user management, users, register, login, contacts
 Requires at least: 5.9.0
 Tested up to: 7.1
-Stable tag: 1.1.71
+Stable tag: 1.1.72
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Streamline user management on your WordPress site with this powerful plugin. Enable custom forms, secure login, custom login page styling, passkeys (WebAuthn), session management, audit logging, GDPR compliance, REST API, and seamless profile management.

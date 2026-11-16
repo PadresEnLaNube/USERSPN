@@ -102,7 +102,7 @@ class USERSPN_Ajax_Nopriv {
 
           if ($is_multiple_field) {
             $userspn_clear_key = $clear_key;
-            ${$userspn_clear_key} = $userspn_key_value[$userspn_clear_key] = [];
+            $userspn_key_value[$userspn_clear_key] = [];
 
             if (!empty($posted_value)) {
               $unslashed_array = $posted_value;
@@ -142,10 +142,9 @@ class USERSPN_Ajax_Nopriv {
               }
               $sanitized_array = array_values(array_unique($sanitized_array));
 
-              ${$userspn_clear_key} = $userspn_key_value[$userspn_clear_key] = $sanitized_array;
+              $userspn_key_value[$userspn_clear_key] = $sanitized_array;
             } else {
               // Explicitly store empty array for multiple fields with no selection
-              ${$userspn_clear_key} = [];
               $userspn_key_value[$userspn_clear_key] = [];
             }
           } else {
@@ -160,7 +159,7 @@ class USERSPN_Ajax_Nopriv {
                 $userspn_key['field_config'] ?? [],
               ) : '';
             
-              ${$userspn_key['id']} = $userspn_key_value[$userspn_key['id']] = $userspn_key_id;
+              $userspn_key_value[$userspn_key['id']] = $userspn_key_id;
           }
         }
       }
@@ -1013,7 +1012,8 @@ class USERSPN_Ajax_Nopriv {
           // Generar URL de autorización de Google
           // Usar admin-ajax.php como redirect URI (más compatible que REST API)
           $redirect_uri = admin_url('admin-ajax.php?action=userspn_google_callback');
-          $state = 'userspn_google_login';
+          $state = wp_generate_password(32, false, false);
+          set_transient('userspn_google_oauth_state_' . $state, '1', 600);
           $scope = 'email profile';
 
           $auth_url = add_query_arg([
@@ -1055,7 +1055,8 @@ class USERSPN_Ajax_Nopriv {
 
           // Generar URL de autorización de Meta
           $redirect_uri = admin_url('admin-ajax.php?action=userspn_facebook_callback');
-          $state = 'userspn_facebook_login';
+          $state = wp_generate_password(32, false, false);
+          set_transient('userspn_facebook_oauth_state_' . $state, '1', 600);
           $scope = 'email,public_profile';
 
           $auth_url = add_query_arg([
@@ -1095,7 +1096,8 @@ class USERSPN_Ajax_Nopriv {
 
           // Generar URL de autorización de GitHub
           $redirect_uri = admin_url('admin-ajax.php?action=userspn_github_callback');
-          $state = 'userspn_github_login';
+          $state = wp_generate_password(32, false, false);
+          set_transient('userspn_github_oauth_state_' . $state, '1', 600);
           $scope = 'user:email';
 
           $auth_url = add_query_arg([
@@ -1136,7 +1138,8 @@ class USERSPN_Ajax_Nopriv {
 
           // Generar URL de autorización de Apple
           $redirect_uri = admin_url('admin-ajax.php?action=userspn_apple_callback');
-          $state = 'userspn_apple_login';
+          $state = wp_generate_password(32, false, false);
+          set_transient('userspn_apple_oauth_state_' . $state, '1', 600);
           $scope = 'email name';
 
           $auth_url = add_query_arg([
@@ -1176,14 +1179,15 @@ class USERSPN_Ajax_Nopriv {
 
           // X OAuth 2.0 with PKCE
           $redirect_uri = admin_url('admin-ajax.php?action=userspn_x_callback');
-          $state = 'userspn_x_login';
+          $state = wp_generate_password(32, false, false);
+          set_transient('userspn_x_oauth_state_' . $state, '1', 600);
 
           // Generate PKCE code verifier and challenge
           $code_verifier = wp_generate_password(64, false, false);
           $code_challenge = rtrim(strtr(base64_encode(hash('sha256', $code_verifier, true)), '+/', '-_'), '=');
 
-          // Store code verifier in transient for callback
-          set_transient('userspn_x_code_verifier', $code_verifier, 600);
+          // Store code verifier in transient scoped to this state
+          set_transient('userspn_x_code_verifier_' . $state, $code_verifier, 600);
 
           $auth_url = add_query_arg([
             'response_type' => 'code',
@@ -1612,8 +1616,6 @@ class USERSPN_Ajax_Nopriv {
 
           echo wp_json_encode([
             'success'      => true,
-            'user_login'   => $user->user_login,
-            'user_email'   => $user->user_email,
             'display_name' => $user->display_name,
             'avatar_url'   => $avatar_url,
           ]);

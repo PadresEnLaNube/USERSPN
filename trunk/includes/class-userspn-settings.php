@@ -3005,14 +3005,14 @@ class USERSPN_Settings
   public function userspn_login_headerurl()
   {
     if (!empty(get_option('userspn_admin_page_logo_link'))) {
-      return get_option('userspn_admin_page_logo_link');
+      return esc_url(get_option('userspn_admin_page_logo_link'));
     }
   }
 
   public function userspn_login_headertext()
   {
     if (!empty(get_option('userspn_admin_page_logo_link_text'))) {
-      return __('Powered by', 'userspn') . ' ' . get_option('userspn_admin_page_logo_link_text');
+      return esc_html(__('Powered by', 'userspn') . ' ' . get_option('userspn_admin_page_logo_link_text'));
     }
   }
 
@@ -3031,29 +3031,33 @@ class USERSPN_Settings
     if (!empty($userspn_admin_page_logo_css)) {
       wp_register_style('userspn-admin-page-logo-css', false, [], USERSPN_VERSION);
       wp_enqueue_style('userspn-admin-page-logo-css');
-      wp_add_inline_style('userspn-admin-page-logo-css', $userspn_admin_page_logo_css);
+      wp_add_inline_style('userspn-admin-page-logo-css', wp_strip_all_tags($userspn_admin_page_logo_css));
     }
 
     if (get_option('userspn_login_custom_style') === 'on') {
       wp_enqueue_style('userspn-login-custom-style', USERSPN_URL . 'assets/css/userspn-login-style.css', [], USERSPN_VERSION);
 
       // Inject CSS color variables so the login stylesheet can use them
-      $color_main            = get_option('userspn_color_main', '#00aa44');
-      $bg_color_main         = get_option('userspn_bg_color_main', '#00aa44');
-      $border_color_main     = get_option('userspn_border_color_main', '#00aa44');
-      $color_main_alt        = get_option('userspn_color_main_alt', '#232323');
-      $bg_color_main_alt     = get_option('userspn_bg_color_main_alt', '#232323');
-      $border_color_main_alt = get_option('userspn_border_color_main_alt', '#232323');
-      $color_main_blue       = get_option('userspn_color_main_blue', '#6e6eff');
+      $color_vars = [
+        'userspn_color_main'            => '#00aa44',
+        'userspn_bg_color_main'         => '#00aa44',
+        'userspn_border_color_main'     => '#00aa44',
+        'userspn_color_main_alt'        => '#232323',
+        'userspn_bg_color_main_alt'     => '#232323',
+        'userspn_border_color_main_alt' => '#232323',
+        'userspn_color_main_blue'       => '#6e6eff',
+      ];
 
       $vars_css  = ':root {';
-      $vars_css .= '--userspn-color-main:' . esc_attr($color_main) . ';';
-      $vars_css .= '--userspn-bg-color-main:' . esc_attr($bg_color_main) . ';';
-      $vars_css .= '--userspn-border-color-main:' . esc_attr($border_color_main) . ';';
-      $vars_css .= '--userspn-color-main-alt:' . esc_attr($color_main_alt) . ';';
-      $vars_css .= '--userspn-bg-color-main-alt:' . esc_attr($bg_color_main_alt) . ';';
-      $vars_css .= '--userspn-border-color-main-alt:' . esc_attr($border_color_main_alt) . ';';
-      $vars_css .= '--userspn-color-main-blue:' . esc_attr($color_main_blue) . ';';
+      foreach ($color_vars as $option_key => $default) {
+        $value = get_option($option_key, $default);
+        // Validate CSS color value (hex, rgb, hsl, named colors)
+        if (!preg_match('/^(#[0-9a-fA-F]{3,8}|rgb\(|rgba\(|hsl\(|hsla\(|[a-zA-Z]+)/', $value)) {
+          $value = $default;
+        }
+        $css_var = str_replace('userspn_', '--userspn-', str_replace('_', '-', $option_key));
+        $vars_css .= $css_var . ':' . esc_attr($value) . ';';
+      }
       $vars_css .= '}';
 
       wp_add_inline_style('userspn-login-custom-style', $vars_css);

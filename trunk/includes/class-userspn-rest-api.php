@@ -383,6 +383,19 @@ class USERSPN_REST_API {
 
     // --- Settings ---
 
+    /**
+     * Sensitive option keys that must never be exposed via the REST API.
+     */
+    private static $secret_keys = [
+        'userspn_google_client_secret',
+        'userspn_facebook_app_secret',
+        'userspn_github_client_secret',
+        'userspn_apple_private_key',
+        'userspn_apple_key_id',
+        'userspn_x_client_secret',
+        'userspn_recaptcha_secret_key',
+    ];
+
     public function get_settings($request) {
         $settings_obj = new USERSPN_Settings();
         $options = $settings_obj->get_options();
@@ -391,6 +404,8 @@ class USERSPN_REST_API {
         foreach ($options as $key => $config) {
             if (isset($config['section'])) continue;
             if (isset($config['type']) && in_array($config['type'], ['nonce', 'submit'])) continue;
+            // Never expose secrets through the API
+            if (in_array($key, self::$secret_keys, true)) continue;
 
             $value = get_option($key, '');
             if ($value !== '') {

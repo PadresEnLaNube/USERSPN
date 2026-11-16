@@ -99,9 +99,12 @@ class USERSPN_2FA_Login {
         }
 
         // User has 2FA enabled - store user ID in session and redirect to verification
+        if (function_exists('session_regenerate_id')) {
+            session_regenerate_id(true);
+        }
         $_SESSION[self::SESSION_KEY] = $user->ID;
         $_SESSION['userspn_2fa_username'] = $username;
-        $_SESSION['userspn_2fa_password'] = $password;
+        $_SESSION['userspn_2fa_attempts'] = 0;
 
         // Send email code if method is email
         $method = get_user_meta($user->ID, 'userspn_2fa_method', true);
@@ -437,6 +440,18 @@ class USERSPN_2FA_Login {
             exit;
         }
 
+        // Rate limiting: max 5 attempts
+        $attempts = isset($_SESSION['userspn_2fa_attempts']) ? (int)$_SESSION['userspn_2fa_attempts'] : 0;
+        if ($attempts >= 5) {
+            // Clear session and force re-login
+            unset($_SESSION[self::SESSION_KEY]);
+            unset($_SESSION['userspn_2fa_username']);
+            unset($_SESSION['userspn_show_2fa_form']);
+            unset($_SESSION['userspn_2fa_attempts']);
+            $this->login_error(__('Too many failed attempts. Please log in again.', 'userspn'));
+            return;
+        }
+
         // Get verification code
         $code = isset($_POST['userspn_2fa_code']) ? sanitize_text_field($_POST['userspn_2fa_code']) : '';
 
@@ -449,6 +464,7 @@ class USERSPN_2FA_Login {
         $verified = USERSPN_2FA::verify_2fa_code($user_id, $code);
 
         if (!$verified) {
+            $_SESSION['userspn_2fa_attempts'] = $attempts + 1;
             $this->login_error(__('Invalid verification code. Please try again.', 'userspn'));
             return;
         }
@@ -466,8 +482,13 @@ class USERSPN_2FA_Login {
         // Clear session data
         unset($_SESSION[self::SESSION_KEY]);
         unset($_SESSION['userspn_2fa_username']);
-        unset($_SESSION['userspn_2fa_password']);
         unset($_SESSION['userspn_show_2fa_form']);
+        unset($_SESSION['userspn_2fa_attempts']);
+
+        // Regenerate session ID after successful authentication
+        if (function_exists('session_regenerate_id')) {
+            session_regenerate_id(true);
+        }
 
         // Set auth cookie
         wp_set_auth_cookie($user->ID, true);

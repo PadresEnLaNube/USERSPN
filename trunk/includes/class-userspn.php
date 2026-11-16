@@ -54,13 +54,16 @@ class USERSPN
 		if (defined('USERSPN_VERSION')) {
 			$this->version = USERSPN_VERSION;
 		} else {
-			$this->version = '1.1.71';
+			$this->version = '1.1.72';
 		}
 
 		$this->plugin_name = 'userspn';
 
-		$this->userspn_check_db_version();
 		$this->userspn_load_dependencies();
+		// Only run DB version check in admin context
+		if (is_admin()) {
+			$this->userspn_check_db_version();
+		}
 		$this->userspn_set_i18n();
 		$this->userspn_define_common_hooks();
 		$this->userspn_define_admin_hooks();
@@ -356,8 +359,8 @@ class USERSPN
 		$this->loader->userspn_add_filter('show_admin_bar', $plugin_settings, 'userspn_show_admin_bar_filter');
 		$this->loader->userspn_add_action('wp', $plugin_settings, 'userspn_remove_admin_bar');
 
-		$plugin_mailing = new USERSPN_Mailing();
-		$this->loader->userspn_add_filter('wp_mail_content_type', $plugin_mailing, 'userspn_wp_mail_content_type');
+		// Note: wp_mail_content_type is set per-email in the mailing class send method,
+		// not as a global filter (which would affect all emails site-wide including other plugins).
 
 		// Register Google OAuth REST API routes and AJAX handlers
 		$plugin_google_oauth = new USERSPN_Google_OAuth();

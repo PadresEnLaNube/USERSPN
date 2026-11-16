@@ -157,20 +157,21 @@ class USERSPN_Common {
 		// Add cache-busting for private windows and ensure proper loading
 		$script_version = $this->version;
 
-		wp_enqueue_script($this->plugin_name, USERSPN_URL . 'assets/js/userspn.js', ['jquery'], $script_version, false);
-		wp_enqueue_script($this->plugin_name . '-ajax', USERSPN_URL . 'assets/js/userspn-ajax.js', ['jquery'], $this->version, false);
-		wp_enqueue_script($this->plugin_name . '-aux', USERSPN_URL . 'assets/js/userspn-aux.js', ['jquery'], $this->version, false);
-		wp_enqueue_script($this->plugin_name . '-forms', USERSPN_URL . 'assets/js/userspn-forms.js', ['jquery', 'jquery-ui-sortable'], $this->version, false);
-		wp_enqueue_script($this->plugin_name . '-input-editor-builder', USERSPN_URL . 'assets/js/userspn-input-editor-builder.js', ['jquery'], $this->version, false);
-		wp_enqueue_script($this->plugin_name . '-profile-progress', USERSPN_URL . 'assets/js/userspn-profile-progress.js', ['jquery'], $this->version, false);
+		wp_enqueue_script($this->plugin_name, USERSPN_URL . 'assets/js/userspn.js', ['jquery'], $script_version, true);
+		wp_enqueue_script($this->plugin_name . '-ajax', USERSPN_URL . 'assets/js/userspn-ajax.js', ['jquery'], $this->version, true);
+		wp_enqueue_script($this->plugin_name . '-aux', USERSPN_URL . 'assets/js/userspn-aux.js', ['jquery'], $this->version, true);
+		wp_enqueue_script($this->plugin_name . '-forms', USERSPN_URL . 'assets/js/userspn-forms.js', ['jquery', 'jquery-ui-sortable'], $this->version, true);
+		wp_enqueue_script($this->plugin_name . '-input-editor-builder', USERSPN_URL . 'assets/js/userspn-input-editor-builder.js', ['jquery'], $this->version, true);
+		wp_enqueue_script($this->plugin_name . '-profile-progress', USERSPN_URL . 'assets/js/userspn-profile-progress.js', ['jquery'], $this->version, true);
 
-		// Load bot analysis script
-		wp_enqueue_script($this->plugin_name . '-bot-analysis', USERSPN_URL . 'assets/js/userspn-bot-analysis.js', ['jquery'], $this->version, false);
-
-		// Load Chart.js for bot analysis charts (only in admin)
+		// Load bot analysis script and Chart.js only on plugin admin pages
 		if (is_admin()) {
-			// phpcs:ignore PluginCheck.CodeAnalysis.EnqueuedResourceOffloading.OffloadedContent
-			wp_enqueue_script('chart-js', 'https://cdn.jsdelivr.net/npm/chart.js', [], '4.4.0', true);
+			$screen = get_current_screen();
+			if ($screen && strpos($screen->id, 'userspn') !== false) {
+				wp_enqueue_script($this->plugin_name . '-bot-analysis', USERSPN_URL . 'assets/js/userspn-bot-analysis.js', ['jquery'], $this->version, true);
+				// phpcs:ignore PluginCheck.CodeAnalysis.EnqueuedResourceOffloading.OffloadedContent
+				wp_enqueue_script('chart-js', 'https://cdn.jsdelivr.net/npm/chart.js', [], '4.4.0', true);
+			}
 		}
 
 		// Scripts previously enqueued inside shortcodes/render methods - moved here for FSE/block theme compatibility

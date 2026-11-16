@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
 /**
  * X (Twitter) OAuth REST API endpoints
  *
@@ -95,19 +98,21 @@ class USERSPN_X_OAuth
       return $this->redirect_with_error('no_code', __('No authorization code received.', 'userspn'));
     }
 
-    if ($state !== 'userspn_x_login') {
+    // Verificar state (random token stored in transient)
+    if (empty($state) || !get_transient('userspn_x_oauth_state_' . $state)) {
       return $this->redirect_with_error('invalid_state', __('Invalid state parameter.', 'userspn'));
     }
+    delete_transient('userspn_x_oauth_state_' . $state);
 
     // Exchange code for access token using OAuth 2.0
     $redirect_uri = admin_url('admin-ajax.php?action=userspn_x_callback');
 
-    // Retrieve PKCE code verifier from transient
-    $code_verifier = get_transient('userspn_x_code_verifier');
+    // Retrieve PKCE code verifier from transient (scoped to state)
+    $code_verifier = get_transient('userspn_x_code_verifier_' . $state);
     if (empty($code_verifier)) {
       return $this->redirect_with_error('no_verifier', __('Session expired. Please try again.', 'userspn'));
     }
-    delete_transient('userspn_x_code_verifier');
+    delete_transient('userspn_x_code_verifier_' . $state);
 
     $token_response = wp_remote_post('https://api.x.com/2/oauth2/token', [
       'headers' => [

@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
 /**
  * Apple OAuth REST API endpoints
  *
@@ -98,6 +101,12 @@ class USERSPN_Apple_OAuth
     $error = isset($params['error']) ? $params['error'] : '';
     $id_token = isset($params['id_token']) ? $params['id_token'] : '';
     $user_data = isset($params['user']) ? $params['user'] : '';
+
+    // Verificar state (random token stored in transient)
+    if (empty($state) || !get_transient('userspn_apple_oauth_state_' . $state)) {
+      return $this->redirect_with_error('invalid_state', __('Invalid state parameter.', 'userspn'));
+    }
+    delete_transient('userspn_apple_oauth_state_' . $state);
 
     // Verificar si el usuario canceló
     if (!empty($error)) {

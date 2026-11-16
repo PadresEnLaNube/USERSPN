@@ -259,11 +259,11 @@ class USERSPN_Cron {
     $userspn_csv_removal = get_option('userspn_csv_removal');
     
     if (!empty($userspn_csv_removal)) {
-      foreach ($userspn_csv_removal as $file) {
+      foreach ($userspn_csv_removal as $key => $file) {
         wp_delete_file($file);
-        unset($userspn_csv_removal[array_search($file, $userspn_csv_removal)]);
-        update_option('userspn_csv_removal', $userspn_csv_removal);
+        unset($userspn_csv_removal[$key]);
       }
+      update_option('userspn_csv_removal', array_values($userspn_csv_removal));
     }
   }
 }

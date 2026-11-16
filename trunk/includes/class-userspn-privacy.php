@@ -208,7 +208,7 @@ class USERSPN_Privacy {
         }
 
         $export_items = [];
-        $providers = ['google', 'facebook', 'github', 'apple'];
+        $providers = ['google', 'facebook', 'github', 'apple', 'x'];
         $data = [];
 
         foreach ($providers as $provider) {
